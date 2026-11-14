@@ -42,7 +42,7 @@
   <div class="max-w-3xl mx-auto">
     <!-- 邀請函本體卡片 -->
     <div class="invitation-card rounded-3xl p-6 sm:p-12 shadow-xl relative overflow-hidden">
-      <!-- 角落裝飾 -->
+      <!-- 典禮主題 -->
       <div class="text-center mb-6">
         <div class="inline-block px-4 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold tracking-widest border border-amber-300 mb-3">
           盛典邀約 • 嘉賓同慶
@@ -71,7 +71,7 @@
           耑此 謹具薄柬，誠摯恭請 撥冗蒞臨指導，同沐歡慶！
         </p>
 
-        <!-- 典禮核心時間地點摘要（完美排版，絕不換行） -->
+        <!-- 典禮核心時間地點摘要 -->
         <div class="bg-amber-100/70 border border-amber-300 rounded-2xl p-4 sm:p-5 mt-4 space-y-2.5 text-xs sm:text-sm font-medium text-amber-950">
           <div class="flex items-baseline gap-2">
             <span class="font-bold text-amber-900 whitespace-nowrap flex-shrink-0">📅 典禮時間：</span>
@@ -80,10 +80,6 @@
           <div class="flex items-baseline gap-2">
             <span class="font-bold text-amber-900 whitespace-nowrap flex-shrink-0">📍 典禮地點：</span>
             <span>臺南市安南區南興國小（操場／風雨球場）• <strong>臺南市安南區公學路五段627號</strong></span>
-          </div>
-          <div class="flex items-baseline gap-2">
-            <span class="font-bold text-amber-900 whitespace-nowrap flex-shrink-0">🍱 親職午宴：</span>
-            <span>11:40 ~ 13:30 於 <strong>B1 小禮堂</strong> 備有樂齡媽媽風味餐（學生回各班教室用餐），竭誠敬備</span>
           </div>
         </div>
 
@@ -100,29 +96,31 @@
             <i class="fa-solid fa-clipboard-check text-rose-600"></i>
             貴賓出席線上回條填報
           </h3>
-          <p class="text-xs text-slate-500 mt-1">為利大會座位安排、車輛引導及風味午宴準備，敬請於 115 年 11 月 28 日前填覆，感謝支持！</p>
+          <p class="text-xs text-slate-500 mt-1">為利大會席次預留、車輛引導及開幕司儀介紹，敬請於 115 年 11 月 28 日前填覆，感謝支持！</p>
         </div>
 
         <form id="invite-form" onsubmit="handleFormSubmit(event)" class="space-y-4 text-xs sm:text-sm">
+          <!-- 機關單位與姓名 -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block font-bold text-slate-700 mb-1">貴賓服務機關 / 單位名稱 <span class="text-rose-500">*</span></label>
+              <label class="block font-bold text-slate-700 mb-1">服務機關 / 單位名稱 <span class="text-rose-500">*</span></label>
               <input type="text" id="guest-org" required placeholder="例：臺南市政府教育局、XX國小、萬安宮" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
             </div>
             <div>
-              <label class="block font-bold text-slate-700 mb-1">貴賓姓名 <span class="text-rose-500">*</span></label>
-              <input type="text" id="guest-name" required placeholder="請填寫尊姓大名" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
+              <label class="block font-bold text-slate-700 mb-1">貴賓尊姓大名 <span class="text-rose-500">*</span></label>
+              <input type="text" id="guest-name" required placeholder="請填寫貴賓姓名" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
             </div>
           </div>
 
+          <!-- 職稱與車牌號碼 -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block font-bold text-slate-700 mb-1">現任職稱 <span class="text-rose-500">*</span></label>
               <input type="text" id="guest-title" required placeholder="例：局長、校長、主任委員、理事長" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
             </div>
             <div>
-              <label class="block font-bold text-slate-700 mb-1">聯絡電話 / 行動手機 <span class="text-rose-500">*</span></label>
-              <input type="tel" id="guest-phone" required placeholder="例：0912-345-678" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
+              <label class="block font-bold text-slate-700 mb-1">貴賓車牌號碼 <span class="text-slate-400 font-normal">（選填，便於預留車位與引導）</span></label>
+              <input type="text" id="guest-car" placeholder="例：ABC-1234 或 搭公車/接送" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
             </div>
           </div>
 
@@ -147,26 +145,8 @@
 
           <!-- 代表人備註 -->
           <div>
-            <label class="block font-bold text-slate-700 mb-1">出席代表人姓名與職稱（若指派代表出席請填寫）</label>
+            <label class="block font-bold text-slate-700 mb-1">出席代表人姓名與職稱 <span class="text-slate-400 font-normal">（若指派代表出席請填寫）</span></label>
             <input type="text" id="guest-delegate" placeholder="例：李大明 總幹事" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
-          </div>
-
-          <!-- 午餐與車號 -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">親職風味午宴（11:40~13:30 於 B1 小禮堂）</label>
-              <select id="guest-meal" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white">
-                <option value="葷食 (1位)">享用風味午宴：葷食 (1位)</option>
-                <option value="素食 (1位)">享用風味午宴：素食 (1位)</option>
-                <option value="葷食 (2位)">享用風味午宴：葷食 (2位，含隨行)</option>
-                <option value="素食 (2位)">享用風味午宴：素食 (2位，含隨行)</option>
-                <option value="不留用">因公務繁忙，不留用餐點</option>
-              </select>
-            </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">貴賓車牌號碼（便於預留停車格引導）</label>
-              <input type="text" id="guest-car" placeholder="例：ABC-1234 或 搭公車/接送" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
-            </div>
           </div>
 
           <!-- 致詞意向 -->
@@ -186,7 +166,7 @@
 
           <!-- 祝福的話 -->
           <div>
-            <label class="block font-bold text-slate-700 mb-1">給南興學子的勉勵與祝賀詞</label>
+            <label class="block font-bold text-slate-700 mb-1">給南興學子的勉勵與祝賀詞 <span class="text-slate-400 font-normal">（選填）</span></label>
             <textarea id="guest-wishes" rows="2" placeholder="敬祝 南興國小 115學年度校慶大會圓滿成功，欣欣向榮！" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
           </div>
 
@@ -228,12 +208,12 @@
       </div>
     </div>
 
-    <!-- 頁底隱私安全保證與內部後台快捷入口 -->
+    <!-- 頁底隱私保證 -->
     <div class="mt-8 text-center text-xs text-slate-400 space-y-1">
-      <p>🔒 本系統依個人資料保護法妥善保護貴賓填報資料，僅供本次校慶大會接待與通訊使用。</p>
+      <p>🔒 本系統依個人資料保護法妥善保護貴賓填報資料，僅供本次校慶大會接待使用。</p>
       <p>
         <a href="admin.html" class="text-slate-400 hover:text-amber-700 transition">
-          <i class="fa-solid fa-lock text-[10px]"></i> 總務處接待組後台登入
+          <i class="fa-solid fa-lock text-[10px]"></i> 總務處接待組管理後台
         </a>
       </p>
     </div>
@@ -241,9 +221,9 @@
 
   <script>
     const DEFAULT_GUESTS = [
-      { org: '臺南市政府教育局', name: '教育局長官', title: '長官/視導區督學', phone: '06-2991111', attendance: '親自出席', delegate: '', meal: '葷食 (1位)', car: '公務車', speech: '樂意致詞', wishes: '祝南興國小校運昌隆、學子健全身心！', sponsor: '是' },
-      { org: '公塭萬安宮管理委員會', name: '萬安宮主委', title: '主任委員', phone: '06-2550000', attendance: '親自出席', delegate: '', meal: '葷食 (2位)', car: 'ABC-8888', speech: '致意即可', wishes: '保佑南興學子平安開朗、金獅蜈蚣代代相傳！', sponsor: '是 (贊助大獎腳踏車)' },
-      { org: '南興新南宮管理委員會', name: '新南宮主委', title: '主任委員', phone: '06-2551111', attendance: '親自出席', delegate: '', meal: '葷食 (2位)', car: 'XYZ-9999', speech: '致意即可', wishes: '金獅騰躍、學藝精進！', sponsor: '是 (贊助文具大禮盒)' }
+      { org: '臺南市政府教育局', name: '教育局長官', title: '長官/視導區督學', attendance: '親自出席', delegate: '', car: '公務車', speech: '樂意致詞', wishes: '祝南興國小校運昌隆、學子健全身心！', sponsor: '是' },
+      { org: '公塭萬安宮管理委員會', name: '萬安宮主委', title: '主任委員', attendance: '親自出席', delegate: '', car: 'ABC-8888', speech: '致意即可', wishes: '保佑南興學子平安開朗、金獅蜈蚣代代相傳！', sponsor: '是 (贊助大獎腳踏車)' },
+      { org: '南興新南宮管理委員會', name: '新南宮主委', title: '主任委員', attendance: '親自出席', delegate: '', car: 'XYZ-9999', speech: '致意即可', wishes: '金獅騰躍、學藝精進！', sponsor: '是 (贊助文具大禮盒)' }
     ];
 
     function getGuestList() {
@@ -268,10 +248,8 @@
         org: document.getElementById('guest-org').value,
         name: document.getElementById('guest-name').value,
         title: document.getElementById('guest-title').value,
-        phone: document.getElementById('guest-phone').value,
         attendance: attendance,
         delegate: document.getElementById('guest-delegate').value,
-        meal: document.getElementById('guest-meal').value,
         car: document.getElementById('guest-car').value,
         speech: speech,
         wishes: document.getElementById('guest-wishes').value,

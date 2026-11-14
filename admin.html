@@ -17,7 +17,7 @@
           <span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">內部專用系統</span>
           <h1 class="text-xl sm:text-2xl font-black text-slate-900">南興國小 115學年度校慶大會 • 貴賓線上回條即時管理後台</h1>
         </div>
-        <p class="text-xs text-slate-500">主責單位：總務處接待組 ｜ 供貴賓簽到簿產製、司儀致詞資訊卡、B1親職午宴便當統計與車位安排</p>
+        <p class="text-xs text-slate-500">主責單位：總務處接待組 ｜ 供貴賓簽到簿產製、司儀致詞資訊卡與貴賓停車位安排</p>
       </div>
       <div class="flex items-center gap-3">
         <a href="invite.html" class="px-3.5 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-xl text-xs font-bold transition">
@@ -30,7 +30,7 @@
     </div>
 
     <!-- 數據摘要卡片 -->
-    <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <div class="text-xs text-slate-500 font-medium">回條填覆總數</div>
         <div class="text-2xl font-black text-slate-900 mt-1" id="stat-total">0 筆</div>
@@ -38,13 +38,6 @@
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <div class="text-xs text-slate-500 font-medium">親自 / 代表出席</div>
         <div class="text-2xl font-black text-emerald-600 mt-1" id="stat-attend">0 位</div>
-      </div>
-      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-        <div class="text-xs text-slate-500 font-medium">B1風味午宴需求</div>
-        <div class="text-xs text-slate-700 mt-1 space-y-0.5">
-          <div>葷食：<strong id="stat-meat" class="text-amber-700">0</strong> 份</div>
-          <div>素食：<strong id="stat-veg" class="text-emerald-700">0</strong> 份</div>
-        </div>
       </div>
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <div class="text-xs text-slate-500 font-medium">開幕大會致詞</div>
@@ -74,10 +67,8 @@
               <th class="py-3 px-3">服務機關 / 單位名稱</th>
               <th class="py-3 px-3">貴賓尊姓大名</th>
               <th class="py-3 px-3">職稱</th>
-              <th class="py-3 px-3">聯絡電話</th>
               <th class="py-3 px-3">出席狀況</th>
               <th class="py-3 px-3">代表出席者</th>
-              <th class="py-3 px-3">午宴餐點需求</th>
               <th class="py-3 px-3">車牌號碼</th>
               <th class="py-3 px-3">致詞安排</th>
               <th class="py-3 px-3">摸彩贊助意願</th>
@@ -101,9 +92,9 @@
 
   <script>
     const DEFAULT_GUESTS = [
-      { org: '臺南市政府教育局', name: '教育局長官', title: '長官/視導區督學', phone: '06-2991111', attendance: '親自出席', delegate: '', meal: '葷食 (1位)', car: '公務車', speech: '樂意致詞', wishes: '祝南興國小校運昌隆、學子健全身心！', sponsor: '是' },
-      { org: '公塭萬安宮管理委員會', name: '萬安宮主委', title: '主任委員', phone: '06-2550000', attendance: '親自出席', delegate: '', meal: '葷食 (2位)', car: 'ABC-8888', speech: '致意即可', wishes: '保佑南興學子平安開朗、金獅蜈蚣代代相傳！', sponsor: '是 (贊助大獎腳踏車)' },
-      { org: '南興新南宮管理委員會', name: '新南宮主委', title: '主任委員', phone: '06-2551111', attendance: '親自出席', delegate: '', meal: '葷食 (2位)', car: 'XYZ-9999', speech: '致意即可', wishes: '金獅騰躍、學藝精進！', sponsor: '是 (贊助文具大禮盒)' }
+      { org: '臺南市政府教育局', name: '教育局長官', title: '長官/視導區督學', attendance: '親自出席', delegate: '', car: '公務車', speech: '樂意致詞', wishes: '祝南興國小校運昌隆、學子健全身心！', sponsor: '是' },
+      { org: '公塭萬安宮管理委員會', name: '萬安宮主委', title: '主任委員', attendance: '親自出席', delegate: '', car: 'ABC-8888', speech: '致意即可', wishes: '保佑南興學子平安開朗、金獅蜈蚣代代相傳！', sponsor: '是 (贊助大獎腳踏車)' },
+      { org: '南興新南宮管理委員會', name: '新南宮主委', title: '主任委員', attendance: '親自出席', delegate: '', car: 'XYZ-9999', speech: '致意即可', wishes: '金獅騰躍、學藝精進！', sponsor: '是 (贊助文具大禮盒)' }
     ];
 
     function getGuestList() {
@@ -121,17 +112,11 @@
 
       let total = list.length;
       let attendCount = 0;
-      let meatCount = 0;
-      let vegCount = 0;
       let speechCount = 0;
       let sponsorCount = 0;
 
       list.forEach((item, index) => {
         if (item.attendance === '親自出席' || item.attendance === '指派代表') attendCount++;
-        if (item.meal && item.meal.includes('葷食 (1位)')) meatCount += 1;
-        if (item.meal && item.meal.includes('葷食 (2位)')) meatCount += 2;
-        if (item.meal && item.meal.includes('素食 (1位)')) vegCount += 1;
-        if (item.meal && item.meal.includes('素食 (2位)')) vegCount += 2;
         if (item.speech === '樂意致詞') speechCount++;
         if (item.sponsor && (item.sponsor.includes('是') || item.sponsor.includes('有意'))) sponsorCount++;
 
@@ -142,14 +127,12 @@
           <td class="py-2.5 px-3 font-medium text-slate-900">${item.org}</td>
           <td class="py-2.5 px-3 font-bold text-slate-900">${item.name}</td>
           <td class="py-2.5 px-3 text-slate-600">${item.title}</td>
-          <td class="py-2.5 px-3 font-mono text-slate-600">${item.phone}</td>
           <td class="py-2.5 px-3">
             <span class="px-2 py-0.5 rounded text-[11px] font-bold ${item.attendance === '親自出席' ? 'bg-emerald-100 text-emerald-800' : (item.attendance === '指派代表' ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-600')}">
               ${item.attendance}
             </span>
           </td>
           <td class="py-2.5 px-3 text-slate-600">${item.delegate || '—'}</td>
-          <td class="py-2.5 px-3 font-medium text-slate-700">${item.meal}</td>
           <td class="py-2.5 px-3 font-mono text-slate-700">${item.car || '—'}</td>
           <td class="py-2.5 px-3 ${item.speech === '樂意致詞' ? 'text-amber-700 font-bold' : 'text-slate-500'}">${item.speech}</td>
           <td class="py-2.5 px-3 ${item.sponsor.includes('是') ? 'text-rose-600 font-bold' : 'text-slate-400'}">${item.sponsor}</td>
@@ -160,8 +143,6 @@
 
       document.getElementById('stat-total').innerText = total + ' 筆';
       document.getElementById('stat-attend').innerText = attendCount + ' 位';
-      document.getElementById('stat-meat').innerText = meatCount;
-      document.getElementById('stat-veg').innerText = vegCount;
       document.getElementById('stat-speech').innerText = speechCount + ' 位';
       document.getElementById('stat-sponsor').innerText = sponsorCount + ' 位';
     }
@@ -169,9 +150,9 @@
     function exportCSV() {
       const list = getGuestList();
       let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-      csvContent += "序號,服務機關,貴賓姓名,職稱,聯絡電話,出席狀況,指派代表,午宴需求,車牌號碼,致詞意向,摸彩贊助意願,祝賀嘉言\n";
+      csvContent += "序號,服務機關,貴賓姓名,職稱,出席狀況,指派代表,車牌號碼,致詞意向,摸彩贊助意願,祝賀嘉言\n";
       list.forEach((g, idx) => {
-        csvContent += `"${idx + 1}","${g.org}","${g.name}","${g.title}","${g.phone}","${g.attendance}","${g.delegate || ''}","${g.meal}","${g.car || ''}","${g.speech}","${g.sponsor}","${g.wishes || ''}"\n`;
+        csvContent += `"${idx + 1}","${g.org}","${g.name}","${g.title}","${g.attendance}","${g.delegate || ''}","${g.car || ''}","${g.speech}","${g.sponsor}","${g.wishes || ''}"\n`;
       });
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
