@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>南興國小 115校慶 • 總務處接待組貴賓回條管理後台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen py-8 px-4 sm:px-8">
+
+  <div class="max-w-7xl mx-auto">
+    <!-- 頂部 Header -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">內部專用系統</span>
+          <h1 class="text-xl sm:text-2xl font-black text-slate-900">南興國小 115學年度校慶大會 • 貴賓線上回條即時管理後台</h1>
+        </div>
+        <p class="text-xs text-slate-500">主責單位：總務處接待組 ｜ 供貴賓簽到簿產製、司儀致詞資訊卡、B1親職午宴便當統計與車位安排</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="invite.html" class="px-3.5 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-xl text-xs font-bold transition">
+          <i class="fa-solid fa-arrow-left mr-1"></i> 前往邀請函頁面
+        </a>
+        <button onclick="exportCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5">
+          <i class="fa-solid fa-file-excel"></i> 匯出 Excel / CSV 芳名錄
+        </button>
+      </div>
+    </div>
+
+    <!-- 數據摘要卡片 -->
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <div class="text-xs text-slate-500 font-medium">回條填覆總數</div>
+        <div class="text-2xl font-black text-slate-900 mt-1" id="stat-total">0 筆</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <div class="text-xs text-slate-500 font-medium">親自 / 代表出席</div>
+        <div class="text-2xl font-black text-emerald-600 mt-1" id="stat-attend">0 位</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <div class="text-xs text-slate-500 font-medium">B1風味午宴需求</div>
+        <div class="text-xs text-slate-700 mt-1 space-y-0.5">
+          <div>葷食：<strong id="stat-meat" class="text-amber-700">0</strong> 份</div>
+          <div>素食：<strong id="stat-veg" class="text-emerald-700">0</strong> 份</div>
+        </div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <div class="text-xs text-slate-500 font-medium">開幕大會致詞</div>
+        <div class="text-2xl font-black text-amber-600 mt-1" id="stat-speech">0 位</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <div class="text-xs text-slate-500 font-medium">意向贊助摸彩</div>
+        <div class="text-2xl font-black text-rose-600 mt-1" id="stat-sponsor">0 位</div>
+      </div>
+    </div>
+
+    <!-- 貴賓詳細名冊表格 -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+        <h2 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+          <i class="fa-solid fa-list-check text-amber-600"></i>
+          貴賓填覆即時名冊
+        </h2>
+        <span class="text-xs text-slate-400">依填寫時間先後排序</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="bg-slate-100/80 text-slate-700 border-b border-slate-200 font-bold">
+              <th class="py-3 px-3 w-10 text-center">#</th>
+              <th class="py-3 px-3">服務機關 / 單位名稱</th>
+              <th class="py-3 px-3">貴賓尊姓大名</th>
+              <th class="py-3 px-3">職稱</th>
+              <th class="py-3 px-3">聯絡電話</th>
+              <th class="py-3 px-3">出席狀況</th>
+              <th class="py-3 px-3">代表出席者</th>
+              <th class="py-3 px-3">午宴餐點需求</th>
+              <th class="py-3 px-3">車牌號碼</th>
+              <th class="py-3 px-3">致詞安排</th>
+              <th class="py-3 px-3">摸彩贊助意願</th>
+              <th class="py-3 px-3">祝賀嘉言</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body" class="divide-y divide-slate-100">
+            <!-- 動態填入 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="mt-4 flex justify-between items-center text-xs text-slate-400">
+      <div>資料儲存於本機瀏覽器中。如需清空重新測試，請謹慎點擊右側按鈕。</div>
+      <button onclick="clearData()" class="text-rose-500 hover:underline">
+        重設為預設名單
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_GUESTS = [
+      { org: '臺南市政府教育局', name: '教育局長官', title: '長官/視導區督學', phone: '06-2991111', attendance: '親自出席', delegate: '', meal: '葷食 (1位)', car: '公務車', speech: '樂意致詞', wishes: '祝南興國小校運昌隆、學子健全身心！', sponsor: '是' },
+      { org: '公塭萬安宮管理委員會', name: '萬安宮主委', title: '主任委員', phone: '06-2550000', attendance: '親自出席', delegate: '', meal: '葷食 (2位)', car: 'ABC-8888', speech: '致意即可', wishes: '保佑南興學子平安開朗、金獅蜈蚣代代相傳！', sponsor: '是 (贊助大獎腳踏車)' },
+      { org: '南興新南宮管理委員會', name: '新南宮主委', title: '主任委員', phone: '06-2551111', attendance: '親自出席', delegate: '', meal: '葷食 (2位)', car: 'XYZ-9999', speech: '致意即可', wishes: '金獅騰躍、學藝精進！', sponsor: '是 (贊助文具大禮盒)' }
+    ];
+
+    function getGuestList() {
+      const stored = localStorage.getItem('nanxing_guest_list');
+      if (stored) {
+        try { return JSON.parse(stored); } catch (e) { return DEFAULT_GUESTS; }
+      }
+      return DEFAULT_GUESTS;
+    }
+
+    function renderAdminTable() {
+      const list = getGuestList();
+      const tbody = document.getElementById('admin-table-body');
+      tbody.innerHTML = '';
+
+      let total = list.length;
+      let attendCount = 0;
+      let meatCount = 0;
+      let vegCount = 0;
+      let speechCount = 0;
+      let sponsorCount = 0;
+
+      list.forEach((item, index) => {
+        if (item.attendance === '親自出席' || item.attendance === '指派代表') attendCount++;
+        if (item.meal && item.meal.includes('葷食 (1位)')) meatCount += 1;
+        if (item.meal && item.meal.includes('葷食 (2位)')) meatCount += 2;
+        if (item.meal && item.meal.includes('素食 (1位)')) vegCount += 1;
+        if (item.meal && item.meal.includes('素食 (2位)')) vegCount += 2;
+        if (item.speech === '樂意致詞') speechCount++;
+        if (item.sponsor && (item.sponsor.includes('是') || item.sponsor.includes('有意'))) sponsorCount++;
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-amber-50/40';
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 text-center text-slate-400 font-mono">${index + 1}</td>
+          <td class="py-2.5 px-3 font-medium text-slate-900">${item.org}</td>
+          <td class="py-2.5 px-3 font-bold text-slate-900">${item.name}</td>
+          <td class="py-2.5 px-3 text-slate-600">${item.title}</td>
+          <td class="py-2.5 px-3 font-mono text-slate-600">${item.phone}</td>
+          <td class="py-2.5 px-3">
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold ${item.attendance === '親自出席' ? 'bg-emerald-100 text-emerald-800' : (item.attendance === '指派代表' ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-600')}">
+              ${item.attendance}
+            </span>
+          </td>
+          <td class="py-2.5 px-3 text-slate-600">${item.delegate || '—'}</td>
+          <td class="py-2.5 px-3 font-medium text-slate-700">${item.meal}</td>
+          <td class="py-2.5 px-3 font-mono text-slate-700">${item.car || '—'}</td>
+          <td class="py-2.5 px-3 ${item.speech === '樂意致詞' ? 'text-amber-700 font-bold' : 'text-slate-500'}">${item.speech}</td>
+          <td class="py-2.5 px-3 ${item.sponsor.includes('是') ? 'text-rose-600 font-bold' : 'text-slate-400'}">${item.sponsor}</td>
+          <td class="py-2.5 px-3 text-slate-600 max-w-xs truncate" title="${item.wishes || ''}">${item.wishes || '—'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('stat-total').innerText = total + ' 筆';
+      document.getElementById('stat-attend').innerText = attendCount + ' 位';
+      document.getElementById('stat-meat').innerText = meatCount;
+      document.getElementById('stat-veg').innerText = vegCount;
+      document.getElementById('stat-speech').innerText = speechCount + ' 位';
+      document.getElementById('stat-sponsor').innerText = sponsorCount + ' 位';
+    }
+
+    function exportCSV() {
+      const list = getGuestList();
+      let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+      csvContent += "序號,服務機關,貴賓姓名,職稱,聯絡電話,出席狀況,指派代表,午宴需求,車牌號碼,致詞意向,摸彩贊助意願,祝賀嘉言\n";
+      list.forEach((g, idx) => {
+        csvContent += `"${idx + 1}","${g.org}","${g.name}","${g.title}","${g.phone}","${g.attendance}","${g.delegate || ''}","${g.meal}","${g.car || ''}","${g.speech}","${g.sponsor}","${g.wishes || ''}"\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "南興國小115校慶貴賓線上回條名冊.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function clearData() {
+      if (confirm('確定要將回條清單重設為初始預設資料嗎？')) {
+        localStorage.setItem('nanxing_guest_list', JSON.stringify(DEFAULT_GUESTS));
+        renderAdminTable();
+      }
+    }
+
+    window.onload = function() {
+      renderAdminTable();
+    };
+  </script>
+</body>
+</html>

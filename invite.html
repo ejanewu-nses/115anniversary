@@ -42,7 +42,7 @@
   <div class="max-w-3xl mx-auto">
     <!-- 邀請函本體卡片 -->
     <div class="invitation-card rounded-3xl p-6 sm:p-12 shadow-xl relative overflow-hidden">
-      <!-- 角落祥雲裝飾 -->
+      <!-- 角落裝飾 -->
       <div class="text-center mb-6">
         <div class="inline-block px-4 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold tracking-widest border border-amber-300 mb-3">
           盛典邀約 • 嘉賓同慶
@@ -71,19 +71,19 @@
           耑此 謹具薄柬，誠摯恭請 撥冗蒞臨指導，同沐歡慶！
         </p>
 
-        <!-- 典禮核心時間地點摘要 -->
-        <div class="bg-amber-100/60 border border-amber-300 rounded-2xl p-4 sm:p-5 mt-4 space-y-2 text-xs sm:text-sm font-medium text-amber-950">
-          <div class="flex items-start gap-2">
-            <span class="font-bold w-20 flex-shrink-0 text-amber-800">📅 典禮時間：</span>
-            <span>民國 115 年 12 月 05 日（星期六）07:40 迎賓簽到 ｜ 08:00 開幕典禮</span>
+        <!-- 典禮核心時間地點摘要（完美排版，絕不換行） -->
+        <div class="bg-amber-100/70 border border-amber-300 rounded-2xl p-4 sm:p-5 mt-4 space-y-2.5 text-xs sm:text-sm font-medium text-amber-950">
+          <div class="flex items-baseline gap-2">
+            <span class="font-bold text-amber-900 whitespace-nowrap flex-shrink-0">📅 典禮時間：</span>
+            <span>民國 115 年 12 月 05 日（星期六）<strong>07:55 迎賓簽到</strong> ｜ 08:00 開幕典禮</span>
           </div>
-          <div class="flex items-start gap-2">
-            <span class="font-bold w-20 flex-shrink-0 text-amber-800">📍 典禮地點：</span>
-            <span>臺南市安南區南興國小（操場／風雨球場）• 臺南市安南區安豐六街 90 號</span>
+          <div class="flex items-baseline gap-2">
+            <span class="font-bold text-amber-900 whitespace-nowrap flex-shrink-0">📍 典禮地點：</span>
+            <span>臺南市安南區南興國小（操場／風雨球場）• <strong>臺南市安南區公學路五段627號</strong></span>
           </div>
-          <div class="flex items-start gap-2">
-            <span class="font-bold w-20 flex-shrink-0 text-amber-800">🍱 親職午宴：</span>
-            <span>11:40 ~ 13:30 於B1小禮堂備有樂齡媽媽風味餐（學生回班用餐），竭誠敬備</span>
+          <div class="flex items-baseline gap-2">
+            <span class="font-bold text-amber-900 whitespace-nowrap flex-shrink-0">🍱 親職午宴：</span>
+            <span>11:40 ~ 13:30 於 <strong>B1 小禮堂</strong> 備有樂齡媽媽風味餐（學生回各班教室用餐），竭誠敬備</span>
           </div>
         </div>
 
@@ -154,7 +154,7 @@
           <!-- 午餐與車號 -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block font-bold text-slate-700 mb-1">親職午宴需求（11:45~13:30）</label>
+              <label class="block font-bold text-slate-700 mb-1">親職風味午宴（11:40~13:30 於 B1 小禮堂）</label>
               <select id="guest-meal" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white">
                 <option value="葷食 (1位)">享用風味午宴：葷食 (1位)</option>
                 <option value="素食 (1位)">享用風味午宴：素食 (1位)</option>
@@ -228,74 +228,22 @@
       </div>
     </div>
 
-    <!-- 總務處管理後台（便於校方預覽與匯出芳名錄） -->
-    <div class="mt-8 bg-white/90 backdrop-blur rounded-2xl p-6 border border-slate-200 shadow-sm text-xs">
-      <div class="flex justify-between items-center mb-4">
-        <div>
-          <h4 class="font-bold text-slate-800 flex items-center gap-1.5">
-            <i class="fa-solid fa-users-gear text-amber-600"></i>
-            【總務處接待組視角】貴賓線上回條即時匯整名單
-          </h4>
-          <p class="text-slate-500 mt-0.5">資料即時保存在本機瀏覽器，可直接匯出 CSV 檔供司儀名卡與簽到處使用</p>
-        </div>
-        <button onclick="exportCSV()" class="px-3 py-1.5 bg-slate-800 text-white rounded-lg hover:bg-slate-700 font-bold">
-          <i class="fa-solid fa-file-csv mr-1"></i> 匯出 CSV 芳名錄
-        </button>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
-              <th class="py-2 px-3">單位</th>
-              <th class="py-2 px-3">貴賓姓名/職稱</th>
-              <th class="py-2 px-3">意向</th>
-              <th class="py-2 px-3">午宴</th>
-              <th class="py-2 px-3">車號</th>
-              <th class="py-2 px-3">致詞</th>
-              <th class="py-2 px-3">摸彩贊助</th>
-            </tr>
-          </thead>
-          <tbody id="guest-table-body" class="divide-y divide-slate-100">
-            <!-- 示範預載資料 -->
-            <tr class="hover:bg-amber-50/50">
-              <td class="py-2 px-3">臺南市政府教育局</td>
-              <td class="py-2 px-3 font-bold">局長 / 視導長官</td>
-              <td class="py-2 px-3"><span class="px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded">親自出席</span></td>
-              <td class="py-2 px-3">葷食 (1位)</td>
-              <td class="py-2 px-3">公務車</td>
-              <td class="py-2 px-3 text-amber-700 font-bold">樂意致詞</td>
-              <td class="py-2 px-3 text-rose-600 font-bold">是</td>
-            </tr>
-            <tr class="hover:bg-amber-50/50">
-              <td class="py-2 px-3">公塭萬安宮管理委員會</td>
-              <td class="py-2 px-3 font-bold">主任委員</td>
-              <td class="py-2 px-3"><span class="px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded">親自出席</span></td>
-              <td class="py-2 px-3">葷食 (2位)</td>
-              <td class="py-2 px-3">ABC-8888</td>
-              <td class="py-2 px-3">致意即可</td>
-              <td class="py-2 px-3 text-rose-600 font-bold">是 (大獎腳踏車)</td>
-            </tr>
-            <tr class="hover:bg-amber-50/50">
-              <td class="py-2 px-3">南興新南宮管理委員會</td>
-              <td class="py-2 px-3 font-bold">主任委員</td>
-              <td class="py-2 px-3"><span class="px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded">親自出席</span></td>
-              <td class="py-2 px-3">葷食 (2位)</td>
-              <td class="py-2 px-3">XYZ-9999</td>
-              <td class="py-2 px-3">致意即可</td>
-              <td class="py-2 px-3 text-rose-600 font-bold">是 (文具大禮盒)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <!-- 頁底隱私安全保證與內部後台快捷入口 -->
+    <div class="mt-8 text-center text-xs text-slate-400 space-y-1">
+      <p>🔒 本系統依個人資料保護法妥善保護貴賓填報資料，僅供本次校慶大會接待與通訊使用。</p>
+      <p>
+        <a href="admin.html" class="text-slate-400 hover:text-amber-700 transition">
+          <i class="fa-solid fa-lock text-[10px]"></i> 總務處接待組後台登入
+        </a>
+      </p>
     </div>
   </div>
 
   <script>
     const DEFAULT_GUESTS = [
-      { org: '臺南市政府教育局', name: '教育局代表', title: '長官/督學', phone: '06-2991111', attendance: '親自出席', delegate: '', meal: '葷食 (1位)', car: '公務車', speech: '樂意致詞', wishes: '祝南興校運昌隆！', sponsor: '是' },
-      { org: '公塭萬安宮管理委員會', name: '萬安宮主委', title: '主任委員', phone: '06-2550000', attendance: '親自出席', delegate: '', meal: '葷食 (2位)', car: 'ABC-8888', speech: '致意即可', wishes: '保佑南興學子平安開朗！', sponsor: '是 (贊助大獎腳踏車)' },
-      { org: '南興新南宮管理委員會', name: '新南宮主委', title: '主任委員', phone: '06-2551111', attendance: '親自出席', delegate: '', meal: '葷食 (2位)', car: 'XYZ-9999', speech: '致意即可', wishes: '金獅騰躍代代傳！', sponsor: '是 (贊助文具禮券)' }
+      { org: '臺南市政府教育局', name: '教育局長官', title: '長官/視導區督學', phone: '06-2991111', attendance: '親自出席', delegate: '', meal: '葷食 (1位)', car: '公務車', speech: '樂意致詞', wishes: '祝南興國小校運昌隆、學子健全身心！', sponsor: '是' },
+      { org: '公塭萬安宮管理委員會', name: '萬安宮主委', title: '主任委員', phone: '06-2550000', attendance: '親自出席', delegate: '', meal: '葷食 (2位)', car: 'ABC-8888', speech: '致意即可', wishes: '保佑南興學子平安開朗、金獅蜈蚣代代相傳！', sponsor: '是 (贊助大獎腳踏車)' },
+      { org: '南興新南宮管理委員會', name: '新南宮主委', title: '主任委員', phone: '06-2551111', attendance: '親自出席', delegate: '', meal: '葷食 (2位)', car: 'XYZ-9999', speech: '致意即可', wishes: '金獅騰躍、學藝精進！', sponsor: '是 (贊助文具大禮盒)' }
     ];
 
     function getGuestList() {
@@ -308,26 +256,6 @@
 
     function saveGuestList(list) {
       localStorage.setItem('nanxing_guest_list', JSON.stringify(list));
-    }
-
-    function renderGuestTable() {
-      const list = getGuestList();
-      const tbody = document.getElementById('guest-table-body');
-      tbody.innerHTML = '';
-      list.forEach(item => {
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-amber-50/50';
-        tr.innerHTML = `
-          <td class="py-2 px-3">${item.org}</td>
-          <td class="py-2 px-3 font-bold">${item.name} (${item.title})</td>
-          <td class="py-2 px-3"><span class="px-1.5 py-0.5 ${item.attendance === '親自出席' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700'} rounded">${item.attendance}</span></td>
-          <td class="py-2 px-3">${item.meal}</td>
-          <td class="py-2 px-3">${item.car || '—'}</td>
-          <td class="py-2 px-3 ${item.speech === '樂意致詞' ? 'text-amber-700 font-bold' : ''}">${item.speech}</td>
-          <td class="py-2 px-3 text-rose-600 font-bold">${item.sponsor}</td>
-        `;
-        tbody.appendChild(tr);
-      });
     }
 
     function handleFormSubmit(e) {
@@ -347,13 +275,13 @@
         car: document.getElementById('guest-car').value,
         speech: speech,
         wishes: document.getElementById('guest-wishes').value,
-        sponsor: sponsor
+        sponsor: sponsor,
+        created_at: new Date().toLocaleString('zh-TW')
       };
 
       const list = getGuestList();
       list.push(guest);
       saveGuestList(list);
-      renderGuestTable();
 
       document.getElementById('invite-form').classList.add('hidden');
       document.getElementById('success-box').classList.remove('hidden');
@@ -364,26 +292,6 @@
       document.getElementById('invite-form').classList.remove('hidden');
       document.getElementById('success-box').classList.add('hidden');
     }
-
-    function exportCSV() {
-      const list = getGuestList();
-      let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-      csvContent += "機關單位,貴賓姓名,職稱,電話,出席狀況,指派代表,午宴需求,車牌號碼,致詞意向,祝賀詞,摸彩贊助意願\n";
-      list.forEach(g => {
-        csvContent += `"${g.org}","${g.name}","${g.title}","${g.phone}","${g.attendance}","${g.delegate}","${g.meal}","${g.car}","${g.speech}","${g.wishes}","${g.sponsor}"\n`;
-      });
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", "南興國小115校慶貴賓線上回條名冊.csv");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    window.onload = function() {
-      renderGuestTable();
-    };
   </script>
 </body>
 </html>
