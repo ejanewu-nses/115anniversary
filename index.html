@@ -216,63 +216,110 @@
   <!-- 12/05 校慶主日 精準賽程流程表 -->
   <section id="schedule" class="py-12 bg-white border-b border-slate-200">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
-        <div>
-          <span class="text-rose-600 font-bold text-xs uppercase tracking-wider">Main Event Day</span>
-          <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">12/05 (六) 校慶運動大會活動時程表</h3>
-          <p class="text-sm text-slate-600 mt-1">精彩賽程與多元展演接續登場，操場跑道、風雨球場與內草地動線分流，歡迎親師生與貴賓同歡！</p>
+      <!-- 標題與齊頭對齊之場地指標卡 -->
+      <div class="mb-8">
+        <div class="mb-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold tracking-wider mb-2">
+            <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+            115 年 12 月 05 日（星期六）校慶主場日
+          </div>
+          <h3 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-snug">
+            12/05 (六)<br class="sm:hidden"> 校慶運動大會活動時程表
+          </h3>
+          <p class="text-sm text-slate-600 mt-1.5">
+            精彩賽程與多元展演接續登場，操場跑道、風雨球場與內草地動線分流，歡迎親師生與貴賓同歡！
+          </p>
         </div>
-        <div class="mt-4 md:mt-0 flex flex-wrap gap-2">
-          <span class="inline-flex items-center gap-1 px-3 py-1 bg-amber-50 text-amber-800 text-xs font-bold rounded-lg border border-amber-200">
-            <i class="fa-solid fa-umbrella-beach"></i> 風雨球場(室外)：開幕 / 成果展演 / 團康 / 閉幕摸彩
-          </span>
-          <span class="inline-flex items-center gap-1 px-3 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-lg border border-purple-200">
-            <i class="fa-solid fa-utensils"></i> B1小禮堂：家長親職午宴（學生回班用餐）
-          </span>
-          <span class="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg border border-blue-200">
-            <i class="fa-solid fa-person-running"></i> 操場環形跑道：短跑徑賽 / 大隊接力
-          </span>
-          <span class="inline-flex items-center gap-1 px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-lg border border-emerald-200">
-            <i class="fa-solid fa-clover"></i> 操場內草地：拔河 ＆ 鉛球 ＆ 趣味競賽
-          </span>
+
+        <!-- 4 個標示地點的小區塊（整齊排開、齊頭對齊） -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+          <!-- 風雨球場 -->
+          <div class="flex items-center gap-3 p-3 bg-amber-50/90 rounded-xl border border-amber-200 shadow-2xs">
+            <div class="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-xs">
+              <i class="fa-solid fa-umbrella-beach"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-amber-950">風雨球場（室外）</div>
+              <div class="text-[11px] text-amber-800 font-medium">開幕 / 成果展演 / 團康 / 閉幕摸彩</div>
+            </div>
+          </div>
+
+          <!-- 操場環形跑道 -->
+          <div class="flex items-center gap-3 p-3 bg-blue-50/90 rounded-xl border border-blue-200 shadow-2xs">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-xs">
+              <i class="fa-solid fa-person-running"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-blue-950">操場環形跑道</div>
+              <div class="text-[11px] text-blue-800 font-medium">個人短跑徑賽 / 大隊接力</div>
+            </div>
+          </div>
+
+          <!-- 操場內草地 -->
+          <div class="flex items-center gap-3 p-3 bg-emerald-50/90 rounded-xl border border-emerald-200 shadow-2xs">
+            <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-xs">
+              <i class="fa-solid fa-clover"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-emerald-950">操場內草地</div>
+              <div class="text-[11px] text-emerald-800 font-medium">拔河 ＆ 鉛球擲遠 ＆ 趣味競賽</div>
+            </div>
+          </div>
+
+          <!-- B1小禮堂 -->
+          <div class="flex items-center gap-3 p-3 bg-purple-50/90 rounded-xl border border-purple-200 shadow-2xs">
+            <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-xs">
+              <i class="fa-solid fa-utensils"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-purple-950">B1 小禮堂</div>
+              <div class="text-[11px] text-purple-800 font-medium">家長親職午宴（學生回班用餐）</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
         <table class="w-full text-left border-collapse text-xs sm:text-sm">
           <thead>
-            <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
-              <th class="py-3 px-4 w-28">時間</th>
-              <th class="py-3 px-4 w-28">序號 / 類別</th>
-              <th class="py-3 px-4">活動名稱與內容細節</th>
-              <th class="py-3 px-4 w-36">場地位置</th>
-              <th class="py-3 px-4 w-44">裁判主控、行政與志工協作</th>
+            <tr class="bg-slate-100/90 text-slate-700 font-bold border-b border-slate-200">
+              <th class="py-3.5 px-4 whitespace-nowrap">時間</th>
+              <th class="py-3.5 px-4 whitespace-nowrap text-center">序號 / 類別</th>
+              <th class="py-3.5 px-4 min-w-[280px]">活動名稱與內容細節</th>
+              <th class="py-3.5 px-4 whitespace-nowrap">場地位置</th>
+              <th class="py-3.5 px-4 min-w-[220px]">裁判主控、行政與志工協作</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
             <!-- 07:55~08:00 -->
             <tr class="hover:bg-amber-50/50">
-              <td class="py-3 px-4 font-mono font-bold text-slate-600">07:55-08:00</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 bg-slate-200 text-slate-700 rounded text-xs">迎賓準備</span></td>
-              <td class="py-3 px-4 font-medium text-slate-900">貴賓簽到、學生各班進場集合、設備定位就緒、獎品盤點</td>
-              <td class="py-3 px-4 text-slate-600">風雨球場（室外）</td>
-              <td class="py-3 px-4 text-slate-500">建榮主任、鈺真組長(獎品盤點)、Amos老師(攝影拍照)、志工群</td>
+              <td class="py-3.5 px-4 font-mono font-bold text-slate-600 whitespace-nowrap">07:55-08:00</td>
+              <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold whitespace-nowrap">迎賓準備</span>
+              </td>
+              <td class="py-3.5 px-4 font-medium text-slate-900">貴賓簽到、學生各班進場集合、設備定位就緒、獎品盤點</td>
+              <td class="py-3.5 px-4 text-slate-600 whitespace-nowrap">風雨球場（室外）</td>
+              <td class="py-3.5 px-4 text-slate-500">建榮主任、鈺真組長(獎品盤點)、Amos老師(攝影拍照)、志工群</td>
             </tr>
             <!-- 08:00~08:30 -->
             <tr class="hover:bg-amber-50/50 bg-amber-50/30">
-              <td class="py-3 px-4 font-mono font-bold text-amber-700">08:00-08:30</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 bg-amber-500 text-white rounded text-xs font-bold">開幕典禮</span></td>
-              <td class="py-3 px-4 font-medium text-slate-900">
+              <td class="py-3.5 px-4 font-mono font-bold text-amber-700 whitespace-nowrap">08:00-08:30</td>
+              <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-amber-500 text-white rounded-lg text-xs font-bold whitespace-nowrap shadow-2xs">開幕典禮</span>
+              </td>
+              <td class="py-3.5 px-4 font-medium text-slate-900">
                 運動員進場 ➔ 跳鼓陣開場表演 ➔ 唱校歌/運動會歌 ➔ 主席與長官致詞 ➔ 頒發家長會長證書與獎學金
               </td>
-              <td class="py-3 px-4 text-amber-800 font-bold">風雨球場（室外）</td>
-              <td class="py-3 px-4 text-slate-600">校長、司儀、武憲老師(跳鼓)、宗修組長(音效)、Amos老師(攝影拍照)</td>
+              <td class="py-3.5 px-4 text-amber-800 font-bold whitespace-nowrap">風雨球場（室外）</td>
+              <td class="py-3.5 px-4 text-slate-600">校長、司儀、武憲老師(跳鼓)、宗修組長(音效)、Amos老師(攝影拍照)</td>
             </tr>
             <!-- 08:30~09:15 -->
             <tr class="hover:bg-amber-50/50">
-              <td class="py-3 px-4 font-mono font-bold text-purple-700">08:30-09:15</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-bold">成果展演</span></td>
-              <td class="py-3 px-4 font-medium text-slate-900">
+              <td class="py-3.5 px-4 font-mono font-bold text-purple-700 whitespace-nowrap">08:30-09:15</td>
+              <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-lg text-xs font-bold whitespace-nowrap shadow-2xs">成果展演</span>
+              </td>
+              <td class="py-3.5 px-4 font-medium text-slate-900">
                 1. 小小金獅陣（水樹教練）<br>
                 2. 樂齡學員活力律動（樂齡中心）<br>
                 3. 幼兒園活潑舞蹈（幼兒園教師群）<br>
@@ -281,26 +328,30 @@
                 6. 高年級舞蹈成果展（武憲、詒茹老師）<br>
                 7. 全校健康操（全員起立賽前大熱身！）
               </td>
-              <td class="py-3 px-4 text-purple-700 font-bold">風雨球場（室外）</td>
-              <td class="py-3 px-4 text-slate-600">各班導師、科任珮華老師、宗修組長(音效)、Amos老師(攝影拍照)</td>
+              <td class="py-3.5 px-4 text-purple-700 font-bold whitespace-nowrap">風雨球場（室外）</td>
+              <td class="py-3.5 px-4 text-slate-600">各班導師、科任珮華老師、宗修組長(音效)、Amos老師(攝影拍照)</td>
             </tr>
             <!-- 09:15~09:25 -->
             <tr class="hover:bg-slate-50 text-slate-500">
-              <td class="py-2 px-4 font-mono font-bold">09:15-09:25</td>
-              <td class="py-2 px-4"><span class="px-2 py-0.5 bg-slate-100 rounded text-xs">整隊移地</span></td>
-              <td class="py-2 px-4 italic">全體師生與家長移步至「戶外操場」，各隊就位休息區，短跑選手至起點檢錄</td>
-              <td class="py-2 px-4">操場草地 / 環形跑道</td>
-              <td class="py-2 px-4">紅綠藍指導教師群、Amos老師(攝影拍照)</td>
+              <td class="py-2.5 px-4 font-mono font-bold whitespace-nowrap">09:15-09:25</td>
+              <td class="py-2.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold whitespace-nowrap">整隊移地</span>
+              </td>
+              <td class="py-2.5 px-4 italic">全體師生與家長移步至「戶外操場」，各隊就位休息區，短跑選手至起點檢錄</td>
+              <td class="py-2.5 px-4 whitespace-nowrap">操場草地 / 環形跑道</td>
+              <td class="py-2.5 px-4">紅綠藍指導教師群、Amos老師(攝影拍照)</td>
             </tr>
             <!-- 09:25~10:00 順序1：個人短跑徑賽 -->
             <tr class="hover:bg-amber-50/50 bg-blue-50/30">
-              <td class="py-3 px-4 font-mono font-bold text-blue-700">09:25-10:00</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 bg-blue-600 text-white rounded text-xs font-bold">① 個人短跑</span></td>
-              <td class="py-3 px-4 font-medium text-slate-900">
+              <td class="py-3.5 px-4 font-mono font-bold text-blue-700 whitespace-nowrap">09:25-10:00</td>
+              <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-blue-600 text-white rounded-lg text-xs font-bold whitespace-nowrap shadow-2xs">① 個人短跑</span>
+              </td>
+              <td class="py-3.5 px-4 font-medium text-slate-900">
                 計時決賽：幼兒60m ➔ 低年級60m ➔ 中年級80m ➔ 高年級100m（各組取前三名頒發校徽獎牌）
               </td>
-              <td class="py-3 px-4 text-blue-700 font-bold">操場環形跑道</td>
-              <td class="py-3 px-4 text-slate-600">
+              <td class="py-3.5 px-4 text-blue-700 font-bold whitespace-nowrap">操場環形跑道</td>
+              <td class="py-3.5 px-4 text-slate-600">
                 發令：秀麗主任<br>
                 檢錄：建榮主任＋高中志工1<br>
                 計時拉線：高中志工2~6<br>
@@ -311,16 +362,18 @@
             </tr>
             <!-- 10:00~10:35 順序2：拔河 ＆ 鉛球擲遠 -->
             <tr class="hover:bg-amber-50/50 bg-orange-50/30">
-              <td class="py-3 px-4 font-mono font-bold text-orange-700">10:00-10:35</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 bg-orange-500 text-white rounded text-xs font-bold">② 拔河 ＆ 鉛球</span></td>
-              <td class="py-3 px-4 font-medium text-slate-900">
+              <td class="py-3.5 px-4 font-mono font-bold text-orange-700 whitespace-nowrap">10:00-10:35</td>
+              <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-orange-500 text-white rounded-lg text-xs font-bold whitespace-nowrap shadow-2xs">② 拔河 ＆ 鉛球</span>
+              </td>
+              <td class="py-3.5 px-4 font-medium text-slate-900">
                 <strong>【拔河熱血大對抗】</strong><br>
                 • 幼兒園趣味拔河 ➔ 1~3年級紅綠藍拔河 ➔ 4~6年級紅綠藍拔河 ➔ 社區親師拔河表演賽<br>
                 <strong class="text-rose-600">【社區家長與校友鉛球擲遠】</strong><br>
                 • 同步於操場內草地專區舉行，參賽家長人人獲贈實用毛巾香皂禮！
               </td>
-              <td class="py-3 px-4 text-orange-700 font-bold">操場內草地</td>
-              <td class="py-3 px-4 text-slate-600">
+              <td class="py-3.5 px-4 text-orange-700 font-bold whitespace-nowrap">操場內草地</td>
+              <td class="py-3.5 px-4 text-slate-600">
                 主裁判：秀麗主任<br>
                 拔河安全：建榮主任、宗修組長<br>
                 繩子定位/撿球：高中志工1~4<br>
@@ -331,16 +384,18 @@
             </tr>
             <!-- 10:35~11:10 順序3：趣味競賽 -->
             <tr class="hover:bg-amber-50/50 bg-emerald-50/30">
-              <td class="py-3 px-4 font-mono font-bold text-emerald-700">10:35-11:10</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 bg-emerald-600 text-white rounded text-xs font-bold">③ 趣味競賽</span></td>
-              <td class="py-3 px-4 font-medium text-slate-900">
+              <td class="py-3.5 px-4 font-mono font-bold text-emerald-700 whitespace-nowrap">10:35-11:10</td>
+              <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold whitespace-nowrap shadow-2xs">③ 趣味競賽</span>
+              </td>
+              <td class="py-3.5 px-4 font-medium text-slate-900">
                 <strong>依序歡樂登場：</strong><br>
                 1. <strong>紅綠藍趣味賽：蟲蟲危機</strong>（1~6年級學生跨年級毛毛蟲接力）<br>
                 2. <strong>幼兒園親子趣味賽：同心協力夾夾樂</strong>（萌娃與家長合力夾球）<br>
                 3. <strong>國小部親子趣味賽：協力運球</strong>（家長與學生搭檔展現默契）
               </td>
-              <td class="py-3 px-4 text-emerald-700 font-bold">操場內草地</td>
-              <td class="py-3 px-4 text-slate-600">
+              <td class="py-3.5 px-4 text-emerald-700 font-bold whitespace-nowrap">操場內草地</td>
+              <td class="py-3.5 px-4 text-slate-600">
                 主持：秀麗主任<br>
                 器材與折返點：高中志工1~6<br>
                 成績：淇淇老師<br>
@@ -351,16 +406,18 @@
             </tr>
             <!-- 11:10~11:40 順序4：大隊接力 -->
             <tr class="hover:bg-amber-50/50 bg-rose-50/30">
-              <td class="py-3 px-4 font-mono font-bold text-rose-700">11:10-11:40</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 bg-rose-600 text-white rounded text-xs font-bold">④ 大隊接力</span></td>
-              <td class="py-3 px-4 font-medium text-slate-900">
+              <td class="py-3.5 px-4 font-mono font-bold text-rose-700 whitespace-nowrap">11:10-11:40</td>
+              <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-rose-600 text-white rounded-lg text-xs font-bold whitespace-nowrap shadow-2xs">④ 大隊接力</span>
+              </td>
+              <td class="py-3.5 px-4 font-medium text-slate-900">
                 <strong>上午壓軸最高潮賽事：</strong><br>
                 1. <strong>1~3年級趣味大隊接力（納入紅綠藍積分累算！）</strong><br>
                 2. <strong>4~6年級紅綠藍大隊接力（最高榮譽之戰）</strong><br>
                 3. 社區校友家長熱血接力示範賽（歡樂衝線）
               </td>
-              <td class="py-3 px-4 text-rose-700 font-bold">操場環形跑道</td>
-              <td class="py-3 px-4 text-slate-600">
+              <td class="py-3.5 px-4 text-rose-700 font-bold whitespace-nowrap">操場環形跑道</td>
+              <td class="py-3.5 px-4 text-slate-600">
                 發令：秀麗主任<br>
                 接力區踩線：高中志工1~4<br>
                 終點裁判：宗修組長、建榮主任<br>
@@ -372,44 +429,52 @@
             </tr>
             <!-- 11:40~13:30 -->
             <tr class="hover:bg-amber-50/50">
-              <td class="py-3 px-4 font-mono font-bold text-slate-600">11:40-13:30</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 bg-slate-200 text-slate-700 rounded text-xs">親職午宴約會</span></td>
-              <td class="py-3 px-4 font-medium text-slate-900">
+              <td class="py-3.5 px-4 font-mono font-bold text-slate-600 whitespace-nowrap">11:40-13:30</td>
+              <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold whitespace-nowrap">親職午宴約會</span>
+              </td>
+              <td class="py-3.5 px-4 font-medium text-slate-900">
                 • <strong>學生各自回班級用餐</strong><br>
                 • <strong>長官、貴賓與家長移至 B1 小禮堂</strong> 享用樂齡媽媽現煮風味午餐，並舉行親職教育與學力宣導，公布上午各隊積分戰況
               </td>
-              <td class="py-3 px-4 text-purple-700 font-bold">B1 小禮堂<br><span class="text-xs text-slate-500 font-normal">（學生回各班教室）</span></td>
-              <td class="py-3 px-4 text-slate-500">建榮主任、樂齡志工、鈺真組長、全體教職員</td>
+              <td class="py-3.5 px-4 text-purple-700 font-bold whitespace-nowrap">B1 小禮堂<br><span class="text-xs text-slate-500 font-normal">（學生回各班教室）</span></td>
+              <td class="py-3.5 px-4 text-slate-500">建榮主任、樂齡志工、鈺真組長、全體教職員</td>
             </tr>
             <!-- 13:30~15:30 -->
             <tr class="hover:bg-amber-50/50">
-              <td class="py-3 px-4 font-mono font-bold text-indigo-700">13:30-15:30</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-bold">幸福親子團康</span></td>
-              <td class="py-3 px-4 font-medium text-slate-900">
+              <td class="py-3.5 px-4 font-mono font-bold text-indigo-700 whitespace-nowrap">13:30-15:30</td>
+              <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold whitespace-nowrap shadow-2xs">幸福親子團康</span>
+              </td>
+              <td class="py-3.5 px-4 font-medium text-slate-900">
                 「幸福親子歡樂列車」外聘 CAOEE 專業講師群，操場與風雨球場分組互動破冰與趣味動感團康（表定進行至 15:30）
               </td>
-              <td class="py-3 px-4 text-indigo-700 font-bold">操場 ＆ 風雨球場（室外）</td>
-              <td class="py-3 px-4 text-slate-600">外聘講師群、全體導師、宗修組長、Amos老師(攝影拍照)</td>
+              <td class="py-3.5 px-4 text-indigo-700 font-bold whitespace-nowrap">操場 ＆ 風雨球場（室外）</td>
+              <td class="py-3.5 px-4 text-slate-600">外聘講師群、全體導師、宗修組長、Amos老師(攝影拍照)</td>
             </tr>
             <!-- 15:30~15:50 閉幕式與大摸彩 -->
             <tr class="hover:bg-amber-50/50 bg-amber-100/50">
-              <td class="py-3 px-4 font-mono font-bold text-amber-800">15:30-15:50</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 bg-amber-600 text-white rounded text-xs font-bold">閉幕與大摸彩</span></td>
-              <td class="py-3 px-4 font-medium text-slate-900">
+              <td class="py-3.5 px-4 font-mono font-bold text-amber-800 whitespace-nowrap">15:30-15:50</td>
+              <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-amber-600 text-white rounded-lg text-xs font-bold whitespace-nowrap shadow-2xs">閉幕與大摸彩</span>
+              </td>
+              <td class="py-3.5 px-4 font-medium text-slate-900">
                 頒發競賽總錦標與互助合作錦標 ➔ <strong>全校 118 位學生+幼生人人有獎 120+ 份大摸彩！</strong>（3:30至3:50高潮抽出）
               </td>
-              <td class="py-3 px-4 text-amber-800 font-bold">風雨球場（室外）舞台</td>
-              <td class="py-3 px-4 text-slate-600">校長、會長、鈺真組長(摸彩獎品發送)、淇淇老師、Amos老師(攝影拍照)、全體教職員</td>
+              <td class="py-3.5 px-4 text-amber-800 font-bold whitespace-nowrap">風雨球場（室外）舞台</td>
+              <td class="py-3.5 px-4 text-slate-600">校長、會長、鈺真組長(摸彩獎品發送)、淇淇老師、Amos老師(攝影拍照)、全體教職員</td>
             </tr>
             <!-- 15:50~16:00 場地復原與放學 -->
             <tr class="hover:bg-amber-50/50 bg-slate-50">
-              <td class="py-3 px-4 font-mono font-bold text-slate-700">15:50-16:00</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 bg-slate-700 text-white rounded text-xs font-bold">場地復原</span></td>
-              <td class="py-3 px-4 text-slate-900 font-medium">
+              <td class="py-3.5 px-4 font-mono font-bold text-slate-700 whitespace-nowrap">15:50-16:00</td>
+              <td class="py-3.5 px-4 whitespace-nowrap text-center">
+                <span class="inline-block px-3 py-1 bg-slate-700 text-white rounded-lg text-xs font-bold whitespace-nowrap">場地復原</span>
+              </td>
+              <td class="py-3.5 px-4 text-slate-900 font-medium">
                 <strong>全體親師生合力復原場地（16:00 準時放學平安賦歸！）</strong>
               </td>
-              <td class="py-3 px-4 text-slate-600 font-bold">全校區</td>
-              <td class="py-3 px-4 text-slate-600">全體親師生合力完成</td>
+              <td class="py-3.5 px-4 text-slate-600 font-bold whitespace-nowrap">全校區</td>
+              <td class="py-3.5 px-4 text-slate-600">全體親師生合力完成</td>
             </tr>
           </tbody>
         </table>
