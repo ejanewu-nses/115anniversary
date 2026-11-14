@@ -17,10 +17,24 @@
       font-family: 'ZCOOL KuaiLe', cursive, 'Noto Sans TC', sans-serif;
     }
     .hero-pattern {
-      background-color: #fffbeb;
-      background-image: radial-gradient(#fbbf24 1px, transparent 1px), radial-gradient(#f87171 1px, #fffbeb 1px);
-      background-size: 40px 40px;
-      background-position: 0 0, 20px 20px;
+      background-image: radial-gradient(#fbbf24 1px, transparent 1px), radial-gradient(#f87171 1px, transparent 1px);
+      background-size: 36px 36px;
+      background-position: 0 0, 18px 18px;
+    }
+    /* 全站 3D 立體化方框系統 */
+    .box-3d {
+      background: #ffffff;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04), 0 1px 3px 0 rgba(15, 23, 42, 0.05);
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    .box-3d:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.14), 0 10px 15px -4px rgba(15, 23, 42, 0.06);
+    }
+    .box-3d-static {
+      box-shadow: 0 12px 30px -6px rgba(15, 23, 42, 0.10), 0 6px 12px -4px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      position: relative;
     }
     .team-card-red {
       background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
@@ -69,41 +83,50 @@
     </div>
   </header>
 
-  <!-- Hero 英雄主視覺區 -->
-  <section class="hero-pattern py-12 sm:py-20 border-b border-amber-200 relative overflow-hidden">
+  <!-- Hero 英雄主視覺區（南興操場實景刷淡鋪底） -->
+  <section class="relative py-14 sm:py-24 border-b border-amber-300 overflow-hidden bg-amber-50">
+    <!-- 底層：南興操場實景圖 刷淡鋪底 -->
+    <div class="absolute inset-0 z-0">
+      <img src="images/school_field.jpg" alt="南興國小操場全景" class="w-full h-full object-cover object-center transform scale-105 filter blur-[0.3px]">
+      <!-- 柔和刷淡漸層遮罩（確保操場綠草、藍天若隱若現，標題高對比清晰可讀） -->
+      <div class="absolute inset-0 bg-gradient-to-b from-amber-50/90 via-white/85 to-amber-100/90 backdrop-blur-[1px]"></div>
+      <!-- 晶亮慶典點陣 -->
+      <div class="absolute inset-0 opacity-25 hero-pattern"></div>
+    </div>
+
     <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center relative z-10">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-amber-300 text-amber-800 text-xs sm:text-sm font-bold shadow-sm mb-6">
-        <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 border-2 border-amber-300 text-amber-900 text-xs sm:text-sm font-bold box-3d-static mb-6">
+        <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
         115 年 12 月 05 日（星期六）隆重登場
       </div>
-      <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-4">
+      <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-4 drop-shadow-sm">
         金獅躍騰・蜈蚣獻瑞<br>
         <span class="bg-gradient-to-r from-rose-600 via-amber-500 to-emerald-600 bg-clip-text text-transparent font-fun">
           紅寶石綻放南興心
         </span>
       </h2>
-      <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 leading-relaxed mb-8">
+      <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-700 font-medium leading-relaxed mb-8 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
         凝聚公塭、南興庄頭深厚情誼，深植「恆毅力、自信心、正向動機、自省力」。<br class="hidden sm:inline">
         全校親師生、樂齡長輩與各界校友，攜手迎接熱力四射的南興年度盛典！
       </p>
 
-      <!-- 快速亮點指標卡 -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto">
-        <div class="bg-white/90 backdrop-blur rounded-2xl p-4 shadow-sm border border-amber-100">
-          <div class="text-2xl font-black text-rose-600 font-fun">3 隊對抗</div>
-          <div class="text-xs text-slate-500 font-medium">全校紅綠藍混齡積分</div>
+      <!-- 快速亮點指標卡：升級立體方框 -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 max-w-4xl mx-auto">
+        <div class="bg-white/95 backdrop-blur rounded-2xl p-4.5 box-3d border-2 border-amber-200/90">
+          <div class="text-2xl sm:text-3xl font-black text-rose-600 font-fun">3 隊對抗</div>
+          <div class="text-xs text-slate-600 font-bold mt-1">全校紅綠藍混齡積分</div>
         </div>
-        <div class="bg-white/90 backdrop-blur rounded-2xl p-4 shadow-sm border border-amber-100">
-          <div class="text-2xl font-black text-amber-600 font-fun">4 階段成果</div>
-          <div class="text-xs text-slate-500 font-medium">幼/低/中/高舞蹈精湛展演</div>
+        <div class="bg-white/95 backdrop-blur rounded-2xl p-4.5 box-3d border-2 border-amber-200/90">
+          <div class="text-2xl sm:text-3xl font-black text-amber-600 font-fun">4 階段成果</div>
+          <div class="text-xs text-slate-600 font-bold mt-1">幼/低/中/高舞蹈精湛展演</div>
         </div>
-        <div class="bg-white/90 backdrop-blur rounded-2xl p-4 shadow-sm border border-amber-100">
-          <div class="text-2xl font-black text-emerald-600 font-fun">社區傳承</div>
-          <div class="text-xs text-slate-500 font-medium">跳鼓・金獅・鉛球・樂齡共融</div>
+        <div class="bg-white/95 backdrop-blur rounded-2xl p-4.5 box-3d border-2 border-amber-200/90">
+          <div class="text-2xl sm:text-3xl font-black text-emerald-600 font-fun">社區傳承</div>
+          <div class="text-xs text-slate-600 font-bold mt-1">跳鼓・金獅・鉛球・樂齡共融</div>
         </div>
-        <div class="bg-white/90 backdrop-blur rounded-2xl p-4 shadow-sm border border-amber-100">
-          <div class="text-2xl font-black text-blue-600 font-fun">120+ 大獎</div>
-          <div class="text-xs text-slate-500 font-medium">閉幕全校大摸彩 人人有獎</div>
+        <div class="bg-white/95 backdrop-blur rounded-2xl p-4.5 box-3d border-2 border-amber-200/90">
+          <div class="text-2xl sm:text-3xl font-black text-blue-600 font-fun">120+ 大獎</div>
+          <div class="text-xs text-slate-600 font-bold mt-1">閉幕全校大摸彩 人人有獎</div>
         </div>
       </div>
     </div>
@@ -112,10 +135,10 @@
   <!-- 校長的話與主題理念 -->
   <section id="about" class="py-12 bg-white border-b border-slate-200">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-6 sm:p-10 border border-amber-200 flex flex-col md:flex-row items-center gap-8 shadow-sm">
-        <div class="w-full md:w-56 h-48 md:h-52 rounded-2xl overflow-hidden flex-shrink-0 shadow-md border-4 border-white bg-amber-100 relative group">
+      <div class="bg-gradient-to-br from-amber-50/95 via-orange-50/85 to-amber-100/80 rounded-3xl p-6 sm:p-10 border-2 border-amber-300 flex flex-col md:flex-row items-center gap-8 box-3d-static">
+        <div class="w-full md:w-56 h-48 md:h-52 rounded-2xl overflow-hidden flex-shrink-0 shadow-xl border-4 border-white bg-amber-100 relative group">
           <img src="images/school_gate.jpg" alt="南興國小大門校景" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
-          <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-center">
+          <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent p-2 text-center">
             <span class="text-white text-xs font-bold tracking-wider">綠活南興 • 卓越校園</span>
           </div>
         </div>
@@ -127,10 +150,10 @@
           <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug tracking-tight mb-3">
             在汗水與笑聲中，看見孩子的自信
           </h3>
-          <p class="text-sm sm:text-base text-slate-700 leading-relaxed">
+          <p class="text-sm sm:text-base text-slate-700 leading-relaxed font-medium">
             南興國小座落於台江沃土，擁有「金獅陣、蜈蚣陣、在地番茄紅寶石」三寶豐沛滋養。校慶不僅是一場體能競技，更是親師生與社區緊密相連的溫馨平台。今年我們特別強化了「互助合作精神總錦標」，並邀請港明高中的優秀青年志工投入服務，讓每位老師能全心陪伴孩子在紅綠藍團隊中學會相互扶持。誠摯邀請各位長官、貴賓、社區家長與傑出校友光臨南興，同享這份榮耀與喜悅！
           </p>
-          <div class="mt-6 pt-4 border-t border-amber-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
+          <div class="mt-6 pt-4 border-t border-amber-300/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
             <div class="flex items-center gap-3 text-amber-950 font-bold">
               <span>校　　長　<strong class="text-base sm:text-lg text-slate-900">吳 宜 蓁</strong></span>
               <span class="text-amber-300">|</span>
@@ -156,10 +179,10 @@
 
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
         <!-- 11.25 -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between hover:border-amber-400 transition">
+        <div class="bg-white rounded-2xl p-5 border-2 border-slate-200/90 box-3d flex flex-col justify-between">
           <div>
             <div class="inline-block px-2.5 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-md mb-2">11/25 (三)</div>
-            <div class="text-xs text-slate-500">08:00 ~ 08:40</div>
+            <div class="text-xs text-slate-500 font-bold">08:00 ~ 08:40</div>
             <h4 class="text-base font-bold text-slate-900 mt-1">校園活力慢跑</h4>
             <p class="text-xs text-slate-600 mt-2">紅綠藍縱向競賽<br>幼兒200m、低400m、中高800m，全員累積耐力積分！</p>
           </div>
@@ -167,10 +190,10 @@
         </div>
 
         <!-- 11.30 -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between hover:border-amber-400 transition">
+        <div class="bg-white rounded-2xl p-5 border-2 border-slate-200/90 box-3d flex flex-col justify-between">
           <div>
             <div class="inline-block px-2.5 py-1 bg-rose-100 text-rose-800 text-xs font-bold rounded-md mb-2">11/30 (一)</div>
-            <div class="text-xs text-slate-500">08:00 ~ 08:40</div>
+            <div class="text-xs text-slate-500 font-bold">08:00 ~ 08:40</div>
             <h4 class="text-base font-bold text-slate-900 mt-1">趣味接力預賽</h4>
             <p class="text-xs text-slate-600 mt-2">紅綠藍混齡趣味挑戰，凝聚小組默契與加油精神。</p>
           </div>
@@ -178,10 +201,10 @@
         </div>
 
         <!-- 12.02 -->
-        <div class="bg-gradient-to-b from-amber-50 to-white rounded-2xl p-5 shadow-sm border-2 border-amber-300 flex flex-col justify-between">
+        <div class="bg-gradient-to-b from-amber-50 to-white rounded-2xl p-5 border-2 border-amber-300 box-3d flex flex-col justify-between">
           <div>
             <div class="inline-block px-2.5 py-1 bg-amber-500 text-white text-xs font-bold rounded-md mb-2">12/02 (三)</div>
-            <div class="text-xs text-slate-500">08:00 ~ 09:30</div>
+            <div class="text-xs text-slate-500 font-bold">08:00 ~ 09:30</div>
             <h4 class="text-base font-bold text-slate-900 mt-1">社區踏查走讀</h4>
             <p class="text-xs text-slate-600 mt-2">走訪公塭萬安宮與南興新南宮，結合蜈蚣與金獅文史尋根！</p>
           </div>
@@ -189,10 +212,10 @@
         </div>
 
         <!-- 12.03 -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between hover:border-amber-400 transition">
+        <div class="bg-white rounded-2xl p-5 border-2 border-slate-200/90 box-3d flex flex-col justify-between">
           <div>
             <div class="inline-block px-2.5 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded-md mb-2">12/03 (四)</div>
-            <div class="text-xs text-slate-500">08:00 ~ 08:40</div>
+            <div class="text-xs text-slate-500 font-bold">08:00 ~ 08:40</div>
             <h4 class="text-base font-bold text-slate-900 mt-1">熱血躲避球賽</h4>
             <p class="text-xs text-slate-600 mt-2">美式6球制快節奏對抗，中高年級全力比拼反應與走位。</p>
           </div>
@@ -200,10 +223,10 @@
         </div>
 
         <!-- 12.04 -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between hover:border-amber-400 transition">
+        <div class="bg-white rounded-2xl p-5 border-2 border-slate-200/90 box-3d flex flex-col justify-between">
           <div>
             <div class="inline-block px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-md mb-2">12/04 (五)</div>
-            <div class="text-xs text-slate-500">08:40 ~ 10:30</div>
+            <div class="text-xs text-slate-500 font-bold">08:40 ~ 10:30</div>
             <h4 class="text-base font-bold text-slate-900 mt-1">運動大會總預演</h4>
             <p class="text-xs text-slate-600 mt-2">全校進場、跳鼓、金獅及各年級舞蹈走位定位演練。</p>
           </div>
@@ -231,11 +254,11 @@
           </p>
         </div>
 
-        <!-- 4 個標示地點的小區塊（整齊排開、齊頭對齊） -->
+        <!-- 4 個標示地點的小區塊（整齊排開、齊頭對齊、強立體感） -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
           <!-- 風雨球場 -->
-          <div class="flex items-center gap-3 p-3 bg-amber-50/90 rounded-xl border border-amber-200 shadow-2xs">
-            <div class="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-xs">
+          <div class="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-amber-200 box-3d">
+            <div class="w-9 h-9 rounded-lg bg-amber-500 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-md">
               <i class="fa-solid fa-umbrella-beach"></i>
             </div>
             <div>
@@ -245,8 +268,8 @@
           </div>
 
           <!-- 操場環形跑道 -->
-          <div class="flex items-center gap-3 p-3 bg-blue-50/90 rounded-xl border border-blue-200 shadow-2xs">
-            <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-xs">
+          <div class="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-blue-200 box-3d">
+            <div class="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-md">
               <i class="fa-solid fa-person-running"></i>
             </div>
             <div>
@@ -256,8 +279,8 @@
           </div>
 
           <!-- 操場內草地 -->
-          <div class="flex items-center gap-3 p-3 bg-emerald-50/90 rounded-xl border border-emerald-200 shadow-2xs">
-            <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-xs">
+          <div class="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-emerald-200 box-3d">
+            <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-md">
               <i class="fa-solid fa-clover"></i>
             </div>
             <div>
@@ -267,8 +290,8 @@
           </div>
 
           <!-- B1小禮堂 -->
-          <div class="flex items-center gap-3 p-3 bg-purple-50/90 rounded-xl border border-purple-200 shadow-2xs">
-            <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-xs">
+          <div class="flex items-center gap-3 p-3 bg-white rounded-xl border-2 border-purple-200 box-3d">
+            <div class="w-9 h-9 rounded-lg bg-purple-600 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-md">
               <i class="fa-solid fa-utensils"></i>
             </div>
             <div>
@@ -279,7 +302,7 @@
         </div>
       </div>
 
-      <div class="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
+      <div class="overflow-x-auto rounded-2xl border-2 border-slate-200/90 box-3d-static bg-white">
         <table class="w-full text-left border-collapse text-xs sm:text-sm">
           <thead>
             <tr class="bg-slate-100/90 text-slate-700 font-bold border-b border-slate-200">
@@ -491,14 +514,14 @@
         <p class="text-sm text-slate-600 mt-2">不只比速度與力量，更看重「互助合作、隊呼精神、場地整潔與小隊長領導力」！</p>
       </div>
 
-      <!-- 三隊大卡片 -->
+      <!-- 三隊大卡片（3D 立體浮雕感加強） -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- 紅隊 -->
-        <div class="team-card-red rounded-3xl p-6 border-2 shadow-sm flex flex-col justify-between">
+        <div class="team-card-red rounded-3xl p-6 border-2 box-3d flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-4">
-              <span class="px-3 py-1 bg-rose-600 text-white text-xs font-bold rounded-full">紅隊 • 烈火金獅</span>
-              <span class="text-2xl font-black text-rose-600 font-fun" id="score-red-total">78 分</span>
+              <span class="px-3 py-1 bg-rose-600 text-white text-xs font-bold rounded-full shadow-xs">紅隊 • 烈火金獅</span>
+              <span class="text-2xl font-black text-rose-600 font-fun drop-shadow-xs" id="score-red-total">78 分</span>
             </div>
             <p class="text-xs text-rose-950 font-medium">指導老師：楊詒茹、徐敏瓊、Amos (林承翰) 老師</p>
             <div class="mt-4 space-y-2 text-xs">
@@ -511,21 +534,21 @@
                 <span class="font-bold text-rose-600" id="score-red-spirit">30 分</span>
               </div>
             </div>
-            <div class="mt-4 bg-white/80 p-3 rounded-xl text-xs text-slate-600">
+            <div class="mt-4 bg-white/90 p-3 rounded-xl text-xs text-slate-700 shadow-2xs border border-rose-200/60">
               <span class="font-bold text-rose-700">精神亮點：</span> 高年級主動帶領一年級跑道檢錄，休息區隨時保持整潔乾淨！
             </div>
           </div>
-          <button onclick="addSpiritPoint('red')" class="mt-6 w-full py-2 bg-rose-600 text-white rounded-xl text-xs font-bold hover:bg-rose-700 transition">
+          <button onclick="addSpiritPoint('red')" class="mt-6 w-full py-2.5 bg-rose-600 text-white rounded-xl text-xs font-bold hover:bg-rose-700 transition shadow-md hover:shadow-lg">
             + 登錄合作精神加分
           </button>
         </div>
 
         <!-- 綠隊 -->
-        <div class="team-card-green rounded-3xl p-6 border-2 shadow-sm flex flex-col justify-between">
+        <div class="team-card-green rounded-3xl p-6 border-2 box-3d flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-4">
-              <span class="px-3 py-1 bg-emerald-600 text-white text-xs font-bold rounded-full">綠隊 • 翠玉蜈蚣</span>
-              <span class="text-2xl font-black text-emerald-600 font-fun" id="score-green-total">82 分</span>
+              <span class="px-3 py-1 bg-emerald-600 text-white text-xs font-bold rounded-full shadow-xs">綠隊 • 翠玉蜈蚣</span>
+              <span class="text-2xl font-black text-emerald-600 font-fun drop-shadow-xs" id="score-green-total">82 分</span>
             </div>
             <p class="text-xs text-emerald-950 font-medium">指導老師：蔡武憲、羅珮華、鄭潔老師</p>
             <div class="mt-4 space-y-2 text-xs">
@@ -538,21 +561,21 @@
                 <span class="font-bold text-emerald-600" id="score-green-spirit">32 分</span>
               </div>
             </div>
-            <div class="mt-4 bg-white/80 p-3 rounded-xl text-xs text-slate-600">
+            <div class="mt-4 bg-white/90 p-3 rounded-xl text-xs text-slate-700 shadow-2xs border border-emerald-200/60">
               <span class="font-bold text-emerald-700">精神亮點：</span> 隊呼整齊響徹操場，大隊接力掉棒時全隊彼此打氣不抱怨！
             </div>
           </div>
-          <button onclick="addSpiritPoint('green')" class="mt-6 w-full py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition">
+          <button onclick="addSpiritPoint('green')" class="mt-6 w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition shadow-md hover:shadow-lg">
             + 登錄合作精神加分
           </button>
         </div>
 
         <!-- 藍隊 -->
-        <div class="team-card-blue rounded-3xl p-6 border-2 shadow-sm flex flex-col justify-between">
+        <div class="team-card-blue rounded-3xl p-6 border-2 box-3d flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-4">
-              <span class="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">藍隊 • 碧海晨曦</span>
-              <span class="text-2xl font-black text-blue-600 font-fun" id="score-blue-total">79 分</span>
+              <span class="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-xs">藍隊 • 碧海晨曦</span>
+              <span class="text-2xl font-black text-blue-600 font-fun drop-shadow-xs" id="score-blue-total">79 分</span>
             </div>
             <p class="text-xs text-blue-950 font-medium">指導老師：黃美雅、施喬恩、周婉琳老師</p>
             <div class="mt-4 space-y-2 text-xs">
@@ -565,18 +588,18 @@
                 <span class="font-bold text-blue-600" id="score-blue-spirit">32 分</span>
               </div>
             </div>
-            <div class="mt-4 bg-white/80 p-3 rounded-xl text-xs text-slate-600">
+            <div class="mt-4 bg-white/90 p-3 rounded-xl text-xs text-slate-700 shadow-2xs border border-blue-200/60">
               <span class="font-bold text-blue-700">精神亮點：</span> 拔河比賽時全隊整齊一二喊聲，中低年級緊跟小隊長指示！
             </div>
           </div>
-          <button onclick="addSpiritPoint('blue')" class="mt-6 w-full py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition">
+          <button onclick="addSpiritPoint('blue')" class="mt-6 w-full py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition shadow-md hover:shadow-lg">
             + 登錄合作精神加分
           </button>
         </div>
       </div>
 
-      <!-- 精神評分規準說明卡 -->
-      <div class="mt-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-xs sm:text-sm">
+      <!-- 精神評分規準說明卡（立體化卡片） -->
+      <div class="mt-8 bg-white p-6 sm:p-7 rounded-2xl border-2 border-slate-200 box-3d-static text-xs sm:text-sm">
         <h4 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
           <i class="fa-solid fa-award text-amber-500"></i>
           「互助合作精神總錦標」四大評審面向（由大會裁判長與港明志工觀察員共同核計）：
@@ -606,32 +629,32 @@
   <!-- 全校大摸彩專區 -->
   <section id="lottery" class="py-12 bg-white border-b border-slate-200">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="bg-gradient-to-r from-rose-500 via-amber-500 to-orange-500 rounded-3xl p-8 sm:p-12 text-white shadow-lg relative overflow-hidden">
+      <div class="bg-gradient-to-r from-rose-500 via-amber-500 to-orange-500 rounded-3xl p-8 sm:p-12 text-white border-2 border-amber-300 box-3d-static relative overflow-hidden">
         <div class="relative z-10 max-w-3xl">
-          <span class="px-3 py-1 bg-white/20 backdrop-blur text-white text-xs font-bold rounded-full uppercase tracking-wider">Lucky Draw for All</span>
-          <h3 class="text-2xl sm:text-4xl font-black mt-2 font-fun">
+          <span class="px-3 py-1 bg-white/20 backdrop-blur text-white text-xs font-bold rounded-full uppercase tracking-wider shadow-xs">Lucky Draw for All</span>
+          <h3 class="text-2xl sm:text-4xl font-black mt-2 font-fun drop-shadow-xs">
             閉幕大摸彩：全校 116 位親生人人有獎！
           </h3>
-          <p class="text-white/90 text-sm sm:text-base mt-2 leading-relaxed">
+          <p class="text-white/95 text-sm sm:text-base mt-2 leading-relaxed font-medium">
             國小 103 位學子 ＋ 幼兒園 13 位萌娃 ＋ 全體辛勞教職員工！<br>
             校長與家長會全力號召各界仕紳熱心贊助，預計募集逾 120 份豐富好禮，人人有獎笑開懷！
           </p>
 
-          <div class="mt-6 bg-white/10 backdrop-blur rounded-2xl p-4 border border-white/20">
+          <div class="mt-6 bg-white/15 backdrop-blur rounded-2xl p-4 border border-white/30 shadow-inner">
             <div class="flex justify-between text-xs font-bold mb-2">
               <span>目前募集進度（目標 120 份）：</span>
               <span class="text-amber-200">已募得 96 份 (80%)</span>
             </div>
-            <div class="w-full bg-black/20 rounded-full h-3">
-              <div class="bg-amber-300 h-3 rounded-full transition-all duration-500" style="width: 80%"></div>
+            <div class="w-full bg-black/25 rounded-full h-3">
+              <div class="bg-amber-300 h-3 rounded-full transition-all duration-500 shadow-sm" style="width: 80%"></div>
             </div>
           </div>
 
           <div class="mt-6 flex flex-wrap gap-4 items-center">
-            <a href="invite.html" class="px-5 py-2.5 bg-white text-rose-600 font-bold text-sm rounded-xl shadow hover:bg-slate-100 transition">
+            <a href="invite.html" class="px-5 py-2.5 bg-white text-rose-600 font-bold text-sm rounded-xl shadow-md hover:shadow-lg hover:bg-slate-50 transition transform hover:-translate-y-0.5">
               <i class="fa-solid fa-gift mr-1"></i> 熱心贊助獎品 / 芳名錄登記
             </a>
-            <span class="text-xs text-white/80">感謝家長會、公塭萬安宮、南興新南宮與熱心校友慷慨解囊！</span>
+            <span class="text-xs text-white/90">感謝家長會、公塭萬安宮、南興新南宮與熱心校友慷慨解囊！</span>
           </div>
         </div>
         <div class="absolute -right-8 -bottom-8 text-9xl text-white/10 select-none">
@@ -652,43 +675,49 @@
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- 操場跑道區 -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mb-4">
-            <i class="fa-solid fa-person-running"></i>
+        <div class="bg-white p-6 rounded-2xl border-2 border-slate-200/90 box-3d flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mb-4 shadow-xs">
+              <i class="fa-solid fa-person-running"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 mb-2">操場環形跑道區</h4>
+            <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
+              <li><strong>09:25~10:00</strong> 各年級個人短跑計時決賽</li>
+              <li><strong>11:10~11:40</strong> 壓軸大隊接力（1~3年級趣味、4~6年級競技、校友社區接力）</li>
+              <li>港明高中志工 1~6 號專責檢錄引導、接力區踩線與終點計時拉線</li>
+            </ul>
           </div>
-          <h4 class="font-bold text-slate-900 mb-2">操場環形跑道區</h4>
-          <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
-            <li><strong>09:25~10:00</strong> 各年級個人短跑計時決賽</li>
-            <li><strong>11:10~11:40</strong> 壓軸大隊接力（1~3年級趣味、4~6年級競技、校友社區接力）</li>
-            <li>港明高中志工 1~6 號專責檢錄引導、接力區踩線與終點計時拉線</li>
-          </ul>
         </div>
 
         <!-- 操場草地區 -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl mb-4">
-            <i class="fa-solid fa-clover"></i>
+        <div class="bg-white p-6 rounded-2xl border-2 border-slate-200/90 box-3d flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl mb-4 shadow-xs">
+              <i class="fa-solid fa-clover"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 mb-2">操場內草地區（拔河・鉛球・趣味）</h4>
+            <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
+              <li><strong>10:00~10:35</strong> 拔河大對抗 ＆ 社區家長校友鉛球擲遠（發放精美毛巾香皂禮品）</li>
+              <li><strong>10:35~11:10</strong> 趣味競賽三連發（蟲蟲危機 ➔ 幼兒夾夾樂 ➔ 親子運球）</li>
+              <li>全校親師生草地圍繞熱烈加油，家長無縫同歡</li>
+            </ul>
           </div>
-          <h4 class="font-bold text-slate-900 mb-2">操場內草地區（拔河・鉛球・趣味）</h4>
-          <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
-            <li><strong>10:00~10:35</strong> 拔河大對抗 ＆ 社區家長校友鉛球擲遠（發放精美毛巾香皂禮品）</li>
-            <li><strong>10:35~11:10</strong> 趣味競賽三連發（蟲蟲危機 ➔ 幼兒夾夾樂 ➔ 親子運球）</li>
-            <li>全校親師生草地圍繞熱烈加油，家長無縫同歡</li>
-          </ul>
         </div>
 
         <!-- 風雨球場與 B1 小禮堂 -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl mb-4">
-            <i class="fa-solid fa-landmark"></i>
+        <div class="bg-white p-6 rounded-2xl border-2 border-slate-200/90 box-3d flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl mb-4 shadow-xs">
+              <i class="fa-solid fa-landmark"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 mb-2">風雨球場(室外) ＆ B1小禮堂</h4>
+            <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
+              <li><strong>07:55~08:30</strong> 迎賓簽到 ＆ 開幕典禮（跳鼓陣迎賓）</li>
+              <li><strong>08:30~09:15</strong> 成果展演（水樹教練小小金獅陣、各年級舞蹈、健康操）</li>
+              <li><strong>11:40~13:30</strong> 家長與貴賓親職風味午宴於 <strong>B1 小禮堂</strong>（學生回各班教室用餐）</li>
+              <li><strong>13:30~15:30</strong> 幸福親子團康 ＆ <strong>15:30~15:50</strong> 閉幕大摸彩（<strong>16:00 準時放學</strong>）</li>
+            </ul>
           </div>
-          <h4 class="font-bold text-slate-900 mb-2">風雨球場(室外) ＆ B1小禮堂</h4>
-          <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
-            <li><strong>07:55~08:30</strong> 迎賓簽到 ＆ 開幕典禮（跳鼓陣迎賓）</li>
-            <li><strong>08:30~09:15</strong> 成果展演（水樹教練小小金獅陣、各年級舞蹈、健康操）</li>
-            <li><strong>11:40~13:30</strong> 家長與貴賓親職風味午宴於 <strong>B1 小禮堂</strong>（學生回各班教室用餐）</li>
-            <li><strong>13:30~15:30</strong> 幸福親子團康 ＆ <strong>15:30~15:50</strong> 閉幕大摸彩（<strong>16:00 準時放學</strong>）</li>
-          </ul>
         </div>
       </div>
     </div>
