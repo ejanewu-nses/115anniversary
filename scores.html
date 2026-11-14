@@ -60,13 +60,17 @@
           </div>
         </div>
         <div class="flex items-center gap-3">
-          <a href="index.html" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition">
+          <a href="index.html" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition">
             <i class="fa-solid fa-house"></i>
             <span>回官方首頁</span>
           </a>
-          <button onclick="window.print()" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs sm:text-sm font-bold rounded-xl transition shadow-2xs">
+          <button onclick="openScoreAdmin()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-700 hover:to-amber-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md transition transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span>成績登錄後台</span>
+          </button>
+          <button onclick="window.print()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs sm:text-sm font-bold rounded-xl transition shadow-2xs">
             <i class="fa-solid fa-print"></i>
-            <span>列印成績榜</span>
+            <span>列印</span>
           </button>
         </div>
       </div>
@@ -302,51 +306,55 @@
           </div>
         </div>
 
-        <!-- 卡片 4：12/05 個人短跑徑賽決賽 -->
+        <!-- 卡片 4：12/05 個人短跑徑賽決賽（不計入戰隊分） -->
         <div class="score-card track bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-center gap-2.5">
-              <span class="px-2.5 py-1 bg-rose-600 text-white text-xs font-bold rounded-lg shadow-2xs">12/05 主場日</span>
-              <h4 class="text-base sm:text-lg font-bold text-slate-900">12/05 (六) 個人短跑徑賽決賽（各組前三名榮譽榜）</h4>
+              <span class="px-2.5 py-1 bg-slate-700 text-white text-xs font-bold rounded-lg shadow-2xs">個人獎項</span>
+              <h4 class="text-base sm:text-lg font-bold text-slate-900">12/05 (六) 個人短跑徑賽決賽（純個人榮譽 • 不計入戰隊分）</h4>
             </div>
             <span class="text-xs font-bold text-blue-700">09:25 ~ 10:00 • 操場環形跑道</span>
           </div>
 
+          <div class="mb-3 px-3 py-2 bg-blue-50/70 border border-blue-200 rounded-xl text-xs text-blue-900 font-medium">
+            ℹ️ <strong>大會計分備註：</strong>個人短跑徑賽各年級組取前三名頒發校徽獎牌與個人獎狀，<strong>不納入紅綠藍三隊戰隊總錦標累算</strong>。
+          </div>
+
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
             <!-- 幼兒組 -->
-            <div class="p-3.5 bg-amber-50/70 rounded-xl border border-amber-200">
-              <div class="font-bold text-amber-900 mb-1.5 pb-1 border-b border-amber-200">幼兒園組 (60m)</div>
-              <ul class="space-y-1 text-slate-700">
-                <li>🥇 <strong>金牌</strong>：小班/大班優秀學童 (綠隊)</li>
-                <li>🥈 <strong>銀牌</strong>：大班幼生 (紅隊)</li>
-                <li>🥉 <strong>銅牌</strong>：中班幼生 (藍隊)</li>
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <div class="font-bold text-slate-900 mb-1.5 pb-1 border-b border-slate-200">幼兒園組 (60m)</div>
+              <ul class="space-y-1 text-slate-700" id="card-sprint-kinder">
+                <li>🥇 <strong>金牌</strong>：幼兒園代表A</li>
+                <li>🥈 <strong>銀牌</strong>：幼兒園代表B</li>
+                <li>🥉 <strong>銅牌</strong>：幼兒園代表C</li>
               </ul>
             </div>
             <!-- 低年級 -->
-            <div class="p-3.5 bg-blue-50/70 rounded-xl border border-blue-200">
-              <div class="font-bold text-blue-900 mb-1.5 pb-1 border-b border-blue-200">低年級組 (60m)</div>
-              <ul class="space-y-1 text-slate-700">
-                <li>🥇 <strong>金牌</strong>：二年級代表 (藍隊)</li>
-                <li>🥈 <strong>銀牌</strong>：二年級代表 (綠隊)</li>
-                <li>🥉 <strong>銅牌</strong>：一年級代表 (紅隊)</li>
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <div class="font-bold text-slate-900 mb-1.5 pb-1 border-b border-slate-200">低年級組 (60m)</div>
+              <ul class="space-y-1 text-slate-700" id="card-sprint-low">
+                <li>🥇 <strong>金牌</strong>：二年級代表A</li>
+                <li>🥈 <strong>銀牌</strong>：二年級代表B</li>
+                <li>🥉 <strong>銅牌</strong>：一年級代表A</li>
               </ul>
             </div>
             <!-- 中年級 -->
-            <div class="p-3.5 bg-emerald-50/70 rounded-xl border border-emerald-200">
-              <div class="font-bold text-emerald-900 mb-1.5 pb-1 border-b border-emerald-200">中年級組 (80m)</div>
-              <ul class="space-y-1 text-slate-700">
-                <li>🥇 <strong>金牌</strong>：四年級代表 (紅隊)</li>
-                <li>🥈 <strong>銀牌</strong>：四年級代表 (綠隊)</li>
-                <li>🥉 <strong>銅牌</strong>：三年級代表 (藍隊)</li>
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <div class="font-bold text-slate-900 mb-1.5 pb-1 border-b border-slate-200">中年級組 (80m)</div>
+              <ul class="space-y-1 text-slate-700" id="card-sprint-mid">
+                <li>🥇 <strong>金牌</strong>：四年級代表A</li>
+                <li>🥈 <strong>銀牌</strong>：四年級代表B</li>
+                <li>🥉 <strong>銅牌</strong>：三年級代表A</li>
               </ul>
             </div>
             <!-- 高年級 -->
-            <div class="p-3.5 bg-rose-50/70 rounded-xl border border-rose-200">
-              <div class="font-bold text-rose-900 mb-1.5 pb-1 border-b border-rose-200">高年級組 (100m 飛毛腿)</div>
-              <ul class="space-y-1 text-slate-700">
-                <li>🥇 <strong>金牌</strong>：六年級代表 (綠隊)</li>
-                <li>🥈 <strong>銀牌</strong>：五年級代表 (紅隊)</li>
-                <li>🥉 <strong>銅牌</strong>：六年級代表 (藍隊)</li>
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <div class="font-bold text-slate-900 mb-1.5 pb-1 border-b border-slate-200">高年級組 (100m 飛毛腿)</div>
+              <ul class="space-y-1 text-slate-700" id="card-sprint-high">
+                <li>🥇 <strong>金牌</strong>：六年級代表A</li>
+                <li>🥈 <strong>銀牌</strong>：五年級代表A</li>
+                <li>🥉 <strong>銅牌</strong>：六年級代表B</li>
               </ul>
             </div>
           </div>
@@ -355,65 +363,85 @@
           </div>
         </div>
 
-        <!-- 卡片 5：12/05 拔河熱血大對抗 -->
+        <!-- 卡片 5：12/05 拔河熱血大對抗（分1~3年級與4~6年級兩組納入戰隊計分） -->
         <div class="score-card tug bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-center gap-2.5">
-              <span class="px-2.5 py-1 bg-orange-500 text-white text-xs font-bold rounded-lg shadow-2xs">12/05 主場日</span>
-              <h4 class="text-base sm:text-lg font-bold text-slate-900">12/05 (六) 拔河熱血大對抗 ＆ 社區鉛球擲遠</h4>
+              <span class="px-2.5 py-1 bg-orange-500 text-white text-xs font-bold rounded-lg shadow-2xs">🏆 戰隊計分</span>
+              <h4 class="text-base sm:text-lg font-bold text-slate-900">12/05 (六) 拔河熱血大對抗（分 1~3 年級組 與 4~6 年級組）</h4>
             </div>
             <span class="text-xs font-bold text-orange-700">10:00 ~ 10:35 • 操場內草地專區</span>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
-              <span class="font-bold text-slate-800 block mb-1">【1~3年級紅綠藍拔河】</span>
-              <p class="text-slate-600 mb-2">低中年級合力緊握拔河繩，步調一致向後傾！</p>
-              <div class="text-amber-800 font-bold bg-amber-50 p-2 rounded border border-amber-200">
-                🥇 綠隊 1勝 ｜ 🥈 藍隊 ｜ 🥉 紅隊
+            <div class="p-3.5 bg-amber-50/70 rounded-xl border border-amber-200">
+              <span class="font-bold text-amber-950 block mb-1">【1~3年級組拔河錦標】🏆</span>
+              <p class="text-slate-600 mb-2">低中年級紅綠藍拔河，納入戰隊積分！</p>
+              <div class="text-amber-900 font-bold bg-white p-2 rounded-lg border border-amber-200" id="card-tug-low">
+                🥇 綠隊 (+8分) ｜ 🥈 藍隊 (+6分) ｜ 🥉 紅隊 (+4分)
               </div>
             </div>
 
-            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
-              <span class="font-bold text-slate-800 block mb-1">【4~6年級高年級拔河】</span>
-              <p class="text-slate-600 mb-2">高年級體能與耐力巔峰較量，全場吶喊震天！</p>
-              <div class="text-rose-800 font-bold bg-rose-50 p-2 rounded border border-rose-200">
-                🥇 紅隊 1勝 ｜ 🥈 綠隊 ｜ 🥉 藍隊
+            <div class="p-3.5 bg-rose-50/70 rounded-xl border border-rose-200">
+              <span class="font-bold text-rose-950 block mb-1">【4~6年級組拔河錦標】🏆</span>
+              <p class="text-slate-600 mb-2">高年級體能與耐力巔峰較量，納入戰隊積分！</p>
+              <div class="text-rose-900 font-bold bg-white p-2 rounded-lg border border-rose-200" id="card-tug-high">
+                🥇 紅隊 (+8分) ｜ 🥈 綠隊 (+6分) ｜ 🥉 藍隊 (+4分)
               </div>
             </div>
 
-            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
-              <span class="font-bold text-slate-800 block mb-1">【社區家長校友鉛球擲遠】</span>
-              <p class="text-slate-600 mb-2">家長熱情組隊試身手，人人獲贈毛巾香皂禮！</p>
-              <div class="text-emerald-800 font-bold bg-emerald-50 p-2 rounded border border-emerald-200">
-                🏆 最佳臂力獎：社區里長與校友會代表
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="font-bold text-slate-800 block mb-1">【幼兒趣味拔河＆家長鉛球】</span>
+              <p class="text-slate-600 mb-2">純屬聯誼體驗活動，<strong>不納入戰隊分</strong>。</p>
+              <div class="text-slate-700 font-bold bg-white p-2 rounded-lg border border-slate-200">
+                全員同歡獲贈實用毛巾香皂禮品！
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 卡片 6：12/05 趣味競賽 -->
+        <!-- 卡片 6：12/05 趣味競賽（僅「蟲蟲危機」納入戰隊計分） -->
         <div class="score-card tug bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-center gap-2.5">
-              <span class="px-2.5 py-1 bg-emerald-600 text-white text-xs font-bold rounded-lg shadow-2xs">12/05 主場日</span>
-              <h4 class="text-base sm:text-lg font-bold text-slate-900">12/05 (六) 歡樂趣味競賽三部曲（默契與笑聲滿分）</h4>
+              <span class="px-2.5 py-1 bg-emerald-600 text-white text-xs font-bold rounded-lg shadow-2xs">趣味賽事</span>
+              <h4 class="text-base sm:text-lg font-bold text-slate-900">12/05 (六) 趣味競賽（僅「蟲蟲危機」納入紅綠藍對抗）</h4>
             </div>
             <span class="text-xs font-bold text-emerald-700">10:35 ~ 11:10 • 操場內草地</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
-              <strong class="text-slate-800 block mb-1">1. 蟲蟲危機 (1~6年級跨齡接力)</strong>
-              <p class="text-slate-600">🥇 綠隊 (+8分) ｜ 🥈 藍隊 (+6分) ｜ 🥉 紅隊 (+4分)</p>
+            <div class="p-3.5 bg-emerald-50/80 rounded-xl border-2 border-emerald-300">
+              <div class="flex items-center justify-between mb-1">
+                <strong class="text-emerald-950 font-bold">1. 蟲蟲危機 (1~6年級跨齡接力)</strong>
+                <span class="px-2 py-0.5 bg-emerald-600 text-white text-[10px] font-bold rounded">🏆 納入戰隊計分</span>
+              </div>
+              <p class="text-slate-600 mb-2">毛毛蟲合力折返衝線，考驗全隊協調默契！</p>
+              <div class="font-bold text-emerald-900 bg-white p-2 rounded-lg border border-emerald-200" id="card-caterpillar">
+                🥇 綠隊 (+8分) ｜ 🥈 藍隊 (+6分) ｜ 🥉 紅隊 (+4分)
+              </div>
             </div>
-            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
-              <strong class="text-slate-800 block mb-1">2. 幼兒親子夾夾樂</strong>
-              <p class="text-slate-600">萌娃與家長合力夾球衝線，全員完賽共享歡樂！</p>
+
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <div class="flex items-center justify-between mb-1">
+                <strong class="text-slate-800 font-bold">2. 幼兒親子夾夾樂</strong>
+                <span class="px-2 py-0.5 bg-slate-200 text-slate-600 text-[10px] font-bold rounded">🎪 親子同歡</span>
+              </div>
+              <p class="text-slate-600 mb-2">萌娃與家長合力夾球，<strong>不計入戰隊對抗分</strong>。</p>
+              <div class="text-slate-600 font-medium bg-white p-2 rounded-lg border border-slate-200">
+                完賽家庭皆獲贈精美好禮！
+              </div>
             </div>
-            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
-              <strong class="text-slate-800 block mb-1">3. 國小部親子協力運球</strong>
-              <p class="text-slate-600">🥇 藍隊 (+8分) ｜ 🥈 紅隊 (+6分) ｜ 🥉 綠隊 (+4分)</p>
+
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+              <div class="flex items-center justify-between mb-1">
+                <strong class="text-slate-800 font-bold">3. 國小部親子協力運球</strong>
+                <span class="px-2 py-0.5 bg-slate-200 text-slate-600 text-[10px] font-bold rounded">🎪 親子同歡</span>
+              </div>
+              <p class="text-slate-600 mb-2">家長與孩子搭檔運球，<strong>不計入戰隊對抗分</strong>。</p>
+              <div class="text-slate-600 font-medium bg-white p-2 rounded-lg border border-slate-200">
+                溫馨同歡，促進良好親職互動！
+              </div>
             </div>
           </div>
         </div>
@@ -526,37 +554,397 @@
     </div>
   </footer>
 
+  <!-- 成績登錄管理彈窗（Modal） -->
+  <div id="score-admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border-2 border-slate-200 overflow-hidden">
+      <!-- 標題列 -->
+      <div class="p-5 bg-slate-900 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-pen-ruler"></i>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-bold">裁判組與教導處 • 各項賽事成績登錄面板</h3>
+            <p class="text-xs text-slate-400">登錄各項比賽名次與分數，即時連動計算三隊總積分！</p>
+          </div>
+        </div>
+        <button onclick="closeScoreAdmin()" class="text-slate-400 hover:text-white text-xl p-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- 密碼保護區塊（若未登入） -->
+      <div id="admin-auth-box" class="p-8 text-center">
+        <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 mb-1">請輸入成績管理密碼</h4>
+        <p class="text-xs text-slate-500 mb-4">預設管理密碼為：<code class="bg-slate-100 px-2 py-0.5 rounded text-rose-600 font-bold">nses115</code></p>
+        <div class="max-w-xs mx-auto flex gap-2">
+          <input type="password" id="admin-pass-input" placeholder="請輸入管理密碼" class="flex-1 px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
+          <button onclick="verifyAdminPass()" class="px-4 py-2 bg-rose-600 text-white text-sm font-bold rounded-xl hover:bg-rose-700 transition">
+            解鎖登錄
+          </button>
+        </div>
+        <div id="auth-err-msg" class="text-xs text-rose-600 mt-2 hidden">密碼錯誤，請重新輸入！</div>
+      </div>
+
+      <!-- 表單內容區塊（登入後顯示） -->
+      <div id="admin-form-box" class="hidden flex-1 overflow-y-auto p-5 sm:p-6 space-y-6 text-xs sm:text-sm">
+        
+        <!-- 說明提示 -->
+        <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 text-xs">
+          💡 <strong>計分指引：</strong>
+          依大會規程，<strong>校園活力慢跑、熱血躲避球、蟲蟲危機趣味賽、拔河（1~3年級與4~6年級）、大隊接力、精神加分</strong> 計入戰隊總分；<strong>個人短跑與親子趣味賽不納入戰隊分</strong>。
+        </div>
+
+        <!-- 賽事 1：校園慢跑 -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <h5 class="font-bold text-slate-900 text-sm mb-2 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span> 11/25 (三) 校園活力慢跑（三隊累算總得分）
+          </h5>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">綠隊得分</label>
+              <input type="number" id="inp-run-green" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">藍隊得分</label>
+              <input type="number" id="inp-run-blue" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">紅隊得分</label>
+              <input type="number" id="inp-run-red" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+          </div>
+        </div>
+
+        <!-- 賽事 2：熱血躲避球 -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <h5 class="font-bold text-slate-900 text-sm mb-2 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-blue-500"></span> 12/03 (四) 熱血美式躲避球循環賽得分
+          </h5>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">綠隊得分</label>
+              <input type="number" id="inp-dodge-green" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">藍隊得分</label>
+              <input type="number" id="inp-dodge-blue" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">紅隊得分</label>
+              <input type="number" id="inp-dodge-red" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+          </div>
+        </div>
+
+        <!-- 賽事 3：蟲蟲危機（唯一納入趣味賽） -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <h5 class="font-bold text-slate-900 text-sm mb-2 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 12/05 (六) 蟲蟲危機跨齡接力得分（唯一納入之趣味賽）
+          </h5>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">綠隊得分</label>
+              <input type="number" id="inp-cater-green" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">藍隊得分</label>
+              <input type="number" id="inp-cater-blue" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">紅隊得分</label>
+              <input type="number" id="inp-cater-red" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+          </div>
+        </div>
+
+        <!-- 賽事 4：1~3年級拔河賽 -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <h5 class="font-bold text-slate-900 text-sm mb-2 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-orange-500"></span> 12/05 (六) 1~3 年級組拔河得分
+          </h5>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">綠隊得分</label>
+              <input type="number" id="inp-tuglow-green" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">藍隊得分</label>
+              <input type="number" id="inp-tuglow-blue" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">紅隊得分</label>
+              <input type="number" id="inp-tuglow-red" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+          </div>
+        </div>
+
+        <!-- 賽事 5：4~6年級拔河賽 -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <h5 class="font-bold text-slate-900 text-sm mb-2 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span> 12/05 (六) 4~6 年級組拔河得分
+          </h5>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">綠隊得分</label>
+              <input type="number" id="inp-tughigh-green" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">藍隊得分</label>
+              <input type="number" id="inp-tughigh-blue" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">紅隊得分</label>
+              <input type="number" id="inp-tughigh-red" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+          </div>
+        </div>
+
+        <!-- 賽事 6：大隊接力賽 -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <h5 class="font-bold text-slate-900 text-sm mb-2 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-purple-500"></span> 12/05 (六) 大隊接力賽累計得分
+          </h5>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">綠隊得分</label>
+              <input type="number" id="inp-relay-green" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">藍隊得分</label>
+              <input type="number" id="inp-relay-blue" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">紅隊得分</label>
+              <input type="number" id="inp-relay-red" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+          </div>
+        </div>
+
+        <!-- 賽事 7：互助合作精神分數 -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <h5 class="font-bold text-slate-900 text-sm mb-2 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-indigo-500"></span> 互助合作精神總錦標累積分數
+          </h5>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">綠隊精神分</label>
+              <input type="number" id="inp-spirit-green" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">藍隊精神分</label>
+              <input type="number" id="inp-spirit-blue" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-600 text-xs mb-1 font-bold">紅隊精神分</label>
+              <input type="number" id="inp-spirit-red" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-sm font-mono font-bold">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部操作按鈕 -->
+      <div id="admin-action-bar" class="hidden p-4 bg-slate-100 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+        <button onclick="resetToDefaults()" class="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-900 font-bold underline">
+          恢復系統預設值
+        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="closeScoreAdmin()" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 font-bold rounded-xl text-xs hover:bg-slate-50 transition">
+            取消
+          </button>
+          <button onclick="saveAdminScores()" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow-md transition">
+            <i class="fa-solid fa-check mr-1"></i> 即時儲存並在網頁生效
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    function filterCategory(cat) {
-      const cards = document.querySelectorAll('.score-card');
-      const tabs = document.querySelectorAll('.tab-btn');
+    // 預設各項賽事得分架構
+    const DEFAULT_DATA = {
+      run: { green: 16, blue: 14, red: 12 },
+      dodge: { green: 12, red: 8, blue: 4 },
+      cater: { green: 8, blue: 6, red: 4 },
+      tuglow: { green: 8, blue: 6, red: 4 },
+      tughigh: { red: 8, green: 6, blue: 4 },
+      relay: { green: 15, blue: 12, red: 10 },
+      spirit: { green: 32, blue: 32, red: 30 }
+    };
 
-      // 重設按鈕樣式
-      tabs.forEach(tab => {
-        tab.classList.remove('bg-slate-900', 'text-white', 'shadow-sm');
-        tab.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-200');
-      });
-
-      // 啟動當前按鈕
-      const activeTab = document.getElementById(`tab-${cat}`);
-      if (activeTab) {
-        activeTab.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-200');
-        activeTab.classList.add('bg-slate-900', 'text-white', 'shadow-sm');
+    function loadScores() {
+      const stored = localStorage.getItem('nanxing_score_data');
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) {}
       }
+      return DEFAULT_DATA;
+    }
 
-      // 卡片顯示與隱藏
-      cards.forEach(card => {
-        if (cat === 'all') {
-          card.classList.remove('hidden');
-        } else {
-          if (card.classList.contains(cat)) {
-            card.classList.remove('hidden');
-          } else {
-            card.classList.add('hidden');
-          }
+    function saveScoresToStorage(data) {
+      localStorage.setItem('nanxing_score_data', JSON.stringify(data));
+    }
+
+    function calculateAndRender() {
+      const d = loadScores();
+
+      // 計算體育競技分 (慢跑 + 躲避球 + 蟲蟲危機 + 1-3拔河 + 4-6拔河 + 接力)
+      const sports = {
+        green: (d.run?.green || 0) + (d.dodge?.green || 0) + (d.cater?.green || 0) + (d.tuglow?.green || 0) + (d.tughigh?.green || 0) + (d.relay?.green || 0),
+        blue: (d.run?.blue || 0) + (d.dodge?.blue || 0) + (d.cater?.blue || 0) + (d.tuglow?.blue || 0) + (d.tughigh?.blue || 0) + (d.relay?.blue || 0),
+        red: (d.run?.red || 0) + (d.dodge?.red || 0) + (d.cater?.red || 0) + (d.tuglow?.red || 0) + (d.tughigh?.red || 0) + (d.relay?.red || 0)
+      };
+
+      const spirit = {
+        green: d.spirit?.green || 0,
+        blue: d.spirit?.blue || 0,
+        red: d.spirit?.red || 0
+      };
+
+      const total = {
+        green: sports.green + spirit.green,
+        blue: sports.blue + spirit.blue,
+        red: sports.red + spirit.red
+      };
+
+      // 更新儀表板
+      const maxScore = Math.max(total.green, total.blue, total.red, 100);
+
+      ['green', 'blue', 'red'].forEach(team => {
+        const barText = document.getElementById(`bar-${team}-text`);
+        const bar = document.getElementById(`bar-${team}`);
+        if (barText) {
+          barText.innerText = `${total[team]} 分`;
+        }
+        if (bar) {
+          const pct = Math.min(100, Math.max(15, (total[team] / maxScore) * 100));
+          bar.style.width = pct + '%';
         }
       });
     }
+
+    // 管理彈窗控制
+    function openScoreAdmin() {
+      const modal = document.getElementById('score-admin-modal');
+      modal.classList.remove('hidden');
+      if (sessionStorage.getItem('nanxing_admin_authed') === 'true') {
+        showAdminForm();
+      } else {
+        document.getElementById('admin-auth-box').classList.remove('hidden');
+        document.getElementById('admin-form-box').classList.add('hidden');
+        document.getElementById('admin-action-bar').classList.add('hidden');
+      }
+    }
+
+    function closeScoreAdmin() {
+      document.getElementById('score-admin-modal').classList.add('hidden');
+    }
+
+    function verifyAdminPass() {
+      const pass = document.getElementById('admin-pass-input').value;
+      if (pass === 'nses115') {
+        sessionStorage.setItem('nanxing_admin_authed', 'true');
+        showAdminForm();
+      } else {
+        document.getElementById('auth-err-msg').classList.remove('hidden');
+      }
+    }
+
+    function showAdminForm() {
+      document.getElementById('admin-auth-box').classList.add('hidden');
+      document.getElementById('admin-form-box').classList.remove('hidden');
+      document.getElementById('admin-action-bar').classList.remove('hidden');
+
+      const d = loadScores();
+      // 填入各項現有數值
+      document.getElementById('inp-run-green').value = d.run?.green || 0;
+      document.getElementById('inp-run-blue').value = d.run?.blue || 0;
+      document.getElementById('inp-run-red').value = d.run?.red || 0;
+
+      document.getElementById('inp-dodge-green').value = d.dodge?.green || 0;
+      document.getElementById('inp-dodge-blue').value = d.dodge?.blue || 0;
+      document.getElementById('inp-dodge-red').value = d.dodge?.red || 0;
+
+      document.getElementById('inp-cater-green').value = d.cater?.green || 0;
+      document.getElementById('inp-cater-blue').value = d.cater?.blue || 0;
+      document.getElementById('inp-cater-red').value = d.cater?.red || 0;
+
+      document.getElementById('inp-tuglow-green').value = d.tuglow?.green || 0;
+      document.getElementById('inp-tuglow-blue').value = d.tuglow?.blue || 0;
+      document.getElementById('inp-tuglow-red').value = d.tuglow?.red || 0;
+
+      document.getElementById('inp-tughigh-green').value = d.tughigh?.green || 0;
+      document.getElementById('inp-tughigh-blue').value = d.tughigh?.blue || 0;
+      document.getElementById('inp-tughigh-red').value = d.tughigh?.red || 0;
+
+      document.getElementById('inp-relay-green').value = d.relay?.green || 0;
+      document.getElementById('inp-relay-blue').value = d.relay?.blue || 0;
+      document.getElementById('inp-relay-red').value = d.relay?.red || 0;
+
+      document.getElementById('inp-spirit-green').value = d.spirit?.green || 0;
+      document.getElementById('inp-spirit-blue').value = d.spirit?.blue || 0;
+      document.getElementById('inp-spirit-red').value = d.spirit?.red || 0;
+    }
+
+    function saveAdminScores() {
+      const data = {
+        run: {
+          green: parseInt(document.getElementById('inp-run-green').value) || 0,
+          blue: parseInt(document.getElementById('inp-run-blue').value) || 0,
+          red: parseInt(document.getElementById('inp-run-red').value) || 0
+        },
+        dodge: {
+          green: parseInt(document.getElementById('inp-dodge-green').value) || 0,
+          blue: parseInt(document.getElementById('inp-dodge-blue').value) || 0,
+          red: parseInt(document.getElementById('inp-dodge-red').value) || 0
+        },
+        cater: {
+          green: parseInt(document.getElementById('inp-cater-green').value) || 0,
+          blue: parseInt(document.getElementById('inp-cater-blue').value) || 0,
+          red: parseInt(document.getElementById('inp-cater-red').value) || 0
+        },
+        tuglow: {
+          green: parseInt(document.getElementById('inp-tuglow-green').value) || 0,
+          blue: parseInt(document.getElementById('inp-tuglow-blue').value) || 0,
+          red: parseInt(document.getElementById('inp-tuglow-red').value) || 0
+        },
+        tughigh: {
+          green: parseInt(document.getElementById('inp-tughigh-green').value) || 0,
+          blue: parseInt(document.getElementById('inp-tughigh-blue').value) || 0,
+          red: parseInt(document.getElementById('inp-tughigh-red').value) || 0
+        },
+        relay: {
+          green: parseInt(document.getElementById('inp-relay-green').value) || 0,
+          blue: parseInt(document.getElementById('inp-relay-blue').value) || 0,
+          red: parseInt(document.getElementById('inp-relay-red').value) || 0
+        },
+        spirit: {
+          green: parseInt(document.getElementById('inp-spirit-green').value) || 0,
+          blue: parseInt(document.getElementById('inp-spirit-blue').value) || 0,
+          red: parseInt(document.getElementById('inp-spirit-red').value) || 0
+        }
+      };
+
+      saveScoresToStorage(data);
+      calculateAndRender();
+      closeScoreAdmin();
+      alert('🎉 各項賽事成績已成功儲存，網頁即時戰況已更新！');
+    }
+
+    function resetToDefaults() {
+      if (confirm('確定要恢復預設的賽事得分嗎？')) {
+        saveScoresToStorage(DEFAULT_DATA);
+        showAdminForm();
+        calculateAndRender();
+        alert('已恢復預設成績！');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      calculateAndRender();
+    });
   </script>
 </body>
 </html>
