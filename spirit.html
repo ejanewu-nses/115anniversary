@@ -102,7 +102,7 @@
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-emerald-300">🟢 綠隊 • 翠玉蜈蚣</span>
               <div class="text-right">
-                <span class="text-2xl font-black text-emerald-300 font-fun">32</span>
+                <span class="text-2xl font-black text-emerald-300 font-fun" id="spirit-green-pts">32</span>
                 <span class="text-xs text-emerald-200">分</span>
               </div>
             </div>
@@ -116,7 +116,7 @@
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-blue-300">🔵 藍隊 • 碧海晨曦</span>
               <div class="text-right">
-                <span class="text-2xl font-black text-blue-300 font-fun">32</span>
+                <span class="text-2xl font-black text-blue-300 font-fun" id="spirit-blue-pts">32</span>
                 <span class="text-xs text-blue-200">分</span>
               </div>
             </div>
@@ -130,7 +130,7 @@
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-rose-300">🔴 紅隊 • 烈火金獅</span>
               <div class="text-right">
-                <span class="text-2xl font-black text-rose-300 font-fun">30</span>
+                <span class="text-2xl font-black text-rose-300 font-fun" id="spirit-red-pts">30</span>
                 <span class="text-xs text-rose-200">分</span>
               </div>
             </div>
@@ -341,6 +341,8 @@
 
   <!-- JavaScript 資料與互動核心 -->
   <script>
+    const CLOUD_API_URL = 'https://script.google.com/macros/s/AKfycbwppBa3j4htWuGBHwvnz4UEuo39GeVyM5-cBrVSkhuq1bshMCAB4HRwIP1Ypdc9XdE7/exec';
+
     // 暖心事蹟資料集（生動展現南興國小特色與生活日常）
     const STORIES_DATA = [
       {
@@ -678,9 +680,41 @@
       }
     });
 
+    async function syncCloudSpirit() {
+      try {
+        const res = await fetch(CLOUD_API_URL);
+        const data = await res.json();
+        if (data && data.success) {
+          if (data.spiritScores) {
+            const g = data.spiritScores.green || 32;
+            const b = data.spiritScores.blue || 32;
+            const r = data.spiritScores.red || 30;
+            const greenEl = document.getElementById('spirit-green-pts');
+            const blueEl = document.getElementById('spirit-blue-pts');
+            const redEl = document.getElementById('spirit-red-pts');
+            if (greenEl) greenEl.innerText = g;
+            if (blueEl) blueEl.innerText = b;
+            if (redEl) redEl.innerText = r;
+          }
+
+          if (Array.isArray(data.stories) && data.stories.length > 0) {
+            // 將雲端事蹟置頂
+            const cloudIds = new Set(data.stories.map(s => s.id));
+            const base = STORIES_DATA.filter(s => !cloudIds.has(s.id));
+            STORIES_DATA.splice(0, STORIES_DATA.length, ...data.stories, ...base);
+            renderStories();
+          }
+        }
+      } catch (e) {
+        console.log('Using default spirit stories.');
+      }
+    }
+
     // 初始化
     document.addEventListener('DOMContentLoaded', () => {
       renderStories();
+      syncCloudSpirit();
+      setInterval(syncCloudSpirit, 30000); // 每 30 秒自動向雲端試算表更新
     });
   </script>
 </body>

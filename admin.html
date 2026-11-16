@@ -97,12 +97,27 @@
       { org: '南興新南宮管理委員會', name: '新南宮主委', title: '主任委員', attendance: '親自出席', delegate: '', car: 'XYZ-9999', speech: '致意即可', wishes: '金獅騰躍、學藝精進！', sponsor: '是 (贊助文具大禮盒)' }
     ];
 
+    const CLOUD_API_URL = 'https://script.google.com/macros/s/AKfycbwppBa3j4htWuGBHwvnz4UEuo39GeVyM5-cBrVSkhuq1bshMCAB4HRwIP1Ypdc9XdE7/exec';
+
     function getGuestList() {
       const stored = localStorage.getItem('nanxing_guest_list');
       if (stored) {
         try { return JSON.parse(stored); } catch (e) { return DEFAULT_GUESTS; }
       }
       return DEFAULT_GUESTS;
+    }
+
+    async function syncCloudGuests() {
+      try {
+        const res = await fetch(CLOUD_API_URL + '?type=guests');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.guests) && data.guests.length > 0) {
+          localStorage.setItem('nanxing_guest_list', JSON.stringify(data.guests));
+          renderAdminTable();
+        }
+      } catch (e) {
+        console.log('Using local guest list, cloud sync failed/offline.');
+      }
     }
 
     function renderAdminTable() {
@@ -172,6 +187,7 @@
 
     window.onload = function() {
       renderAdminTable();
+      syncCloudGuests();
     };
   </script>
 </body>

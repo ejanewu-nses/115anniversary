@@ -836,10 +836,13 @@
   </footer>
 
   <script>
+    const CLOUD_API_URL = 'https://script.google.com/macros/s/AKfycbwppBa3j4htWuGBHwvnz4UEuo39GeVyM5-cBrVSkhuq1bshMCAB4HRwIP1Ypdc9XdE7/exec';
+
     // 紅綠藍三隊戰況長條圖顯示同步
-    function syncScoreboard() {
+    async function syncScoreboard() {
       let greenTotal = 82, blueTotal = 79, redTotal = 78;
       
+      // 1. 先從本地快取嘗試讀取
       try {
         const stored = localStorage.getItem('nanxing_score_data_v5');
         if (stored) {
@@ -853,6 +856,19 @@
           redTotal = redSports + (d.spirit?.red || 30);
         }
       } catch(e) {}
+
+      // 2. 向雲端試算表即時 API 抓取最新戰隊總分
+      try {
+        const res = await fetch(CLOUD_API_URL);
+        const data = await res.json();
+        if (data && data.success && data.teamTotals) {
+          greenTotal = data.teamTotals.green.total || greenTotal;
+          blueTotal = data.teamTotals.blue.total || blueTotal;
+          redTotal = data.teamTotals.red.total || redTotal;
+        }
+      } catch (err) {
+        console.log('Using local/default scoreboard.');
+      }
 
       const maxVal = Math.max(greenTotal, blueTotal, redTotal, 85);
       
@@ -878,7 +894,10 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', syncScoreboard);
+    document.addEventListener('DOMContentLoaded', () => {
+      syncScoreboard();
+      setInterval(syncScoreboard, 30000); // 每 30 秒自動向雲端試算表更新
+    });
   </script>
 </body>
 </html>

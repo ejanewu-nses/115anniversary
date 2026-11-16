@@ -237,6 +237,8 @@
       { org: '南興新南宮管理委員會', name: '新南宮主委', title: '主任委員', attendance: '親自出席', delegate: '', car: 'XYZ-9999', speech: '致意即可', wishes: '金獅騰躍、學藝精進！', sponsor: '是 (贊助文具大禮盒)' }
     ];
 
+    const CLOUD_API_URL = 'https://script.google.com/macros/s/AKfycbwppBa3j4htWuGBHwvnz4UEuo39GeVyM5-cBrVSkhuq1bshMCAB4HRwIP1Ypdc9XdE7/exec';
+
     function getGuestList() {
       const stored = localStorage.getItem('nanxing_guest_list');
       if (stored) {
@@ -268,9 +270,18 @@
         created_at: new Date().toLocaleString('zh-TW')
       };
 
+      // 1. 本地備份儲存
       const list = getGuestList();
       list.push(guest);
       saveGuestList(list);
+
+      // 2. 雲端試算表非同步同步 ＆ LINE 即時通報校長
+      fetch(CLOUD_API_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: 'SUBMIT_INVITE', guest: guest })
+      }).catch(err => console.error('Cloud submit error:', err));
 
       document.getElementById('invite-form').classList.add('hidden');
       document.getElementById('success-box').classList.remove('hidden');

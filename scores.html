@@ -325,9 +325,9 @@
                 <span class="text-[11px] text-sky-700 font-bold">1~2年級</span>
               </div>
               <ul class="space-y-1 text-slate-700">
-                <li>🥇 <strong>金牌</strong>：二年級代表A</li>
-                <li>🥈 <strong>銀牌</strong>：二年級代表B</li>
-                <li>🥉 <strong>銅牌</strong>：一年級代表A</li>
+                <li>🥇 <strong>金牌</strong>：<span id="sprint-lowBoy-gold">決賽待公布</span></li>
+                <li>🥈 <strong>銀牌</strong>：<span id="sprint-lowBoy-silver">決賽待公布</span></li>
+                <li>🥉 <strong>銅牌</strong>：<span id="sprint-lowBoy-bronze">決賽待公布</span></li>
               </ul>
             </div>
 
@@ -338,9 +338,9 @@
                 <span class="text-[11px] text-pink-700 font-bold">1~2年級</span>
               </div>
               <ul class="space-y-1 text-slate-700">
-                <li>🥇 <strong>金牌</strong>：二年級代表C</li>
-                <li>🥈 <strong>銀牌</strong>：一年級代表B</li>
-                <li>🥉 <strong>銅牌</strong>：一年級代表C</li>
+                <li>🥇 <strong>金牌</strong>：<span id="sprint-lowGirl-gold">決賽待公布</span></li>
+                <li>🥈 <strong>銀牌</strong>：<span id="sprint-lowGirl-silver">決賽待公布</span></li>
+                <li>🥉 <strong>銅牌</strong>：<span id="sprint-lowGirl-bronze">決賽待公布</span></li>
               </ul>
             </div>
 
@@ -351,9 +351,9 @@
                 <span class="text-[11px] text-emerald-700 font-bold">3~4年級</span>
               </div>
               <ul class="space-y-1 text-slate-700">
-                <li>🥇 <strong>金牌</strong>：四年級代表A</li>
-                <li>🥈 <strong>銀牌</strong>：四年級代表B</li>
-                <li>🥉 <strong>銅牌</strong>：三年級代表A</li>
+                <li>🥇 <strong>金牌</strong>：<span id="sprint-midBoy-gold">決賽待公布</span></li>
+                <li>🥈 <strong>銀牌</strong>：<span id="sprint-midBoy-silver">決賽待公布</span></li>
+                <li>🥉 <strong>銅牌</strong>：<span id="sprint-midBoy-bronze">決賽待公布</span></li>
               </ul>
             </div>
 
@@ -364,9 +364,9 @@
                 <span class="text-[11px] text-teal-700 font-bold">3~4年級</span>
               </div>
               <ul class="space-y-1 text-slate-700">
-                <li>🥇 <strong>金牌</strong>：四年級代表C</li>
-                <li>🥈 <strong>銀牌</strong>：三年級代表B</li>
-                <li>🥉 <strong>銅牌</strong>：三年級代表C</li>
+                <li>🥇 <strong>金牌</strong>：<span id="sprint-midGirl-gold">決賽待公布</span></li>
+                <li>🥈 <strong>銀牌</strong>：<span id="sprint-midGirl-silver">決賽待公布</span></li>
+                <li>🥉 <strong>銅牌</strong>：<span id="sprint-midGirl-bronze">決賽待公布</span></li>
               </ul>
             </div>
 
@@ -377,9 +377,9 @@
                 <span class="text-[11px] text-amber-700 font-bold">5~6年級</span>
               </div>
               <ul class="space-y-1 text-slate-700">
-                <li>🥇 <strong>金牌</strong>：六年級代表A</li>
-                <li>🥈 <strong>銀牌</strong>：五年級代表A</li>
-                <li>🥉 <strong>銅牌</strong>：六年級代表B</li>
+                <li>🥇 <strong>金牌</strong>：<span id="sprint-highBoy-gold">決賽待公布</span></li>
+                <li>🥈 <strong>銀牌</strong>：<span id="sprint-highBoy-silver">決賽待公布</span></li>
+                <li>🥉 <strong>銅牌</strong>：<span id="sprint-highBoy-bronze">決賽待公布</span></li>
               </ul>
             </div>
 
@@ -390,9 +390,9 @@
                 <span class="text-[11px] text-purple-700 font-bold">5~6年級</span>
               </div>
               <ul class="space-y-1 text-slate-700">
-                <li>🥇 <strong>金牌</strong>：六年級代表C</li>
-                <li>🥈 <strong>銀牌</strong>：五年級代表B</li>
-                <li>🥉 <strong>銅牌</strong>：五年級代表C</li>
+                <li>🥇 <strong>金牌</strong>：<span id="sprint-highGirl-gold">決賽待公布</span></li>
+                <li>🥈 <strong>銀牌</strong>：<span id="sprint-highGirl-silver">決賽待公布</span></li>
+                <li>🥉 <strong>銅牌</strong>：<span id="sprint-highGirl-bronze">決賽待公布</span></li>
               </ul>
             </div>
           </div>
@@ -893,6 +893,8 @@
   </div>
 
   <script>
+    const CLOUD_API_URL = 'https://script.google.com/macros/s/AKfycbwppBa3j4htWuGBHwvnz4UEuo39GeVyM5-cBrVSkhuq1bshMCAB4HRwIP1Ypdc9XdE7/exec';
+
     // 預設各項賽事得分架構（嚴格對應計畫書分組與門檻）
     const DEFAULT_DATA = {
       runLow: { green: 6, blue: 7, red: 5 },    // 低年級 3圈 5分鐘內完成人數
@@ -917,6 +919,61 @@
 
     function saveScoresToStorage(data) {
       localStorage.setItem('nanxing_score_data_v5', JSON.stringify(data));
+    }
+
+    // 雲端試算表雙向即時同步
+    async function syncCloudScores() {
+      try {
+        const res = await fetch(CLOUD_API_URL);
+        const data = await res.json();
+        if (!data || !data.success) return;
+
+        const currentData = loadScores();
+
+        // 1. 同步各項賽事成績 (eventScores)
+        if (data.eventScores) {
+          const validKeys = ['runLow', 'runMid', 'runHigh', 'dodge', 'rainbow', 'tugLow', 'tugHigh', 'relayLow', 'relayHigh'];
+          validKeys.forEach(k => {
+            if (data.eventScores[k]) {
+              currentData[k] = {
+                green: Number(data.eventScores[k].green) || 0,
+                blue: Number(data.eventScores[k].blue) || 0,
+                red: Number(data.eventScores[k].red) || 0
+              };
+            }
+          });
+        }
+
+        // 2. 同步精神加分 (spiritScores)
+        if (data.spiritScores) {
+          currentData.spirit = {
+            green: Number(data.spiritScores.green) || 0,
+            blue: Number(data.spiritScores.blue) || 0,
+            red: Number(data.spiritScores.red) || 0
+          };
+        }
+
+        saveScoresToStorage(currentData);
+        calculateAndRender();
+
+        // 3. 同步個人短跑金銀銅榜 (sprintWinners)
+        if (data.sprintWinners) {
+          const sprintGroups = ['lowBoy', 'lowGirl', 'midBoy', 'midGirl', 'highBoy', 'highGirl'];
+          sprintGroups.forEach(g => {
+            const w = data.sprintWinners[g];
+            if (w) {
+              const goldEl = document.getElementById(`sprint-${g}-gold`);
+              const silverEl = document.getElementById(`sprint-${g}-silver`);
+              const bronzeEl = document.getElementById(`sprint-${g}-bronze`);
+              if (goldEl && w.gold) goldEl.innerText = w.gold;
+              if (silverEl && w.silver) silverEl.innerText = w.silver;
+              if (bronzeEl && w.bronze) bronzeEl.innerText = w.bronze;
+            }
+          });
+        }
+      } catch (err) {
+        console.log('Using offline score cache:', err);
+      }
     }
 
     function calculateAndRender() {
@@ -1182,6 +1239,8 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       calculateAndRender();
+      syncCloudScores();
+      setInterval(syncCloudScores, 30000);
     });
   </script>
 </body>
