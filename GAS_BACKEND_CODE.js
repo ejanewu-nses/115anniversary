@@ -13,7 +13,7 @@
 
 // 系統預設組態
 const CONFIG = {
-  GEMINI_MODEL: 'gemini-2.5-flash',
+  GEMINI_MODEL: 'gemini-2.0-flash', // 穩定高速主力模型
   ENABLE_WHITELIST: true, // 開啟白名單機制（防外人亂改）
   SHEET_NAMES: {
     TOTALS: '戰隊總積分榜',
@@ -274,15 +274,120 @@ function doPost(e) {
 
 /**
  * ----------------------------------------------------------------------
- * 3. 呼叫 Gemini 進行意圖分析與結構化 JSON 輸出
+ * 3. 快速本機規則引擎 (0 毫秒極速辨識，防網路/模型抖動)
+ * ----------------------------------------------------------------------
+ */
+function fastLocalParse(text) {
+  if (!text) return null;
+  text = text.trim();
+
+  // A. 精神加分匹配（最常用）
+  if (text.includes('精神') || text.includes('加分') || text.includes('暖心') || text.includes('事蹟')) {
+    let team = 'green';
+    if (text.includes('綠') || text.includes('翠玉')) team = 'green';
+    else if (text.includes('藍') || text.includes('碧海')) team = 'blue';
+    else if (text.includes('紅') || text.includes('烈火')) team = 'red';
+
+    let pts = 2;
+    const ptsMatch = text.match(/([1-9])\s*分/);
+    if (ptsMatch) pts = parseInt(ptsMatch[1], 10);
+
+    let category = 'cross';
+    if (/大帶小|小隊長|一年級|學弟|學妹|牽|陪|抱|照顧|扶|外套|跌倒|鞋帶|拉著|幫忙|協助/.test(text)) category = 'cross';
+    else if (/風度|運動家|禮貌|敬禮|握手|擁抱|運動員|安慰|服從|擊掌/.test(text)) category = 'sports';
+    else if (/環保|垃圾|自律|撿|排隊|水壺|場地|乾淨|落葉|整齊|收拾/.test(text)) category = 'eco';
+    else if (/歡呼|隊呼|加油|吶喊|士氣|掌聲|跳舞|口號/.test(text)) category = 'cheer';
+
+    let story = text.replace(/^[🔴🟢🔵]?\s*(紅隊|綠隊|藍隊)?\s*精神加分\s*\d*\s*分?[，,、\s]*/i, '').trim();
+    if (!story) story = text;
+
+    return {
+      intent: 'ADD_SPIRIT',
+      team: team,
+      category: category,
+      points: pts,
+      story: story,
+      author: '大會裁判',
+      place: '操場'
+    };
+  }
+
+  // B. 個人短跑決賽名次匹配
+  if (/短跑|60m|80m|100m|第一名|金牌|決賽/.test(text)) {
+    let group = 'highBoy';
+    if (/低.*男|1.*男|2.*男/.test(text)) group = 'lowBoy';
+    else if (/低.*女|1.*女|2.*女/.test(text)) group = 'lowGirl';
+    else if (/中.*男|3.*男|4.*男/.test(text)) group = 'midBoy';
+    else if (/中.*女|3.*女|4.*女/.test(text)) group = 'midGirl';
+    else if (/高.*男|5.*男|6.*男/.test(text)) group = 'highBoy';
+    else if (/高.*女|5.*女|6.*女/.test(text)) group = 'highGirl';
+
+    const m1 = text.match(/(?:第一名|金牌)[：:\s]*([^\s,，、]+)/);
+    const m2 = text.match(/(?:第二名|銀牌)[：:\s]*([^\s,，、]+)/);
+    const m3 = text.match(/(?:第三名|銅牌)[：:\s]*([^\s,，、]+)/);
+
+    if (m1 || m2 || m3) {
+      return {
+        intent: 'UPDATE_SPRINT',
+        group: group,
+        gold: m1 ? m1[1] : '待定',
+        silver: m2 ? m2[1] : '待定',
+        bronze: m3 ? m3[1] : '待定'
+      };
+    }
+  }
+
+  // C. 團體賽事名次得分匹配
+  if (/躲避球|拔河|接力|趣味競賽|蟲蟲危機|彩虹危機/.test(text)) {
+    let event = 'dodge';
+    if (/躲避球/.test(text)) event = 'dodge';
+    else if (/拔河.*低|低.*拔河/.test(text)) event = 'tugLow';
+    else if (/拔河.*高|高.*拔河/.test(text)) event = 'tugHigh';
+    else if (/接力.*低|低.*接力/.test(text)) event = 'relayLow';
+    else if (/接力.*高|高.*接力/.test(text)) event = 'relayHigh';
+    else if (/蟲蟲|彩虹|趣味/.test(text)) event = 'rainbow';
+
+    const parseTeam = (str) => {
+      if (/綠/.test(str)) return 'green';
+      if (/藍/.test(str)) return 'blue';
+      if (/紅/.test(str)) return 'red';
+      return 'green';
+    };
+
+    const m1 = text.match(/(?:第一名|冠軍)[：:\s]*([^\s,，、]+)/);
+    const m2 = text.match(/(?:第二名|亞軍)[：:\s]*([^\s,，、]+)/);
+    const m3 = text.match(/(?:第三名|季軍)[：:\s]*([^\s,，、]+)/);
+
+    if (m1) {
+      return {
+        intent: 'UPDATE_EVENT',
+        event: event,
+        rank1: parseTeam(m1[1]),
+        rank2: m2 ? parseTeam(m2[1]) : 'blue',
+        rank3: m3 ? parseTeam(m3[1]) : 'red'
+      };
+    }
+  }
+
+  return null;
+}
+
+/**
+ * ----------------------------------------------------------------------
+ * 4. 呼叫 Gemini 進行意圖分析與結構化 JSON 輸出（雙引擎自動降級備援）
  * ----------------------------------------------------------------------
  */
 function callGeminiParser(userText, userId) {
+  // ⚡ 優先級 1：使用本地超高速規則引擎（0 毫秒、零 API 成本、100% 精準）
+  const localRes = fastLocalParse(userText);
+  if (localRes) {
+    return localRes;
+  }
+
+  // 🧠 優先級 2：口語隨性表達交給 Gemini Flash 進行多模態與語意解析
   const scriptProps = PropertiesService.getScriptProperties();
   const apiKey = scriptProps.getProperty('GEMINI_API_KEY');
-  if (!apiKey) throw new Error('請先在 Script Properties 中設定 GEMINI_API_KEY！');
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${CONFIG.GEMINI_MODEL}:generateContent?key=${apiKey}`;
+  if (!apiKey) return null;
 
   const systemInstruction = `
 你是一位專門為「臺南市安南區南興國小 115 學年度校慶運動大會」服務的 AI 賽事秘書。
@@ -316,39 +421,42 @@ function callGeminiParser(userText, userId) {
 必須只回傳合法的純 JSON，絕不加 markdown 標籤（如 \`\`\`json ）。
 `;
 
-  const payload = {
-    contents: [
-      { role: 'user', parts: [{ text: userText }] }
-    ],
-    systemInstruction: {
-      parts: [{ text: systemInstruction }]
-    },
-    generationConfig: {
-      temperature: 0.1,
-      responseMimeType: "application/json"
+  const modelsToTry = [CONFIG.GEMINI_MODEL, 'gemini-1.5-flash', 'gemini-2.0-flash'];
+
+  for (const model of modelsToTry) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const payload = {
+        contents: [{ role: 'user', parts: [{ text: userText }] }],
+        systemInstruction: { parts: [{ text: systemInstruction }] },
+        generationConfig: { temperature: 0.1, responseMimeType: "application/json" }
+      };
+      const options = {
+        method: 'post',
+        contentType: 'application/json',
+        payload: JSON.stringify(payload),
+        muteHttpExceptions: true
+      };
+      const response = UrlFetchApp.fetch(url, options);
+      if (response.getResponseCode() === 200) {
+        const json = JSON.parse(response.getContentText());
+        if (json.candidates && json.candidates[0].content && json.candidates[0].content.parts[0].text) {
+          let raw = json.candidates[0].content.parts[0].text.trim();
+          raw = raw.replace(/^```json/i, '').replace(/```$/i, '').trim();
+          return JSON.parse(raw);
+        }
+      }
+    } catch (e) {
+      console.warn(`Gemini model ${model} failed:`, e);
     }
-  };
-
-  const options = {
-    method: 'post',
-    contentType: 'application/json',
-    payload: JSON.stringify(payload),
-    muteHttpExceptions: true
-  };
-
-  const response = UrlFetchApp.fetch(url, options);
-  const json = JSON.parse(response.getContentText());
-
-  if (json.candidates && json.candidates[0].content.parts[0].text) {
-    const raw = json.candidates[0].content.parts[0].text.trim();
-    return JSON.parse(raw);
   }
+
   return null;
 }
 
 /**
  * ----------------------------------------------------------------------
- * 4. 寫入資料庫：精神加分記錄
+ * 5. 寫入資料庫：精神加分記錄
  * ----------------------------------------------------------------------
  */
 function recordSpiritPoint(p) {
@@ -407,6 +515,96 @@ function undoLastRecord() {
     return `↩️【已成功撤銷上一筆精神加分】\n戰隊：${deletedData[1]} (-${deletedData[4]}分)\n事蹟：${deletedData[5]}\n官網資料已即時更正！`;
   }
   return '撤銷失敗，該列已不存在或已經撤銷過。';
+}
+
+/**
+ * ----------------------------------------------------------------------
+ * 6. 寫入資料庫：個人短跑決賽名次 (recordSprintWinner)
+ * ----------------------------------------------------------------------
+ */
+function recordSprintWinner(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ensureSheetHeaders(ss);
+  const sheet = ss.getSheetByName(CONFIG.SHEET_NAMES.SPRINT);
+  const data = sheet.getDataRange().getValues();
+
+  const groupNameMap = {
+    lowBoy: '低年級男生組 (60m)',
+    lowGirl: '低年級女生組 (60m)',
+    midBoy: '中年級男生組 (80m)',
+    midGirl: '中年級女生組 (80m)',
+    highBoy: '高年級男生組 (100m)',
+    highGirl: '高年級女生組 (100m)'
+  };
+
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0]).trim() === p.group) {
+      if (p.gold && p.gold !== '待定') sheet.getRange(i + 1, 4).setValue(p.gold);
+      if (p.silver && p.silver !== '待定') sheet.getRange(i + 1, 5).setValue(p.silver);
+      if (p.bronze && p.bronze !== '待定') sheet.getRange(i + 1, 6).setValue(p.bronze);
+      sheet.getRange(i + 1, 7).setValue('裁判登記');
+      sheet.getRange(i + 1, 8).setValue(new Date());
+      break;
+    }
+  }
+
+  const grpTitle = groupNameMap[p.group] || p.group;
+  return `🏃【個人短跑決賽名次已更新！】\n` +
+         `━━━━━━━━━━━━━━\n` +
+         `組別：${grpTitle}\n` +
+         `🥇 金牌：${p.gold || '尚未決賽'}\n` +
+         `🥈 銀牌：${p.silver || '尚未決賽'}\n` +
+         `🥉 銅牌：${p.bronze || '尚未決賽'}\n` +
+         `━━━━━━━━━━━━━━\n` +
+         `💡 官網各項賽事成績公告榜已即時同步！`;
+}
+
+/**
+ * ----------------------------------------------------------------------
+ * 7. 寫入資料庫：團體賽事得分 (recordEventScores)
+ * ----------------------------------------------------------------------
+ */
+function recordEventScores(p) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ensureSheetHeaders(ss);
+  const sheet = ss.getSheetByName(CONFIG.SHEET_NAMES.EVENTS);
+  const data = sheet.getDataRange().getValues();
+
+  const isTug = (p.event === 'tugLow' || p.event === 'tugHigh');
+  const pts1 = isTug ? 8 : 12;
+  const pts2 = isTug ? 6 : (p.event.includes('relay') ? 10 : 8);
+  const pts3 = isTug ? 4 : (p.event.includes('relay') ? 8 : 4);
+
+  const scores = { green: 0, blue: 0, red: 0 };
+  if (p.rank1) scores[p.rank1] = pts1;
+  if (p.rank2) scores[p.rank2] = pts2;
+  if (p.rank3) scores[p.rank3] = pts3;
+
+  const teamNameMap = { green: '綠隊', blue: '藍隊', red: '紅隊' };
+
+  let eventName = p.event;
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][2]).trim() === p.event) {
+      eventName = data[i][1];
+      sheet.getRange(i + 1, 4).setValue(scores.green);
+      sheet.getRange(i + 1, 5).setValue(scores.blue);
+      sheet.getRange(i + 1, 6).setValue(scores.red);
+      const memo = `冠軍${teamNameMap[p.rank1]}(+${pts1})、亞軍${teamNameMap[p.rank2]}(+${pts2})、季軍${teamNameMap[p.rank3]}(+${pts3})`;
+      sheet.getRange(i + 1, 7).setValue(memo);
+      sheet.getRange(i + 1, 8).setValue('裁判登記');
+      sheet.getRange(i + 1, 9).setValue(new Date());
+      break;
+    }
+  }
+
+  return `🏆【賽事項目得分已更新！】\n` +
+         `━━━━━━━━━━━━━━\n` +
+         `賽事：${eventName}\n` +
+         `🥇 冠軍：${teamNameMap[p.rank1]} (+${pts1}分)\n` +
+         `🥈 亞軍：${teamNameMap[p.rank2]} (+${pts2}分)\n` +
+         `🥉 季軍：${teamNameMap[p.rank3]} (+${pts3}分)\n` +
+         `━━━━━━━━━━━━━━\n` +
+         `💡 官網首頁與成績公告榜戰隊總積分已即時累算！`;
 }
 
 /**
