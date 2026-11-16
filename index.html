@@ -72,7 +72,10 @@
           <a href="#scoreboard" class="text-slate-600 hover:text-amber-600 transition">紅綠藍積分榜</a>
           <a href="#lottery" class="text-slate-600 hover:text-amber-600 transition">全校大摸彩</a>
           <a href="scores.html" class="inline-flex items-center gap-1 text-rose-600 hover:text-rose-700 font-bold transition px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200">
-            <i class="fa-solid fa-trophy text-amber-500"></i> 各項賽事成績公告
+            <i class="fa-solid fa-trophy text-amber-500"></i> 各項賽事成績
+          </a>
+          <a href="spirit.html" class="inline-flex items-center gap-1 text-indigo-700 hover:text-indigo-800 font-bold transition px-2.5 py-1 rounded-full bg-indigo-50 border border-indigo-200">
+            <i class="fa-solid fa-heart text-rose-500"></i> 精神加分事蹟館
           </a>
         </nav>
         <div class="flex items-center gap-2">
@@ -570,11 +573,35 @@
               🥇 綠隊 82 分暫居領先 ｜ 🥈 藍隊 79 分（僅差 3 分） ｜ 🥉 紅隊 78 分（僅差 4 分）
             </p>
           </div>
-          <a href="scores.html" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-rose-600 via-amber-500 to-rose-600 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
-            <i class="fa-solid fa-trophy"></i>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <a href="scores.html" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-rose-600 to-amber-500 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-trophy text-amber-200"></i>
             <span>查看各項賽事成績明細</span>
             <i class="fa-solid fa-arrow-right text-xs"></i>
           </a>
+          <a href="spirit.html" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-heart text-pink-300"></i>
+            <span>進入互助精神榮譽事蹟館</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 三隊即時積分可視化對比圖表卡片（快速掌握戰況高低） -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-slate-200 box-3d-static mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+              <h4 class="text-lg sm:text-xl font-black text-slate-900">目前總戰況：三大戰隊激烈拉鋸對決！</h4>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">
+              🥇 綠隊 82 分暫居領先 ｜ 🥈 藍隊 79 分（僅差 3 分） ｜ 🥉 紅隊 78 分（僅差 4 分）
+            </p>
+          </div>
+          <span class="px-3 py-1 bg-amber-50 text-amber-900 text-xs font-bold rounded-lg border border-amber-200">
+            體育競技積分 ＋ 互助合作精神分數 綜合累計
+          </span>
         </div>
 
         <!-- 橫向長條圖比較 -->
@@ -623,87 +650,95 @@
         </div>
       </div>
 
-      <!-- 三隊大卡片（3D 立體浮雕感加強） -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- 紅隊 -->
-        <div class="team-card-red rounded-3xl p-6 border-2 box-3d flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <span class="px-3 py-1 bg-rose-600 text-white text-xs font-bold rounded-full shadow-xs">紅隊 • 烈火金獅</span>
-              <span class="text-2xl font-black text-rose-600 font-fun drop-shadow-xs" id="score-red-total">78 分</span>
-            </div>
-            <p class="text-xs text-rose-950 font-medium">指導老師：楊詒茹、徐敏瓊、Amos (林承翰) 老師</p>
-            <div class="mt-4 space-y-2 text-xs">
-              <div class="flex justify-between py-1 border-b border-rose-200">
-                <span class="text-slate-600">體育競技積分</span>
-                <span class="font-bold text-slate-800" id="score-red-sports">48 分</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-rose-200">
-                <span class="text-slate-600">互助合作精神分數</span>
-                <span class="font-bold text-rose-600" id="score-red-spirit">30 分</span>
-              </div>
-            </div>
-            <div class="mt-4 bg-white/90 p-3 rounded-xl text-xs text-slate-700 shadow-2xs border border-rose-200/60">
-              <span class="font-bold text-rose-700">精神亮點：</span> 高年級主動帶領一年級跑道檢錄，休息區隨時保持整潔乾淨！
-            </div>
+      <!-- 三大戰隊指導老師團隊榮譽列（簡潔大氣橫排） -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <!-- 綠隊指導老師 -->
+        <div class="p-4 bg-emerald-50/90 rounded-2xl border border-emerald-200 flex items-center gap-3.5 box-3d">
+          <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg shadow-sm flex-shrink-0">
+            綠
           </div>
-          <button onclick="addSpiritPoint('red')" class="mt-6 w-full py-2.5 bg-rose-600 text-white rounded-xl text-xs font-bold hover:bg-rose-700 transition shadow-md hover:shadow-lg">
-            + 登錄合作精神加分
-          </button>
+          <div class="text-xs">
+            <div class="font-bold text-emerald-950 text-sm">綠隊 • 翠玉蜈蚣</div>
+            <div class="text-slate-600 mt-0.5">指導：蔡武憲、羅珮華、鄭潔、林立樺老師</div>
+          </div>
         </div>
 
-        <!-- 綠隊 -->
-        <div class="team-card-green rounded-3xl p-6 border-2 box-3d flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <span class="px-3 py-1 bg-emerald-600 text-white text-xs font-bold rounded-full shadow-xs">綠隊 • 翠玉蜈蚣</span>
-              <span class="text-2xl font-black text-emerald-600 font-fun drop-shadow-xs" id="score-green-total">82 分</span>
-            </div>
-            <p class="text-xs text-emerald-950 font-medium">指導老師：蔡武憲、羅珮華、鄭潔、林立樺老師</p>
-            <div class="mt-4 space-y-2 text-xs">
-              <div class="flex justify-between py-1 border-b border-emerald-200">
-                <span class="text-slate-600">體育競技積分</span>
-                <span class="font-bold text-slate-800" id="score-green-sports">50 分</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-emerald-200">
-                <span class="text-slate-600">互助合作精神分數</span>
-                <span class="font-bold text-emerald-600" id="score-green-spirit">32 分</span>
-              </div>
-            </div>
-            <div class="mt-4 bg-white/90 p-3 rounded-xl text-xs text-slate-700 shadow-2xs border border-emerald-200/60">
-              <span class="font-bold text-emerald-700">精神亮點：</span> 隊呼整齊響徹操場，大隊接力掉棒時全隊彼此打氣不抱怨！
-            </div>
+        <!-- 藍隊指導老師 -->
+        <div class="p-4 bg-blue-50/90 rounded-2xl border border-blue-200 flex items-center gap-3.5 box-3d">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-sm flex-shrink-0">
+            藍
           </div>
-          <button onclick="addSpiritPoint('green')" class="mt-6 w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition shadow-md hover:shadow-lg">
-            + 登錄合作精神加分
-          </button>
+          <div class="text-xs">
+            <div class="font-bold text-blue-950 text-sm">藍隊 • 碧海晨曦</div>
+            <div class="text-slate-600 mt-0.5">指導：黃美雅、施喬恩、周婉琳老師</div>
+          </div>
         </div>
 
-        <!-- 藍隊 -->
-        <div class="team-card-blue rounded-3xl p-6 border-2 box-3d flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <span class="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow-xs">藍隊 • 碧海晨曦</span>
-              <span class="text-2xl font-black text-blue-600 font-fun drop-shadow-xs" id="score-blue-total">79 分</span>
-            </div>
-            <p class="text-xs text-blue-950 font-medium">指導老師：黃美雅、施喬恩、周婉琳老師</p>
-            <div class="mt-4 space-y-2 text-xs">
-              <div class="flex justify-between py-1 border-b border-blue-200">
-                <span class="text-slate-600">體育競技積分</span>
-                <span class="font-bold text-slate-800" id="score-blue-sports">47 分</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-blue-200">
-                <span class="text-slate-600">互助合作精神分數</span>
-                <span class="font-bold text-blue-600" id="score-blue-spirit">32 分</span>
-              </div>
-            </div>
-            <div class="mt-4 bg-white/90 p-3 rounded-xl text-xs text-slate-700 shadow-2xs border border-blue-200/60">
-              <span class="font-bold text-blue-700">精神亮點：</span> 拔河比賽時全隊整齊一二喊聲，中低年級緊跟小隊長指示！
+        <!-- 紅隊指導老師 -->
+        <div class="p-4 bg-rose-50/90 rounded-2xl border border-rose-200 flex items-center gap-3.5 box-3d">
+          <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center font-bold text-lg shadow-sm flex-shrink-0">
+            紅
+          </div>
+          <div class="text-xs">
+            <div class="font-bold text-rose-950 text-sm">紅隊 • 烈火金獅</div>
+            <div class="text-slate-600 mt-0.5">指導：楊詒茹、徐敏瓊、Amos (林承翰) 老師</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🌟 最新互助合作精神暖心事蹟動態牆（即時滾動預覽） -->
+      <div class="bg-gradient-to-br from-indigo-50/90 via-purple-50/80 to-white rounded-3xl p-6 sm:p-8 border-2 border-indigo-200 box-3d-static mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-indigo-200/80 mb-5">
+          <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-sm">
+              <i class="fa-solid fa-heart"></i>
+            </span>
+            <div>
+              <h4 class="text-base sm:text-lg font-black text-slate-900">最新互助合作精神暖心事蹟動態</h4>
+              <p class="text-xs text-indigo-900">記錄南興孩子在賽道外的體貼、扶持與高尚風度</p>
             </div>
           </div>
-          <button onclick="addSpiritPoint('blue')" class="mt-6 w-full py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition shadow-md hover:shadow-lg">
-            + 登錄合作精神加分
-          </button>
+          <a href="spirit.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-700 hover:text-indigo-900 bg-white px-3.5 py-1.5 rounded-xl border border-indigo-200 shadow-2xs hover:shadow-xs transition">
+            <span>查看完整事蹟專頁（共 48 則）</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- 2 則精選最新暖心事蹟預覽卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <!-- 事蹟 1 -->
+          <div class="p-4 bg-white/95 rounded-2xl border-l-4 border-emerald-500 border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded-md">
+                🟢 綠隊 +2 分 ｜ 🤝 跨齡扶持
+              </span>
+              <span class="text-slate-400 font-mono text-[11px]">12/01 08:35</span>
+            </div>
+            <p class="text-slate-700 font-medium leading-relaxed">
+              低年級慢跑結束後，一年級小生跑完全程有些喘，六年級小隊長主動上前攙扶、遞上溫水並引導至樹下休息，大帶小畫面極為溫暖動人！
+            </p>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-100">
+              <span>見證教師：林立樺老師</span>
+              <span>地點：操場司令台側</span>
+            </div>
+          </div>
+
+          <!-- 事蹟 2 -->
+          <div class="p-4 bg-white/95 rounded-2xl border-l-4 border-blue-500 border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 bg-blue-100 text-blue-800 font-bold rounded-md">
+                🔵 藍隊 +2 分 ｜ 🏃 運動家風度
+              </span>
+              <span class="text-slate-400 font-mono text-[11px]">11/26 08:38</span>
+            </div>
+            <p class="text-slate-700 font-medium leading-relaxed">
+              躲避球循環賽落後時全隊互相拍肩打氣，賽後全員整齊列隊向對手鞠躬致敬喊「謝謝指教」，贏得全場喝采！
+            </p>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-100">
+              <span>見證教師：黃美雅老師</span>
+              <span>地點：風雨球場</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -801,34 +836,49 @@
   </footer>
 
   <script>
-    // 互助合作精神分數即時示範互動
-    let scores = {
-      red: { sports: 48, spirit: 30 },
-      green: { sports: 50, spirit: 32 },
-      blue: { sports: 47, spirit: 32 }
-    };
+    // 紅綠藍三隊戰況長條圖顯示同步
+    function syncScoreboard() {
+      let greenTotal = 82, blueTotal = 79, redTotal = 78;
+      
+      try {
+        const stored = localStorage.getItem('nanxing_score_data_v5');
+        if (stored) {
+          const d = JSON.parse(stored);
+          const greenSports = (d.runLow?.green||0) + (d.runMid?.green||0) + (d.runHigh?.green||0) + (d.dodge?.green||0) + (d.rainbow?.green||0) + (d.tugLow?.green||0) + (d.tugHigh?.green||0) + (d.relayLow?.green||0) + (d.relayHigh?.green||0);
+          const blueSports = (d.runLow?.blue||0) + (d.runMid?.blue||0) + (d.runHigh?.blue||0) + (d.dodge?.blue||0) + (d.rainbow?.blue||0) + (d.tugLow?.blue||0) + (d.tugHigh?.blue||0) + (d.relayLow?.blue||0) + (d.relayHigh?.blue||0);
+          const redSports = (d.runLow?.red||0) + (d.runMid?.red||0) + (d.runHigh?.red||0) + (d.dodge?.red||0) + (d.rainbow?.red||0) + (d.tugLow?.red||0) + (d.tugHigh?.red||0) + (d.relayLow?.red||0) + (d.relayHigh?.red||0);
 
-    function updateDisplay() {
-      ['red', 'green', 'blue'].forEach(team => {
-        const total = scores[team].sports + scores[team].spirit;
-        document.getElementById(`score-${team}-sports`).innerText = scores[team].sports + ' 分';
-        document.getElementById(`score-${team}-spirit`).innerText = scores[team].spirit + ' 分';
-        document.getElementById(`score-${team}-total`).innerText = total + ' 分';
-        
-        const bar = document.getElementById(`bar-${team}`);
-        const text = document.getElementById(`bar-${team}-text`);
-        if (bar && text) {
-          bar.style.width = Math.min(100, Math.max(20, total)) + '%';
-          text.innerText = total + ' 分';
+          greenTotal = greenSports + (d.spirit?.green || 32);
+          blueTotal = blueSports + (d.spirit?.blue || 32);
+          redTotal = redSports + (d.spirit?.red || 30);
         }
-      });
+      } catch(e) {}
+
+      const maxVal = Math.max(greenTotal, blueTotal, redTotal, 85);
+      
+      const barGreen = document.getElementById('bar-green');
+      const textGreen = document.getElementById('bar-green-text');
+      if (barGreen && textGreen) {
+        barGreen.style.width = Math.min(100, Math.round((greenTotal / (maxVal * 1.1)) * 100)) + '%';
+        textGreen.innerText = greenTotal + ' 分' + (greenTotal >= Math.max(blueTotal, redTotal) ? ' (領先)' : '');
+      }
+
+      const barBlue = document.getElementById('bar-blue');
+      const textBlue = document.getElementById('bar-blue-text');
+      if (barBlue && textBlue) {
+        barBlue.style.width = Math.min(100, Math.round((blueTotal / (maxVal * 1.1)) * 100)) + '%';
+        textBlue.innerText = blueTotal + ' 分' + (blueTotal >= Math.max(greenTotal, redTotal) ? ' (領先)' : '');
+      }
+
+      const barRed = document.getElementById('bar-red');
+      const textRed = document.getElementById('bar-red-text');
+      if (barRed && textRed) {
+        barRed.style.width = Math.min(100, Math.round((redTotal / (maxVal * 1.1)) * 100)) + '%';
+        textRed.innerText = redTotal + ' 分' + (redTotal >= Math.max(greenTotal, blueTotal) ? ' (領先)' : '');
+      }
     }
 
-    function addSpiritPoint(team) {
-      scores[team].spirit += 2;
-      updateDisplay();
-      alert(`🎉 恭喜【${team === 'red' ? '紅隊' : team === 'green' ? '綠隊' : '藍隊'}】獲得「互助合作精神加分 +2 分」！`);
-    }
+    document.addEventListener('DOMContentLoaded', syncScoreboard);
   </script>
 </body>
 </html>

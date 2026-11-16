@@ -59,12 +59,16 @@
             <p class="text-xs text-rose-600 font-bold">115學年度校慶運動大會 • 各項賽事成績即時公告榜</p>
           </div>
         </div>
-        <div class="flex items-center gap-3">
-          <a href="index.html" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition">
+        <div class="flex items-center gap-2 sm:gap-3">
+          <a href="index.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition">
             <i class="fa-solid fa-house"></i>
-            <span>回官方首頁</span>
+            <span class="hidden sm:inline">回官方首頁</span>
           </a>
-          <button onclick="openScoreAdmin()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-700 hover:to-amber-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md transition transform hover:-translate-y-0.5">
+          <a href="spirit.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-xs sm:text-sm font-bold rounded-xl transition shadow-2xs">
+            <i class="fa-solid fa-heart text-pink-500"></i>
+            <span>精神加分事蹟館</span>
+          </a>
+          <button onclick="openScoreAdmin()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-700 hover:to-amber-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md transition transform hover:-translate-y-0.5">
             <i class="fa-solid fa-pen-to-square"></i>
             <span>成績登錄後台</span>
           </button>
@@ -534,7 +538,13 @@
               <span class="px-2.5 py-1 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-2xs">精神總錦標</span>
               <h4 class="text-base sm:text-lg font-bold text-slate-900">互助合作精神加分審核紀錄簿（港明志工觀察員共同登錄）</h4>
             </div>
-            <span class="text-xs font-bold text-indigo-700">累積總分：綠32分 ｜ 藍32分 ｜ 紅30分</span>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-indigo-700">累積總分：綠32分 ｜ 藍32分 ｜ 紅30分</span>
+              <a href="spirit.html" class="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg text-xs font-bold shadow-2xs hover:shadow-sm transition">
+                <i class="fa-solid fa-heart"></i>
+                <span>查看事蹟故事專頁 ➔</span>
+              </a>
+            </div>
           </div>
 
           <div class="space-y-2.5 text-xs">

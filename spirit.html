@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>互助合作精神總錦標榮譽榜 ｜ 臺南市安南區南興國小 115 學年度校慶</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    body { font-family: 'Noto Sans TC', sans-serif; }
+    .font-fun { font-family: 'Fredoka', 'Noto Sans TC', cursive; }
+    .box-3d {
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+      transition: all 0.25s ease-out;
+    }
+    .box-3d:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 30px -6px rgba(15, 23, 42, 0.12), 0 8px 12px -4px rgba(15, 23, 42, 0.06);
+    }
+    .box-3d-static {
+      box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08), 0 6px 12px -4px rgba(15, 23, 42, 0.04);
+    }
+    /* 輪播淡入淡出 */
+    .fade-enter {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+    .fade-enter-active {
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 400ms ease, transform 400ms ease;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-indigo-500 selection:text-white min-h-screen flex flex-col justify-between">
+
+  <!-- 頂部導航列 -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-indigo-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white p-1 shadow-md border-2 border-indigo-300 flex items-center justify-center flex-shrink-0 overflow-hidden">
+            <img src="images/school_logo.jpg" alt="南興國小校徽" class="w-full h-full object-contain">
+          </div>
+          <div>
+            <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">臺南市安南區南興國小</h1>
+            <p class="text-xs text-indigo-700 font-bold">115學年度校慶 • 互助合作精神總錦標榮譽館</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <a href="index.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold rounded-xl transition">
+            <i class="fa-solid fa-house"></i>
+            <span class="hidden sm:inline">回官方首頁</span>
+          </a>
+          <a href="scores.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs sm:text-sm font-bold rounded-xl transition shadow-2xs">
+            <i class="fa-solid fa-trophy text-amber-500"></i>
+            <span class="hidden sm:inline">賽事成績榜</span>
+          </a>
+          <button onclick="openKiosk()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-tv"></i>
+            <span>大螢幕輪播</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主內容區 -->
+  <main class="flex-1 pb-16">
+
+    <!-- Hero 頂部主視覺 -->
+    <section class="py-10 sm:py-12 bg-gradient-to-b from-indigo-900 via-indigo-800 to-slate-900 text-white relative overflow-hidden">
+      <!-- 裝飾微光背景 -->
+      <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-pink-500/10 blur-3xl pointer-events-none"></div>
+      <div class="absolute top-1/2 -right-24 w-96 h-96 rounded-full bg-indigo-500/20 blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-indigo-200 text-xs font-bold tracking-wider mb-4 shadow-inner">
+          <i class="fa-solid fa-heart text-pink-400"></i>
+          南興三寶精神 • 看見品德與愛的綻放
+        </div>
+        <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-snug mb-3">
+          看見大帶小的溫暖，聽見彼此喝采的聲音
+        </h2>
+        <p class="max-w-2xl mx-auto text-xs sm:text-base text-indigo-100 font-medium leading-relaxed mb-6">
+          在南興的操場跑道上，勝負只是一時，陪伴彼此成長才是永恆。<br class="hidden sm:inline">
+          本專頁<strong>完全不設比賽名次與戰績比分</strong>，純粹記錄紅綠藍三隊在校慶週期間每一則體貼學弟妹、自律環保與尊重對手的感人事蹟！
+        </p>
+
+        <!-- 三大戰隊精神累計積分看板 -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
+          <!-- 綠隊 -->
+          <div class="p-4 rounded-2xl bg-emerald-950/60 border-2 border-emerald-400/60 backdrop-blur-md shadow-lg flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-emerald-300">綠隊 • 翠玉蜈蚣</div>
+              <div class="text-xs text-emerald-100 mt-0.5">蔡武憲、羅珮華、鄭潔、林立樺老師</div>
+            </div>
+            <div class="text-right">
+              <span class="text-2xl font-black text-emerald-300 font-fun">32</span>
+              <span class="text-xs text-emerald-200">分</span>
+            </div>
+          </div>
+
+          <!-- 藍隊 -->
+          <div class="p-4 rounded-2xl bg-blue-950/60 border-2 border-blue-400/60 backdrop-blur-md shadow-lg flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-blue-300">藍隊 • 碧海晨曦</div>
+              <div class="text-xs text-blue-100 mt-0.5">黃美雅、施喬恩、周婉琳老師</div>
+            </div>
+            <div class="text-right">
+              <span class="text-2xl font-black text-blue-300 font-fun">32</span>
+              <span class="text-xs text-blue-200">分</span>
+            </div>
+          </div>
+
+          <!-- 紅隊 -->
+          <div class="p-4 rounded-2xl bg-rose-950/60 border-2 border-rose-400/60 backdrop-blur-md shadow-lg flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-rose-300">紅隊 • 烈火金獅</div>
+              <div class="text-xs text-rose-100 mt-0.5">楊詒茹、徐敏瓊、Amos 老師</div>
+            </div>
+            <div class="text-right">
+              <span class="text-2xl font-black text-rose-300 font-fun">30</span>
+              <span class="text-xs text-rose-200">分</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 四大向度成就徽章區塊 -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 -mt-6 relative z-20">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <!-- 向度 1 -->
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-md box-3d flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-lg flex-shrink-0">
+            🤝
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-bold">向度一 (大帶小)</div>
+            <div class="text-sm font-black text-slate-900">跨齡扶持</div>
+            <div class="text-[11px] text-purple-700 font-bold mt-0.5">已累計 18 次加分</div>
+          </div>
+        </div>
+
+        <!-- 向度 2 -->
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-md box-3d flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg flex-shrink-0">
+            🏃
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-bold">向度二 (品德)</div>
+            <div class="text-sm font-black text-slate-900">運動家風度</div>
+            <div class="text-[11px] text-blue-700 font-bold mt-0.5">已累計 14 次加分</div>
+          </div>
+        </div>
+
+        <!-- 向度 3 -->
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-md box-3d flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg flex-shrink-0">
+            🌿
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-bold">向度三 (環境)</div>
+            <div class="text-sm font-black text-slate-900">環保自律</div>
+            <div class="text-[11px] text-emerald-700 font-bold mt-0.5">已累計 11 次加分</div>
+          </div>
+        </div>
+
+        <!-- 向度 4 -->
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-md box-3d flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg flex-shrink-0">
+            📣
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-bold">向度四 (士氣)</div>
+            <div class="text-sm font-black text-slate-900">團隊歡呼</div>
+            <div class="text-[11px] text-amber-700 font-bold mt-0.5">已累計 12 次加分</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 事蹟故事卡片牆（核心列表） -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 mt-10">
+      
+      <!-- 控制列：搜尋與分類篩選按鈕 -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200 mb-8">
+        
+        <!-- 分類標籤按鈕 -->
+        <div class="flex flex-wrap items-center gap-2" id="filter-buttons">
+          <button onclick="setFilter('all')" id="btn-all" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm transition">
+            全部暖心故事 (<span id="count-all">0</span>)
+          </button>
+          <button onclick="setFilter('green')" id="btn-green" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-emerald-800 border border-emerald-300 hover:bg-emerald-50 shadow-2xs transition">
+            🟢 綠隊事蹟
+          </button>
+          <button onclick="setFilter('blue')" id="btn-blue" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-blue-800 border border-blue-300 hover:bg-blue-50 shadow-2xs transition">
+            🔵 藍隊事蹟
+          </button>
+          <button onclick="setFilter('red')" id="btn-red" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-rose-800 border border-rose-300 hover:bg-rose-50 shadow-2xs transition">
+            🔴 紅隊事蹟
+          </button>
+          <span class="text-slate-300 hidden sm:inline">|</span>
+          <button onclick="setFilter('cross')" id="btn-cross" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-purple-800 border border-purple-200 hover:bg-purple-50 shadow-2xs transition">
+            🤝 跨齡扶持
+          </button>
+          <button onclick="setFilter('sports')" id="btn-sports" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-blue-800 border border-blue-200 hover:bg-blue-50 shadow-2xs transition">
+            🏃 運動風度
+          </button>
+          <button onclick="setFilter('eco')" id="btn-eco" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-emerald-800 border border-emerald-200 hover:bg-emerald-50 shadow-2xs transition">
+            🌿 環保自律
+          </button>
+        </div>
+
+        <!-- 關鍵字搜尋框 -->
+        <div class="relative w-full md:w-64">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input type="text" id="search-input" oninput="handleSearch()" placeholder="搜尋事蹟、學生或老師..." class="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-indigo-500 bg-white shadow-2xs">
+        </div>
+      </div>
+
+      <!-- 事蹟卡片網格 -->
+      <div id="stories-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- 由 JavaScript 動態生成所有故事卡片 -->
+      </div>
+
+      <!-- 無搜尋結果提示 -->
+      <div id="empty-state" class="hidden text-center py-16 text-slate-400">
+        <i class="fa-solid fa-magnifying-glass text-4xl mb-3 text-slate-300"></i>
+        <p class="text-sm font-bold">沒有符合條件的暖心事蹟</p>
+        <p class="text-xs text-slate-400 mt-1">請嘗試調整搜尋關鍵字或點選「全部暖心故事」</p>
+      </div>
+
+    </section>
+
+    <!-- 裁判與教師專用 LINE 登記提示卡 -->
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 mt-14">
+      <div class="p-6 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 text-emerald-950 flex flex-col sm:flex-row items-center gap-5 shadow-sm">
+        <div class="w-12 h-12 rounded-2xl bg-[#06C755] text-white flex items-center justify-center text-2xl flex-shrink-0 shadow-md">
+          <i class="fa-brands fa-line"></i>
+        </div>
+        <div class="flex-1 text-center sm:text-left text-xs leading-relaxed">
+          <h4 class="font-bold text-sm text-emerald-900 mb-1">南興全體教師隨行記錄指引（LINE 智慧橋接）</h4>
+          <p class="text-slate-700">
+            在校慶前導週與主場日，若老師或裁判在現場看見值得讚許的善行，只要在 <strong>LINE 官方帳號</strong> 直接打字或用語音輸入：<br>
+            <span class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 font-bold text-emerald-800">「綠隊精神加分2分，六年級主動牽一年級去檢錄並幫忙綁鞋帶」</span>，系統即時自動同步至本頁面！
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 📺 大螢幕全螢幕輪播 Modal (Kiosk Mode) -->
+  <div id="kiosk-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex flex-col justify-between p-6 sm:p-12 text-white">
+    <!-- 頂部資訊列 -->
+    <div class="flex items-center justify-between border-b border-white/20 pb-4">
+      <div class="flex items-center gap-3">
+        <span class="px-3 py-1 bg-pink-600 text-white rounded-full text-xs font-black tracking-wider uppercase animate-pulse">
+          LIVE 大螢幕輪播
+        </span>
+        <h3 class="text-base sm:text-xl font-bold tracking-tight text-indigo-200">
+          南興國小 115 校慶 • 互助合作精神暖心事蹟展
+        </h3>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-white/60 font-mono" id="kiosk-counter">1 / 15</span>
+        <button onclick="closeKiosk()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition text-sm">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 中央大字卡片 -->
+    <div class="max-w-4xl mx-auto w-full my-auto py-8">
+      <div id="kiosk-card" class="bg-white/10 border-2 border-white/20 backdrop-blur-xl rounded-3xl p-8 sm:p-12 shadow-2xl transition-all duration-500">
+        <div class="flex items-center justify-between gap-3 mb-6">
+          <div class="flex items-center gap-2.5" id="kiosk-team-badge">
+            <!-- 動態隊伍標籤 -->
+          </div>
+          <span class="text-sm font-mono text-indigo-300" id="kiosk-time"></span>
+        </div>
+
+        <p class="text-2xl sm:text-4xl lg:text-5xl font-black leading-snug tracking-tight text-white mb-8" id="kiosk-story">
+          <!-- 故事內容 -->
+        </p>
+
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-white/20 text-sm sm:text-base text-indigo-200">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-user-check text-pink-400"></i>
+            <span id="kiosk-author"></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-location-dot text-amber-400"></i>
+            <span id="kiosk-place"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 進度指示條 -->
+      <div class="w-full bg-white/10 rounded-full h-1.5 mt-6 overflow-hidden">
+        <div id="kiosk-progress" class="bg-gradient-to-r from-pink-500 via-indigo-400 to-emerald-400 h-full w-0 transition-all duration-100 ease-linear"></div>
+      </div>
+    </div>
+
+    <!-- 底部控制列 -->
+    <div class="flex items-center justify-center gap-6">
+      <button onclick="prevKiosk()" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-sm font-bold transition flex items-center gap-2">
+        <i class="fa-solid fa-chevron-left"></i> 上一則
+      </button>
+      <button onclick="toggleKioskPause()" id="kiosk-pause-btn" class="px-6 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 text-sm font-bold shadow-md transition flex items-center gap-2">
+        <i class="fa-solid fa-pause"></i> 暫停輪播
+      </button>
+      <button onclick="nextKiosk()" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-sm font-bold transition flex items-center gap-2">
+        下一則 <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- 頁尾 -->
+  <footer class="bg-slate-900 text-slate-400 py-10 text-xs text-center border-t border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 space-y-2">
+      <div class="flex items-center justify-center gap-2.5 text-white font-bold text-sm">
+        <div class="w-7 h-7 rounded-full bg-white p-0.5 flex items-center justify-center shadow-sm">
+          <img src="images/school_logo.jpg" alt="南興國小校徽" class="w-full h-full object-contain">
+        </div>
+        <span>臺南市安南區南興國民小學</span>
+      </div>
+      <p>
+        校址：709 臺南市安南區公學路五段627號 ｜ 電話：(06)2873204 ｜
+        <a href="index.html" class="text-indigo-400 hover:text-indigo-300 underline font-bold">校慶大會首頁</a> ｜
+        <a href="scores.html" class="text-amber-400 hover:text-amber-300 underline font-bold">賽事成績榜</a>
+      </p>
+      <p class="text-slate-500">
+        115學年度校慶運動大會籌備委員會 • 互助合作精神總錦標審查組
+      </p>
+    </div>
+  </footer>
+
+  <!-- JavaScript 資料與互動核心 -->
+  <script>
+    // 暖心事蹟資料集（生動展現南興國小特色與生活日常）
+    const STORIES_DATA = [
+      {
+        id: 1,
+        team: 'green',
+        category: 'cross',
+        categoryLabel: '跨齡扶持',
+        points: 2,
+        title: '操場慢跑後的及時溫暖',
+        story: '低年級 3 圈慢跑衝線後，一年級小生跑完全程有些喘不過氣，六年級的阿翔小隊長立刻上前攙扶、主動遞上溫開水並陪他在樹下休息調節呼吸，大帶小畫面極為溫暖動人！',
+        author: '林立樺 老師',
+        time: '12/01 08:35',
+        place: '操場司令台旁樹蔭處'
+      },
+      {
+        id: 2,
+        team: 'blue',
+        category: 'sports',
+        categoryLabel: '運動家風度',
+        points: 2,
+        title: '惜敗時的真誠敬禮與擁抱',
+        story: '躲避球循環賽戰至最後一刻以一分之差落敗，藍隊隊員無人沮喪抱怨，在隊長帶領下整齊向對手握手致意，並大聲喊出：「謝謝紅隊，你們真的很強！」，展現可貴的勝負氣度。',
+        author: '黃美雅 老師',
+        time: '11/26 08:38',
+        place: '操場球場'
+      },
+      {
+        id: 3,
+        team: 'red',
+        category: 'eco',
+        categoryLabel: '環保自律',
+        points: 2,
+        title: '離場前的一塵不染自主整潔',
+        story: '趣味競賽友誼賽結束全隊退場時，紅隊高年級隊長自發號召學弟妹，主動將整座風雨球場休息區周邊遺留的保特瓶、紙屑撿拾得乾乾淨淨，保持模範整潔。',
+        author: '楊詒茹 老師',
+        time: '11/30 08:42',
+        place: '風雨球場休息區'
+      },
+      {
+        id: 4,
+        team: 'green',
+        category: 'cheer',
+        categoryLabel: '團隊歡呼',
+        points: 2,
+        title: '隊呼震撼風雨球場，為友隊熱烈鼓掌',
+        story: '綠隊全體隊員手持自製彩帶，隊呼口號整齊響徹操場！更令人感動的是，當紅隊與藍隊拔河激烈僵持時，綠隊同樣給予兩隊最熱烈的加油節奏！',
+        author: '蔡武憲 老師',
+        time: '12/03 09:15',
+        place: '操場拔河跑道旁'
+      },
+      {
+        id: 5,
+        team: 'red',
+        category: 'cross',
+        categoryLabel: '跨齡扶持',
+        points: 2,
+        title: '細心替二年級學妹綁好鞋帶',
+        story: '在個人短跑決賽檢錄區，二年級小妹妹鞋帶突然鬆脫險些絆倒，紅隊五年級學姊立刻蹲下身子，溫柔且熟練地幫學妹綁上漂亮的蝴蝶結，並摸摸頭鼓勵她加油。',
+        author: '徐敏瓊 老師',
+        time: '12/05 09:10',
+        place: '操場檢錄帳篷前'
+      },
+      {
+        id: 6,
+        team: 'blue',
+        category: 'cross',
+        categoryLabel: '跨齡扶持',
+        points: 2,
+        title: '守護幼兒園小萌娃安全進場',
+        story: '大會開幕典禮時，藍隊六年級護旗手主動牽著幼兒園兩歲專班的小朋友入列，步伐放慢並貼心叮嚀踩階梯要小心，展現大哥哥大姊姊的體貼心腸。',
+        author: '周婉琳 老師',
+        time: '12/05 08:15',
+        place: '校門迎賓大道'
+      },
+      {
+        id: 7,
+        team: 'green',
+        category: 'sports',
+        categoryLabel: '運動家風度',
+        points: 2,
+        title: '大隊接力掉棒時的全員打氣',
+        story: '大隊接力總預演時，綠隊在交接棒時不慎掉棒落後，場邊全體綠隊隊友非但沒有一聲責怪，反而齊聲大喊：「沒關係！繼續衝！我們一起追回來！」，令人動容。',
+        author: '羅珮華 老師',
+        time: '12/03 09:50',
+        place: '外環跑道彎道處'
+      },
+      {
+        id: 8,
+        team: 'blue',
+        category: 'eco',
+        categoryLabel: '環保自律',
+        points: 2,
+        title: '守護校園綠草皮，落實分類回收',
+        story: '藍隊學童用完親子午宴餐盒後，主動在司令台後方設立臨時資源分類小尖兵，引導低年級依廚餘、紙餐盒與一般垃圾分類，展現高度自律品格。',
+        author: '施喬恩 老師',
+        time: '12/05 12:40',
+        place: '草皮遮陽帳篷區'
+      },
+      {
+        id: 9,
+        team: 'red',
+        category: 'cheer',
+        categoryLabel: '團隊歡呼',
+        points: 2,
+        title: '金獅陣精湛演出後的謙遜致敬',
+        story: '紅隊配合金獅陣開場展演後，隊員們大汗淋漓卻依然端正站立，向在場長官、家長會長及全校師長行最標準的武術抱拳禮，展現南興武藝傳統風骨。',
+        author: 'Amos (林承翰) 老師',
+        time: '12/05 08:50',
+        place: '操場中央大草坪'
+      },
+      {
+        id: 10,
+        team: 'green',
+        category: 'cross',
+        categoryLabel: '跨齡扶持',
+        points: 2,
+        title: '趣味競賽牽著學弟一起衝向終點',
+        story: '全校趣味競賽「蟲蟲危機」進行時，綠隊高年級選手配合三年級學弟的步伐調慢衝刺速度，並在耳邊不斷喊：「穩住！我們一起到終點！」，順利合力完成挑戰。',
+        author: '鄭潔 老師',
+        time: '12/05 10:45',
+        place: '大會中央競技區'
+      }
+    ];
+
+    let currentFilter = 'all';
+    let currentSearch = '';
+
+    // 渲染故事卡片
+    function renderStories() {
+      const grid = document.getElementById('stories-grid');
+      const emptyState = document.getElementById('empty-state');
+      
+      const filtered = STORIES_DATA.filter(item => {
+        const matchFilter = (currentFilter === 'all') ||
+                            (currentFilter === item.team) ||
+                            (currentFilter === item.category);
+        
+        const matchSearch = !currentSearch ||
+                            item.title.includes(currentSearch) ||
+                            item.story.includes(currentSearch) ||
+                            item.author.includes(currentSearch) ||
+                            item.place.includes(currentSearch) ||
+                            item.categoryLabel.includes(currentSearch);
+        
+        return matchFilter && matchSearch;
+      });
+
+      document.getElementById('count-all').innerText = STORIES_DATA.length;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filtered.map(item => {
+        const teamColors = {
+          green: { border: 'border-emerald-500', bg: 'bg-emerald-50/70', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300', icon: '🟢 綠隊 • 翠玉蜈蚣' },
+          blue: { border: 'border-blue-500', bg: 'bg-blue-50/70', badge: 'bg-blue-100 text-blue-800 border-blue-300', icon: '🔵 藍隊 • 碧海晨曦' },
+          red: { border: 'border-rose-500', bg: 'bg-rose-50/70', badge: 'bg-rose-100 text-rose-800 border-rose-300', icon: '🔴 紅隊 • 烈火金獅' }
+        }[item.team];
+
+        const catIcons = {
+          cross: '🤝 跨齡扶持',
+          sports: '🏃 運動家風度',
+          eco: '🌿 環保自律',
+          cheer: '📣 團隊歡呼'
+        }[item.category] || item.categoryLabel;
+
+        return `
+          <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-slate-200 border-l-8 ${teamColors.border} box-3d flex flex-col justify-between">
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-lg text-xs font-bold border ${teamColors.badge}">
+                    ${teamColors.icon}
+                  </span>
+                  <span class="px-2 py-0.5 rounded-md text-xs font-bold bg-slate-100 text-slate-700">
+                    ${catIcons}
+                  </span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-300 rounded-md text-xs font-black">
+                    +${item.points} 分
+                  </span>
+                  <span class="text-slate-400 font-mono text-[11px]">${item.time}</span>
+                </div>
+              </div>
+
+              <h4 class="text-base font-bold text-slate-900 mb-2 leading-snug">
+                ${item.title}
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
+                ${item.story}
+              </p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+              <span class="flex items-center gap-1 font-bold text-slate-700">
+                <i class="fa-solid fa-user-check text-indigo-500"></i>
+                見證教師：${item.author}
+              </span>
+              <span class="flex items-center gap-1 text-slate-400">
+                <i class="fa-solid fa-location-dot"></i>
+                ${item.place}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 設定分類篩選
+    function setFilter(type) {
+      currentFilter = type;
+      const buttons = document.querySelectorAll('#filter-buttons button');
+      buttons.forEach(btn => {
+        btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-2xs transition';
+      });
+
+      const activeBtn = document.getElementById(`btn-${type}`);
+      if (activeBtn) {
+        activeBtn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm transition';
+      }
+
+      renderStories();
+    }
+
+    // 搜尋處理
+    function handleSearch() {
+      currentSearch = document.getElementById('search-input').value.trim();
+      renderStories();
+    }
+
+    // 📺 Kiosk 大螢幕輪播邏輯
+    let kioskIndex = 0;
+    let kioskTimer = null;
+    let isKioskPaused = false;
+    const KIOSK_DURATION = 7000; // 每則 7 秒
+
+    function openKiosk() {
+      document.getElementById('kiosk-modal').classList.remove('hidden');
+      kioskIndex = 0;
+      isKioskPaused = false;
+      document.body.style.overflow = 'hidden';
+      showKioskSlide();
+      startKioskTimer();
+    }
+
+    function closeKiosk() {
+      document.getElementById('kiosk-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+      clearInterval(kioskTimer);
+    }
+
+    function showKioskSlide() {
+      const item = STORIES_DATA[kioskIndex];
+      const teamBadges = {
+        green: '<span class="px-3 py-1 bg-emerald-500 text-white font-black rounded-xl text-sm sm:text-base shadow">🟢 綠隊 • 翠玉蜈蚣</span>',
+        blue: '<span class="px-3 py-1 bg-blue-500 text-white font-black rounded-xl text-sm sm:text-base shadow">🔵 藍隊 • 碧海晨曦</span>',
+        red: '<span class="px-3 py-1 bg-rose-500 text-white font-black rounded-xl text-sm sm:text-base shadow">🔴 紅隊 • 烈火金獅</span>'
+      }[item.team];
+
+      const catBadges = {
+        cross: '🤝 跨齡扶持', sports: '🏃 運動家風度', eco: '🌿 環保自律', cheer: '📣 團隊歡呼'
+      }[item.category] || item.categoryLabel;
+
+      document.getElementById('kiosk-team-badge').innerHTML = `
+        ${teamBadges}
+        <span class="px-3 py-1 bg-white/20 text-white font-bold rounded-xl text-xs sm:text-sm">${catBadges}</span>
+        <span class="px-3 py-1 bg-amber-400 text-amber-950 font-black rounded-xl text-xs sm:text-sm">+${item.points} 分</span>
+      `;
+      document.getElementById('kiosk-time').innerText = item.time;
+      document.getElementById('kiosk-story').innerText = `「${item.story}」`;
+      document.getElementById('kiosk-author').innerText = `見證評審：${item.author}`;
+      document.getElementById('kiosk-place').innerText = item.place;
+      document.getElementById('kiosk-counter').innerText = `${kioskIndex + 1} / ${STORIES_DATA.length}`;
+
+      // 重設進度條動畫
+      const bar = document.getElementById('kiosk-progress');
+      bar.style.transition = 'none';
+      bar.style.width = '0%';
+      setTimeout(() => {
+        if (!isKioskPaused) {
+          bar.style.transition = `width ${KIOSK_DURATION}ms linear`;
+          bar.style.width = '100%';
+        }
+      }, 50);
+    }
+
+    function startKioskTimer() {
+      clearInterval(kioskTimer);
+      if (isKioskPaused) return;
+
+      kioskTimer = setInterval(() => {
+        kioskIndex = (kioskIndex + 1) % STORIES_DATA.length;
+        showKioskSlide();
+      }, KIOSK_DURATION);
+    }
+
+    function nextKiosk() {
+      kioskIndex = (kioskIndex + 1) % STORIES_DATA.length;
+      showKioskSlide();
+      startKioskTimer();
+    }
+
+    function prevKiosk() {
+      kioskIndex = (kioskIndex - 1 + STORIES_DATA.length) % STORIES_DATA.length;
+      showKioskSlide();
+      startKioskTimer();
+    }
+
+    function toggleKioskPause() {
+      isKioskPaused = !isKioskPaused;
+      const btn = document.getElementById('kiosk-pause-btn');
+      const bar = document.getElementById('kiosk-progress');
+      if (isKioskPaused) {
+        clearInterval(kioskTimer);
+        btn.innerHTML = '<i class="fa-solid fa-play"></i> 繼續輪播';
+        bar.style.transition = 'none';
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-pause"></i> 暫停輪播';
+        startKioskTimer();
+      }
+    }
+
+    // 鍵盤操控
+    document.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('kiosk-modal');
+      if (!modal.classList.contains('hidden')) {
+        if (e.key === 'Escape') closeKiosk();
+        if (e.key === 'ArrowRight' || e.key === ' ') nextKiosk();
+        if (e.key === 'ArrowLeft') prevKiosk();
+      }
+    });
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      renderStories();
+    });
+  </script>
+</body>
+</html>
