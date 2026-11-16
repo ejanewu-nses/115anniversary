@@ -16,10 +16,10 @@ const CONFIG = {
   GEMINI_MODEL: 'gemini-2.5-flash',
   ENABLE_WHITELIST: true, // 開啟白名單機制（防外人亂改）
   SHEET_NAMES: {
-    SPIRIT: '精神加分明細',
-    TOTALS: '戰隊總積分',
-    EVENTS: '各項賽事成績',
+    TOTALS: '戰隊總積分榜',
+    EVENTS: '各項賽事成績明細',
     SPRINT: '個人短跑得獎榜',
+    SPIRIT: '精神加分明細',
     GUESTS: '貴賓線上回條名冊'
   }
 };
@@ -28,7 +28,7 @@ const CONFIG = {
  * ----------------------------------------------------------------------
  * 1. 提供給官方網頁讀取的公開唯讀 JSON API (doGet)
  * - 支援 ?type=guests 讀取貴賓回條清單（供接待管理後台 admin.html 載入）
- * - 預設回傳最新賽事精神總分與暖心故事列表（供 index/scores/spirit 載入）
+ * - 預設回傳：三大戰隊總積分、各項賽事成績、個人短跑得獎名冊、精神事蹟日誌
  * ----------------------------------------------------------------------
  */
 function doGet(e) {
@@ -65,11 +65,101 @@ function doGet(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // B. 查詢賽事戰況與精神加分明細
+    // B. 讀取「精神加分明細」
     const spiritSheet = ss.getSheetByName(CONFIG.SHEET_NAMES.SPIRIT);
     const spiritData = spiritSheet.getDataRange().getValues();
     const stories = [];
     let greenSpirit = 0, blueSpirit = 0, redSpirit = 0;
+
+    for (let i = 1; i < spiritData.length; i++) {
+      const row = spiritData[i];
+      if (!row[0]) continue;
+      const team = String(row[2]).trim(); // 'green', 'blue', 'red'
+      const pts = Number(row[4]) || 0;
+
+      if (team === 'green' || team.includes('綠')) greenSpirit += pts;
+      else if (team === 'blue' || team.includes('藍')) blueSpirit += pts;
+      else if (team === 'red' || team.includes('紅')) redSpirit += pts;
+
+      stories.push({
+        id: i,
+        time: Utilities.formatDate(new Date(row[0]), 'Asia/Taipei', 'MM/dd HH:mm'),
+        team: normalizeTeam(team),
+        category: row[3],
+        points: pts,
+        story: row[5],
+        author: row[6] || '大會裁判',
+        place: row[7] || '操場'
+      });
+    }
+    stories.reverse();
+
+    // C. 讀取「各項賽事成績明細」
+    const eventSheet = ss.getSheetByName(CONFIG.SHEET_NAMES.EVENTS);
+    const eventData = eventSheet.getDataRange().getValues();
+    const eventScores = {};
+    let greenSports = 0, blueSports = 0, redSports = 0;
+
+    for (let i = 1; i < eventData.length; i++) {
+      const row = eventData[i];
+      if (!row[0]) continue;
+      const eventCode = String(row[2]).trim(); // e.g. 'dodge', 'runLow', etc.
+      const gPts = Number(row[3]) || 0;
+      const bPts = Number(row[4]) || 0;
+      const rPts = Number(row[5]) || 0;
+
+      eventScores[eventCode] = { green: gPts, blue: bPts, red: rPts, memo: row[6] || '' };
+      greenSports += gPts;
+      blueSports += bPts;
+      redSports += rPts;
+    }
+
+    // D. 讀取「個人短跑得獎榜」
+    const sprintSheet = ss.getSheetByName(CONFIG.SHEET_NAMES.SPRINT);
+    const sprintData = sprintSheet.getDataRange().getValues();
+    const sprintWinners = {};
+
+    for (let i = 1; i < sprintData.length; i++) {
+      const row = sprintData[i];
+      if (!row[0]) continue;
+      const groupCode = String(row[0]).trim(); // 'lowBoy', 'lowGirl', etc.
+      sprintWinners[groupCode] = {
+        name: row[1],
+        dist: row[2],
+        gold: row[3] || '尚未決賽',
+        silver: row[4] || '尚未決賽',
+        bronze: row[5] || '尚未決賽'
+      };
+    }
+
+    // E. 彙整三大戰隊總分（體育分 + 精神分）
+    const teamTotals = {
+      green: { sports: greenSports, spirit: greenSpirit, total: greenSports + greenSpirit },
+      blue: { sports: blueSports, spirit: blueSpirit, total: blueSports + blueSpirit },
+      red: { sports: redSports, spirit: redSpirit, total: redSports + redSpirit }
+    };
+
+    // F. 組合完整結果回傳
+    const result = {
+      success: true,
+      timestamp: new Date().toISOString(),
+      teamTotals: teamTotals,
+      eventScores: eventScores,
+      sprintWinners: sprintWinners,
+      spiritScores: { green: greenSpirit, blue: blueSpirit, red: redSpirit },
+      stories: stories
+    };
+
+    return ContentService.createTextOutput(JSON.stringify(result))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: err.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
 
     for (let i = 1; i < spiritData.length; i++) {
       const row = spiritData[i];
@@ -377,11 +467,53 @@ function isUserAuthorized(userId) {
 
 /**
  * ----------------------------------------------------------------------
- * 7. 試算表自癒建表函式（自動建立各分頁與標題列）
+ * 7. 試算表自癒建表函式（自動建立五大核心分頁與標題列）
  * ----------------------------------------------------------------------
  */
 function ensureSheetHeaders(ss) {
-  // 1. 精神加分分頁
+  // 1. 各項賽事成績明細分頁
+  let eventSheet = ss.getSheetByName(CONFIG.SHEET_NAMES.EVENTS);
+  if (!eventSheet) {
+    eventSheet = ss.insertSheet(CONFIG.SHEET_NAMES.EVENTS);
+    eventSheet.appendRow(['賽事日期', '賽事項目名稱', '賽事代碼', '綠隊得分', '藍隊得分', '紅隊得分', '名次與備註說明', '裁判登記人', '更新時間']);
+    eventSheet.getRange(1, 1, 1, 9).setBackground('#0f766e').setFontColor('#ffffff').setFontWeight('bold');
+    eventSheet.setFrozenRows(1);
+
+    // 寫入預設賽事架構
+    const defaultEvents = [
+      ['11/26 (四)', '熱血美式躲避球循環賽', 'dodge', 12, 4, 8, '綠隊冠軍(+12)、紅隊亞軍(+8)、藍隊季軍(+4)', '大會裁判組', new Date()],
+      ['12/01 (二)', '校園慢跑-低年級3圈(5分內)', 'runLow', 6, 7, 5, '藍7人、綠6人、紅5人達標(每人1分)', '大會裁判組', new Date()],
+      ['12/01 (二)', '校園慢跑-中年級800m(7分內)', 'runMid', 6, 4, 5, '綠6人、紅5人、藍4人達標(每人1分)', '大會裁判組', new Date()],
+      ['12/01 (二)', '校園慢跑-高年級800m(6分內)', 'runHigh', 5, 4, 6, '紅6人、綠5人、藍4人達標(每人1分)', '大會裁判組', new Date()],
+      ['12/05 (六)', '拔河賽-一二三年級組', 'tugLow', 8, 6, 4, '綠隊冠軍(+8)、藍隊亞軍(+6)、紅隊季軍(+4)', '大會裁判組', new Date()],
+      ['12/05 (六)', '拔河賽-四五六年級組', 'tugHigh', 6, 4, 8, '紅隊冠軍(+8)、綠隊亞軍(+6)、藍隊季軍(+4)', '大會裁判組', new Date()],
+      ['12/05 (六)', '趣味競賽-蟲蟲危機', 'rainbow', 6, 12, 8, '藍隊冠軍(+12)、紅隊亞軍(+8)、綠隊季軍(+6)', '大會裁判組', new Date()],
+      ['12/05 (六)', '大隊接力-一二三年級組', 'relayLow', 10, 12, 8, '藍隊冠軍(+12)、綠隊亞軍(+10)、紅隊季軍(+8)', '大會裁判組', new Date()],
+      ['12/05 (六)', '大隊接力-四五六年級組', 'relayHigh', 12, 8, 10, '綠隊冠軍(+12)、紅隊亞軍(+10)、藍隊季軍(+8)', '大會裁判組', new Date()]
+    ];
+    eventSheet.getRange(2, 1, defaultEvents.length, 9).setValues(defaultEvents);
+  }
+
+  // 2. 個人短跑得獎榜分頁
+  let sprintSheet = ss.getSheetByName(CONFIG.SHEET_NAMES.SPRINT);
+  if (!sprintSheet) {
+    sprintSheet = ss.insertSheet(CONFIG.SHEET_NAMES.SPRINT);
+    sprintSheet.appendRow(['組別代碼', '競賽組別名稱', '競賽距離', '🥇金牌(第1名)', '🥈銀牌(第2名)', '🥉銅牌(第3名)', '裁判簽名', '更新時間']);
+    sprintSheet.getRange(1, 1, 1, 8).setBackground('#0369a1').setFontColor('#ffffff').setFontWeight('bold');
+    sprintSheet.setFrozenRows(1);
+
+    const defaultSprints = [
+      ['lowBoy', '低年級男生組', '60m', '二年級代表A', '二年級代表B', '一年級代表A', '大會裁判組', new Date()],
+      ['lowGirl', '低年級女生組', '60m', '二年級代表C', '一年級代表B', '一年級代表C', '大會裁判組', new Date()],
+      ['midBoy', '中年級男生組', '80m', '四年級代表A', '四年級代表B', '三年級代表A', '大會裁判組', new Date()],
+      ['midGirl', '中年級女生組', '80m', '四年級代表C', '三年級代表B', '三年級代表C', '大會裁判組', new Date()],
+      ['highBoy', '高年級男生組', '100m', '六年級代表A', '五年級代表A', '六年級代表B', '大會裁判組', new Date()],
+      ['highGirl', '高年級女生組', '100m', '六年級代表C', '五年級代表B', '五年級代表C', '大會裁判組', new Date()]
+    ];
+    sprintSheet.getRange(2, 1, defaultSprints.length, 8).setValues(defaultSprints);
+  }
+
+  // 3. 精神加分明細分頁
   let spiritSheet = ss.getSheetByName(CONFIG.SHEET_NAMES.SPIRIT);
   if (!spiritSheet) {
     spiritSheet = ss.insertSheet(CONFIG.SHEET_NAMES.SPIRIT);
@@ -390,7 +522,7 @@ function ensureSheetHeaders(ss) {
     spiritSheet.setFrozenRows(1);
   }
 
-  // 2. 貴賓線上回條名冊分頁
+  // 4. 貴賓線上回條名冊分頁
   let guestSheet = ss.getSheetByName(CONFIG.SHEET_NAMES.GUESTS);
   if (!guestSheet) {
     guestSheet = ss.insertSheet(CONFIG.SHEET_NAMES.GUESTS);
