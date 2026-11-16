@@ -26,6 +26,23 @@ const CONFIG = {
 
 /**
  * ----------------------------------------------------------------------
+ * 手動一鍵初始化資料庫分頁（在 Apps Script 編輯器上方選擇此函式並點擊「執行」即可秒速建好 4 大核心分頁！）
+ * ----------------------------------------------------------------------
+ */
+function initDatabase() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ensureSheetHeaders(ss);
+  
+  // 若預設的「工作表1」是空的，自動移除保持整潔
+  const defaultSheet = ss.getSheetByName('工作表1') || ss.getSheetByName('Sheet1');
+  if (defaultSheet && ss.getSheets().length > 1 && defaultSheet.getLastRow() === 0) {
+    try { ss.deleteSheet(defaultSheet); } catch(e) {}
+  }
+  console.log('✅ 資料庫核心工作表已成功建立！');
+}
+
+/**
+ * ----------------------------------------------------------------------
  * 1. 提供給官方網頁讀取的公開唯讀 JSON API (doGet)
  * - 支援 ?type=guests 讀取貴賓回條清單（供接待管理後台 admin.html 載入）
  * - 預設回傳：三大戰隊總積分、各項賽事成績、個人短跑得獎名冊、精神事蹟日誌
