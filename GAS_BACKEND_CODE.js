@@ -98,13 +98,25 @@ function doGet(e) {
       else if (team === 'blue' || team.includes('藍')) blueSpirit += pts;
       else if (team === 'red' || team.includes('紅')) redSpirit += pts;
 
+      const rawCat = String(row[3] || '');
+      let catCode = 'cross';
+      let catLabel = '🤝 跨齡扶持';
+      if (rawCat.includes('風度') || rawCat.includes('sports')) { catCode = 'sports'; catLabel = '🏃 運動家風度'; }
+      else if (rawCat.includes('環保') || rawCat.includes('eco')) { catCode = 'eco'; catLabel = '🌿 環保自律'; }
+      else if (rawCat.includes('歡呼') || rawCat.includes('cheer')) { catCode = 'cheer'; catLabel = '📣 團隊歡呼'; }
+
+      const storyText = String(row[5] || '');
+      const storyTitle = storyText.length > 18 ? storyText.substring(0, 18) + '...' : (storyText || '溫馨互助事蹟');
+
       stories.push({
         id: i,
         time: Utilities.formatDate(new Date(row[0]), 'Asia/Taipei', 'MM/dd HH:mm'),
         team: normalizeTeam(team),
-        category: row[3],
+        category: catCode,
+        categoryLabel: catLabel,
+        title: storyTitle,
         points: pts,
-        story: row[5],
+        story: storyText,
         author: row[6] || '大會裁判',
         place: row[7] || '操場'
       });

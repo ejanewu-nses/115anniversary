@@ -343,8 +343,8 @@
   <script>
     const CLOUD_API_URL = 'https://script.google.com/macros/s/AKfycbwppBa3j4htWuGBHwvnz4UEuo39GeVyM5-cBrVSkhuq1bshMCAB4HRwIP1Ypdc9XdE7/exec';
 
-    // 暖心事蹟資料集（生動展現南興國小特色與生活日常）
-    const STORIES_DATA = [
+    // 基礎預設暖心事蹟資料集（10筆經典故事，確保各向度與三隊皆有基底）
+    const DEFAULT_STORIES = [
       {
         id: 1,
         team: 'green',
@@ -467,8 +467,34 @@
       }
     ];
 
+    let STORIES_DATA = [...DEFAULT_STORIES];
     let currentFilter = 'all';
     let currentSearch = '';
+
+    // 輔助函式：安全解析向度名稱與圖示，防範任何 undefined
+    function resolveCategoryLabel(item) {
+      const catMap = {
+        cross: '🤝 跨齡扶持',
+        sports: '🏃 運動家風度',
+        eco: '🌿 環保自律',
+        cheer: '📣 團隊歡呼'
+      };
+      let label = item.categoryLabel || catMap[item.category] || item.category || '🤝 跨齡扶持';
+      if (!label.includes(' ')) {
+        if (label.includes('跨齡') || label.includes('大帶小') || label.includes('扶持')) label = '🤝 跨齡扶持';
+        else if (label.includes('運動') || label.includes('風度')) label = '🏃 運動家風度';
+        else if (label.includes('環保') || label.includes('自律')) label = '🌿 環保自律';
+        else if (label.includes('歡呼') || label.includes('隊呼')) label = '📣 團隊歡呼';
+      }
+      return label;
+    }
+
+    // 輔助函式：安全解析事蹟標題，防範任何 undefined
+    function resolveStoryTitle(item) {
+      if (item.title && item.title !== 'undefined') return item.title;
+      const s = item.story || '';
+      return s.length > 18 ? s.slice(0, 18) + '...' : (s || '溫馨互助事蹟');
+    }
 
     // 渲染故事卡片
     function renderStories() {
@@ -476,16 +502,23 @@
       const emptyState = document.getElementById('empty-state');
       
       const filtered = STORIES_DATA.filter(item => {
+        const catLabel = resolveCategoryLabel(item);
+        const title = resolveStoryTitle(item);
+
         const matchFilter = (currentFilter === 'all') ||
                             (currentFilter === item.team) ||
-                            (currentFilter === item.category);
+                            (currentFilter === item.category) ||
+                            (currentFilter === 'cross' && catLabel.includes('跨齡')) ||
+                            (currentFilter === 'sports' && catLabel.includes('運動')) ||
+                            (currentFilter === 'eco' && catLabel.includes('環保')) ||
+                            (currentFilter === 'cheer' && catLabel.includes('歡呼'));
         
         const matchSearch = !currentSearch ||
-                            item.title.includes(currentSearch) ||
-                            item.story.includes(currentSearch) ||
-                            item.author.includes(currentSearch) ||
-                            item.place.includes(currentSearch) ||
-                            item.categoryLabel.includes(currentSearch);
+                            title.includes(currentSearch) ||
+                            (item.story && item.story.includes(currentSearch)) ||
+                            (item.author && item.author.includes(currentSearch)) ||
+                            (item.place && item.place.includes(currentSearch)) ||
+                            catLabel.includes(currentSearch);
         
         return matchFilter && matchSearch;
       });
@@ -504,14 +537,10 @@
           green: { border: 'border-emerald-500', bg: 'bg-emerald-50/70', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300', icon: '🟢 綠隊 • 翠玉蜈蚣' },
           blue: { border: 'border-blue-500', bg: 'bg-blue-50/70', badge: 'bg-blue-100 text-blue-800 border-blue-300', icon: '🔵 藍隊 • 碧海晨曦' },
           red: { border: 'border-rose-500', bg: 'bg-rose-50/70', badge: 'bg-rose-100 text-rose-800 border-rose-300', icon: '🔴 紅隊 • 烈火金獅' }
-        }[item.team];
+        }[item.team] || { border: 'border-emerald-500', bg: 'bg-emerald-50/70', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300', icon: '🟢 綠隊 • 翠玉蜈蚣' };
 
-        const catIcons = {
-          cross: '🤝 跨齡扶持',
-          sports: '🏃 運動家風度',
-          eco: '🌿 環保自律',
-          cheer: '📣 團隊歡呼'
-        }[item.category] || item.categoryLabel;
+        const catLabel = resolveCategoryLabel(item);
+        const titleText = resolveStoryTitle(item);
 
         return `
           <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-slate-200 border-l-8 ${teamColors.border} box-3d flex flex-col justify-between">
@@ -522,33 +551,33 @@
                     ${teamColors.icon}
                   </span>
                   <span class="px-2 py-0.5 rounded-md text-xs font-bold bg-slate-100 text-slate-700">
-                    ${catIcons}
+                    ${catLabel}
                   </span>
                 </div>
                 <div class="flex items-center gap-1.5">
                   <span class="px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-300 rounded-md text-xs font-black">
-                    +${item.points} 分
+                    +${item.points || 2} 分
                   </span>
-                  <span class="text-slate-400 font-mono text-[11px]">${item.time}</span>
+                  <span class="text-slate-400 font-mono text-[11px]">${item.time || ''}</span>
                 </div>
               </div>
 
               <h4 class="text-base font-bold text-slate-900 mb-2 leading-snug">
-                ${item.title}
+                ${titleText}
               </h4>
               <p class="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
-                ${item.story}
+                ${item.story || ''}
               </p>
             </div>
 
             <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
               <span class="flex items-center gap-1 font-bold text-slate-700">
                 <i class="fa-solid fa-user-check text-indigo-500"></i>
-                見證教師：${item.author}
+                見證教師：${item.author || '大會裁判'}
               </span>
               <span class="flex items-center gap-1 text-slate-400">
                 <i class="fa-solid fa-location-dot"></i>
-                ${item.place}
+                ${item.place || '操場'}
               </span>
             </div>
           </div>
@@ -605,21 +634,19 @@
         green: '<span class="px-3 py-1 bg-emerald-500 text-white font-black rounded-xl text-sm sm:text-base shadow">🟢 綠隊 • 翠玉蜈蚣</span>',
         blue: '<span class="px-3 py-1 bg-blue-500 text-white font-black rounded-xl text-sm sm:text-base shadow">🔵 藍隊 • 碧海晨曦</span>',
         red: '<span class="px-3 py-1 bg-rose-500 text-white font-black rounded-xl text-sm sm:text-base shadow">🔴 紅隊 • 烈火金獅</span>'
-      }[item.team];
+      }[item.team] || '<span class="px-3 py-1 bg-emerald-500 text-white font-black rounded-xl text-sm sm:text-base shadow">🟢 綠隊 • 翠玉蜈蚣</span>';
 
-      const catBadges = {
-        cross: '🤝 跨齡扶持', sports: '🏃 運動家風度', eco: '🌿 環保自律', cheer: '📣 團隊歡呼'
-      }[item.category] || item.categoryLabel;
+      const catBadges = resolveCategoryLabel(item);
 
       document.getElementById('kiosk-team-badge').innerHTML = `
         ${teamBadges}
         <span class="px-3 py-1 bg-white/20 text-white font-bold rounded-xl text-xs sm:text-sm">${catBadges}</span>
-        <span class="px-3 py-1 bg-amber-400 text-amber-950 font-black rounded-xl text-xs sm:text-sm">+${item.points} 分</span>
+        <span class="px-3 py-1 bg-amber-400 text-amber-950 font-black rounded-xl text-xs sm:text-sm">+${item.points || 2} 分</span>
       `;
-      document.getElementById('kiosk-time').innerText = item.time;
-      document.getElementById('kiosk-story').innerText = `「${item.story}」`;
-      document.getElementById('kiosk-author').innerText = `見證評審：${item.author}`;
-      document.getElementById('kiosk-place').innerText = item.place;
+      document.getElementById('kiosk-time').innerText = item.time || '';
+      document.getElementById('kiosk-story').innerText = `「${item.story || ''}」`;
+      document.getElementById('kiosk-author').innerText = `見證評審：${item.author || '大會裁判'}`;
+      document.getElementById('kiosk-place').innerText = item.place || '操場';
       document.getElementById('kiosk-counter').innerText = `${kioskIndex + 1} / ${STORIES_DATA.length}`;
 
       // 重設進度條動畫
@@ -685,10 +712,16 @@
         const res = await fetch(CLOUD_API_URL);
         const data = await res.json();
         if (data && data.success) {
+          // 1. 同步頂部精神總分（基準 32, 32, 30 + 雲端即時累加）
           if (data.spiritScores) {
-            const g = data.spiritScores.green || 32;
-            const b = data.spiritScores.blue || 32;
-            const r = data.spiritScores.red || 30;
+            const gRaw = Number(data.spiritScores.green) || 0;
+            const bRaw = Number(data.spiritScores.blue) || 0;
+            const rRaw = Number(data.spiritScores.red) || 0;
+
+            const g = gRaw >= 30 ? gRaw : (32 + gRaw);
+            const b = bRaw >= 30 ? bRaw : (32 + bRaw);
+            const r = rRaw >= 30 ? rRaw : (30 + rRaw);
+
             const greenEl = document.getElementById('spirit-green-pts');
             const blueEl = document.getElementById('spirit-blue-pts');
             const redEl = document.getElementById('spirit-red-pts');
@@ -697,11 +730,18 @@
             if (redEl) redEl.innerText = r;
           }
 
+          // 2. 雲端最新事蹟置頂合併（不沖掉 10 則歷史事蹟）
           if (Array.isArray(data.stories) && data.stories.length > 0) {
-            // 將雲端事蹟置頂
-            const cloudIds = new Set(data.stories.map(s => s.id));
-            const base = STORIES_DATA.filter(s => !cloudIds.has(s.id));
-            STORIES_DATA.splice(0, STORIES_DATA.length, ...data.stories, ...base);
+            // 為雲端故事標記前綴防撞 ID
+            const cloudStories = data.stories.map((s, idx) => ({
+              ...s,
+              id: 'cloud_' + (s.id || idx),
+              title: s.title || resolveStoryTitle(s),
+              categoryLabel: resolveCategoryLabel(s)
+            }));
+
+            // 合併：雲端最新在最上方，基底在後
+            STORIES_DATA = [...cloudStories, ...DEFAULT_STORIES];
             renderStories();
           }
         }

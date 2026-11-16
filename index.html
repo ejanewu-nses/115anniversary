@@ -857,14 +857,22 @@
         }
       } catch(e) {}
 
-      // 2. 向雲端試算表即時 API 抓取最新戰隊總分
+      // 2. 向雲端試算表即時 API 抓取最新戰隊總分（基準 32, 32, 30 + 雲端累計）
       try {
         const res = await fetch(CLOUD_API_URL);
         const data = await res.json();
-        if (data && data.success && data.teamTotals) {
-          greenTotal = data.teamTotals.green.total || greenTotal;
-          blueTotal = data.teamTotals.blue.total || blueTotal;
-          redTotal = data.teamTotals.red.total || redTotal;
+        if (data && data.success) {
+          const gSpirit = (data.spiritScores?.green >= 30) ? data.spiritScores.green : (32 + (data.spiritScores?.green || 0));
+          const bSpirit = (data.spiritScores?.blue >= 30) ? data.spiritScores.blue : (32 + (data.spiritScores?.blue || 0));
+          const rSpirit = (data.spiritScores?.red >= 30) ? data.spiritScores.red : (30 + (data.spiritScores?.red || 0));
+
+          const gSports = (data.teamTotals && data.teamTotals.green && data.teamTotals.green.sports) ? data.teamTotals.green.sports : 50;
+          const bSports = (data.teamTotals && data.teamTotals.blue && data.teamTotals.blue.sports) ? data.teamTotals.blue.sports : 47;
+          const rSports = (data.teamTotals && data.teamTotals.red && data.teamTotals.red.sports) ? data.teamTotals.red.sports : 48;
+
+          greenTotal = gSports + gSpirit;
+          blueTotal = bSports + bSpirit;
+          redTotal = rSports + rSpirit;
         }
       } catch (err) {
         console.log('Using local/default scoreboard.');

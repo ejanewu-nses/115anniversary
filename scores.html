@@ -110,10 +110,10 @@
               體育競技與互助精神分數雙軌累算，三隊積分緊咬！
             </p>
           </div>
-          <div class="flex items-center gap-2 text-xs font-bold">
-            <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg">🥇 綠隊 82 分</span>
-            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-lg">🥈 藍隊 79 分</span>
-            <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-lg">🥉 紅隊 78 分</span>
+          <div class="flex items-center gap-2 text-xs font-bold" id="dashboard-badges">
+            <span id="badge-green" class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg">🥇 綠隊 84 分</span>
+            <span id="badge-blue" class="px-3 py-1 bg-blue-100 text-blue-800 rounded-lg">🥈 藍隊 81 分</span>
+            <span id="badge-red" class="px-3 py-1 bg-rose-100 text-rose-800 rounded-lg">🥉 紅隊 80 分</span>
           </div>
         </div>
 
@@ -124,12 +124,12 @@
             <div class="flex justify-between text-xs font-bold mb-1">
               <span class="text-emerald-800 flex items-center gap-1.5">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                <strong>綠隊 • 翠玉蜈蚣</strong>（體育 50 分 ＋ 精神 32 分）
+                <strong>綠隊 • 翠玉蜈蚣</strong><span id="detail-green">（體育 50 分 ＋ 精神 34 分）</span>
               </span>
-              <span class="text-emerald-700 font-mono text-sm font-bold">82 分 (目前領先)</span>
+              <span id="bar-green-text" class="text-emerald-700 font-mono text-sm font-bold">84 分 (目前領先)</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-200">
-              <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full" style="width: 82%"></div>
+              <div id="bar-green" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 84%"></div>
             </div>
           </div>
 
@@ -138,12 +138,12 @@
             <div class="flex justify-between text-xs font-bold mb-1">
               <span class="text-blue-800 flex items-center gap-1.5">
                 <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                <strong>藍隊 • 碧海晨曦</strong>（體育 47 分 ＋ 精神 32 分）
+                <strong>藍隊 • 碧海晨曦</strong><span id="detail-blue">（體育 47 分 ＋ 精神 34 分）</span>
               </span>
-              <span class="text-blue-700 font-mono text-sm font-bold">79 分（差距 3 分）</span>
+              <span id="bar-blue-text" class="text-blue-700 font-mono text-sm font-bold">81 分（差距 3 分）</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-200">
-              <div class="bg-gradient-to-r from-blue-500 to-indigo-400 h-full rounded-full" style="width: 79%"></div>
+              <div id="bar-blue" class="bg-gradient-to-r from-blue-500 to-indigo-400 h-full rounded-full transition-all duration-500" style="width: 81%"></div>
             </div>
           </div>
 
@@ -152,12 +152,12 @@
             <div class="flex justify-between text-xs font-bold mb-1">
               <span class="text-rose-800 flex items-center gap-1.5">
                 <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                <strong>紅隊 • 烈火金獅</strong>（體育 48 分 ＋ 精神 30 分）
+                <strong>紅隊 • 烈火金獅</strong><span id="detail-red">（體育 48 分 ＋ 精神 32 分）</span>
               </span>
-              <span class="text-rose-700 font-mono text-sm font-bold">78 分（差距 4 分）</span>
+              <span id="bar-red-text" class="text-rose-700 font-mono text-sm font-bold">80 分（差距 4 分）</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-200">
-              <div class="bg-gradient-to-r from-rose-500 to-amber-500 h-full rounded-full" style="width: 78%"></div>
+              <div id="bar-red" class="bg-gradient-to-r from-rose-500 to-amber-500 h-full rounded-full transition-all duration-500" style="width: 80%"></div>
             </div>
           </div>
         </div>
@@ -539,7 +539,7 @@
               <h4 class="text-base sm:text-lg font-bold text-slate-900">互助合作精神加分審核紀錄簿（港明志工觀察員共同登錄）</h4>
             </div>
             <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-indigo-700">累積總分：綠32分 ｜ 藍32分 ｜ 紅30分</span>
+              <span id="spirit-summary-text" class="text-xs font-bold text-indigo-700">累積總分：綠 34 分 ｜ 藍 34 分 ｜ 紅 32 分</span>
               <a href="spirit.html" class="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg text-xs font-bold shadow-2xs hover:shadow-sm transition">
                 <i class="fa-solid fa-heart"></i>
                 <span>查看事蹟故事專頁 ➔</span>
@@ -547,7 +547,14 @@
             </div>
           </div>
 
-          <div class="space-y-2.5 text-xs">
+          <div id="spirit-log-container" class="space-y-2.5 text-xs">
+            <div class="p-3 bg-slate-50 rounded-xl border-l-4 border-emerald-500 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span class="font-bold text-emerald-800">【綠隊 +2 分】跨齡扶持：</span>
+                <span class="text-slate-600">六年級小隊長主動幫一年級拿外套。</span>
+              </div>
+              <span class="font-mono text-slate-400 text-[11px]">即時連動</span>
+            </div>
             <div class="p-3 bg-slate-50 rounded-xl border-l-4 border-blue-500 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <span class="font-bold text-blue-800">【藍隊 +2 分】運動家風度：</span>
@@ -944,12 +951,16 @@
           });
         }
 
-        // 2. 同步精神加分 (spiritScores)
+        // 2. 同步精神加分 (spiritScores) - 基準 32, 32, 30 + 雲端即時累加
         if (data.spiritScores) {
+          const gRaw = Number(data.spiritScores.green) || 0;
+          const bRaw = Number(data.spiritScores.blue) || 0;
+          const rRaw = Number(data.spiritScores.red) || 0;
+
           currentData.spirit = {
-            green: Number(data.spiritScores.green) || 0,
-            blue: Number(data.spiritScores.blue) || 0,
-            red: Number(data.spiritScores.red) || 0
+            green: gRaw >= 30 ? gRaw : (32 + gRaw),
+            blue: bRaw >= 30 ? bRaw : (32 + bRaw),
+            red: rRaw >= 30 ? rRaw : (30 + rRaw)
           };
         }
 
@@ -971,9 +982,39 @@
             }
           });
         }
+
+        // 4. 同步卡片 8 精神加分明細日誌
+        if (Array.isArray(data.stories) && data.stories.length > 0) {
+          renderSpiritLogCards(data.stories);
+        }
       } catch (err) {
         console.log('Using offline score cache:', err);
       }
+    }
+
+    // 渲染卡片 8 精神日誌清單
+    function renderSpiritLogCards(stories) {
+      const container = document.getElementById('spirit-log-container');
+      if (!container || !stories || stories.length === 0) return;
+
+      const teamBorder = { green: 'border-emerald-500', blue: 'border-blue-500', red: 'border-rose-500' };
+      const teamTextColor = { green: 'text-emerald-800', blue: 'text-blue-800', red: 'text-rose-800' };
+      const teamName = { green: '綠隊', blue: '藍隊', red: '紅隊' };
+
+      const topStories = stories.slice(0, 5);
+      container.innerHTML = topStories.map(s => {
+        const team = s.team || 'green';
+        const cat = s.categoryLabel || s.category || '跨齡扶持';
+        return `
+          <div class="p-3 bg-slate-50 rounded-xl border-l-4 ${teamBorder[team] || 'border-emerald-500'} flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span class="font-bold ${teamTextColor[team] || 'text-emerald-800'}">【${teamName[team] || '綠隊'} +${s.points || 2} 分】${cat}：</span>
+              <span class="text-slate-600">${s.story || ''}</span>
+            </div>
+            <span class="font-mono text-slate-400 text-[11px]">${s.time || ''}</span>
+          </div>
+        `;
+      }).join('');
     }
 
     function calculateAndRender() {
@@ -1005,20 +1046,52 @@
         red: sports.red + spirit.red
       };
 
-      // 更新儀表板長條圖與文字
+      // 更新細項說明 (體育 X 分 + 精神 Y 分)
+      const detGreen = document.getElementById('detail-green');
+      if (detGreen) detGreen.innerText = `（體育 ${sports.green} 分 ＋ 精神 ${spirit.green} 分）`;
+      const detBlue = document.getElementById('detail-blue');
+      if (detBlue) detBlue.innerText = `（體育 ${sports.blue} 分 ＋ 精神 ${spirit.blue} 分）`;
+      const detRed = document.getElementById('detail-red');
+      if (detRed) detRed.innerText = `（體育 ${sports.red} 分 ＋ 精神 ${spirit.red} 分）`;
+
+      // 排名排序與頂部徽章即時更新
+      const ranking = [
+        { team: 'green', name: '綠隊', score: total.green },
+        { team: 'blue', name: '藍隊', score: total.blue },
+        { team: 'red', name: '紅隊', score: total.red }
+      ].sort((a, b) => b.score - a.score);
+
+      const medals = ['🥇', '🥈', '🥉'];
+      ranking.forEach((r, idx) => {
+        const badge = document.getElementById(`badge-${r.team}`);
+        if (badge) badge.innerText = `${medals[idx]} ${r.name} ${r.score} 分`;
+      });
+
+      // 更新儀表板長條圖與文字 (領先或差距)
       const maxScore = Math.max(total.green, total.blue, total.red, 100);
+      const topScore = ranking[0].score;
 
       ['green', 'blue', 'red'].forEach(team => {
         const barText = document.getElementById(`bar-${team}-text`);
         const bar = document.getElementById(`bar-${team}`);
         if (barText) {
-          barText.innerText = `${total[team]} 分`;
+          if (total[team] === topScore) {
+            barText.innerText = `${total[team]} 分 (目前領先)`;
+          } else {
+            barText.innerText = `${total[team]} 分（差距 ${topScore - total[team]} 分）`;
+          }
         }
         if (bar) {
           const pct = Math.min(100, Math.max(15, (total[team] / maxScore) * 100));
           bar.style.width = pct + '%';
         }
       });
+
+      // 更新卡片 8 精神總錦標累積總分
+      const spiritSum = document.getElementById('spirit-summary-text');
+      if (spiritSum) {
+        spiritSum.innerText = `累積總分：綠 ${spirit.green} 分 ｜ 藍 ${spirit.blue} 分 ｜ 紅 ${spirit.red} 分`;
+      }
 
       // 連動更新慢跑卡片展示文字
       const cardRunLow = document.getElementById('card-run-low');
