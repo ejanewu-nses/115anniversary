@@ -294,60 +294,116 @@
           </div>
         </div>
 
-        <!-- 卡片 4：12/05 個人短跑徑賽決賽（不計入戰隊分） -->
+        <!-- 卡片 4：12/05 個人短跑徑賽決賽（純個人榮譽 • 不計入戰隊分） -->
         <div class="score-card track bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-center gap-2.5">
-              <span class="px-2.5 py-1 bg-slate-700 text-white text-xs font-bold rounded-lg shadow-2xs">個人獎項</span>
+              <span class="px-2.5 py-1 bg-blue-600 text-white text-xs font-bold rounded-lg shadow-2xs">個人獎項</span>
               <h4 class="text-base sm:text-lg font-bold text-slate-900">12/05 (六) 個人短跑徑賽決賽（純個人榮譽 • 不計入戰隊分）</h4>
             </div>
-            <span class="text-xs font-bold text-blue-700">09:25 ~ 10:00 • 操場環形跑道</span>
-          </div>
-
-          <div class="mb-3 px-3 py-2 bg-blue-50/70 border border-blue-200 rounded-xl text-xs text-blue-900 font-medium">
-            ℹ️ <strong>大會計分備註：</strong>個人短跑徑賽各年級組取前三名頒發校徽獎牌與個人獎狀，<strong>不納入紅綠藍三隊戰隊總錦標累算</strong>。
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-            <!-- 幼兒組 -->
-            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
-              <div class="font-bold text-slate-900 mb-1.5 pb-1 border-b border-slate-200">幼兒園組 (60m)</div>
-              <ul class="space-y-1 text-slate-700" id="card-sprint-kinder">
-                <li>🥇 <strong>金牌</strong>：幼兒園代表A</li>
-                <li>🥈 <strong>銀牌</strong>：幼兒園代表B</li>
-                <li>🥉 <strong>銅牌</strong>：幼兒園代表C</li>
-              </ul>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 bg-blue-50 text-blue-800 text-xs font-bold rounded-md border border-blue-200">
+                頒發國小六組金、銀、銅牌
+              </span>
+              <span class="text-xs font-bold text-blue-700">09:25 ~ 10:00 • 操場環形跑道</span>
             </div>
-            <!-- 低年級 -->
-            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
-              <div class="font-bold text-slate-900 mb-1.5 pb-1 border-b border-slate-200">低年級組 (60m)</div>
-              <ul class="space-y-1 text-slate-700" id="card-sprint-low">
+          </div>
+
+          <div class="mb-4 px-3.5 py-2.5 bg-blue-50/70 border border-blue-200 rounded-xl text-xs text-blue-950 font-medium leading-relaxed">
+            ℹ️ <strong>大會競賽與頒獎規程：</strong>本賽事為學童個人榮譽，<strong>不納入紅綠藍三隊總錦標累算</strong>。國小部共分 <strong>6 組</strong> 進行決賽，各組前三名於閉幕典禮頒發<strong>客製化校徽金、銀、銅獎牌</strong>；幼兒園組為健康趣味體驗跑，不進行名次競賽與頒發獎牌。
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs">
+            <!-- 1. 低年級男生組 -->
+            <div class="p-3.5 bg-sky-50/80 rounded-xl border border-sky-200 shadow-2xs">
+              <div class="font-bold text-sky-950 mb-1.5 pb-1 border-b border-sky-200 flex items-center justify-between">
+                <span>🏃‍♂️ 低年級男生組 (60m)</span>
+                <span class="text-[11px] text-sky-700 font-bold">1~2年級</span>
+              </div>
+              <ul class="space-y-1 text-slate-700">
                 <li>🥇 <strong>金牌</strong>：二年級代表A</li>
                 <li>🥈 <strong>銀牌</strong>：二年級代表B</li>
                 <li>🥉 <strong>銅牌</strong>：一年級代表A</li>
               </ul>
             </div>
-            <!-- 中年級 -->
-            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
-              <div class="font-bold text-slate-900 mb-1.5 pb-1 border-b border-slate-200">中年級組 (80m)</div>
-              <ul class="space-y-1 text-slate-700" id="card-sprint-mid">
+
+            <!-- 2. 低年級女生組 -->
+            <div class="p-3.5 bg-pink-50/80 rounded-xl border border-pink-200 shadow-2xs">
+              <div class="font-bold text-pink-950 mb-1.5 pb-1 border-b border-pink-200 flex items-center justify-between">
+                <span>🏃‍♀️ 低年級女生組 (60m)</span>
+                <span class="text-[11px] text-pink-700 font-bold">1~2年級</span>
+              </div>
+              <ul class="space-y-1 text-slate-700">
+                <li>🥇 <strong>金牌</strong>：二年級代表C</li>
+                <li>🥈 <strong>銀牌</strong>：一年級代表B</li>
+                <li>🥉 <strong>銅牌</strong>：一年級代表C</li>
+              </ul>
+            </div>
+
+            <!-- 3. 中年級男生組 -->
+            <div class="p-3.5 bg-emerald-50/80 rounded-xl border border-emerald-200 shadow-2xs">
+              <div class="font-bold text-emerald-950 mb-1.5 pb-1 border-b border-emerald-200 flex items-center justify-between">
+                <span>🏃‍♂️ 中年級男生組 (80m)</span>
+                <span class="text-[11px] text-emerald-700 font-bold">3~4年級</span>
+              </div>
+              <ul class="space-y-1 text-slate-700">
                 <li>🥇 <strong>金牌</strong>：四年級代表A</li>
                 <li>🥈 <strong>銀牌</strong>：四年級代表B</li>
                 <li>🥉 <strong>銅牌</strong>：三年級代表A</li>
               </ul>
             </div>
-            <!-- 高年級 -->
-            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
-              <div class="font-bold text-slate-900 mb-1.5 pb-1 border-b border-slate-200">高年級組 (100m 飛毛腿)</div>
-              <ul class="space-y-1 text-slate-700" id="card-sprint-high">
+
+            <!-- 4. 中年級女生組 -->
+            <div class="p-3.5 bg-teal-50/80 rounded-xl border border-teal-200 shadow-2xs">
+              <div class="font-bold text-teal-950 mb-1.5 pb-1 border-b border-teal-200 flex items-center justify-between">
+                <span>🏃‍♀️ 中年級女生組 (80m)</span>
+                <span class="text-[11px] text-teal-700 font-bold">3~4年級</span>
+              </div>
+              <ul class="space-y-1 text-slate-700">
+                <li>🥇 <strong>金牌</strong>：四年級代表C</li>
+                <li>🥈 <strong>銀牌</strong>：三年級代表B</li>
+                <li>🥉 <strong>銅牌</strong>：三年級代表C</li>
+              </ul>
+            </div>
+
+            <!-- 5. 高年級男生組 -->
+            <div class="p-3.5 bg-amber-50/80 rounded-xl border border-amber-200 shadow-2xs">
+              <div class="font-bold text-amber-950 mb-1.5 pb-1 border-b border-amber-200 flex items-center justify-between">
+                <span>⚡ 高年級男生組 (100m)</span>
+                <span class="text-[11px] text-amber-700 font-bold">5~6年級</span>
+              </div>
+              <ul class="space-y-1 text-slate-700">
                 <li>🥇 <strong>金牌</strong>：六年級代表A</li>
                 <li>🥈 <strong>銀牌</strong>：五年級代表A</li>
                 <li>🥉 <strong>銅牌</strong>：六年級代表B</li>
               </ul>
             </div>
+
+            <!-- 6. 高年級女生組 -->
+            <div class="p-3.5 bg-purple-50/80 rounded-xl border border-purple-200 shadow-2xs">
+              <div class="font-bold text-purple-950 mb-1.5 pb-1 border-b border-purple-200 flex items-center justify-between">
+                <span>⚡ 高年級女生組 (100m)</span>
+                <span class="text-[11px] text-purple-700 font-bold">5~6年級</span>
+              </div>
+              <ul class="space-y-1 text-slate-700">
+                <li>🥇 <strong>金牌</strong>：六年級代表C</li>
+                <li>🥈 <strong>銀牌</strong>：五年級代表B</li>
+                <li>🥉 <strong>銅牌</strong>：五年級代表C</li>
+              </ul>
+            </div>
           </div>
-          <div class="mt-3 text-[11px] text-slate-500">
-            * 得獎選手均於閉幕典禮頒發南興國小專屬客製化校徽獎牌。
+
+          <!-- 幼兒園專區備註 -->
+          <div class="mt-3.5 p-3 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-600">
+            <div>
+              <span class="font-bold text-slate-800">🌱 幼兒園組 (60m 趣味體驗跑)：</span>
+              <span>全園小寶貝全員開心奔馳完賽！不進行名次競賽，完賽即獲大會熱情掌聲鼓勵與點心好禮！</span>
+            </div>
+            <span class="text-[11px] text-slate-400 font-bold whitespace-nowrap">健康體驗 • 無排程名次</span>
+          </div>
+
+          <div class="mt-3 text-[11px] text-slate-500 text-right">
+            * 得獎選手均於閉幕典禮（15:00~15:40）依序頒發金、銀、銅客製獎牌。
           </div>
         </div>
 
