@@ -161,54 +161,6 @@ function doGet(e) {
   }
 }
 
-    for (let i = 1; i < spiritData.length; i++) {
-      const row = spiritData[i];
-      if (!row[0]) continue;
-      const team = String(row[2]).trim(); // 'green', 'blue', 'red'
-      const pts = Number(row[4]) || 0;
-
-      if (team === 'green' || team.includes('綠')) greenSpirit += pts;
-      else if (team === 'blue' || team.includes('藍')) blueSpirit += pts;
-      else if (team === 'red' || team.includes('紅')) redSpirit += pts;
-
-      stories.push({
-        id: i,
-        time: Utilities.formatDate(new Date(row[0]), 'Asia/Taipei', 'MM/dd HH:mm'),
-        team: normalizeTeam(team),
-        category: row[3],
-        points: pts,
-        story: row[5],
-        author: row[6] || '大會裁判',
-        place: row[7] || '操場'
-      });
-    }
-
-    // 最新故事排在最前面
-    stories.reverse();
-
-    // 2. 組合回傳結果
-    const result = {
-      success: true,
-      timestamp: new Date().toISOString(),
-      spiritScores: {
-        green: greenSpirit,
-        blue: blueSpirit,
-        red: redSpirit
-      },
-      stories: stories
-    };
-
-    return ContentService.createTextOutput(JSON.stringify(result))
-      .setMimeType(ContentService.MimeType.JSON);
-
-  } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({
-      success: false,
-      error: err.toString()
-    })).setMimeType(ContentService.MimeType.JSON);
-  }
-}
-
 /**
  * ----------------------------------------------------------------------
  * 2. 接收 LINE 訊息之 Webhook 與 貴賓線上回條提交 (doPost)
