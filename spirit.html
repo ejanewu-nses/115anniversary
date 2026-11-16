@@ -96,40 +96,46 @@
         </p>
 
         <!-- 三大戰隊精神累計積分看板 -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto text-left">
           <!-- 綠隊 -->
-          <div class="p-4 rounded-2xl bg-emerald-950/60 border-2 border-emerald-400/60 backdrop-blur-md shadow-lg flex items-center justify-between">
-            <div>
-              <div class="text-[11px] font-bold text-emerald-300">綠隊 • 翠玉蜈蚣</div>
-              <div class="text-xs text-emerald-100 mt-0.5">蔡武憲、羅珮華、鄭潔、林立樺老師</div>
+          <div class="p-4 rounded-2xl bg-emerald-950/70 border-2 border-emerald-400/60 backdrop-blur-md shadow-lg flex flex-col justify-between min-h-[96px]">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-emerald-300">🟢 綠隊 • 翠玉蜈蚣</span>
+              <div class="text-right">
+                <span class="text-2xl font-black text-emerald-300 font-fun">32</span>
+                <span class="text-xs text-emerald-200">分</span>
+              </div>
             </div>
-            <div class="text-right">
-              <span class="text-2xl font-black text-emerald-300 font-fun">32</span>
-              <span class="text-xs text-emerald-200">分</span>
+            <div class="text-[11px] text-emerald-100 font-medium mt-1">
+              指導老師：蔡武憲、羅珮華、鄭潔、林立樺
             </div>
           </div>
 
           <!-- 藍隊 -->
-          <div class="p-4 rounded-2xl bg-blue-950/60 border-2 border-blue-400/60 backdrop-blur-md shadow-lg flex items-center justify-between">
-            <div>
-              <div class="text-[11px] font-bold text-blue-300">藍隊 • 碧海晨曦</div>
-              <div class="text-xs text-blue-100 mt-0.5">黃美雅、施喬恩、周婉琳老師</div>
+          <div class="p-4 rounded-2xl bg-blue-950/70 border-2 border-blue-400/60 backdrop-blur-md shadow-lg flex flex-col justify-between min-h-[96px]">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-blue-300">🔵 藍隊 • 碧海晨曦</span>
+              <div class="text-right">
+                <span class="text-2xl font-black text-blue-300 font-fun">32</span>
+                <span class="text-xs text-blue-200">分</span>
+              </div>
             </div>
-            <div class="text-right">
-              <span class="text-2xl font-black text-blue-300 font-fun">32</span>
-              <span class="text-xs text-blue-200">分</span>
+            <div class="text-[11px] text-blue-100 font-medium mt-1">
+              指導老師：黃美雅、施喬恩、周婉琳
             </div>
           </div>
 
           <!-- 紅隊 -->
-          <div class="p-4 rounded-2xl bg-rose-950/60 border-2 border-rose-400/60 backdrop-blur-md shadow-lg flex items-center justify-between">
-            <div>
-              <div class="text-[11px] font-bold text-rose-300">紅隊 • 烈火金獅</div>
-              <div class="text-xs text-rose-100 mt-0.5">楊詒茹、徐敏瓊、Amos 老師</div>
+          <div class="p-4 rounded-2xl bg-rose-950/70 border-2 border-rose-400/60 backdrop-blur-md shadow-lg flex flex-col justify-between min-h-[96px]">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-rose-300">🔴 紅隊 • 烈火金獅</span>
+              <div class="text-right">
+                <span class="text-2xl font-black text-rose-300 font-fun">30</span>
+                <span class="text-xs text-rose-200">分</span>
+              </div>
             </div>
-            <div class="text-right">
-              <span class="text-2xl font-black text-rose-300 font-fun">30</span>
-              <span class="text-xs text-rose-200">分</span>
+            <div class="text-[11px] text-rose-100 font-medium mt-1">
+              指導老師：楊詒茹、徐敏瓊、Amos
             </div>
           </div>
         </div>
@@ -219,6 +225,9 @@
           <button onclick="setFilter('eco')" id="btn-eco" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-emerald-800 border border-emerald-200 hover:bg-emerald-50 shadow-2xs transition">
             🌿 環保自律
           </button>
+          <button onclick="setFilter('cheer')" id="btn-cheer" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-amber-800 border border-amber-200 hover:bg-amber-50 shadow-2xs transition">
+            📣 團隊歡呼
+          </button>
         </div>
 
         <!-- 關鍵字搜尋框 -->
@@ -240,22 +249,6 @@
         <p class="text-xs text-slate-400 mt-1">請嘗試調整搜尋關鍵字或點選「全部暖心故事」</p>
       </div>
 
-    </section>
-
-    <!-- 裁判與教師專用 LINE 登記提示卡 -->
-    <section class="max-w-4xl mx-auto px-4 sm:px-6 mt-14">
-      <div class="p-6 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 text-emerald-950 flex flex-col sm:flex-row items-center gap-5 shadow-sm">
-        <div class="w-12 h-12 rounded-2xl bg-[#06C755] text-white flex items-center justify-center text-2xl flex-shrink-0 shadow-md">
-          <i class="fa-brands fa-line"></i>
-        </div>
-        <div class="flex-1 text-center sm:text-left text-xs leading-relaxed">
-          <h4 class="font-bold text-sm text-emerald-900 mb-1">南興全體教師隨行記錄指引（LINE 智慧橋接）</h4>
-          <p class="text-slate-700">
-            在校慶前導週與主場日，若老師或裁判在現場看見值得讚許的善行，只要在 <strong>LINE 官方帳號</strong> 直接打字或用語音輸入：<br>
-            <span class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 font-bold text-emerald-800">「綠隊精神加分2分，六年級主動牽一年級去檢錄並幫忙綁鞋帶」</span>，系統即時自動同步至本頁面！
-          </p>
-        </div>
-      </div>
     </section>
 
   </main>
