@@ -52,41 +52,68 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-amber-500 selection:text-white">
 
-  <!-- 頂部導覽列 -->
-  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-amber-100">
+  <!-- 全站統一頂部導覽列 -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-xs border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white p-1 shadow-md border-2 border-amber-300 flex items-center justify-center flex-shrink-0 overflow-hidden">
+        
+        <!-- 左側：品牌校徽識別 -->
+        <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 group">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white p-1 shadow-sm border-2 border-amber-300 flex items-center justify-center flex-shrink-0 overflow-hidden group-hover:scale-105 transition">
             <img src="images/school_logo.jpg" alt="南興國小校徽" class="w-full h-full object-contain">
           </div>
           <div>
-            <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">臺南市安南區南興國小</h1>
-            <p class="text-xs text-amber-600 font-medium">115學年度校慶運動大會暨系列活動</p>
+            <h1 class="text-sm sm:text-base font-black text-slate-900 leading-tight group-hover:text-amber-600 transition">臺南市安南區南興國小</h1>
+            <p class="text-[11px] sm:text-xs text-amber-600 font-bold">115學年度校慶運動大會暨系列活動</p>
           </div>
-        </div>
-        <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-          <a href="#about" class="text-slate-600 hover:text-amber-600 transition">主題理念</a>
-          <a href="#series" class="text-slate-600 hover:text-amber-600 transition">系列暖身週</a>
-          <a href="#schedule" class="text-slate-600 hover:text-amber-600 transition">校慶當日賽程</a>
-          <a href="#scoreboard" class="text-slate-600 hover:text-amber-600 transition">紅綠藍積分榜</a>
-          <a href="#lottery" class="text-slate-600 hover:text-amber-600 transition">全校大摸彩</a>
-          <a href="scores.html" class="inline-flex items-center gap-1 text-rose-600 hover:text-rose-700 font-bold transition px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200">
-            <i class="fa-solid fa-trophy text-amber-500"></i> 各項賽事成績
+        </a>
+
+        <!-- 中間：三大固定主頁導覽（位置與順序固定，當前頁高亮防迷路） -->
+        <nav class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold">
+          <!-- 1. 大會首頁 (當前頁 Active) -->
+          <a href="index.html" class="px-3 py-1.5 rounded-xl bg-amber-500 text-white shadow-xs flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-house"></i>
+            <span>大會首頁</span>
           </a>
-          <a href="spirit.html" class="inline-flex items-center gap-1 text-indigo-700 hover:text-indigo-800 font-bold transition px-2.5 py-1 rounded-full bg-indigo-50 border border-indigo-200">
-            <i class="fa-solid fa-heart text-rose-500"></i> 精神加分事蹟館
+
+          <!-- 2. 賽事成績榜 -->
+          <a href="scores.html" class="px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-trophy text-amber-500"></i>
+            <span>賽事成績榜</span>
+          </a>
+
+          <!-- 3. 精神事蹟館 -->
+          <a href="spirit.html" class="px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-heart text-rose-500"></i>
+            <span>精神事蹟館</span>
           </a>
         </nav>
+
+        <!-- 右側：貴賓線上邀請函 (全站常駐最顯眼位置) -->
         <div class="flex items-center gap-2">
-          <a href="invite.html" class="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-amber-500 to-rose-500 text-white text-xs sm:text-sm font-bold rounded-full shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
-            <i class="fa-solid fa-envelope-open-text"></i>
-            <span>貴賓線上回條</span>
+          <a href="invite.html" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm hover:shadow-md transition transform hover:-translate-y-0.5 whitespace-nowrap">
+            <i class="fa-solid fa-envelope-open-text text-amber-100"></i>
+            <span>貴賓線上邀請函</span>
           </a>
         </div>
+
       </div>
     </div>
   </header>
+
+  <!-- 首頁專屬章節快速跳轉導覽列 (Sub-nav) -->
+  <nav class="bg-amber-50/90 border-b border-amber-200/80 py-2.5 px-4 sticky top-16 z-40 backdrop-blur-xs shadow-2xs">
+    <div class="max-w-6xl mx-auto flex items-center justify-center gap-2 sm:gap-3 overflow-x-auto text-xs sm:text-sm font-bold text-slate-700 whitespace-nowrap">
+      <span class="text-amber-800 text-xs font-black flex items-center gap-1">
+        <i class="fa-solid fa-compass"></i> 首頁單元：
+      </span>
+      <a href="#about" class="px-2.5 py-1 rounded-lg hover:bg-amber-200/70 hover:text-amber-950 transition">🎯 主題理念</a>
+      <a href="#series" class="px-2.5 py-1 rounded-lg hover:bg-amber-200/70 hover:text-amber-950 transition">🏃 系列暖身週</a>
+      <a href="#schedule" class="px-2.5 py-1 rounded-lg hover:bg-amber-200/70 hover:text-amber-950 transition">📅 校慶當日賽程</a>
+      <a href="#scoreboard" class="px-2.5 py-1 rounded-lg hover:bg-amber-200/70 hover:text-amber-950 transition">📊 紅綠藍即時戰況</a>
+      <a href="#lottery" class="px-2.5 py-1 rounded-lg hover:bg-amber-200/70 hover:text-amber-950 transition">🎁 全校大摸彩</a>
+    </div>
+  </nav>
 
   <!-- Hero 英雄主視覺區（南興操場實景通透清爽鋪底） -->
   <section class="relative py-12 sm:py-20 border-b border-amber-300 overflow-hidden bg-slate-100">
