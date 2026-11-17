@@ -210,24 +210,24 @@
                   <th class="py-2.5 px-3">戰隊積分累積</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-100">
+              <tbody class="divide-y divide-slate-100" id="dodge-match-tbody">
                 <tr class="hover:bg-slate-50">
                   <td class="py-2.5 px-3 font-medium">第一場：綠隊 vs 紅隊</td>
-                  <td class="py-2.5 px-3 font-mono font-bold text-slate-700">7 : 4</td>
-                  <td class="py-2.5 px-3 text-emerald-600 font-bold">綠隊 勝出</td>
-                  <td class="py-2.5 px-3">綠隊 +6分 ｜ 紅隊 +2分</td>
+                  <td class="py-2.5 px-3 font-mono font-bold text-slate-700">- : -</td>
+                  <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
+                  <td class="py-2.5 px-3 text-slate-400">-</td>
                 </tr>
                 <tr class="hover:bg-slate-50">
                   <td class="py-2.5 px-3 font-medium">第二場：紅隊 vs 藍隊</td>
-                  <td class="py-2.5 px-3 font-mono font-bold text-slate-700">6 : 5</td>
-                  <td class="py-2.5 px-3 text-rose-600 font-bold">紅隊 險勝</td>
-                  <td class="py-2.5 px-3">紅隊 +6分 ｜ 藍隊 +2分</td>
+                  <td class="py-2.5 px-3 font-mono font-bold text-slate-700">- : -</td>
+                  <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
+                  <td class="py-2.5 px-3 text-slate-400">-</td>
                 </tr>
                 <tr class="hover:bg-slate-50">
                   <td class="py-2.5 px-3 font-medium">第三場：綠隊 vs 藍隊</td>
-                  <td class="py-2.5 px-3 font-mono font-bold text-slate-700">8 : 6</td>
-                  <td class="py-2.5 px-3 text-emerald-600 font-bold">綠隊 勝出</td>
-                  <td class="py-2.5 px-3">綠隊 +6分 ｜ 藍隊 +2分</td>
+                  <td class="py-2.5 px-3 font-mono font-bold text-slate-700">- : -</td>
+                  <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
+                  <td class="py-2.5 px-3 text-slate-400">-</td>
                 </tr>
               </tbody>
             </table>
@@ -235,9 +235,7 @@
           <div class="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
             <span class="font-bold text-slate-700">🏆 本項戰隊積分結算：</span>
             <div id="card-dodge-summary" class="flex items-center gap-3 font-semibold text-slate-600">
-              <span class="text-emerald-700 font-bold">🟢 綠隊 +12 分</span>
-              <span class="text-rose-700 font-bold">🔴 紅隊 +8 分</span>
-              <span class="text-blue-700 font-bold">🔵 藍隊 +4 分</span>
+              <span class="text-slate-400 font-medium">尚未開賽（目前各隊 0 分）</span>
             </div>
           </div>
         </div>
@@ -1098,77 +1096,163 @@
       }
 
       // 連動更新慢跑卡片展示文字
-      const cardRunLow = document.getElementById('card-run-low');
-      if (cardRunLow) {
-        cardRunLow.innerHTML = `
-          <li>🥇 藍隊：<strong>${d.runLow?.blue || 0}</strong> 人完成</li>
-          <li>🥈 綠隊：<strong>${d.runLow?.green || 0}</strong> 人完成</li>
-          <li>🥉 紅隊：<strong>${d.runLow?.red || 0}</strong> 人完成</li>
-        `;
-      }
-      const cardRunMid = document.getElementById('card-run-mid');
-      if (cardRunMid) {
-        cardRunMid.innerHTML = `
-          <li>🥇 綠隊：<strong>${d.runMid?.green || 0}</strong> 人達標</li>
-          <li>🥈 紅隊：<strong>${d.runMid?.red || 0}</strong> 人達標</li>
-          <li>🥉 藍隊：<strong>${d.runMid?.blue || 0}</strong> 人達標</li>
-        `;
-      }
-      const cardRunHigh = document.getElementById('card-run-high');
-      if (cardRunHigh) {
-        cardRunHigh.innerHTML = `
-          <li>🥇 紅隊：<strong>${d.runHigh?.red || 0}</strong> 人達標</li>
-          <li>🥈 綠隊：<strong>${d.runHigh?.green || 0}</strong> 人達標</li>
-          <li>🥉 藍隊：<strong>${d.runHigh?.blue || 0}</strong> 人達標</li>
-        `;
-      }
+      const renderRunGroup = (groupKey, listElId, winnerElId) => {
+        const listEl = document.getElementById(listElId);
+        const winEl = document.getElementById(winnerElId);
+        if (!listEl) return;
+        const g = d[groupKey]?.green || 0;
+        const b = d[groupKey]?.blue || 0;
+        const r = d[groupKey]?.red || 0;
+
+        if (g === 0 && b === 0 && r === 0) {
+          listEl.innerHTML = `<li class="text-slate-400 font-medium py-1">⏳ 尚未開跑檢錄（各隊 0 人達標）</li>`;
+          if (winEl) { winEl.innerText = '待登場'; winEl.className = 'text-slate-400 font-bold'; }
+          return;
+        }
+
+        const teams = [
+          { name: '綠隊', count: g, icon: '🟢' },
+          { name: '藍隊', count: b, icon: '🔵' },
+          { name: '紅隊', count: r, icon: '🔴' }
+        ].sort((x, y) => y.count - x.count);
+
+        const medals = ['🥇', '🥈', '🥉'];
+        listEl.innerHTML = teams.map((t, idx) => `
+          <li>${medals[idx]} ${t.name}：<strong>${t.count}</strong> 人達標</li>
+        `).join('');
+
+        if (winEl) {
+          winEl.innerText = `${teams[0].name}領先`;
+          winEl.className = 'font-bold text-emerald-700';
+        }
+      };
+
+      renderRunGroup('runLow', 'card-run-low', 'card-run-low-winner');
+      renderRunGroup('runMid', 'card-run-mid', 'card-run-mid-winner');
+      renderRunGroup('runHigh', 'card-run-high', 'card-run-high-winner');
 
       // 連動更新拔河卡片展示
       const cardTugLow = document.getElementById('card-tug-low');
       if (cardTugLow) {
-        cardTugLow.innerHTML = `綠隊 (+${d.tugLow?.green || 0}分) ｜ 藍隊 (+${d.tugLow?.blue || 0}分) ｜ 紅隊 (+${d.tugLow?.red || 0}分)`;
+        const g = d.tugLow?.green || 0, b = d.tugLow?.blue || 0, r = d.tugLow?.red || 0;
+        if (g === 0 && b === 0 && r === 0) {
+          cardTugLow.innerHTML = `<span class="text-slate-400 font-medium">⏳ 尚未開賽（賽程準備中）</span>`;
+        } else {
+          cardTugLow.innerHTML = `綠隊 (+${g}分) ｜ 藍隊 (+${b}分) ｜ 紅隊 (+${r}分)`;
+        }
       }
       const cardTugHigh = document.getElementById('card-tug-high');
       if (cardTugHigh) {
-        cardTugHigh.innerHTML = `紅隊 (+${d.tugHigh?.red || 0}分) ｜ 綠隊 (+${d.tugHigh?.green || 0}分) ｜ 藍隊 (+${d.tugHigh?.blue || 0}分)`;
+        const g = d.tugHigh?.green || 0, b = d.tugHigh?.blue || 0, r = d.tugHigh?.red || 0;
+        if (g === 0 && b === 0 && r === 0) {
+          cardTugHigh.innerHTML = `<span class="text-slate-400 font-medium">⏳ 尚未開賽（賽程準備中）</span>`;
+        } else {
+          cardTugHigh.innerHTML = `紅隊 (+${r}分) ｜ 綠隊 (+${g}分) ｜ 藍隊 (+${b}分)`;
+        }
       }
 
       // 連動更新躲避球卡片結算展示
       const cardDodge = document.getElementById('card-dodge-summary');
-      if (cardDodge) {
-        cardDodge.innerHTML = `
-          <span class="text-emerald-700 font-bold">🟢 綠隊 +${d.dodge?.green || 0} 分</span>
-          <span class="text-rose-700 font-bold">🔴 紅隊 +${d.dodge?.red || 0} 分</span>
-          <span class="text-blue-700 font-bold">🔵 藍隊 +${d.dodge?.blue || 0} 分</span>
-        `;
+      const dodgeTbody = document.getElementById('dodge-match-tbody');
+      const dgGreen = d.dodge?.green || 0, dgBlue = d.dodge?.blue || 0, dgRed = d.dodge?.red || 0;
+
+      if (dgGreen === 0 && dgBlue === 0 && dgRed === 0) {
+        if (cardDodge) cardDodge.innerHTML = `<span class="text-slate-400 font-medium">尚未開賽（目前各隊 0 分）</span>`;
+        if (dodgeTbody) {
+          dodgeTbody.innerHTML = `
+            <tr class="hover:bg-slate-50">
+              <td class="py-2.5 px-3 font-medium text-slate-600">第一場：綠隊 vs 紅隊</td>
+              <td class="py-2.5 px-3 font-mono font-bold text-slate-400">- : -</td>
+              <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
+              <td class="py-2.5 px-3 text-slate-400">-</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-2.5 px-3 font-medium text-slate-600">第二場：紅隊 vs 藍隊</td>
+              <td class="py-2.5 px-3 font-mono font-bold text-slate-400">- : -</td>
+              <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
+              <td class="py-2.5 px-3 text-slate-400">-</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-2.5 px-3 font-medium text-slate-600">第三場：綠隊 vs 藍隊</td>
+              <td class="py-2.5 px-3 font-mono font-bold text-slate-400">- : -</td>
+              <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
+              <td class="py-2.5 px-3 text-slate-400">-</td>
+            </tr>
+          `;
+        }
+      } else {
+        if (cardDodge) {
+          cardDodge.innerHTML = `
+            <span class="text-emerald-700 font-bold">🟢 綠隊 +${dgGreen} 分</span>
+            <span class="text-rose-700 font-bold">🔴 紅隊 +${dgRed} 分</span>
+            <span class="text-blue-700 font-bold">🔵 藍隊 +${dgBlue} 分</span>
+          `;
+        }
+        if (dodgeTbody) {
+          dodgeTbody.innerHTML = `
+            <tr class="hover:bg-slate-50">
+              <td class="py-2.5 px-3 font-medium text-slate-700">第一場：綠隊 vs 紅隊</td>
+              <td class="py-2.5 px-3 font-mono font-bold text-slate-700">已完賽</td>
+              <td class="py-2.5 px-3 font-bold ${dgGreen >= dgRed ? 'text-emerald-600' : 'text-rose-600'}">${dgGreen >= dgRed ? '綠隊佔優' : '紅隊佔優'}</td>
+              <td class="py-2.5 px-3">綠隊 +${dgGreen}分 ｜ 紅隊 +${dgRed}分</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-2.5 px-3 font-medium text-slate-700">第二場：紅隊 vs 藍隊</td>
+              <td class="py-2.5 px-3 font-mono font-bold text-slate-700">已完賽</td>
+              <td class="py-2.5 px-3 font-bold ${dgRed >= dgBlue ? 'text-rose-600' : 'text-blue-600'}">${dgRed >= dgBlue ? '紅隊佔優' : '藍隊佔優'}</td>
+              <td class="py-2.5 px-3">紅隊 +${dgRed}分 ｜ 藍隊 +${dgBlue}分</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-2.5 px-3 font-medium text-slate-700">第三場：綠隊 vs 藍隊</td>
+              <td class="py-2.5 px-3 font-mono font-bold text-slate-700">已完賽</td>
+              <td class="py-2.5 px-3 font-bold ${dgGreen >= dgBlue ? 'text-emerald-600' : 'text-blue-600'}">${dgGreen >= dgBlue ? '綠隊佔優' : '藍隊佔優'}</td>
+              <td class="py-2.5 px-3">綠隊 +${dgGreen}分 ｜ 藍隊 +${dgBlue}分</td>
+            </tr>
+          `;
+        }
       }
 
       // 連動更新彩虹危機趣味賽卡片展示
       const cardRainbow = document.getElementById('card-rainbow-crisis');
       if (cardRainbow) {
-        cardRainbow.innerHTML = `
-          <span>藍隊：<strong>+${d.rainbow?.blue || 0} 分</strong></span>
-          <span>紅隊：<strong>+${d.rainbow?.red || 0} 分</strong></span>
-          <span>綠隊：<strong>+${d.rainbow?.green || 0} 分</strong></span>
-        `;
+        const g = d.rainbow?.green || 0, b = d.rainbow?.blue || 0, r = d.rainbow?.red || 0;
+        if (g === 0 && b === 0 && r === 0) {
+          cardRainbow.innerHTML = `<span class="text-slate-400 font-medium py-1">⏳ 尚未登場（12/05 歡樂開賽）</span>`;
+        } else {
+          cardRainbow.innerHTML = `
+            <span>藍隊：<strong>+${b} 分</strong></span>
+            <span>紅隊：<strong>+${r} 分</strong></span>
+            <span>綠隊：<strong>+${g} 分</strong></span>
+          `;
+        }
       }
 
       // 連動更新大隊接力卡片展示
       const cardRelayLow = document.getElementById('card-relay-low');
       if (cardRelayLow) {
-        cardRelayLow.innerHTML = `
-          <div>藍隊得分：<strong>+${d.relayLow?.blue || 0} 分</strong></div>
-          <div>綠隊得分：<strong>+${d.relayLow?.green || 0} 分</strong></div>
-          <div>紅隊得分：<strong>+${d.relayLow?.red || 0} 分</strong></div>
-        `;
+        const g = d.relayLow?.green || 0, b = d.relayLow?.blue || 0, r = d.relayLow?.red || 0;
+        if (g === 0 && b === 0 && r === 0) {
+          cardRelayLow.innerHTML = `<div class="text-slate-400 font-medium py-1">⏳ 尚未登場（12/05 鳴槍開跑）</div>`;
+        } else {
+          cardRelayLow.innerHTML = `
+            <div>藍隊得分：<strong>+${b} 分</strong></div>
+            <div>綠隊得分：<strong>+${g} 分</strong></div>
+            <div>紅隊得分：<strong>+${r} 分</strong></div>
+          `;
+        }
       }
       const cardRelayHigh = document.getElementById('card-relay-high');
       if (cardRelayHigh) {
-        cardRelayHigh.innerHTML = `
-          <div>綠隊得分：<strong>+${d.relayHigh?.green || 0} 分</strong></div>
-          <div>紅隊得分：<strong>+${d.relayHigh?.red || 0} 分</strong></div>
-          <div>藍隊得分：<strong>+${d.relayHigh?.blue || 0} 分</strong></div>
-        `;
+        const g = d.relayHigh?.green || 0, b = d.relayHigh?.blue || 0, r = d.relayHigh?.red || 0;
+        if (g === 0 && b === 0 && r === 0) {
+          cardRelayHigh.innerHTML = `<div class="text-slate-400 font-medium py-1">⏳ 尚未登場（12/05 鳴槍開跑）</div>`;
+        } else {
+          cardRelayHigh.innerHTML = `
+            <div>綠隊得分：<strong>+${g} 分</strong></div>
+            <div>紅隊得分：<strong>+${r} 分</strong></div>
+            <div>藍隊得分：<strong>+${b} 分</strong></div>
+          `;
+        }
       }
     }
 
