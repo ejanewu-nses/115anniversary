@@ -563,45 +563,31 @@
 
       <!-- 三隊即時積分可視化對比圖表卡片（快速掌握戰況高低） -->
       <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-slate-200 box-3d-static mb-8">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-100">
           <div>
             <div class="flex items-center gap-2">
               <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-              <h4 class="text-lg sm:text-xl font-black text-slate-900">目前總戰況：三隊激烈拉鋸對決！</h4>
+              <h4 class="text-lg sm:text-xl font-black text-slate-900">目前總戰況：三大戰隊即時戰況對比</h4>
             </div>
-            <p class="text-xs text-slate-500 mt-1">
-              🥇 綠隊 82 分暫居領先 ｜ 🥈 藍隊 79 分（僅差 3 分） ｜ 🥉 紅隊 78 分（僅差 4 分）
+            <p id="scoreboard-summary-text" class="text-xs text-slate-500 mt-1">
+              體育競技與互助精神分數雙軌累計，三隊積分緊咬！
             </p>
           </div>
-        <div class="flex flex-wrap items-center justify-center gap-3">
-          <a href="scores.html" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-rose-600 to-amber-500 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
-            <i class="fa-solid fa-trophy text-amber-200"></i>
-            <span>查看各項賽事成績明細</span>
-            <i class="fa-solid fa-arrow-right text-xs"></i>
-          </a>
-          <a href="spirit.html" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
-            <i class="fa-solid fa-heart text-pink-300"></i>
-            <span>進入互助精神榮譽事蹟館</span>
-            <i class="fa-solid fa-arrow-right text-xs"></i>
-          </a>
-        </div>
-      </div>
-
-      <!-- 三隊即時積分可視化對比圖表卡片（快速掌握戰況高低） -->
-      <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-slate-200 box-3d-static mb-8">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-              <h4 class="text-lg sm:text-xl font-black text-slate-900">目前總戰況：三大戰隊激烈拉鋸對決！</h4>
-            </div>
-            <p class="text-xs text-slate-500 mt-1">
-              🥇 綠隊 82 分暫居領先 ｜ 🥈 藍隊 79 分（僅差 3 分） ｜ 🥉 紅隊 78 分（僅差 4 分）
-            </p>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span class="px-3 py-1.5 bg-amber-50 text-amber-900 text-xs font-bold rounded-xl border border-amber-200">
+              體育競技積分 ＋ 互助合作精神分數 綜合累計
+            </span>
+            <a href="scores.html" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-gradient-to-r from-rose-600 to-amber-500 text-white text-xs font-bold rounded-xl shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
+              <i class="fa-solid fa-trophy text-amber-200 text-xs"></i>
+              <span>查看各項賽事成績明細</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+            <a href="spirit.html" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-bold rounded-xl shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
+              <i class="fa-solid fa-heart text-pink-300 text-xs"></i>
+              <span>進入互助精神榮譽事蹟館</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
           </div>
-          <span class="px-3 py-1 bg-amber-50 text-amber-900 text-xs font-bold rounded-lg border border-amber-200">
-            體育競技積分 ＋ 互助合作精神分數 綜合累計
-          </span>
         </div>
 
         <!-- 橫向長條圖比較 -->
@@ -611,12 +597,12 @@
             <div class="flex justify-between text-xs font-bold mb-1.5">
               <span class="flex items-center gap-1.5 text-emerald-800">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                <strong>綠隊 • 翠玉蜈蚣</strong>（體育 50 分 ＋ 精神 32 分）
+                <strong>綠隊 • 翠玉蜈蚣</strong> <span id="detail-green" class="font-normal text-slate-500">（體育 0 分 ＋ 精神 0 分）</span>
               </span>
-              <span class="text-emerald-700 font-mono text-sm" id="bar-green-text">82 分 (領先)</span>
+              <span class="text-emerald-700 font-mono text-sm font-bold" id="bar-green-text">0 分</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden p-0.5 border border-slate-200 shadow-inner">
-              <div id="bar-green" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-700" style="width: 82%"></div>
+              <div id="bar-green" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-700" style="width: 10%"></div>
             </div>
           </div>
 
@@ -625,12 +611,12 @@
             <div class="flex justify-between text-xs font-bold mb-1.5">
               <span class="flex items-center gap-1.5 text-blue-800">
                 <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                <strong>藍隊 • 碧海晨曦</strong>（體育 47 分 ＋ 精神 32 分）
+                <strong>藍隊 • 碧海晨曦</strong> <span id="detail-blue" class="font-normal text-slate-500">（體育 0 分 ＋ 精神 0 分）</span>
               </span>
-              <span class="text-blue-700 font-mono text-sm" id="bar-blue-text">79 分</span>
+              <span class="text-blue-700 font-mono text-sm font-bold" id="bar-blue-text">0 分</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden p-0.5 border border-slate-200 shadow-inner">
-              <div id="bar-blue" class="bg-gradient-to-r from-blue-500 to-indigo-400 h-full rounded-full transition-all duration-700" style="width: 79%"></div>
+              <div id="bar-blue" class="bg-gradient-to-r from-blue-500 to-indigo-400 h-full rounded-full transition-all duration-700" style="width: 10%"></div>
             </div>
           </div>
 
@@ -639,12 +625,12 @@
             <div class="flex justify-between text-xs font-bold mb-1.5">
               <span class="flex items-center gap-1.5 text-rose-800">
                 <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                <strong>紅隊 • 烈火金獅</strong>（體育 48 分 ＋ 精神 30 分）
+                <strong>紅隊 • 烈火金獅</strong> <span id="detail-red" class="font-normal text-slate-500">（體育 0 分 ＋ 精神 0 分）</span>
               </span>
-              <span class="text-rose-700 font-mono text-sm" id="bar-red-text">78 分</span>
+              <span class="text-rose-700 font-mono text-sm font-bold" id="bar-red-text">0 分</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden p-0.5 border border-slate-200 shadow-inner">
-              <div id="bar-red" class="bg-gradient-to-r from-rose-500 to-amber-500 h-full rounded-full transition-all duration-700" style="width: 78%"></div>
+              <div id="bar-red" class="bg-gradient-to-r from-rose-500 to-amber-500 h-full rounded-full transition-all duration-700" style="width: 10%"></div>
             </div>
           </div>
         </div>
@@ -841,14 +827,25 @@
     // 紅綠藍三隊戰況長條圖顯示同步（100% 依據試算表真實數據）
     async function syncScoreboard() {
       let greenTotal = 0, blueTotal = 0, redTotal = 0;
+      let greenSports = 0, greenSpirit = 0;
+      let blueSports = 0, blueSpirit = 0;
+      let redSports = 0, redSpirit = 0;
 
       // 1. 向雲端試算表即時 API 抓取最新戰隊總分與精神事蹟
       try {
         const res = await fetch(CLOUD_API_URL);
         const data = await res.json();
         if (data && data.success && data.teamTotals) {
+          greenSports = Number(data.teamTotals.green.sports) || 0;
+          greenSpirit = Number(data.teamTotals.green.spirit) || 0;
           greenTotal = Number(data.teamTotals.green.total) || 0;
+
+          blueSports = Number(data.teamTotals.blue.sports) || 0;
+          blueSpirit = Number(data.teamTotals.blue.spirit) || 0;
           blueTotal = Number(data.teamTotals.blue.total) || 0;
+
+          redSports = Number(data.teamTotals.red.sports) || 0;
+          redSpirit = Number(data.teamTotals.red.spirit) || 0;
           redTotal = Number(data.teamTotals.red.total) || 0;
 
           // 同步首頁精神事蹟預覽卡片
@@ -860,27 +857,62 @@
         console.log('Using local/default scoreboard.');
       }
 
-      const maxVal = Math.max(greenTotal, blueTotal, redTotal, 85);
+      // 2. 更新隊名後方的「（體育 X 分 ＋ 精神 Y 分）」
+      const detGreen = document.getElementById('detail-green');
+      if (detGreen) detGreen.innerText = `（體育 ${greenSports} 分 ＋ 精神 ${greenSpirit} 分）`;
+      const detBlue = document.getElementById('detail-blue');
+      if (detBlue) detBlue.innerText = `（體育 ${blueSports} 分 ＋ 精神 ${blueSpirit} 分）`;
+      const detRed = document.getElementById('detail-red');
+      if (detRed) detRed.innerText = `（體育 ${redSports} 分 ＋ 精神 ${redSpirit} 分）`;
+
+      // 3. 計算即時戰況排名
+      const ranking = [
+        { team: 'green', name: '綠隊', score: greenTotal },
+        { team: 'blue', name: '藍隊', score: blueTotal },
+        { team: 'red', name: '紅隊', score: redTotal }
+      ].sort((a, b) => b.score - a.score);
+
+      const topScore = ranking[0].score;
+      const medals = ['🥇', '🥈', '🥉'];
+      const summaryEl = document.getElementById('scoreboard-summary-text');
+      if (summaryEl) {
+        if (topScore === 0) {
+          summaryEl.innerText = '體育競技與互助精神分數雙軌累計，三大戰隊蓄勢待發！';
+        } else {
+          const parts = ranking.map((r, idx) => {
+            if (idx === 0) {
+              return `${medals[idx]} ${r.name} ${r.score} 分暫居領先`;
+            } else {
+              const diff = topScore - r.score;
+              return `${medals[idx]} ${r.name} ${r.score} 分（${diff === 0 ? '同分並列' : `僅差 ${diff} 分`}）`;
+            }
+          });
+          summaryEl.innerText = parts.join(' ｜ ');
+        }
+      }
+
+      // 4. 動態更新三隊長條圖寬度與右側分數
+      const maxVal = Math.max(greenTotal, blueTotal, redTotal, 20);
       
       const barGreen = document.getElementById('bar-green');
       const textGreen = document.getElementById('bar-green-text');
       if (barGreen && textGreen) {
-        barGreen.style.width = Math.min(100, Math.round((greenTotal / (maxVal * 1.1)) * 100)) + '%';
-        textGreen.innerText = greenTotal + ' 分' + (greenTotal >= Math.max(blueTotal, redTotal) ? ' (領先)' : '');
+        barGreen.style.width = Math.min(100, Math.max(8, Math.round((greenTotal / (maxVal * 1.15)) * 100))) + '%';
+        textGreen.innerText = greenTotal + ' 分' + (greenTotal === topScore && topScore > 0 ? ' (目前領先)' : '');
       }
 
       const barBlue = document.getElementById('bar-blue');
       const textBlue = document.getElementById('bar-blue-text');
       if (barBlue && textBlue) {
-        barBlue.style.width = Math.min(100, Math.round((blueTotal / (maxVal * 1.1)) * 100)) + '%';
-        textBlue.innerText = blueTotal + ' 分' + (blueTotal >= Math.max(greenTotal, redTotal) ? ' (領先)' : '');
+        barBlue.style.width = Math.min(100, Math.max(8, Math.round((blueTotal / (maxVal * 1.15)) * 100))) + '%';
+        textBlue.innerText = blueTotal + ' 分' + (blueTotal === topScore && topScore > 0 ? ' (目前領先)' : '');
       }
 
       const barRed = document.getElementById('bar-red');
       const textRed = document.getElementById('bar-red-text');
       if (barRed && textRed) {
-        barRed.style.width = Math.min(100, Math.round((redTotal / (maxVal * 1.1)) * 100)) + '%';
-        textRed.innerText = redTotal + ' 分' + (redTotal >= Math.max(greenTotal, blueTotal) ? ' (領先)' : '');
+        barRed.style.width = Math.min(100, Math.max(8, Math.round((redTotal / (maxVal * 1.15)) * 100))) + '%';
+        textRed.innerText = redTotal + ' 分' + (redTotal === topScore && topScore > 0 ? ' (目前領先)' : '');
       }
     }
 
