@@ -388,11 +388,45 @@
       return label;
     }
 
-    // 輔助函式：安全解析事蹟標題，防範任何 undefined
+    // 輔助函式：安全解析事蹟標題，支援智慧動態下標題
     function resolveStoryTitle(item) {
-      if (item.title && item.title !== 'undefined') return item.title;
+      if (item.title && item.title !== 'undefined' && item.title.trim() !== '') return item.title;
       const s = item.story || '';
-      return s.length > 18 ? s.slice(0, 18) + '...' : (s || '溫馨互助事蹟');
+      const cat = item.category || '';
+
+      // 1. 環保自律
+      if (cat === 'eco' || /清潔|環境|垃圾|落葉|掃地|整齊|收拾|排隊|水壺|自律|整潔|回收|紙屑/.test(s)) {
+        if (/清潔|環境|打掃|掃地|做整潔/.test(s)) return '主動維護整潔，守護美麗校園';
+        if (/垃圾|落葉|撿|紙屑|寶特瓶/.test(s)) return '隨手彎腰拾起，美化綠活校園';
+        if (/排隊|水壺|整齊|收拾|常規/.test(s)) return '自律守規井然，落實生活常規';
+        return '自主維護環境，實踐綠活校園';
+      }
+
+      // 2. 跨齡扶持
+      if (cat === 'cross' || /大帶小|小隊長|一年級|二年級|學弟|學妹|低年級|牽|陪|抱|外套|跌倒|鞋帶/.test(s)) {
+        if (/外套|衣服|穿|保暖/.test(s)) return '大手貼心遞外套，溫暖學弟學妹';
+        if (/鞋帶|綁/.test(s)) return '蹲下身細心綁鞋帶，展現大帶小溫情';
+        if (/跌倒|扶|牽手|牽|抱/.test(s)) return '大手牽小手，暖心扶持齊步走';
+        if (/檢錄|排隊|帶隊|帶領/.test(s)) return '熱心帶領檢錄，小隊長盡責典範';
+        return '跨齡互助扶持，大手牽小手展溫馨';
+      }
+
+      // 3. 運動家風度
+      if (cat === 'sports' || /風度|運動家|運動員|禮貌|敬禮|握手|擁抱|安慰|服從|擊掌|拍肩|勝不驕|敗不餒/.test(s)) {
+        if (/握手|鞠躬|敬禮|致意/.test(s)) return '賽後致敬對手，展現運動家風度';
+        if (/拍肩|安慰|鼓勵|打氣/.test(s)) return '拍肩暖心打氣，超越勝負的真情';
+        if (/跌倒|扶對手|受傷/.test(s)) return '扶起競賽對手，發揚運動家品格';
+        return '勝不驕敗不餒，盡顯運動家典範';
+      }
+
+      // 4. 團隊歡呼
+      if (cat === 'cheer' || /歡呼|隊呼|加油|吶喊|士氣|掌聲|口號|鼓掌|喝采|熱情/.test(s)) {
+        if (/隊呼|口號/.test(s)) return '戰隊呼響徹雲霄，凝聚最強向心力';
+        if (/加油|吶喊|掌聲|喝采/.test(s)) return '熱情吶喊加油，點燃全場澎湃士氣';
+        return '齊心歡呼鼓舞，展現團隊最高士氣';
+      }
+
+      return s.length > 16 ? s.slice(0, 16) + '...' : (s || '溫馨校園互助事蹟');
     }
 
     // 渲染故事卡片

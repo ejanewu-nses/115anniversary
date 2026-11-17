@@ -1010,7 +1010,7 @@
         return `
           <div class="p-3 bg-slate-50 rounded-xl border-l-4 ${teamBorder[team] || 'border-emerald-500'} flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <span class="font-bold ${teamTextColor[team] || 'text-emerald-800'}">【${teamName[team] || '綠隊'} +${s.points || 2} 分】${cat}：</span>
+              <span class="font-bold ${teamTextColor[team] || 'text-emerald-800'}">【${teamName[team] || '綠隊'} +${s.points || 2} 分】${cat}${s.author && s.author !== '大會裁判' ? `（見證：${s.author}）` : ''}：</span>
               <span class="text-slate-600">${s.story || ''}</span>
             </div>
             <span class="font-mono text-slate-400 text-[11px]">${s.time || ''}</span>

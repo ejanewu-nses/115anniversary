@@ -106,7 +106,7 @@ function doGet(e) {
       else if (rawCat.includes('歡呼') || rawCat.includes('cheer')) { catCode = 'cheer'; catLabel = '📣 團隊歡呼'; }
 
       const storyText = String(row[5] || '');
-      const storyTitle = storyText.length > 18 ? storyText.substring(0, 18) + '...' : (storyText || '溫馨互助事蹟');
+      const storyTitle = generateStoryTitle(storyText, catCode);
 
       stories.push({
         id: i,
@@ -294,7 +294,7 @@ function fastLocalParse(text) {
   text = text.trim();
 
   // A. 精神加分匹配（最常用）
-  if (text.includes('精神') || text.includes('加分') || text.includes('暖心') || text.includes('事蹟')) {
+  if (text.includes('精神') || text.includes('加分') || text.includes('暖心') || text.includes('事蹟') || text.includes('好品德')) {
     let team = 'green';
     if (text.includes('綠') || text.includes('翠玉')) team = 'green';
     else if (text.includes('藍') || text.includes('碧海')) team = 'blue';
@@ -304,23 +304,54 @@ function fastLocalParse(text) {
     const ptsMatch = text.match(/([1-9])\s*分/);
     if (ptsMatch) pts = parseInt(ptsMatch[1], 10);
 
-    let category = 'cross';
-    if (/大帶小|小隊長|一年級|學弟|學妹|牽|陪|抱|照顧|扶|外套|跌倒|鞋帶|拉著|幫忙|協助/.test(text)) category = 'cross';
-    else if (/風度|運動家|禮貌|敬禮|握手|擁抱|運動員|安慰|服從|擊掌/.test(text)) category = 'sports';
-    else if (/環保|垃圾|自律|撿|排隊|水壺|場地|乾淨|落葉|整齊|收拾/.test(text)) category = 'eco';
-    else if (/歡呼|隊呼|加油|吶喊|士氣|掌聲|跳舞|口號/.test(text)) category = 'cheer';
+    // 1. 精準提取登記人 / 見證人（避免混入事蹟內）
+    let author = '大會裁判';
+    const authorMatch = text.match(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]*([^\s,，、。]+)/);
+    if (authorMatch) {
+      author = authorMatch[1].trim();
+    } else if (/吳宜蓁|校長/.test(text)) {
+      author = '吳宜蓁校長';
+    }
 
-    let story = text.replace(/^[🔴🟢🔵]?\s*(紅隊|綠隊|藍隊)?\s*精神加分\s*\d*\s*分?[，,、\s]*/i, '').trim();
+    // 2. 提取地點位置
+    let place = '操場';
+    const placeMatch = text.match(/(?:地點|位置|在)[：:\s]*([^\s,，、。]+(?:操場|司令台|球場|跑道|穿堂|走廊|教室|樹下|休息區|看台|大門))/);
+    if (placeMatch) {
+      place = placeMatch[1].trim();
+    }
+
+    // 3. 向度判定（加強清潔、環境等生活關鍵字，並依優先級排序）
+    let category = 'cross';
+    if (/環保|垃圾|自律|撿|排隊|水壺|場地|乾淨|落葉|整齊|收拾|清潔|環境|掃地|整潔|回收|寶特瓶|衛生|紙屑/.test(text)) {
+      category = 'eco';
+    } else if (/風度|運動家|運動員|禮貌|敬禮|握手|擁抱|安慰|服從|擊掌|拍肩|勝不驕|敗不餒|謙虛|致敬|道歉|誠實/.test(text)) {
+      category = 'sports';
+    } else if (/歡呼|隊呼|加油|吶喊|士氣|掌聲|跳舞|口號|鼓掌|喝采|熱情|精神抖擻/.test(text)) {
+      category = 'cheer';
+    } else if (/大帶小|跨齡|小隊長|學弟|學妹|低年級|一年級|二年級|牽|陪|抱|照顧|扶|外套|跌倒|鞋帶|綁鞋帶|拉著|幫忙|協助|牽手/.test(text)) {
+      category = 'cross';
+    }
+
+    // 4. 清洗事蹟文字（乾淨切除登記人、地點、以及開頭的加分引言贅字）
+    let story = text;
+    story = story.replace(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]*[^\s,，、。]+/g, '');
+    story = story.replace(/(?:地點|位置)[：:\s]*[^\s,，、。]+/g, '');
+    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊)?\s*(?:精神加分|精神分|加分)?\s*(?:加)?\s*\d*\s*分?[，,、。\s]*/i, '');
+    story = story.replace(/^[，,、。\s]+|[，,、。\s]+$/g, '').trim();
     if (!story) story = text;
+
+    // 5. 智慧下標題（自動提煉 8~16 字精美大標題）
+    const title = generateStoryTitle(story, category);
 
     return {
       intent: 'ADD_SPIRIT',
       team: team,
       category: category,
       points: pts,
+      title: title,
       story: story,
-      author: '大會裁判',
-      place: '操場'
+      author: author,
+      place: place
     };
   }
 
@@ -546,10 +577,13 @@ function recordSpiritPoint(p) {
   // 暫存上一筆資訊供 /undo 撤銷使用
   PropertiesService.getScriptProperties().setProperty('LAST_SPIRIT_ROW', sheet.getLastRow().toString());
 
+  const titleText = p.title || generateStoryTitle(p.story, p.category);
+
   return `🎉【精神加分登記成功！】\n` +
          `━━━━━━━━━━━━━━\n` +
          `戰隊：${teamNameMap[p.team] || p.team} (+${p.points || 2}分)\n` +
          `向度：${catNameMap[p.category] || p.category}\n` +
+         `標題：${titleText}\n` +
          `事蹟：${p.story}\n` +
          `見證：${p.author || '大會裁判'} (${p.place || '操場'})\n` +
          `━━━━━━━━━━━━━━\n` +
@@ -919,4 +953,48 @@ function normalizeTeam(t) {
   if (t === 'blue' || t.includes('藍')) return 'blue';
   if (t === 'red' || t.includes('紅')) return 'red';
   return 'green';
+}
+
+/**
+ * ----------------------------------------------------------------------
+ * 智慧精神事蹟標題提煉器 (自動為事蹟下優雅動人的精準大標題)
+ * ----------------------------------------------------------------------
+ */
+function generateStoryTitle(story, category) {
+  if (!story) return '溫馨校園互助事蹟';
+
+  // 1. 環保自律向度
+  if (category === 'eco' || /清潔|環境|垃圾|落葉|掃地|整齊|收拾|排隊|水壺|自律|整潔|回收|紙屑/.test(story)) {
+    if (/清潔|環境|打掃|掃地|做整潔/.test(story)) return '主動維護整潔，守護美麗校園';
+    if (/垃圾|落葉|撿|紙屑|寶特瓶/.test(story)) return '隨手彎腰拾起，美化綠活校園';
+    if (/排隊|水壺|整齊|收拾|常規/.test(story)) return '自律守規井然，落實生活常規';
+    return '自主維護環境，實踐綠活校園';
+  }
+
+  // 2. 跨齡扶持向度
+  if (category === 'cross' || /大帶小|小隊長|一年級|二年級|學弟|學妹|低年級|牽|陪|抱|外套|跌倒|鞋帶/.test(story)) {
+    if (/外套|衣服|穿|保暖/.test(story)) return '大手貼心遞外套，溫暖學弟學妹';
+    if (/鞋帶|綁/.test(story)) return '蹲下身細心綁鞋帶，展現大帶小溫情';
+    if (/跌倒|扶|牽手|牽|抱/.test(story)) return '大手牽小手，暖心扶持齊步走';
+    if (/檢錄|排隊|帶隊|帶領/.test(story)) return '熱心帶領檢錄，小隊長盡責典範';
+    return '跨齡互助扶持，大手牽小手展溫馨';
+  }
+
+  // 3. 運動家風度向度
+  if (category === 'sports' || /風度|運動家|運動員|禮貌|敬禮|握手|擁抱|安慰|服從|擊掌|拍肩|勝不驕|敗不餒/.test(story)) {
+    if (/握手|鞠躬|敬禮|致意/.test(story)) return '賽後致敬對手，展現運動家風度';
+    if (/拍肩|安慰|鼓勵|打氣/.test(story)) return '拍肩暖心打氣，超越勝負的真情';
+    if (/跌倒|扶對手|受傷/.test(story)) return '扶起競賽對手，發揚運動家品格';
+    return '勝不驕敗不餒，盡顯運動家典範';
+  }
+
+  // 4. 團隊歡呼向度
+  if (category === 'cheer' || /歡呼|隊呼|加油|吶喊|士氣|掌聲|口號|鼓掌|喝采|熱情/.test(story)) {
+    if (/隊呼|口號/.test(story)) return '戰隊呼響徹雲霄，凝聚最強向心力';
+    if (/加油|吶喊|掌聲|喝采/.test(story)) return '熱情吶喊加油，點燃全場澎湃士氣';
+    return '齊心歡呼鼓舞，展現團隊最高士氣';
+  }
+
+  // 預設擷取精華
+  return story.length > 16 ? story.substring(0, 16) + '...' : story;
 }
