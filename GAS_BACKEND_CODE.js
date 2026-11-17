@@ -294,7 +294,10 @@ function fastLocalParse(text) {
   text = text.trim();
 
   // A. 精神加分匹配（最常用）
-  if (text.includes('精神') || text.includes('加分') || text.includes('暖心') || text.includes('事蹟') || text.includes('好品德')) {
+  const isEventWord = /(?:拔河|躲避球|接力|趣味|蟲蟲|彩虹|慢跑|短跑|100m|60m|80m|第一名|第二名|第三名|金牌|銀牌|銅牌)/.test(text);
+  const isSpiritTrigger = /(?:精神|暖心|事蹟|好品德|大帶小|運動家|歡呼|隊呼|自律|整齊|互助|清潔|環境)|(?:紅隊|綠隊|藍隊)?\s*(?:加|得)?\s*[1-9]\s*分/.test(text);
+
+  if (isSpiritTrigger && !isEventWord) {
     let team = 'green';
     if (text.includes('綠') || text.includes('翠玉')) team = 'green';
     else if (text.includes('藍') || text.includes('碧海')) team = 'blue';
@@ -305,38 +308,58 @@ function fastLocalParse(text) {
     if (ptsMatch) pts = parseInt(ptsMatch[1], 10);
 
     // 1. 精準提取登記人 / 見證人（避免混入事蹟內）
-    let author = '大會裁判';
-    const authorMatch = text.match(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]*([^\s,，、。]+)/);
+    let author = '';
+    const authorMatch = text.match(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]*([^\s,，、。\n\r]+)/);
     if (authorMatch) {
       author = authorMatch[1].trim();
-    } else if (/吳宜蓁|校長/.test(text)) {
+      if (author === '校長') author = '吳宜蓁校長';
+    } else if (/吳宜蓁/.test(text)) {
       author = '吳宜蓁校長';
     }
 
-    // 2. 提取地點位置（有明確提及才記錄，未提及則留空不硬加預設值）
+    // 2. 提取地點位置（嚴格支援冒號或空格分開格式，如「地點 操場」）
     let place = '';
-    const placeMatch = text.match(/(?:地點|位置|在)[：:\s]*([^\s,，、。]+(?:操場|司令台|球場|跑道|穿堂|走廊|教室|樹下|休息區|看台|大門|校門口|活動中心))/);
+    const placeMatch = text.match(/(?:地點|位置|在)[：:\s]*([^\s,，、。\n\r]+)/);
     if (placeMatch) {
-      place = placeMatch[1].trim();
+      const candidate = placeMatch[1].trim();
+      if (/操場|司令台|球場|跑道|穿堂|走廊|教室|樹下|休息區|看台|大門|校門口|活動中心/.test(candidate)) {
+        place = candidate;
+      }
     }
 
-    // 3. 向度判定（加強清潔、環境等生活關鍵字，並依優先級排序）
+    // 3. 智慧權重計分法決定向度（防範因「整齊」修飾副詞搶走「歡呼」核心）
+    let scoreCheer = 0, scoreSports = 0, scoreEco = 0, scoreCross = 0;
+
+    // cheer（團隊歡呼）
+    if (/歡呼|隊呼|加油|吶喊|口號|鼓掌|喝采|鼓舞/.test(text)) scoreCheer += 4;
+    if (/士氣|掌聲|熱情|精神抖擻/.test(text)) scoreCheer += 1;
+
+    // sports（運動家風度）
+    if (/運動家|風度|勝不驕|敗不餒|握手|鞠躬|致敬|服從|擊掌|拍肩|道歉/.test(text)) scoreSports += 4;
+    if (/禮貌|友愛|謙虛|誠實|安慰/.test(text)) scoreSports += 1;
+
+    // cross（跨齡扶持）
+    if (/大帶小|跨齡|小隊長|綁鞋帶|牽手|拿外套|遞外套|學弟|學妹/.test(text)) scoreCross += 4;
+    if (/照顧|幫忙|協助|牽|扶|陪|低年級|一年級|二年級/.test(text)) scoreCross += 1;
+
+    // eco（環保自律）
+    if (/垃圾|撿垃圾|清潔環境|落葉|掃地|做整潔|資源回收|寶特瓶/.test(text)) scoreEco += 4;
+    if (/乾淨|自律|整齊|收拾|排隊|環境|清潔|水壺/.test(text)) scoreEco += 1;
+
     let category = 'cross';
-    if (/環保|垃圾|自律|撿|排隊|水壺|場地|乾淨|落葉|整齊|收拾|清潔|環境|掃地|整潔|回收|寶特瓶|衛生|紙屑/.test(text)) {
-      category = 'eco';
-    } else if (/風度|運動家|運動員|禮貌|敬禮|握手|擁抱|安慰|服從|擊掌|拍肩|勝不驕|敗不餒|謙虛|致敬|道歉|誠實/.test(text)) {
-      category = 'sports';
-    } else if (/歡呼|隊呼|加油|吶喊|士氣|掌聲|跳舞|口號|鼓掌|喝采|熱情|精神抖擻/.test(text)) {
-      category = 'cheer';
-    } else if (/大帶小|跨齡|小隊長|學弟|學妹|低年級|一年級|二年級|牽|陪|抱|照顧|扶|外套|跌倒|鞋帶|綁鞋帶|拉著|幫忙|協助|牽手/.test(text)) {
-      category = 'cross';
+    const maxScore = Math.max(scoreCheer, scoreSports, scoreEco, scoreCross);
+    if (maxScore > 0) {
+      if (scoreCheer === maxScore) category = 'cheer';
+      else if (scoreSports === maxScore) category = 'sports';
+      else if (scoreEco === maxScore) category = 'eco';
+      else if (scoreCross === maxScore) category = 'cross';
     }
 
-    // 4. 清洗事蹟文字（乾淨切除登記人、地點、以及開頭的加分引言贅字）
+    // 4. 清洗事蹟文字（徹底剔除登記人、地點、以及「藍隊精神加 3 分，」等引言）
     let story = text;
-    story = story.replace(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]*[^\s,，、。]+/g, '');
-    story = story.replace(/(?:地點|位置)[：:\s]*[^\s,，、。]+/g, '');
-    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊)?\s*(?:精神加分|精神分|加分)?\s*(?:加)?\s*\d*\s*分?[，,、。\s]*/i, '');
+    story = story.replace(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]*[^\s,，、。\n\r]+/g, '');
+    story = story.replace(/(?:地點|位置)[：:\s]*[^\s,，、。\n\r]+/g, '');
+    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊)?\s*(?:精神(?:加分|分|加)?|加分|加|\d+|分|[，,、。\s])+/i, '');
     story = story.replace(/^[，,、。\s]+|[，,、。\s]+$/g, '').trim();
     if (!story) story = text;
 
@@ -350,7 +373,7 @@ function fastLocalParse(text) {
       points: pts,
       title: title,
       story: story,
-      author: author,
+      author: author || '大會裁判',
       place: place
     };
   }
