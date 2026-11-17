@@ -295,7 +295,7 @@ function fastLocalParse(text) {
 
   // A. 精神加分匹配（最常用）
   const isEventWord = /(?:拔河|躲避球|接力|趣味|蟲蟲|彩虹|慢跑|短跑|100m|60m|80m|第一名|第二名|第三名|金牌|銀牌|銅牌)/.test(text);
-  const isSpiritTrigger = /(?:精神|暖心|事蹟|好品德|大帶小|運動家|歡呼|隊呼|自律|整齊|互助|清潔|環境)|(?:紅隊|綠隊|藍隊)?\s*(?:加|得)?\s*[1-9]\s*分/.test(text);
+  const isSpiritTrigger = /(?:精神|暖心|事蹟|好品德|大帶小|運動家|歡呼|隊呼|自律|整齊|互助|清潔|環境|勉勵)|(?:紅隊|綠隊|藍隊)?\s*(?:加|得)?\s*[1-9一二兩三]\s*分/.test(text);
 
   if (isSpiritTrigger && !isEventWord) {
     let team = 'green';
@@ -304,12 +304,18 @@ function fastLocalParse(text) {
     else if (text.includes('紅') || text.includes('烈火')) team = 'red';
 
     let pts = 2;
-    const ptsMatch = text.match(/([1-9])\s*分/);
-    if (ptsMatch) pts = parseInt(ptsMatch[1], 10);
+    const ptsMatch = text.match(/([1-9一二兩三])\s*分/);
+    if (ptsMatch) {
+      const v = ptsMatch[1];
+      if (v === '一' || v === '1') pts = 1;
+      else if (v === '二' || v === '兩' || v === '2') pts = 2;
+      else if (v === '三' || v === '3') pts = 3;
+      else pts = parseInt(v, 10) || 2;
+    }
 
-    // 1. 精準提取登記人 / 見證人（避免混入事蹟內）
+    // 1. 精準提取登記人 / 見證人（支援冒號或空格隔開，如「見證人 校長」）
     let author = '';
-    const authorMatch = text.match(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]*([^\s,，、。\n\r]+)/);
+    const authorMatch = text.match(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]+([^\s,，、。\n\r]+)/);
     if (authorMatch) {
       author = authorMatch[1].trim();
       if (author === '校長') author = '吳宜蓁校長';
@@ -317,9 +323,9 @@ function fastLocalParse(text) {
       author = '吳宜蓁校長';
     }
 
-    // 2. 提取地點位置（嚴格支援冒號或空格分開格式，如「地點 操場」）
+    // 2. 提取地點位置（支援冒號或空格分開格式，如「地點 操場」）
     let place = '';
-    const placeMatch = text.match(/(?:地點|位置|在)[：:\s]*([^\s,，、。\n\r]+)/);
+    const placeMatch = text.match(/(?:地點|位置|在)[：:\s]+([^\s,，、。\n\r]+)/);
     if (placeMatch) {
       const candidate = placeMatch[1].trim();
       if (/操場|司令台|球場|跑道|穿堂|走廊|教室|樹下|休息區|看台|大門|校門口|活動中心/.test(candidate)) {
@@ -327,16 +333,16 @@ function fastLocalParse(text) {
       }
     }
 
-    // 3. 智慧權重計分法決定向度（防範因「整齊」修飾副詞搶走「歡呼」核心）
+    // 3. 智慧權重計分法決定向度（全面防禦副詞干擾）
     let scoreCheer = 0, scoreSports = 0, scoreEco = 0, scoreCross = 0;
+
+    // sports（運動家風度）
+    if (/運動家|風度|勝不驕|敗不餒|握手|鞠躬|致敬|服從|擊掌|拍肩|道歉|輸了|落後|不氣餒|勉勵|彼此勉勵|互勉|安慰|再接再厲/.test(text)) scoreSports += 4;
+    if (/禮貌|友愛|謙虛|誠實|運動員|鼓舞/.test(text)) scoreSports += 1;
 
     // cheer（團隊歡呼）
     if (/歡呼|隊呼|加油|吶喊|口號|鼓掌|喝采|鼓舞/.test(text)) scoreCheer += 4;
     if (/士氣|掌聲|熱情|精神抖擻/.test(text)) scoreCheer += 1;
-
-    // sports（運動家風度）
-    if (/運動家|風度|勝不驕|敗不餒|握手|鞠躬|致敬|服從|擊掌|拍肩|道歉/.test(text)) scoreSports += 4;
-    if (/禮貌|友愛|謙虛|誠實|安慰/.test(text)) scoreSports += 1;
 
     // cross（跨齡扶持）
     if (/大帶小|跨齡|小隊長|綁鞋帶|牽手|拿外套|遞外套|學弟|學妹/.test(text)) scoreCross += 4;
@@ -346,20 +352,20 @@ function fastLocalParse(text) {
     if (/垃圾|撿垃圾|清潔環境|落葉|掃地|做整潔|資源回收|寶特瓶/.test(text)) scoreEco += 4;
     if (/乾淨|自律|整齊|收拾|排隊|環境|清潔|水壺/.test(text)) scoreEco += 1;
 
-    let category = 'cross';
-    const maxScore = Math.max(scoreCheer, scoreSports, scoreEco, scoreCross);
+    let category = 'sports';
+    const maxScore = Math.max(scoreSports, scoreCheer, scoreEco, scoreCross);
     if (maxScore > 0) {
-      if (scoreCheer === maxScore) category = 'cheer';
-      else if (scoreSports === maxScore) category = 'sports';
+      if (scoreSports === maxScore) category = 'sports';
+      else if (scoreCheer === maxScore) category = 'cheer';
       else if (scoreEco === maxScore) category = 'eco';
       else if (scoreCross === maxScore) category = 'cross';
     }
 
-    // 4. 清洗事蹟文字（徹底剔除登記人、地點、以及「藍隊精神加 3 分，」等引言）
+    // 4. 清洗事蹟文字（徹底剔除中文「一分」、登記人、地點、以及開頭的加分引言贅字）
     let story = text;
-    story = story.replace(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]*[^\s,，、。\n\r]+/g, '');
-    story = story.replace(/(?:地點|位置)[：:\s]*[^\s,，、。\n\r]+/g, '');
-    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊)?\s*(?:精神(?:加分|分|加)?|加分|加|\d+|分|[，,、。\s])+/i, '');
+    story = story.replace(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]+[^\s,，、。\n\r]+/g, '');
+    story = story.replace(/(?:地點|位置)[：:\s]+[^\s,，、。\n\r]+/g, '');
+    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊)?\s*(?:精神(?:加分|分|加)?|加分|加|[1-9一二兩三]|分|[，,、。\s])+/i, '');
     story = story.replace(/^[，,、。\s]+|[，,、。\s]+$/g, '').trim();
     if (!story) story = text;
 
@@ -1005,7 +1011,8 @@ function generateStoryTitle(story, category) {
   }
 
   // 3. 運動家風度向度
-  if (category === 'sports' || /風度|運動家|運動員|禮貌|敬禮|握手|擁抱|安慰|服從|擊掌|拍肩|勝不驕|敗不餒/.test(story)) {
+  if (category === 'sports' || /風度|運動家|運動員|禮貌|敬禮|握手|擁抱|安慰|服從|擊掌|拍肩|勝不驕|敗不餒|輸了|落後|勉勵|彼此勉勵|互勉/.test(story)) {
+    if (/輸了|落後|不氣餒|勉勵|彼此勉勵|互勉/.test(story)) return '落後不氣餒，彼此勉勵展風度';
     if (/握手|鞠躬|敬禮|致意/.test(story)) return '賽後致敬對手，展現運動家風度';
     if (/拍肩|安慰|鼓勵|打氣/.test(story)) return '拍肩暖心打氣，超越勝負的真情';
     if (/跌倒|扶對手|受傷/.test(story)) return '扶起競賽對手，發揚運動家品格';
