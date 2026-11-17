@@ -508,10 +508,11 @@
                 <i class="fa-solid fa-user-check text-indigo-500"></i>
                 見證教師：${item.author || '大會裁判'}
               </span>
+              ${item.place ? `
               <span class="flex items-center gap-1 text-slate-400">
                 <i class="fa-solid fa-location-dot"></i>
-                ${item.place || '操場'}
-              </span>
+                ${item.place}
+              </span>` : ''}
             </div>
           </div>
         `;
@@ -579,7 +580,13 @@
       document.getElementById('kiosk-time').innerText = item.time || '';
       document.getElementById('kiosk-story').innerText = `「${item.story || ''}」`;
       document.getElementById('kiosk-author').innerText = `見證評審：${item.author || '大會裁判'}`;
-      document.getElementById('kiosk-place').innerText = item.place || '操場';
+      const kioskPlaceEl = document.getElementById('kiosk-place');
+      if (kioskPlaceEl) {
+        kioskPlaceEl.innerText = item.place || '';
+        if (kioskPlaceEl.parentElement) {
+          kioskPlaceEl.parentElement.style.display = item.place ? 'flex' : 'none';
+        }
+      }
       document.getElementById('kiosk-counter').innerText = `${kioskIndex + 1} / ${STORIES_DATA.length}`;
 
       // 重設進度條動畫

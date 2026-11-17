@@ -118,7 +118,7 @@ function doGet(e) {
         points: pts,
         story: storyText,
         author: row[6] || '大會裁判',
-        place: row[7] || '操場'
+        place: row[7] ? String(row[7]).trim() : ''
       });
     }
     stories.reverse();
@@ -313,9 +313,9 @@ function fastLocalParse(text) {
       author = '吳宜蓁校長';
     }
 
-    // 2. 提取地點位置
-    let place = '操場';
-    const placeMatch = text.match(/(?:地點|位置|在)[：:\s]*([^\s,，、。]+(?:操場|司令台|球場|跑道|穿堂|走廊|教室|樹下|休息區|看台|大門))/);
+    // 2. 提取地點位置（有明確提及才記錄，未提及則留空不硬加預設值）
+    let place = '';
+    const placeMatch = text.match(/(?:地點|位置|在)[：:\s]*([^\s,，、。]+(?:操場|司令台|球場|跑道|穿堂|走廊|教室|樹下|休息區|看台|大門|校門口|活動中心))/);
     if (placeMatch) {
       place = placeMatch[1].trim();
     }
@@ -569,7 +569,7 @@ function recordSpiritPoint(p) {
     p.points || 2,
     p.story,
     p.author || '大會裁判',
-    p.place || '操場'
+    p.place || ''
   ];
 
   sheet.appendRow(row);
@@ -578,6 +578,7 @@ function recordSpiritPoint(p) {
   PropertiesService.getScriptProperties().setProperty('LAST_SPIRIT_ROW', sheet.getLastRow().toString());
 
   const titleText = p.title || generateStoryTitle(p.story, p.category);
+  const placeTag = p.place ? ` (${p.place})` : '';
 
   return `🎉【精神加分登記成功！】\n` +
          `━━━━━━━━━━━━━━\n` +
@@ -585,7 +586,7 @@ function recordSpiritPoint(p) {
          `向度：${catNameMap[p.category] || p.category}\n` +
          `標題：${titleText}\n` +
          `事蹟：${p.story}\n` +
-         `見證：${p.author || '大會裁判'} (${p.place || '操場'})\n` +
+         `見證：${p.author || '大會裁判'}${placeTag}\n` +
          `━━━━━━━━━━━━━━\n` +
          `💡 官網首頁與精神榮譽館已即時同步更新！\n若登記有誤，請於 3 分鐘內輸入 /undo 即可撤銷。`;
 }
