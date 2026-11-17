@@ -346,10 +346,39 @@ function fastLocalParse(text) {
 
     const isHeadcount = /人/.test(text) || event.startsWith('run');
 
-    // 檢查是否有直接報得分或人數（例如：綠隊8分、藍隊6分、紅隊4分 或 藍7人、綠6人、紅5人）
-    const greenM = text.match(/綠(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)?/);
-    const blueM = text.match(/藍(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)?/);
-    const redM = text.match(/紅(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)?/);
+    const parseTeam = (str) => {
+      if (/綠/.test(str)) return 'green';
+      if (/藍/.test(str)) return 'blue';
+      if (/紅/.test(str)) return 'red';
+      return 'green';
+    };
+
+    // 1. 優先檢查名次模式（例如：第一名藍隊、第二名綠隊、第三名紅隊，或「1. 第一名：藍隊」條列格式）
+    const m1 = text.match(/(?:第一名|冠軍)[：:\s]*([^\s,，、\d]+)/);
+    const m2 = text.match(/(?:第二名|亞軍)[：:\s]*([^\s,，、\d]+)/);
+    const m3 = text.match(/(?:第三名|季軍)[：:\s]*([^\s,，、\d]+)/);
+
+    if (m1) {
+      const t1 = parseTeam(m1[1]);
+      const t2 = m2 ? parseTeam(m2[1]) : (t1 === 'green' ? 'blue' : 'green');
+      const allTeams = ['green', 'blue', 'red'];
+      const remaining = allTeams.filter(t => t !== t1 && t !== t2);
+      const t3 = m3 ? parseTeam(m3[1]) : (remaining[0] || 'red');
+
+      return {
+        intent: 'UPDATE_EVENT',
+        event: event,
+        rank1: t1,
+        rank2: t2,
+        rank3: t3
+      };
+    }
+
+    // 2. 檢查是否有直接報得分或人數（例如：綠隊8分、藍隊6分、紅隊4分 或 藍7人、綠6人、紅5人）
+    // 嚴格強制必須包含「分」或「人」單位，避免將條列序號「2. 第二名」誤判為「2分」
+    const greenM = text.match(/綠(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)/);
+    const blueM = text.match(/藍(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)/);
+    const redM = text.match(/紅(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)/);
 
     if (greenM || blueM || redM) {
       return {
@@ -361,28 +390,6 @@ function fastLocalParse(text) {
           red: redM ? parseInt(redM[1], 10) : null
         },
         isHeadcount: isHeadcount
-      };
-    }
-
-    // 檢查名次模式（例如：第一名綠隊、第二名藍隊、第三名紅隊）
-    const parseTeam = (str) => {
-      if (/綠/.test(str)) return 'green';
-      if (/藍/.test(str)) return 'blue';
-      if (/紅/.test(str)) return 'red';
-      return 'green';
-    };
-
-    const m1 = text.match(/(?:第一名|冠軍)[：:\s]*([^\s,，、]+)/);
-    const m2 = text.match(/(?:第二名|亞軍)[：:\s]*([^\s,，、]+)/);
-    const m3 = text.match(/(?:第三名|季軍)[：:\s]*([^\s,，、]+)/);
-
-    if (m1) {
-      return {
-        intent: 'UPDATE_EVENT',
-        event: event,
-        rank1: parseTeam(m1[1]),
-        rank2: m2 ? parseTeam(m2[1]) : 'blue',
-        rank3: m3 ? parseTeam(m3[1]) : 'red'
       };
     }
   }
@@ -666,9 +673,12 @@ function recordEventScores(p) {
   // 模式 B：以第一名、第二名、第三名名次登記 (p.rank1)
   else if (p.rank1) {
     const isTug = (p.event === 'tugLow' || p.event === 'tugHigh');
+    const isRelay = p.event.includes('relay');
+    const isRainbow = (p.event === 'rainbow');
+
     const pts1 = isTug ? 8 : 12;
-    const pts2 = isTug ? 6 : (p.event.includes('relay') ? 10 : 8);
-    const pts3 = isTug ? 4 : (p.event.includes('relay') ? 8 : 4);
+    const pts2 = isTug ? 6 : (isRelay ? 10 : 8);
+    const pts3 = isTug ? 4 : (isRelay ? 8 : (isRainbow ? 6 : 4));
 
     const scores = { green: 0, blue: 0, red: 0 };
     if (p.rank1) scores[p.rank1] = pts1;

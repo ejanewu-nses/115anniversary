@@ -1131,25 +1131,29 @@
       renderRunGroup('runMid', 'card-run-mid', 'card-run-mid-winner');
       renderRunGroup('runHigh', 'card-run-high', 'card-run-high-winner');
 
-      // 連動更新拔河卡片展示
-      const cardTugLow = document.getElementById('card-tug-low');
-      if (cardTugLow) {
-        const g = d.tugLow?.green || 0, b = d.tugLow?.blue || 0, r = d.tugLow?.red || 0;
+      // 連動更新拔河卡片展示（依分數動態排序冠亞季軍）
+      const renderTugGroup = (elId, gKey) => {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        const g = d[gKey]?.green || 0, b = d[gKey]?.blue || 0, r = d[gKey]?.red || 0;
         if (g === 0 && b === 0 && r === 0) {
-          cardTugLow.innerHTML = `<span class="text-slate-400 font-medium">⏳ 尚未開賽（賽程準備中）</span>`;
-        } else {
-          cardTugLow.innerHTML = `綠隊 (+${g}分) ｜ 藍隊 (+${b}分) ｜ 紅隊 (+${r}分)`;
+          el.innerHTML = `<span class="text-slate-400 font-medium">⏳ 尚未開賽（賽程準備中）</span>`;
+          return;
         }
-      }
-      const cardTugHigh = document.getElementById('card-tug-high');
-      if (cardTugHigh) {
-        const g = d.tugHigh?.green || 0, b = d.tugHigh?.blue || 0, r = d.tugHigh?.red || 0;
-        if (g === 0 && b === 0 && r === 0) {
-          cardTugHigh.innerHTML = `<span class="text-slate-400 font-medium">⏳ 尚未開賽（賽程準備中）</span>`;
-        } else {
-          cardTugHigh.innerHTML = `紅隊 (+${r}分) ｜ 綠隊 (+${g}分) ｜ 藍隊 (+${b}分)`;
-        }
-      }
+        const teams = [
+          { name: '綠隊', score: g, color: 'text-emerald-700' },
+          { name: '藍隊', score: b, color: 'text-blue-700' },
+          { name: '紅隊', score: r, color: 'text-rose-700' }
+        ].sort((x, y) => y.score - x.score);
+
+        const medals = ['🥇', '🥈', '🥉'];
+        el.innerHTML = teams.map((t, idx) => `
+          <span class="${t.color}">${medals[idx]} ${t.name} (+${t.score}分)</span>
+        `).join(' ｜ ');
+      };
+
+      renderTugGroup('card-tug-low', 'tugLow');
+      renderTugGroup('card-tug-high', 'tugHigh');
 
       // 連動更新躲避球卡片結算展示
       const cardDodge = document.getElementById('card-dodge-summary');
@@ -1212,48 +1216,49 @@
         }
       }
 
-      // 連動更新彩虹危機趣味賽卡片展示
+      // 連動更新彩虹危機趣味賽卡片展示（依分數動態排序冠亞季軍）
       const cardRainbow = document.getElementById('card-rainbow-crisis');
       if (cardRainbow) {
         const g = d.rainbow?.green || 0, b = d.rainbow?.blue || 0, r = d.rainbow?.red || 0;
         if (g === 0 && b === 0 && r === 0) {
           cardRainbow.innerHTML = `<span class="text-slate-400 font-medium py-1">⏳ 尚未登場（12/05 歡樂開賽）</span>`;
         } else {
-          cardRainbow.innerHTML = `
-            <span>藍隊：<strong>+${b} 分</strong></span>
-            <span>紅隊：<strong>+${r} 分</strong></span>
-            <span>綠隊：<strong>+${g} 分</strong></span>
-          `;
+          const teams = [
+            { name: '綠隊', score: g, color: 'text-emerald-700' },
+            { name: '藍隊', score: b, color: 'text-blue-700' },
+            { name: '紅隊', score: r, color: 'text-rose-700' }
+          ].sort((x, y) => y.score - x.score);
+
+          const medals = ['🥇 冠軍', '🥈 亞軍', '🥉 季軍'];
+          cardRainbow.innerHTML = teams.map((t, idx) => `
+            <span class="${t.color}">${medals[idx]}：<strong>${t.name}</strong> (+${t.score}分)</span>
+          `).join('');
         }
       }
 
-      // 連動更新大隊接力卡片展示
-      const cardRelayLow = document.getElementById('card-relay-low');
-      if (cardRelayLow) {
-        const g = d.relayLow?.green || 0, b = d.relayLow?.blue || 0, r = d.relayLow?.red || 0;
+      // 連動更新大隊接力卡片展示（依分數動態排序冠亞季軍）
+      const renderRelayGroup = (elId, gKey) => {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        const g = d[gKey]?.green || 0, b = d[gKey]?.blue || 0, r = d[gKey]?.red || 0;
         if (g === 0 && b === 0 && r === 0) {
-          cardRelayLow.innerHTML = `<div class="text-slate-400 font-medium py-1">⏳ 尚未登場（12/05 鳴槍開跑）</div>`;
-        } else {
-          cardRelayLow.innerHTML = `
-            <div>藍隊得分：<strong>+${b} 分</strong></div>
-            <div>綠隊得分：<strong>+${g} 分</strong></div>
-            <div>紅隊得分：<strong>+${r} 分</strong></div>
-          `;
+          el.innerHTML = `<div class="text-slate-400 font-medium py-1">⏳ 尚未登場（12/05 鳴槍開跑）</div>`;
+          return;
         }
-      }
-      const cardRelayHigh = document.getElementById('card-relay-high');
-      if (cardRelayHigh) {
-        const g = d.relayHigh?.green || 0, b = d.relayHigh?.blue || 0, r = d.relayHigh?.red || 0;
-        if (g === 0 && b === 0 && r === 0) {
-          cardRelayHigh.innerHTML = `<div class="text-slate-400 font-medium py-1">⏳ 尚未登場（12/05 鳴槍開跑）</div>`;
-        } else {
-          cardRelayHigh.innerHTML = `
-            <div>綠隊得分：<strong>+${g} 分</strong></div>
-            <div>紅隊得分：<strong>+${r} 分</strong></div>
-            <div>藍隊得分：<strong>+${b} 分</strong></div>
-          `;
-        }
-      }
+        const teams = [
+          { name: '綠隊', score: g, color: 'text-emerald-700' },
+          { name: '藍隊', score: b, color: 'text-blue-700' },
+          { name: '紅隊', score: r, color: 'text-rose-700' }
+        ].sort((x, y) => y.score - x.score);
+
+        const medals = ['🥇 冠軍', '🥈 亞軍', '🥉 季軍'];
+        el.innerHTML = teams.map((t, idx) => `
+          <div>${medals[idx]}：<strong class="${t.color}">${t.name}</strong> (+${t.score} 分)</div>
+        `).join('');
+      };
+
+      renderRelayGroup('card-relay-low', 'relayLow');
+      renderRelayGroup('card-relay-high', 'relayHigh');
     }
 
     // 管理彈窗控制
