@@ -102,7 +102,7 @@
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-emerald-300">🟢 綠隊 • 翠玉蜈蚣</span>
               <div class="text-right">
-                <span class="text-2xl font-black text-emerald-300 font-fun" id="spirit-green-pts">32</span>
+                <span class="text-2xl font-black text-emerald-300 font-fun" id="spirit-green-pts">0</span>
                 <span class="text-xs text-emerald-200">分</span>
               </div>
             </div>
@@ -116,7 +116,7 @@
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-blue-300">🔵 藍隊 • 碧海晨曦</span>
               <div class="text-right">
-                <span class="text-2xl font-black text-blue-300 font-fun" id="spirit-blue-pts">32</span>
+                <span class="text-2xl font-black text-blue-300 font-fun" id="spirit-blue-pts">0</span>
                 <span class="text-xs text-blue-200">分</span>
               </div>
             </div>
@@ -130,7 +130,7 @@
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-rose-300">🔴 紅隊 • 烈火金獅</span>
               <div class="text-right">
-                <span class="text-2xl font-black text-rose-300 font-fun" id="spirit-red-pts">30</span>
+                <span class="text-2xl font-black text-rose-300 font-fun" id="spirit-red-pts">0</span>
                 <span class="text-xs text-rose-200">分</span>
               </div>
             </div>
@@ -153,7 +153,7 @@
           <div>
             <div class="text-xs text-slate-500 font-bold">向度一 (大帶小)</div>
             <div class="text-sm font-black text-slate-900">跨齡扶持</div>
-            <div class="text-[11px] text-purple-700 font-bold mt-0.5">已累計 18 次加分</div>
+            <div class="text-[11px] text-purple-700 font-bold mt-0.5" id="cat-count-cross">已累計 0 次加分</div>
           </div>
         </div>
 
@@ -165,7 +165,7 @@
           <div>
             <div class="text-xs text-slate-500 font-bold">向度二 (品德)</div>
             <div class="text-sm font-black text-slate-900">運動家風度</div>
-            <div class="text-[11px] text-blue-700 font-bold mt-0.5">已累計 14 次加分</div>
+            <div class="text-[11px] text-blue-700 font-bold mt-0.5" id="cat-count-sports">已累計 0 次加分</div>
           </div>
         </div>
 
@@ -177,7 +177,7 @@
           <div>
             <div class="text-xs text-slate-500 font-bold">向度三 (環境)</div>
             <div class="text-sm font-black text-slate-900">環保自律</div>
-            <div class="text-[11px] text-emerald-700 font-bold mt-0.5">已累計 11 次加分</div>
+            <div class="text-[11px] text-emerald-700 font-bold mt-0.5" id="cat-count-eco">已累計 0 次加分</div>
           </div>
         </div>
 
@@ -189,7 +189,7 @@
           <div>
             <div class="text-xs text-slate-500 font-bold">向度四 (士氣)</div>
             <div class="text-sm font-black text-slate-900">團隊歡呼</div>
-            <div class="text-[11px] text-amber-700 font-bold mt-0.5">已累計 12 次加分</div>
+            <div class="text-[11px] text-amber-700 font-bold mt-0.5" id="cat-count-cheer">已累計 0 次加分</div>
           </div>
         </div>
       </div>
@@ -343,133 +343,32 @@
   <script>
     const CLOUD_API_URL = 'https://script.google.com/macros/s/AKfycbwppBa3j4htWuGBHwvnz4UEuo39GeVyM5-cBrVSkhuq1bshMCAB4HRwIP1Ypdc9XdE7/exec';
 
-    // 基礎預設暖心事蹟資料集（10筆經典故事，確保各向度與三隊皆有基底）
-    const DEFAULT_STORIES = [
-      {
-        id: 1,
-        team: 'green',
-        category: 'cross',
-        categoryLabel: '跨齡扶持',
-        points: 2,
-        title: '操場慢跑後的及時溫暖',
-        story: '低年級 3 圈慢跑衝線後，一年級小生跑完全程有些喘不過氣，六年級的阿翔小隊長立刻上前攙扶、主動遞上溫開水並陪他在樹下休息調節呼吸，大帶小畫面極為溫暖動人！',
-        author: '林立樺 老師',
-        time: '12/01 08:35',
-        place: '操場司令台旁樹蔭處'
-      },
-      {
-        id: 2,
-        team: 'blue',
-        category: 'sports',
-        categoryLabel: '運動家風度',
-        points: 2,
-        title: '惜敗時的真誠敬禮與擁抱',
-        story: '躲避球循環賽戰至最後一刻以一分之差落敗，藍隊隊員無人沮喪抱怨，在隊長帶領下整齊向對手握手致意，並大聲喊出：「謝謝紅隊，你們真的很強！」，展現可貴的勝負氣度。',
-        author: '黃美雅 老師',
-        time: '11/26 08:38',
-        place: '操場球場'
-      },
-      {
-        id: 3,
-        team: 'red',
-        category: 'eco',
-        categoryLabel: '環保自律',
-        points: 2,
-        title: '離場前的一塵不染自主整潔',
-        story: '趣味競賽友誼賽結束全隊退場時，紅隊高年級隊長自發號召學弟妹，主動將整座風雨球場休息區周邊遺留的保特瓶、紙屑撿拾得乾乾淨淨，保持模範整潔。',
-        author: '楊詒茹 老師',
-        time: '11/30 08:42',
-        place: '風雨球場休息區'
-      },
-      {
-        id: 4,
-        team: 'green',
-        category: 'cheer',
-        categoryLabel: '團隊歡呼',
-        points: 2,
-        title: '隊呼震撼風雨球場，為友隊熱烈鼓掌',
-        story: '綠隊全體隊員手持自製彩帶，隊呼口號整齊響徹操場！更令人感動的是，當紅隊與藍隊拔河激烈僵持時，綠隊同樣給予兩隊最熱烈的加油節奏！',
-        author: '蔡武憲 老師',
-        time: '12/03 09:15',
-        place: '操場拔河跑道旁'
-      },
-      {
-        id: 5,
-        team: 'red',
-        category: 'cross',
-        categoryLabel: '跨齡扶持',
-        points: 2,
-        title: '細心替二年級學妹綁好鞋帶',
-        story: '在個人短跑決賽檢錄區，二年級小妹妹鞋帶突然鬆脫險些絆倒，紅隊五年級學姊立刻蹲下身子，溫柔且熟練地幫學妹綁上漂亮的蝴蝶結，並摸摸頭鼓勵她加油。',
-        author: '徐敏瓊 老師',
-        time: '12/05 09:10',
-        place: '操場檢錄帳篷前'
-      },
-      {
-        id: 6,
-        team: 'blue',
-        category: 'cross',
-        categoryLabel: '跨齡扶持',
-        points: 2,
-        title: '守護幼兒園小萌娃安全進場',
-        story: '大會開幕典禮時，藍隊六年級護旗手主動牽著幼兒園兩歲專班的小朋友入列，步伐放慢並貼心叮嚀踩階梯要小心，展現大哥哥大姊姊的體貼心腸。',
-        author: '周婉琳 老師',
-        time: '12/05 08:15',
-        place: '校門迎賓大道'
-      },
-      {
-        id: 7,
-        team: 'green',
-        category: 'sports',
-        categoryLabel: '運動家風度',
-        points: 2,
-        title: '大隊接力掉棒時的全員打氣',
-        story: '大隊接力總預演時，綠隊在交接棒時不慎掉棒落後，場邊全體綠隊隊友非但沒有一聲責怪，反而齊聲大喊：「沒關係！繼續衝！我們一起追回來！」，令人動容。',
-        author: '羅珮華 老師',
-        time: '12/03 09:50',
-        place: '外環跑道彎道處'
-      },
-      {
-        id: 8,
-        team: 'blue',
-        category: 'eco',
-        categoryLabel: '環保自律',
-        points: 2,
-        title: '守護校園綠草皮，落實分類回收',
-        story: '藍隊學童用完親子午宴餐盒後，主動在司令台後方設立臨時資源分類小尖兵，引導低年級依廚餘、紙餐盒與一般垃圾分類，展現高度自律品格。',
-        author: '施喬恩 老師',
-        time: '12/05 12:40',
-        place: '草皮遮陽帳篷區'
-      },
-      {
-        id: 9,
-        team: 'red',
-        category: 'cheer',
-        categoryLabel: '團隊歡呼',
-        points: 2,
-        title: '金獅陣精湛演出後的謙遜致敬',
-        story: '紅隊配合金獅陣開場展演後，隊員們大汗淋漓卻依然端正站立，向在場長官、家長會長及全校師長行最標準的武術抱拳禮，展現南興武藝傳統風骨。',
-        author: 'Amos (林承翰) 老師',
-        time: '12/05 08:50',
-        place: '操場中央大草坪'
-      },
-      {
-        id: 10,
-        team: 'green',
-        category: 'cross',
-        categoryLabel: '跨齡扶持',
-        points: 2,
-        title: '趣味競賽牽著學弟一起衝向終點',
-        story: '全校趣味競賽「蟲蟲危機」進行時，綠隊高年級選手配合三年級學弟的步伐調慢衝刺速度，並在耳邊不斷喊：「穩住！我們一起到終點！」，順利合力完成挑戰。',
-        author: '鄭潔 老師',
-        time: '12/05 10:45',
-        place: '大會中央競技區'
-      }
-    ];
-
-    let STORIES_DATA = [...DEFAULT_STORIES];
+    // 暖心事蹟資料集（100% 來自 Google 試算表雲端資料庫，無預設假資料）
+    let STORIES_DATA = [];
     let currentFilter = 'all';
     let currentSearch = '';
+
+    // 動態累計四大向度加分次數
+    function updateCategoryCounts() {
+      let cross = 0, sports = 0, eco = 0, cheer = 0;
+      STORIES_DATA.forEach(item => {
+        const cat = item.category || '';
+        const catLbl = item.categoryLabel || resolveCategoryLabel(item) || '';
+        if (cat === 'cross' || catLbl.includes('跨齡') || catLbl.includes('大帶小') || catLbl.includes('扶持')) cross++;
+        else if (cat === 'sports' || catLbl.includes('運動') || catLbl.includes('風度')) sports++;
+        else if (cat === 'eco' || catLbl.includes('環保') || catLbl.includes('自律')) eco++;
+        else if (cat === 'cheer' || catLbl.includes('歡呼') || catLbl.includes('隊呼')) cheer++;
+      });
+
+      const elCross = document.getElementById('cat-count-cross');
+      const elSports = document.getElementById('cat-count-sports');
+      const elEco = document.getElementById('cat-count-eco');
+      const elCheer = document.getElementById('cat-count-cheer');
+      if (elCross) elCross.innerText = `已累計 ${cross} 次加分`;
+      if (elSports) elSports.innerText = `已累計 ${sports} 次加分`;
+      if (elEco) elEco.innerText = `已累計 ${eco} 次加分`;
+      if (elCheer) elCheer.innerText = `已累計 ${cheer} 次加分`;
+    }
 
     // 輔助函式：安全解析向度名稱與圖示，防範任何 undefined
     function resolveCategoryLabel(item) {
@@ -712,15 +611,11 @@
         const res = await fetch(CLOUD_API_URL);
         const data = await res.json();
         if (data && data.success) {
-          // 1. 同步頂部精神總分（基準 32, 32, 30 + 雲端即時累加）
+          // 1. 同步頂部精神總分（100% 依據試算表真實數據，刪除即扣除，新增即累計）
           if (data.spiritScores) {
-            const gRaw = Number(data.spiritScores.green) || 0;
-            const bRaw = Number(data.spiritScores.blue) || 0;
-            const rRaw = Number(data.spiritScores.red) || 0;
-
-            const g = gRaw >= 30 ? gRaw : (32 + gRaw);
-            const b = bRaw >= 30 ? bRaw : (32 + bRaw);
-            const r = rRaw >= 30 ? rRaw : (30 + rRaw);
+            const g = Number(data.spiritScores.green) || 0;
+            const b = Number(data.spiritScores.blue) || 0;
+            const r = Number(data.spiritScores.red) || 0;
 
             const greenEl = document.getElementById('spirit-green-pts');
             const blueEl = document.getElementById('spirit-blue-pts');
@@ -730,23 +625,20 @@
             if (redEl) redEl.innerText = r;
           }
 
-          // 2. 雲端最新事蹟置頂合併（不沖掉 10 則歷史事蹟）
-          if (Array.isArray(data.stories) && data.stories.length > 0) {
-            // 為雲端故事標記前綴防撞 ID
-            const cloudStories = data.stories.map((s, idx) => ({
+          // 2. 100% 依據試算表更新事蹟日誌牆（試算表刪除即刪除，新增即新增）
+          if (Array.isArray(data.stories)) {
+            STORIES_DATA = data.stories.map((s, idx) => ({
               ...s,
-              id: 'cloud_' + (s.id || idx),
+              id: s.id || idx,
               title: s.title || resolveStoryTitle(s),
               categoryLabel: resolveCategoryLabel(s)
             }));
-
-            // 合併：雲端最新在最上方，基底在後
-            STORIES_DATA = [...cloudStories, ...DEFAULT_STORIES];
             renderStories();
+            updateCategoryCounts();
           }
         }
       } catch (e) {
-        console.log('Using default spirit stories.');
+        console.log('Error fetching spirit stories from sheet:', e);
       }
     }
 

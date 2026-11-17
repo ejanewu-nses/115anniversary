@@ -699,27 +699,27 @@
             </div>
           </div>
           <a href="spirit.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-700 hover:text-indigo-900 bg-white px-3.5 py-1.5 rounded-xl border border-indigo-200 shadow-2xs hover:shadow-xs transition">
-            <span>查看完整事蹟專頁（共 48 則）</span>
+            <span>查看完整事蹟專頁（共 <span id="index-spirit-count">0</span> 則）</span>
             <i class="fa-solid fa-arrow-right"></i>
           </a>
         </div>
 
         <!-- 2 則精選最新暖心事蹟預覽卡片 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div id="index-spirit-preview" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <!-- 事蹟 1 -->
           <div class="p-4 bg-white/95 rounded-2xl border-l-4 border-emerald-500 border-slate-200 shadow-sm space-y-2">
             <div class="flex items-center justify-between">
               <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded-md">
                 🟢 綠隊 +2 分 ｜ 🤝 跨齡扶持
               </span>
-              <span class="text-slate-400 font-mono text-[11px]">12/01 08:35</span>
+              <span class="text-slate-400 font-mono text-[11px]">即時連動</span>
             </div>
             <p class="text-slate-700 font-medium leading-relaxed">
-              低年級慢跑結束後，一年級小生跑完全程有些喘，六年級小隊長主動上前攙扶、遞上溫水並引導至樹下休息，大帶小畫面極為溫暖動人！
+              六年級小隊長主動幫一年級拿外套。
             </p>
             <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-100">
-              <span>見證教師：林立樺老師</span>
-              <span>地點：操場司令台側</span>
+              <span>見證教師：大會裁判</span>
+              <span>地點：操場</span>
             </div>
           </div>
 
@@ -727,16 +727,16 @@
           <div class="p-4 bg-white/95 rounded-2xl border-l-4 border-blue-500 border-slate-200 shadow-sm space-y-2">
             <div class="flex items-center justify-between">
               <span class="px-2 py-0.5 bg-blue-100 text-blue-800 font-bold rounded-md">
-                🔵 藍隊 +2 分 ｜ 🏃 運動家風度
+                🔵 藍隊 +2 分 ｜ 🤝 跨齡扶持
               </span>
-              <span class="text-slate-400 font-mono text-[11px]">11/26 08:38</span>
+              <span class="text-slate-400 font-mono text-[11px]">即時連動</span>
             </div>
             <p class="text-slate-700 font-medium leading-relaxed">
-              躲避球循環賽落後時全隊互相拍肩打氣，賽後全員整齊列隊向對手鞠躬致敬喊「謝謝指教」，贏得全場喝采！
+              六年級小隊長主動幫一年級拿外套。
             </p>
             <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-100">
-              <span>見證教師：黃美雅老師</span>
-              <span>地點：風雨球場</span>
+              <span>見證教師：大會裁判</span>
+              <span>地點：操場</span>
             </div>
           </div>
         </div>
@@ -838,41 +838,23 @@
   <script>
     const CLOUD_API_URL = 'https://script.google.com/macros/s/AKfycbwppBa3j4htWuGBHwvnz4UEuo39GeVyM5-cBrVSkhuq1bshMCAB4HRwIP1Ypdc9XdE7/exec';
 
-    // 紅綠藍三隊戰況長條圖顯示同步
+    // 紅綠藍三隊戰況長條圖顯示同步（100% 依據試算表真實數據）
     async function syncScoreboard() {
-      let greenTotal = 82, blueTotal = 79, redTotal = 78;
-      
-      // 1. 先從本地快取嘗試讀取
-      try {
-        const stored = localStorage.getItem('nanxing_score_data_v5');
-        if (stored) {
-          const d = JSON.parse(stored);
-          const greenSports = (d.runLow?.green||0) + (d.runMid?.green||0) + (d.runHigh?.green||0) + (d.dodge?.green||0) + (d.rainbow?.green||0) + (d.tugLow?.green||0) + (d.tugHigh?.green||0) + (d.relayLow?.green||0) + (d.relayHigh?.green||0);
-          const blueSports = (d.runLow?.blue||0) + (d.runMid?.blue||0) + (d.runHigh?.blue||0) + (d.dodge?.blue||0) + (d.rainbow?.blue||0) + (d.tugLow?.blue||0) + (d.tugHigh?.blue||0) + (d.relayLow?.blue||0) + (d.relayHigh?.blue||0);
-          const redSports = (d.runLow?.red||0) + (d.runMid?.red||0) + (d.runHigh?.red||0) + (d.dodge?.red||0) + (d.rainbow?.red||0) + (d.tugLow?.red||0) + (d.tugHigh?.red||0) + (d.relayLow?.red||0) + (d.relayHigh?.red||0);
+      let greenTotal = 0, blueTotal = 0, redTotal = 0;
 
-          greenTotal = greenSports + (d.spirit?.green || 32);
-          blueTotal = blueSports + (d.spirit?.blue || 32);
-          redTotal = redSports + (d.spirit?.red || 30);
-        }
-      } catch(e) {}
-
-      // 2. 向雲端試算表即時 API 抓取最新戰隊總分（基準 32, 32, 30 + 雲端累計）
+      // 1. 向雲端試算表即時 API 抓取最新戰隊總分與精神事蹟
       try {
         const res = await fetch(CLOUD_API_URL);
         const data = await res.json();
-        if (data && data.success) {
-          const gSpirit = (data.spiritScores?.green >= 30) ? data.spiritScores.green : (32 + (data.spiritScores?.green || 0));
-          const bSpirit = (data.spiritScores?.blue >= 30) ? data.spiritScores.blue : (32 + (data.spiritScores?.blue || 0));
-          const rSpirit = (data.spiritScores?.red >= 30) ? data.spiritScores.red : (30 + (data.spiritScores?.red || 0));
+        if (data && data.success && data.teamTotals) {
+          greenTotal = Number(data.teamTotals.green.total) || 0;
+          blueTotal = Number(data.teamTotals.blue.total) || 0;
+          redTotal = Number(data.teamTotals.red.total) || 0;
 
-          const gSports = (data.teamTotals && data.teamTotals.green && data.teamTotals.green.sports) ? data.teamTotals.green.sports : 50;
-          const bSports = (data.teamTotals && data.teamTotals.blue && data.teamTotals.blue.sports) ? data.teamTotals.blue.sports : 47;
-          const rSports = (data.teamTotals && data.teamTotals.red && data.teamTotals.red.sports) ? data.teamTotals.red.sports : 48;
-
-          greenTotal = gSports + gSpirit;
-          blueTotal = bSports + bSpirit;
-          redTotal = rSports + rSpirit;
+          // 同步首頁精神事蹟預覽卡片
+          if (Array.isArray(data.stories) && data.stories.length > 0) {
+            renderIndexSpiritStories(data.stories);
+          }
         }
       } catch (err) {
         console.log('Using local/default scoreboard.');
@@ -900,6 +882,43 @@
         barRed.style.width = Math.min(100, Math.round((redTotal / (maxVal * 1.1)) * 100)) + '%';
         textRed.innerText = redTotal + ' 分' + (redTotal >= Math.max(greenTotal, blueTotal) ? ' (領先)' : '');
       }
+    }
+
+    // 渲染首頁 2 則最新暖心事蹟預覽卡片
+    function renderIndexSpiritStories(stories) {
+      const container = document.getElementById('index-spirit-preview');
+      const countEl = document.getElementById('index-spirit-count');
+      if (countEl) countEl.innerText = stories.length;
+      if (!container || !stories || stories.length === 0) return;
+
+      const teamColors = {
+        green: { border: 'border-emerald-500', badge: 'bg-emerald-100 text-emerald-800', name: '🟢 綠隊' },
+        blue: { border: 'border-blue-500', badge: 'bg-blue-100 text-blue-800', name: '🔵 藍隊' },
+        red: { border: 'border-rose-500', badge: 'bg-rose-100 text-rose-800', name: '🔴 紅隊' }
+      };
+
+      const top2 = stories.slice(0, 2);
+      container.innerHTML = top2.map(s => {
+        const conf = teamColors[s.team] || teamColors.green;
+        const cat = s.categoryLabel || s.category || '跨齡扶持';
+        return `
+          <div class="p-4 bg-white/95 rounded-2xl border-l-4 ${conf.border} border-slate-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 ${conf.badge} font-bold rounded-md">
+                ${conf.name} +${s.points || 2} 分 ｜ ${cat}
+              </span>
+              <span class="text-slate-400 font-mono text-[11px]">${s.time || ''}</span>
+            </div>
+            <p class="text-slate-700 font-medium leading-relaxed">
+              ${s.story || ''}
+            </p>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-100">
+              <span>見證教師：${s.author || '大會裁判'}</span>
+              <span>地點：${s.place || '操場'}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     document.addEventListener('DOMContentLoaded', () => {

@@ -913,11 +913,11 @@
       tugHigh: { red: 8, green: 6, blue: 4 },   // 四五六年級組拔河得分（參賽49人）
       relayLow: { blue: 12, green: 10, red: 8 },// 一二三年級組紅綠藍大隊接力（參賽48人）
       relayHigh: { green: 12, red: 10, blue: 8 }, // 四五六年級組紅綠藍大隊接力（參賽54人）
-      spirit: { green: 32, blue: 32, red: 30 }  // 互助合作精神總錦標累積分
+      spirit: { green: 0, blue: 0, red: 0 }  // 100% 讀取試算表真實累積分
     };
 
     function loadScores() {
-      const stored = localStorage.getItem('nanxing_score_data_v5');
+      const stored = localStorage.getItem('nanxing_score_data_v6');
       if (stored) {
         try { return JSON.parse(stored); } catch(e) {}
       }
@@ -925,7 +925,7 @@
     }
 
     function saveScoresToStorage(data) {
-      localStorage.setItem('nanxing_score_data_v5', JSON.stringify(data));
+      localStorage.setItem('nanxing_score_data_v6', JSON.stringify(data));
     }
 
     // 雲端試算表雙向即時同步
@@ -951,16 +951,12 @@
           });
         }
 
-        // 2. 同步精神加分 (spiritScores) - 基準 32, 32, 30 + 雲端即時累加
+        // 2. 同步精神加分 (spiritScores) - 100% 依據試算表真實累計（刪除即扣除，新增即累計）
         if (data.spiritScores) {
-          const gRaw = Number(data.spiritScores.green) || 0;
-          const bRaw = Number(data.spiritScores.blue) || 0;
-          const rRaw = Number(data.spiritScores.red) || 0;
-
           currentData.spirit = {
-            green: gRaw >= 30 ? gRaw : (32 + gRaw),
-            blue: bRaw >= 30 ? bRaw : (32 + bRaw),
-            red: rRaw >= 30 ? rRaw : (30 + rRaw)
+            green: Number(data.spiritScores.green) || 0,
+            blue: Number(data.spiritScores.blue) || 0,
+            red: Number(data.spiritScores.red) || 0
           };
         }
 
