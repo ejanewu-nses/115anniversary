@@ -1,0 +1,695 @@
+[
+  {
+    "id": 1,
+    "grade": 1,
+    "class": "甲",
+    "name": "黃修齊",
+    "team": "blue"
+  },
+  {
+    "id": 2,
+    "grade": 1,
+    "class": "甲",
+    "name": "林宇宸",
+    "team": "blue"
+  },
+  {
+    "id": 3,
+    "grade": 1,
+    "class": "甲",
+    "name": "黃羿暘",
+    "team": "blue"
+  },
+  {
+    "id": 4,
+    "grade": 1,
+    "class": "甲",
+    "name": "蔡孟言",
+    "team": "red"
+  },
+  {
+    "id": 5,
+    "grade": 1,
+    "class": "甲",
+    "name": "蔡昕佳",
+    "team": "green"
+  },
+  {
+    "id": 6,
+    "grade": 1,
+    "class": "甲",
+    "name": "郭于瑈",
+    "team": "blue"
+  },
+  {
+    "id": 7,
+    "grade": 1,
+    "class": "甲",
+    "name": "黃卉丞",
+    "team": "red"
+  },
+  {
+    "id": 8,
+    "grade": 1,
+    "class": "甲",
+    "name": "林羽彤",
+    "team": "green"
+  },
+  {
+    "id": 9,
+    "grade": 1,
+    "class": "甲",
+    "name": "黃妙金",
+    "team": "blue"
+  },
+  {
+    "id": 10,
+    "grade": 1,
+    "class": "甲",
+    "name": "黃羽晨",
+    "team": "red"
+  },
+  {
+    "id": 11,
+    "grade": 1,
+    "class": "甲",
+    "name": "郭子綺",
+    "team": "green"
+  },
+  {
+    "id": 12,
+    "grade": 1,
+    "class": "甲",
+    "name": "施語凡",
+    "team": "blue"
+  },
+  {
+    "id": 13,
+    "grade": 1,
+    "class": "甲",
+    "name": "黎宛潔",
+    "team": "red"
+  },
+  {
+    "id": 14,
+    "grade": 2,
+    "class": "甲",
+    "name": "黃建霆",
+    "team": "red"
+  },
+  {
+    "id": 15,
+    "grade": 2,
+    "class": "甲",
+    "name": "黃世瑋",
+    "team": "green"
+  },
+  {
+    "id": 16,
+    "grade": 2,
+    "class": "甲",
+    "name": "曾紹愷",
+    "team": "blue"
+  },
+  {
+    "id": 17,
+    "grade": 2,
+    "class": "甲",
+    "name": "邱恩俊",
+    "team": "red"
+  },
+  {
+    "id": 18,
+    "grade": 2,
+    "class": "甲",
+    "name": "吳楷鈞",
+    "team": "green"
+  },
+  {
+    "id": 19,
+    "grade": 2,
+    "class": "甲",
+    "name": "邱士軒",
+    "team": "blue"
+  },
+  {
+    "id": 20,
+    "grade": 2,
+    "class": "甲",
+    "name": "顏淓鋙",
+    "team": "red"
+  },
+  {
+    "id": 21,
+    "grade": 2,
+    "class": "甲",
+    "name": "楊佳瑜",
+    "team": "green"
+  },
+  {
+    "id": 22,
+    "grade": 2,
+    "class": "甲",
+    "name": "樊沛恩",
+    "team": "blue"
+  },
+  {
+    "id": 23,
+    "grade": 2,
+    "class": "甲",
+    "name": "蘇潁心",
+    "team": "red"
+  },
+  {
+    "id": 24,
+    "grade": 2,
+    "class": "甲",
+    "name": "楊珍恬",
+    "team": "green"
+  },
+  {
+    "id": 25,
+    "grade": 2,
+    "class": "甲",
+    "name": "黃姵潔",
+    "team": "blue"
+  },
+  {
+    "id": 26,
+    "grade": 2,
+    "class": "甲",
+    "name": "劉恩語",
+    "team": "red"
+  },
+  {
+    "id": 27,
+    "grade": 2,
+    "class": "甲",
+    "name": "黃詩柔",
+    "team": "green"
+  },
+  {
+    "id": 28,
+    "grade": 2,
+    "class": "甲",
+    "name": "郭沛貽",
+    "team": "blue"
+  },
+  {
+    "id": 29,
+    "grade": 2,
+    "class": "甲",
+    "name": "蔡理璇",
+    "team": "red"
+  },
+  {
+    "id": 30,
+    "grade": 2,
+    "class": "甲",
+    "name": "張巧沛",
+    "team": "green"
+  },
+  {
+    "id": 31,
+    "grade": 2,
+    "class": "甲",
+    "name": "柯允菲",
+    "team": "blue"
+  },
+  {
+    "id": 32,
+    "grade": 3,
+    "class": "甲",
+    "name": "林進陞",
+    "team": "red"
+  },
+  {
+    "id": 33,
+    "grade": 3,
+    "class": "甲",
+    "name": "黃柏嘉",
+    "team": "blue"
+  },
+  {
+    "id": 34,
+    "grade": 3,
+    "class": "甲",
+    "name": "陳睿謙",
+    "team": "blue"
+  },
+  {
+    "id": 35,
+    "grade": 3,
+    "class": "甲",
+    "name": "施慎和",
+    "team": "red"
+  },
+  {
+    "id": 36,
+    "grade": 3,
+    "class": "甲",
+    "name": "葉涅山",
+    "team": "green"
+  },
+  {
+    "id": 37,
+    "grade": 3,
+    "class": "甲",
+    "name": "黃邦睿",
+    "team": "blue"
+  },
+  {
+    "id": 38,
+    "grade": 3,
+    "class": "甲",
+    "name": "李宇樂",
+    "team": "red"
+  },
+  {
+    "id": 39,
+    "grade": 3,
+    "class": "甲",
+    "name": "郭子翔",
+    "team": "green"
+  },
+  {
+    "id": 40,
+    "grade": 3,
+    "class": "甲",
+    "name": "邱亞忻",
+    "team": "green"
+  },
+  {
+    "id": 41,
+    "grade": 3,
+    "class": "甲",
+    "name": "蔡喬捷",
+    "team": "red"
+  },
+  {
+    "id": 42,
+    "grade": 3,
+    "class": "甲",
+    "name": "林姿妤",
+    "team": "green"
+  },
+  {
+    "id": 43,
+    "grade": 3,
+    "class": "甲",
+    "name": "郭俞岑",
+    "team": "blue"
+  },
+  {
+    "id": 44,
+    "grade": 3,
+    "class": "甲",
+    "name": "葉芷安",
+    "team": "red"
+  },
+  {
+    "id": 45,
+    "grade": 3,
+    "class": "甲",
+    "name": "王畇霏",
+    "team": "green"
+  },
+  {
+    "id": 46,
+    "grade": 4,
+    "class": "甲",
+    "name": "黃祐嘉",
+    "team": "red"
+  },
+  {
+    "id": 47,
+    "grade": 4,
+    "class": "甲",
+    "name": "陳敬倫",
+    "team": "blue"
+  },
+  {
+    "id": 48,
+    "grade": 4,
+    "class": "甲",
+    "name": "邱弘富",
+    "team": "blue"
+  },
+  {
+    "id": 49,
+    "grade": 4,
+    "class": "甲",
+    "name": "黃凱崙",
+    "team": "red"
+  },
+  {
+    "id": 50,
+    "grade": 4,
+    "class": "甲",
+    "name": "王宣錡",
+    "team": "green"
+  },
+  {
+    "id": 51,
+    "grade": 4,
+    "class": "甲",
+    "name": "黃震興",
+    "team": "blue"
+  },
+  {
+    "id": 52,
+    "grade": 4,
+    "class": "甲",
+    "name": "陳伯瑞",
+    "team": "red"
+  },
+  {
+    "id": 53,
+    "grade": 4,
+    "class": "甲",
+    "name": "吳家樂",
+    "team": "green"
+  },
+  {
+    "id": 54,
+    "grade": 4,
+    "class": "甲",
+    "name": "林雨晴",
+    "team": "blue"
+  },
+  {
+    "id": 55,
+    "grade": 4,
+    "class": "甲",
+    "name": "蔡依璇",
+    "team": "red"
+  },
+  {
+    "id": 56,
+    "grade": 4,
+    "class": "甲",
+    "name": "翁梓綝",
+    "team": "green"
+  },
+  {
+    "id": 57,
+    "grade": 4,
+    "class": "甲",
+    "name": "陳品彤",
+    "team": "blue"
+  },
+  {
+    "id": 58,
+    "grade": 4,
+    "class": "甲",
+    "name": "蘇亮伃",
+    "team": "red"
+  },
+  {
+    "id": 59,
+    "grade": 4,
+    "class": "甲",
+    "name": "方婕薰",
+    "team": "green"
+  },
+  {
+    "id": 60,
+    "grade": 4,
+    "class": "甲",
+    "name": "黃晨瑄",
+    "team": "blue"
+  },
+  {
+    "id": 61,
+    "grade": 4,
+    "class": "甲",
+    "name": "邱子瑜",
+    "team": "red"
+  },
+  {
+    "id": 62,
+    "grade": 4,
+    "class": "甲",
+    "name": "楊佳恩",
+    "team": "green"
+  },
+  {
+    "id": 63,
+    "grade": 4,
+    "class": "甲",
+    "name": "陳采緹",
+    "team": "green"
+  },
+  {
+    "id": 64,
+    "grade": 5,
+    "class": "甲",
+    "name": "陳致愷",
+    "team": "red"
+  },
+  {
+    "id": 65,
+    "grade": 5,
+    "class": "甲",
+    "name": "黃鈞瑋",
+    "team": "green"
+  },
+  {
+    "id": 66,
+    "grade": 5,
+    "class": "甲",
+    "name": "黃俊佑",
+    "team": "blue"
+  },
+  {
+    "id": 67,
+    "grade": 5,
+    "class": "甲",
+    "name": "莊迪元",
+    "team": "red"
+  },
+  {
+    "id": 68,
+    "grade": 5,
+    "class": "甲",
+    "name": "夘嵊彬",
+    "team": "green"
+  },
+  {
+    "id": 69,
+    "grade": 5,
+    "class": "甲",
+    "name": "吳羿辰",
+    "team": "blue"
+  },
+  {
+    "id": 70,
+    "grade": 5,
+    "class": "甲",
+    "name": "王浩宸",
+    "team": "red"
+  },
+  {
+    "id": 71,
+    "grade": 5,
+    "class": "甲",
+    "name": "陳奕辰",
+    "team": "green"
+  },
+  {
+    "id": 72,
+    "grade": 5,
+    "class": "甲",
+    "name": "陳浩銘",
+    "team": "blue"
+  },
+  {
+    "id": 73,
+    "grade": 5,
+    "class": "甲",
+    "name": "王威霖",
+    "team": "red"
+  },
+  {
+    "id": 74,
+    "grade": 5,
+    "class": "甲",
+    "name": "劉濬賓",
+    "team": "green"
+  },
+  {
+    "id": 75,
+    "grade": 5,
+    "class": "甲",
+    "name": "林浩哲",
+    "team": "blue"
+  },
+  {
+    "id": 76,
+    "grade": 5,
+    "class": "甲",
+    "name": "蔡岳辰",
+    "team": "red"
+  },
+  {
+    "id": 77,
+    "grade": 5,
+    "class": "甲",
+    "name": "黃晨涵",
+    "team": "green"
+  },
+  {
+    "id": 78,
+    "grade": 5,
+    "class": "甲",
+    "name": "李姿錡",
+    "team": "blue"
+  },
+  {
+    "id": 79,
+    "grade": 5,
+    "class": "甲",
+    "name": "黃宥榛",
+    "team": "red"
+  },
+  {
+    "id": 80,
+    "grade": 5,
+    "class": "甲",
+    "name": "李晨馨",
+    "team": "green"
+  },
+  {
+    "id": 81,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃振宸",
+    "team": "red"
+  },
+  {
+    "id": 82,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃明哲",
+    "team": "green"
+  },
+  {
+    "id": 83,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃睿澄",
+    "team": "blue"
+  },
+  {
+    "id": 84,
+    "grade": 6,
+    "class": "甲",
+    "name": "郭韋辰",
+    "team": "red"
+  },
+  {
+    "id": 85,
+    "grade": 6,
+    "class": "甲",
+    "name": "方晨宇",
+    "team": "green"
+  },
+  {
+    "id": 86,
+    "grade": 6,
+    "class": "甲",
+    "name": "陳駿鈜",
+    "team": "blue"
+  },
+  {
+    "id": 87,
+    "grade": 6,
+    "class": "甲",
+    "name": "施竑群",
+    "team": "green"
+  },
+  {
+    "id": 88,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃若驊",
+    "team": "green"
+  },
+  {
+    "id": 89,
+    "grade": 6,
+    "class": "甲",
+    "name": "李順興",
+    "team": "blue"
+  },
+  {
+    "id": 90,
+    "grade": 6,
+    "class": "甲",
+    "name": "李帷雍",
+    "team": "red"
+  },
+  {
+    "id": 91,
+    "grade": 6,
+    "class": "甲",
+    "name": "吳宜樂",
+    "team": "green"
+  },
+  {
+    "id": 92,
+    "grade": 6,
+    "class": "甲",
+    "name": "顏儀芳",
+    "team": "blue"
+  },
+  {
+    "id": 93,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃品璇",
+    "team": "red"
+  },
+  {
+    "id": 94,
+    "grade": 6,
+    "class": "甲",
+    "name": "陳品甯",
+    "team": "green"
+  },
+  {
+    "id": 95,
+    "grade": 6,
+    "class": "甲",
+    "name": "林勤容",
+    "team": "blue"
+  },
+  {
+    "id": 96,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃婕洺",
+    "team": "red"
+  },
+  {
+    "id": 97,
+    "grade": 6,
+    "class": "甲",
+    "name": "羅苡芸",
+    "team": "green"
+  },
+  {
+    "id": 98,
+    "grade": 6,
+    "class": "甲",
+    "name": "劉雯玲",
+    "team": "blue"
+  },
+  {
+    "id": 99,
+    "grade": 6,
+    "class": "甲",
+    "name": "戴瑋辰",
+    "team": "red"
+  }
+]
