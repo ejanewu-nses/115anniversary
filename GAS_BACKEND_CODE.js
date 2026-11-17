@@ -259,7 +259,7 @@ function doPost(e) {
     const parsed = callGeminiParser(userPrompt, userId);
 
     if (!parsed || !parsed.intent) {
-      replyLineMessage(replyToken, '收到訊息，但未能清楚辨識加分意圖。\n建議範例：\n「綠隊精神加分2分，六年級主動牽一年級去檢錄」\n「高年級男生100m第一名陳小明、第二名林大華、第三名張小傑」');
+      replyLineMessage(replyToken, '收到訊息，但未能清楚辨識意圖。\n建議範例：\n【精神加分】「綠隊精神加分2分，六年級主動牽一年級去檢錄」\n【賽事報分】「拔河低年級綠隊8分、藍隊6分、紅隊4分」\n【慢跑人數】「慢跑低年級藍隊7人、綠隊6人、紅隊5人」\n【短跑名次】「高年級男生100m第一名陳小明、第二名林大華、第三名張小傑」');
       return ContentService.createTextOutput('OK');
     }
 
@@ -324,8 +324,71 @@ function fastLocalParse(text) {
     };
   }
 
-  // B. 個人短跑決賽名次匹配
-  if (/短跑|60m|80m|100m|第一名|金牌|決賽/.test(text)) {
+  // B. 團體賽事與慢跑項目匹配（支援直接報分/人數 或 名次登記，優先於個人短跑）
+  if (/躲避球|拔河|接力|趣味競賽|蟲蟲危機|彩虹危機|慢跑|大隊接力/.test(text)) {
+    let event = 'dodge';
+    if (/慢跑/.test(text)) {
+      if (/低|[一二12]年級/.test(text)) event = 'runLow';
+      else if (/中|[三四34]年級/.test(text)) event = 'runMid';
+      else if (/高|[五六56]年級/.test(text)) event = 'runHigh';
+      else event = 'runLow';
+    } else if (/拔河/.test(text)) {
+      if (/高|[四五六456]年級/.test(text)) event = 'tugHigh';
+      else event = 'tugLow';
+    } else if (/接力/.test(text)) {
+      if (/高|[四五六456]年級/.test(text)) event = 'relayHigh';
+      else event = 'relayLow';
+    } else if (/蟲蟲|彩虹|趣味/.test(text)) {
+      event = 'rainbow';
+    } else if (/躲避球/.test(text)) {
+      event = 'dodge';
+    }
+
+    const isHeadcount = /人/.test(text) || event.startsWith('run');
+
+    // 檢查是否有直接報得分或人數（例如：綠隊8分、藍隊6分、紅隊4分 或 藍7人、綠6人、紅5人）
+    const greenM = text.match(/綠(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)?/);
+    const blueM = text.match(/藍(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)?/);
+    const redM = text.match(/紅(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)?/);
+
+    if (greenM || blueM || redM) {
+      return {
+        intent: 'UPDATE_EVENT',
+        event: event,
+        scores: {
+          green: greenM ? parseInt(greenM[1], 10) : null,
+          blue: blueM ? parseInt(blueM[1], 10) : null,
+          red: redM ? parseInt(redM[1], 10) : null
+        },
+        isHeadcount: isHeadcount
+      };
+    }
+
+    // 檢查名次模式（例如：第一名綠隊、第二名藍隊、第三名紅隊）
+    const parseTeam = (str) => {
+      if (/綠/.test(str)) return 'green';
+      if (/藍/.test(str)) return 'blue';
+      if (/紅/.test(str)) return 'red';
+      return 'green';
+    };
+
+    const m1 = text.match(/(?:第一名|冠軍)[：:\s]*([^\s,，、]+)/);
+    const m2 = text.match(/(?:第二名|亞軍)[：:\s]*([^\s,，、]+)/);
+    const m3 = text.match(/(?:第三名|季軍)[：:\s]*([^\s,，、]+)/);
+
+    if (m1) {
+      return {
+        intent: 'UPDATE_EVENT',
+        event: event,
+        rank1: parseTeam(m1[1]),
+        rank2: m2 ? parseTeam(m2[1]) : 'blue',
+        rank3: m3 ? parseTeam(m3[1]) : 'red'
+      };
+    }
+  }
+
+  // C. 個人短跑決賽名次匹配
+  if (/短跑|60m|80m|100m|第一名|金牌|決賽|男生組|女生組/.test(text)) {
     let group = 'highBoy';
     if (/低.*男|1.*男|2.*男/.test(text)) group = 'lowBoy';
     else if (/低.*女|1.*女|2.*女/.test(text)) group = 'lowGirl';
@@ -345,38 +408,6 @@ function fastLocalParse(text) {
         gold: m1 ? m1[1] : '待定',
         silver: m2 ? m2[1] : '待定',
         bronze: m3 ? m3[1] : '待定'
-      };
-    }
-  }
-
-  // C. 團體賽事名次得分匹配
-  if (/躲避球|拔河|接力|趣味競賽|蟲蟲危機|彩虹危機/.test(text)) {
-    let event = 'dodge';
-    if (/躲避球/.test(text)) event = 'dodge';
-    else if (/拔河.*低|低.*拔河/.test(text)) event = 'tugLow';
-    else if (/拔河.*高|高.*拔河/.test(text)) event = 'tugHigh';
-    else if (/接力.*低|低.*接力/.test(text)) event = 'relayLow';
-    else if (/接力.*高|高.*接力/.test(text)) event = 'relayHigh';
-    else if (/蟲蟲|彩虹|趣味/.test(text)) event = 'rainbow';
-
-    const parseTeam = (str) => {
-      if (/綠/.test(str)) return 'green';
-      if (/藍/.test(str)) return 'blue';
-      if (/紅/.test(str)) return 'red';
-      return 'green';
-    };
-
-    const m1 = text.match(/(?:第一名|冠軍)[：:\s]*([^\s,，、]+)/);
-    const m2 = text.match(/(?:第二名|亞軍)[：:\s]*([^\s,，、]+)/);
-    const m3 = text.match(/(?:第三名|季軍)[：:\s]*([^\s,，、]+)/);
-
-    if (m1) {
-      return {
-        intent: 'UPDATE_EVENT',
-        event: event,
-        rank1: parseTeam(m1[1]),
-        rank2: m2 ? parseTeam(m2[1]) : 'blue',
-        rank3: m3 ? parseTeam(m3[1]) : 'red'
       };
     }
   }
@@ -427,8 +458,20 @@ function callGeminiParser(userText, userId) {
 - intent: "UPDATE_SPRINT" (例如：高年級男生組第一名六年級陳小明、第二名林大華、第三名張小傑)
   輸出欄位: { "intent": "UPDATE_SPRINT", "group": "lowBoy"|"lowGirl"|"midBoy"|"midGirl"|"highBoy"|"highGirl", "gold": "姓名", "silver": "姓名", "bronze": "姓名" }
 
-- intent: "UPDATE_EVENT" (例如：拔河低年級組第一名綠隊、第二名紅隊、第三名藍隊)
-  輸出欄位: { "intent": "UPDATE_EVENT", "event": "dodge"|"tugLow"|"tugHigh"|"relayLow"|"relayHigh", "rank1": "green"|"blue"|"red", "rank2": "green"|"blue"|"red", "rank3": "green"|"blue"|"red" }
+- intent: "UPDATE_EVENT" (例如：拔河低年級組綠隊8分、藍隊6分、紅隊4分 或 慢跑低年級藍隊7人、綠隊6人、紅隊5人 或 躲避球第一名綠隊、第二名紅隊、第三名藍隊)
+  賽事代碼 event 必須為下列之一：
+  - 'dodge' (熱血美式躲避球)
+  - 'runLow' (校園慢跑低年級組)
+  - 'runMid' (校園慢跑中年級組)
+  - 'runHigh' (校園慢跑高年級組)
+  - 'tugLow' (拔河賽一二三年級組)
+  - 'tugHigh' (拔河賽四五六年級組)
+  - 'rainbow' (趣味競賽蟲蟲危機)
+  - 'relayLow' (大隊接力一二三年級組)
+  - 'relayHigh' (大隊接力四五六年級組)
+  輸出欄位可為：
+  - 直接報得分或人數：{ "intent": "UPDATE_EVENT", "event": "tugLow", "scores": { "green": 8, "blue": 6, "red": 4 }, "isHeadcount": false }
+  - 報名次：{ "intent": "UPDATE_EVENT", "event": "dodge", "rank1": "green", "rank2": "red", "rank3": "blue" }
 
 必須只回傳合法的純 JSON，絕不加 markdown 標籤（如 \`\`\`json ）。
 `;
@@ -582,41 +625,78 @@ function recordEventScores(p) {
   const sheet = ss.getSheetByName(CONFIG.SHEET_NAMES.EVENTS);
   const data = sheet.getDataRange().getValues();
 
-  const isTug = (p.event === 'tugLow' || p.event === 'tugHigh');
-  const pts1 = isTug ? 8 : 12;
-  const pts2 = isTug ? 6 : (p.event.includes('relay') ? 10 : 8);
-  const pts3 = isTug ? 4 : (p.event.includes('relay') ? 8 : 4);
-
-  const scores = { green: 0, blue: 0, red: 0 };
-  if (p.rank1) scores[p.rank1] = pts1;
-  if (p.rank2) scores[p.rank2] = pts2;
-  if (p.rank3) scores[p.rank3] = pts3;
-
   const teamNameMap = { green: '綠隊', blue: '藍隊', red: '紅隊' };
-
   let eventName = p.event;
+  let targetRow = -1;
+
   for (let i = 1; i < data.length; i++) {
     if (String(data[i][2]).trim() === p.event) {
+      targetRow = i + 1;
       eventName = data[i][1];
-      sheet.getRange(i + 1, 4).setValue(scores.green);
-      sheet.getRange(i + 1, 5).setValue(scores.blue);
-      sheet.getRange(i + 1, 6).setValue(scores.red);
-      const memo = `冠軍${teamNameMap[p.rank1]}(+${pts1})、亞軍${teamNameMap[p.rank2]}(+${pts2})、季軍${teamNameMap[p.rank3]}(+${pts3})`;
-      sheet.getRange(i + 1, 7).setValue(memo);
-      sheet.getRange(i + 1, 8).setValue('裁判登記');
-      sheet.getRange(i + 1, 9).setValue(new Date());
       break;
     }
   }
 
-  return `🏆【賽事項目得分已更新！】\n` +
+  if (targetRow === -1) {
+    return `⚠️ 找不到代碼為 ${p.event} 的賽事項目。請確認項目名稱。`;
+  }
+
+  // 取得原列資料
+  const currentRowData = sheet.getRange(targetRow, 1, 1, 9).getValues()[0];
+  let curGreen = Number(currentRowData[3]) || 0;
+  let curBlue = Number(currentRowData[4]) || 0;
+  let curRed = Number(currentRowData[5]) || 0;
+
+  let newGreen = curGreen;
+  let newBlue = curBlue;
+  let newRed = curRed;
+  let memo = '';
+  let detailsText = '';
+
+  // 模式 A：直接指定三隊得分或達標人數 (p.scores)
+  if (p.scores) {
+    if (p.scores.green !== undefined && p.scores.green !== null) newGreen = Number(p.scores.green);
+    if (p.scores.blue !== undefined && p.scores.blue !== null) newBlue = Number(p.scores.blue);
+    if (p.scores.red !== undefined && p.scores.red !== null) newRed = Number(p.scores.red);
+
+    const unit = p.isHeadcount ? '人' : '分';
+    memo = `綠隊 ${newGreen} ${unit}、藍隊 ${newBlue} ${unit}、紅隊 ${newRed} ${unit}`;
+    detailsText = `🟢 綠隊：${newGreen} ${unit}\n🔵 藍隊：${newBlue} ${unit}\n🔴 紅隊：${newRed} ${unit}`;
+  } 
+  // 模式 B：以第一名、第二名、第三名名次登記 (p.rank1)
+  else if (p.rank1) {
+    const isTug = (p.event === 'tugLow' || p.event === 'tugHigh');
+    const pts1 = isTug ? 8 : 12;
+    const pts2 = isTug ? 6 : (p.event.includes('relay') ? 10 : 8);
+    const pts3 = isTug ? 4 : (p.event.includes('relay') ? 8 : 4);
+
+    const scores = { green: 0, blue: 0, red: 0 };
+    if (p.rank1) scores[p.rank1] = pts1;
+    if (p.rank2) scores[p.rank2] = pts2;
+    if (p.rank3) scores[p.rank3] = pts3;
+
+    newGreen = scores.green;
+    newBlue = scores.blue;
+    newRed = scores.red;
+    memo = `冠軍${teamNameMap[p.rank1]}(+${pts1})、亞軍${teamNameMap[p.rank2] || '藍隊'}(+${pts2})、季軍${teamNameMap[p.rank3] || '紅隊'}(+${pts3})`;
+    detailsText = `🥇 冠軍：${teamNameMap[p.rank1]} (+${pts1}分)\n🥈 亞軍：${teamNameMap[p.rank2] || '藍隊'} (+${pts2}分)\n🥉 季軍：${teamNameMap[p.rank3] || '紅隊'} (+${pts3}分)`;
+  }
+
+  // 寫入 Google 試算表 D, E, F, G, H, I 欄
+  sheet.getRange(targetRow, 4).setValue(newGreen);
+  sheet.getRange(targetRow, 5).setValue(newBlue);
+  sheet.getRange(targetRow, 6).setValue(newRed);
+  sheet.getRange(targetRow, 7).setValue(memo);
+  sheet.getRange(targetRow, 8).setValue(p.author || '裁判登記 (LINE)');
+  sheet.getRange(targetRow, 9).setValue(new Date());
+
+  return `🏆【賽事項目成績已成功登錄！】\n` +
          `━━━━━━━━━━━━━━\n` +
          `賽事：${eventName}\n` +
-         `🥇 冠軍：${teamNameMap[p.rank1]} (+${pts1}分)\n` +
-         `🥈 亞軍：${teamNameMap[p.rank2]} (+${pts2}分)\n` +
-         `🥉 季軍：${teamNameMap[p.rank3]} (+${pts3}分)\n` +
+         `${detailsText}\n` +
+         `備註：${memo}\n` +
          `━━━━━━━━━━━━━━\n` +
-         `💡 官網首頁與成績公告榜戰隊總積分已即時累算！`;
+         `💡 雲端試算表與官網戰隊總積分榜已即時同步更新！`;
 }
 
 /**
