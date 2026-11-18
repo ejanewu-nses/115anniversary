@@ -90,30 +90,30 @@
     }
 
     /* 左右雙翼模式與上下模式切換樣式 */
-    .layout-wings #wings-left,
-    .layout-wings #wings-right {
+    body.layout-wings #wings-left,
+    body.layout-wings #wings-right {
       display: flex !important;
     }
-    .layout-wings #classic-bottom {
+    body.layout-wings #classic-bottom {
       display: none !important;
     }
-    .layout-wings #stage-wrapper {
-      max-width: 48rem;
+    body.layout-wings #stage-wrapper {
+      max-width: 52rem;
     }
 
-    .layout-classic #wings-left,
-    .layout-classic #wings-right {
+    body.layout-classic #wings-left,
+    body.layout-classic #wings-right {
       display: none !important;
     }
-    .layout-classic #classic-bottom {
+    body.layout-classic #classic-bottom {
       display: block !important;
     }
-    .layout-classic #stage-wrapper {
+    body.layout-classic #stage-wrapper {
       max-width: 40rem;
     }
   </style>
 </head>
-<body class="h-screen overflow-hidden flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
+<body class="layout-wings h-screen overflow-hidden flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
 
   <!-- 頂部魔法控制列 -->
   <header class="w-full h-14 border-b border-amber-900/40 bg-slate-950/85 backdrop-blur-md z-40 px-3 sm:px-6 flex items-center justify-between flex-shrink-0">
@@ -377,7 +377,7 @@
   </div>
 
   <!-- ==================== 經典模式底部三大席位長桌 (在經典上下視圖時顯示，高度緊湊保證100%同屏) ==================== -->
-  <footer id="classic-bottom" class="w-full bg-slate-950/95 border-t border-slate-800 p-2 sm:p-2.5 z-30 shadow-2xl backdrop-blur-md flex-shrink-0">
+  <footer id="classic-bottom" class="w-full bg-slate-950/95 border-t border-slate-800 p-2 sm:p-2.5 z-30 shadow-2xl backdrop-blur-md flex-shrink-0" style="display: none;">
     <div class="max-w-7xl mx-auto">
       <div class="flex items-center justify-between mb-1.5 px-1">
         <div class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
@@ -1413,12 +1413,34 @@
 
     function applyLayoutMode() {
       const container = document.getElementById('app-container');
+      const classicBottom = document.getElementById('classic-bottom');
+      const wingsLeft = document.getElementById('wings-left');
+      const wingsRight = document.getElementById('wings-right');
       const label = document.getElementById('layout-toggle-label');
+
       if (currentLayout === 'wings') {
-        container.className = 'layout-wings flex-1 flex overflow-hidden min-h-0 w-full relative justify-between items-stretch';
+        document.body.classList.remove('layout-classic');
+        document.body.classList.add('layout-wings');
+        if (container) {
+          container.className = 'flex-1 flex overflow-hidden min-h-0 w-full relative justify-between items-stretch';
+        }
+        if (wingsLeft) wingsLeft.style.display = 'flex';
+        if (wingsRight) wingsRight.style.display = 'flex';
+        if (classicBottom) {
+          classicBottom.style.display = 'none';
+        }
         if (label) label.textContent = '劇院雙翼視圖';
       } else {
-        container.className = 'layout-classic flex-1 flex flex-col overflow-hidden min-h-0 w-full relative justify-between items-center';
+        document.body.classList.remove('layout-wings');
+        document.body.classList.add('layout-classic');
+        if (container) {
+          container.className = 'flex-1 flex flex-col overflow-hidden min-h-0 w-full relative justify-between items-center';
+        }
+        if (wingsLeft) wingsLeft.style.display = 'none';
+        if (wingsRight) wingsRight.style.display = 'none';
+        if (classicBottom) {
+          classicBottom.style.display = 'block';
+        }
         if (label) label.textContent = '經典上下視圖';
       }
       // 重新捲動至最新名單
