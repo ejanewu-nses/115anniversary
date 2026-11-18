@@ -423,8 +423,8 @@
               </svg>
             </div>
 
-            <!-- 3. 中景：靈動流體粒子火焰 Canvas (位於杯後壁與杯前壁之間，真正從聖火杯內部向上燃燒竄出！) -->
-            <canvas id="sports-flame-canvas" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 15;"></canvas>
+            <!-- 3. 中景：靈動流體粒子火焰 Canvas (向上大幅延伸 230% 充足高度，火舌與光芒直衝雲霄絕不截斷) -->
+            <canvas id="sports-flame-canvas" class="absolute pointer-events-none" style="bottom: 0; left: 50%; transform: translateX(-50%); width: 140%; height: 230%; z-index: 15;"></canvas>
 
             <!-- 4. 前景：典雅運動聖火金盃本體與前唇 (Front Cauldron & Nanxing Crest - 遮擋火焰下半部，宛如火焰在金盃內躍動) -->
             <div id="goblet-front" class="absolute bottom-1 w-44 sm:w-52 xl:w-56 transition-all duration-300 pointer-events-none filter drop-shadow(0 8px 16px rgba(0,0,0,0.8))" style="z-index: 25;">
@@ -1726,12 +1726,22 @@
       resize() {
         if (!this.canvas) return;
         const rect = this.canvas.getBoundingClientRect();
-        const w = rect.width > 50 ? rect.width : 280;
-        const h = rect.height > 50 ? rect.height : 240;
+        const w = rect.width > 50 ? rect.width : 360;
+        const h = rect.height > 50 ? rect.height : 480;
         this.canvas.width = w;
         this.canvas.height = h;
         this.cx = w / 2;
-        this.baseY = h * 0.58; // 精確對準聖火盃口內部中心 (前唇與後唇之間深處)
+
+        // 精準動態偵測金盃杯口在 Canvas 內的絕對垂直座標
+        const frontBowl = document.getElementById('goblet-front');
+        if (frontBowl) {
+          const bowlRect = frontBowl.getBoundingClientRect();
+          // 杯口中心位於金盃頂部往下 32/120 處
+          const rimY = (bowlRect.top - rect.top) + (bowlRect.height * (32 / 120));
+          this.baseY = Math.round(rimY);
+        } else {
+          this.baseY = Math.round(h * 0.72);
+        }
       }
 
       setMode(mode, team = 'gold') {
@@ -1846,6 +1856,12 @@
         for (let p of this.particles) {
           const progress = 1 - (p.life / p.maxLife);
           const rad = Math.max(1, p.size);
+
+          // 頂端柔和羽化保護：即使極少數粒子飛騰至畫布極高處，也以自然漸隱消散於空中，徹底告別硬切線！
+          const topFade = Math.max(0, Math.min(1, p.y / 50));
+          if (topFade <= 0.01) continue;
+          ctx.globalAlpha = topFade;
+
           const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
 
           if (progress < 0.22) {
@@ -1870,8 +1886,10 @@
 
         // 3. 繪製靈動飛舞火星 (Dancing Embers)
         for (let e of this.embers) {
+          const topFade = Math.max(0, Math.min(1, e.y / 35));
+          if (topFade <= 0.01) continue;
           ctx.fillStyle = colors.ember;
-          ctx.globalAlpha = e.alpha;
+          ctx.globalAlpha = e.alpha * topFade;
           ctx.shadowColor = colors.ember;
           ctx.shadowBlur = 8;
           ctx.beginPath();
