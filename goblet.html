@@ -1695,16 +1695,19 @@
 
         this.resize();
         window.addEventListener('resize', () => this.resize());
+        setTimeout(() => this.resize(), 100);
         this.loop();
       }
 
       resize() {
         if (!this.canvas) return;
         const rect = this.canvas.getBoundingClientRect();
-        this.canvas.width = rect.width || 260;
-        this.canvas.height = rect.height || 220;
-        this.cx = this.canvas.width / 2;
-        this.baseY = this.canvas.height * 0.72; // 火焰發源處 (聖火盆口深處)
+        const w = rect.width > 50 ? rect.width : 280;
+        const h = rect.height > 50 ? rect.height : 240;
+        this.canvas.width = w;
+        this.canvas.height = h;
+        this.cx = w / 2;
+        this.baseY = h * 0.60; // 火焰發源處 (聖火盆口深處)
       }
 
       setMode(mode, team = 'gold') {
@@ -1864,9 +1867,7 @@
       }
     }
 
-    let sportsFlame = null;
-
-    document.addEventListener('DOMContentLoaded', () => {
+    function initApp() {
       sportsFlame = new SportsFlameEngine('sports-flame-canvas');
       initLayoutMode();
       loadStudentsFromStorage();
@@ -1874,7 +1875,13 @@
       updateDashboardCounts();
       renderAllRosters();
       setupKeyboardShortcuts();
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
 
     // 🪟 視圖切換邏輯 (劇院雙翼 vs 經典上下)
     function initLayoutMode() {
