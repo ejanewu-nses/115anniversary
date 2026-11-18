@@ -663,7 +663,7 @@
     </div>
   </footer>
 
-<script><script>
+<script>
     const CLOUD_API_URL = 'https://script.google.com/macros/s/AKfycbwppBa3j4htWuGBHwvnz4UEuo39GeVyM5-cBrVSkhuq1bshMCAB4HRwIP1Ypdc9XdE7/exec';
 
     // 預設各項賽事得分架構（嚴格對應計畫書分組與門檻）
@@ -1019,11 +1019,17 @@
       renderRelayGroup('card-relay-high', 'relayHigh');
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    function initScoresApp() {
       calculateAndRender();
       syncCloudScores();
       setInterval(syncCloudScores, 30000);
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initScoresApp);
+    } else {
+      initScoresApp();
+    }
   </script>
 </body>
 </html>
