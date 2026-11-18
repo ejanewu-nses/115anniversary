@@ -1,0 +1,2479 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>南興魔法聖火盃 • 紅綠藍三大戰隊火盃點將 ｜ 臺南市南興國小115校慶</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ["'Noto Serif TC'", "Cinzel", "Georgia", "serif"],
+            cinzel: ["'Cinzel'", "serif"]
+          },
+          colors: {
+            magic: {
+              dark: '#080c18',
+              card: 'rgba(18, 24, 43, 0.85)',
+              border: '#c5a059',
+              gold: '#ffd700',
+              red: '#e11d48',
+              green: '#10b981',
+              blue: '#0284c7'
+            }
+          },
+          animation: {
+            'pulse-glow': 'pulseGlow 2.5s infinite',
+            'float': 'floatAnim 3.5s ease-in-out infinite',
+            'wiggle': 'wiggle 0.25s ease-in-out infinite',
+            'spin-slow': 'spin 12s linear infinite'
+          },
+          keyframes: {
+            pulseGlow: {
+              '0%, 100%': { filter: 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.4))' },
+              '50%': { filter: 'drop-shadow(0 0 35px rgba(255, 215, 0, 0.85))' }
+            },
+            floatAnim: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-8px) rotate(1.5deg)' }
+            },
+            wiggle: {
+              '0%, 100%': { transform: 'rotate(-5deg) scale(1.06)' },
+              '50%': { transform: 'rotate(5deg) scale(1.08)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #070a14;
+      background-image: 
+        radial-gradient(circle at 50% 15%, rgba(45, 27, 85, 0.5) 0%, transparent 60%),
+        radial-gradient(circle at 10% 80%, rgba(225, 29, 72, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(2, 132, 199, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+      color: #e2e8f0;
+      font-family: 'Noto Serif TC', serif;
+    }
+
+    .gold-text-glow {
+      text-shadow: 0 0 12px rgba(253, 224, 71, 0.6), 0 0 25px rgba(234, 179, 8, 0.3);
+    }
+    
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c5a059;
+      border-radius: 3px;
+    }
+
+    /* 左右雙翼模式與上下模式切換樣式 */
+    body.layout-wings #wings-left,
+    body.layout-wings #wings-right {
+      display: flex !important;
+    }
+    body.layout-wings #classic-bottom {
+      display: none !important;
+    }
+    body.layout-wings #stage-wrapper {
+      max-width: 52rem;
+    }
+
+    body.layout-classic #wings-left,
+    body.layout-classic #wings-right {
+      display: none !important;
+    }
+    body.layout-classic #classic-bottom {
+      display: block !important;
+    }
+    body.layout-classic #stage-wrapper {
+      max-width: 40rem;
+    }
+  
+  /* ==================== 專業列印專屬樣式 (A4 橫向一頁全覽・黑白友善印刷) ==================== */
+  @media print {
+    @page {
+      size: A4 landscape;
+      margin: 8mm 10mm;
+    }
+
+    /* 隱藏一切非名冊介面 */
+    header,
+    footer#classic-bottom,
+    #app-container,
+    #roster-modal,
+    #settings-modal,
+    .no-print,
+    button,
+    .modal-close-btn {
+      display: none !important;
+    }
+
+    /* 全局重置為白底黑字、自然文件流（解除 overflow 截斷） */
+    html, body {
+      background: #ffffff !important;
+      background-image: none !important;
+      color: #0f172a !important;
+      height: auto !important;
+      min-height: auto !important;
+      overflow: visible !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    #summary-modal {
+      display: block !important;
+      position: static !important;
+      inset: auto !important;
+      width: 100% !important;
+      height: auto !important;
+      max-height: none !important;
+      background: #ffffff !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      overflow: visible !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      z-index: auto !important;
+    }
+
+    #summary-modal > div {
+      max-width: 100% !important;
+      max-height: none !important;
+      height: auto !important;
+      overflow: visible !important;
+      border: none !important;
+      background: #ffffff !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+    }
+
+    .summary-print-container {
+      overflow: visible !important;
+      height: auto !important;
+      max-height: none !important;
+      padding: 0 !important;
+    }
+
+    /* 列印專用正式抬頭 Banner */
+    .print-header-banner {
+      display: flex !important;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #0f172a !important;
+      padding-bottom: 6px !important;
+      margin-bottom: 10px !important;
+    }
+
+    /* 螢幕頂部深色小標與底部操作列在列印時隱藏 */
+    .screen-modal-header,
+    .screen-modal-footer {
+      display: none !important;
+    }
+
+    /* 三大戰隊強制在 A4 橫向 3 等分並排 */
+    .print-grid-3 {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 10px !important;
+      width: 100% !important;
+    }
+
+    /* 戰隊直式卡片：印刷專用白底、細邊框與頂部識別色條 */
+    .team-print-column {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      border-radius: 6px !important;
+      padding: 8px 10px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      box-shadow: none !important;
+    }
+
+    .team-red-card {
+      border-top: 4px solid #dc2626 !important;
+    }
+    .team-green-card {
+      border-top: 4px solid #16a34a !important;
+    }
+    .team-blue-card {
+      border-top: 4px solid #0284c7 !important;
+    }
+
+    .team-title-text {
+      color: #0f172a !important;
+      font-size: 13pt !important;
+      font-weight: 900 !important;
+    }
+
+    .team-sub-badge {
+      color: #475569 !important;
+      font-size: 8pt !important;
+    }
+
+    .team-count-badge {
+      color: #0f172a !important;
+      font-weight: 800 !important;
+      font-size: 9pt !important;
+    }
+
+    /* 帶隊指導老師列印區塊 */
+    .teacher-box {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #0f172a !important;
+      padding: 4px 6px !important;
+      border-radius: 4px !important;
+      margin-top: 4px !important;
+      margin-bottom: 6px !important;
+      font-size: 8.5pt !important;
+    }
+    .teacher-box * {
+      color: #0f172a !important;
+    }
+
+    /* 年級小標 */
+    .grade-row-title {
+      color: #0f172a !important;
+      font-size: 8.5pt !important;
+      font-weight: 800 !important;
+      border-bottom: 1px dashed #e2e8f0 !important;
+      padding-bottom: 1px !important;
+      margin-top: 4px !important;
+      margin-bottom: 2px !important;
+    }
+
+    /* 學生名牌在列印時的標籤樣式 */
+    .student-tag-print {
+      display: inline-block !important;
+      background: #ffffff !important;
+      border: 1px solid #94a3b8 !important;
+      color: #0f172a !important;
+      font-size: 8.5pt !important;
+      font-weight: 700 !important;
+      padding: 1px 4px !important;
+      border-radius: 3px !important;
+      margin: 1px !important;
+      box-shadow: none !important;
+    }
+  }
+
+  </style>
+</head>
+<body class="layout-wings h-screen overflow-hidden flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
+
+  <!-- 頂部魔法控制列 -->
+  <header class="w-full h-14 border-b border-amber-900/40 bg-slate-950/85 backdrop-blur-md z-40 px-3 sm:px-6 flex items-center justify-between flex-shrink-0">
+    <!-- 左：校徽與儀式標題 -->
+    <div class="flex items-center gap-2.5">
+      <a href="index.html" class="flex items-center gap-2 group" title="返回校慶首頁">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white p-1 border-2 border-amber-400/80 shadow-md flex items-center justify-center overflow-hidden group-hover:scale-105 transition">
+          <img src="images/school_logo.jpg" alt="校徽" class="w-full h-full object-contain">
+        </div>
+        <div>
+          <div class="text-[10px] text-amber-400 font-cinzel tracking-wider font-bold leading-none">NANXING GOBLET OF FIRE CEREMONY</div>
+          <div class="text-xs sm:text-sm font-black text-amber-100 flex items-center gap-1.5 mt-0.5">
+            <span>南興魔法聖火盃</span>
+            <span class="text-[10px] px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">朝會專用</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 中：進度條與目前人數 -->
+    <div class="hidden md:flex flex-col items-center gap-0.5 min-w-[220px]">
+      <div class="flex items-center justify-between w-full text-[11px] text-slate-300 font-bold px-1">
+        <span>分隊進度</span>
+        <span id="progress-text" class="text-amber-400 font-cinzel">0 / 99 人 (0%)</span>
+      </div>
+      <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700">
+        <div id="progress-bar" class="bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-300 h-full w-0 transition-all duration-500"></div>
+      </div>
+    </div>
+
+    <!-- 右：大典操控輔助快捷按鈕 -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <!-- 🪟 關鍵核心：版面切換按鈕 (左右雙翼 ⟷ 上下全屏) -->
+      <button onclick="toggleLayoutMode()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-bold border border-amber-500/50 flex items-center gap-1.5 transition" title="切換排版：劇院雙翼模式(左右即時看著名單) 或 經典上下模式">
+        <i class="fa-solid fa-table-columns text-amber-400"></i>
+        <span id="layout-toggle-label" class="hidden sm:inline">劇院雙翼視圖</span>
+      </button>
+
+      <!-- 點名冊選人 -->
+      <button onclick="openRosterModal()" class="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 flex items-center gap-1.5 transition" title="展開全校名單，可直接點選指定學生">
+        <i class="fa-solid fa-list-check text-amber-400"></i>
+        <span class="hidden lg:inline">點名冊選人</span>
+      </button>
+
+      <!-- 三隊集合指引 -->
+      <button onclick="openSummaryModal()" class="px-2.5 py-1.5 rounded-lg bg-amber-950/40 hover:bg-amber-900/60 text-amber-200 text-xs font-bold border border-amber-700/60 flex items-center gap-1.5 transition" title="查看三隊大集合分區指引">
+        <i class="fa-solid fa-map-location-dot text-amber-300"></i>
+        <span class="hidden lg:inline">三隊集合指引</span>
+      </button>
+
+      <!-- 名單與設定 -->
+      <button onclick="openSettingsModal()" class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 flex items-center gap-1.5 transition" title="自訂與匯入分組名單">
+        <i class="fa-solid fa-sliders text-sky-400"></i>
+      </button>
+
+      <!-- 語音播報開關 -->
+      <button id="btn-voice" onclick="toggleVoice()" class="p-1.5 sm:px-2 sm:py-1.5 rounded-lg bg-slate-800/80 text-emerald-400 text-xs border border-slate-700 transition" title="語音唱名開關">
+        <i class="fa-solid fa-volume-high"></i>
+      </button>
+
+      <!-- 音效開關 -->
+      <button id="btn-sound" onclick="toggleSound()" class="p-1.5 sm:px-2 sm:py-1.5 rounded-lg bg-slate-800/80 text-amber-400 text-xs border border-slate-700 transition" title="背景魔法音效開關">
+        <i class="fa-solid fa-music"></i>
+      </button>
+
+      <!-- 全螢幕切換 -->
+      <button onclick="toggleFullScreen()" class="px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white text-xs font-bold shadow-md transition flex items-center gap-1" title="全螢幕模式 (大螢幕/投影機必備)">
+        <i class="fa-solid fa-expand"></i>
+        <span class="hidden sm:inline">全螢幕</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== 主舞台與彈性版面容器 ==================== -->
+  <div id="app-container" class="layout-wings flex-1 flex overflow-hidden min-h-0 w-full relative">
+
+    <!-- 🔴 左翼面板：烈火金獅隊 (劇院模式下常駐於左側，一覽無遺！) -->
+    <aside id="wings-left" class="w-64 xl:w-72 flex-shrink-0 flex flex-col p-2.5 bg-slate-950/70 border-r border-rose-900/40 z-20 transition-all duration-300">
+      <div class="flex items-center justify-between border-b border-rose-900/60 pb-1.5 mb-2">
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500 animate-pulse"></span>
+          <span class="font-black text-rose-200 text-sm">🔴 烈火金獅隊</span>
+        </div>
+        <div class="text-xs font-cinzel font-black px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">
+          <span id="wings-count-red">0</span> / 33 人
+        </div>
+      </div>
+      <!-- 學生名單晶片區（自動平滑捲動至最新同學） -->
+      <div id="wings-roster-red" class="flex-1 overflow-y-auto flex flex-wrap gap-1.5 content-start pr-1">
+        <span class="text-[11px] text-slate-500 italic p-1">等待神獸召喚中...</span>
+      </div>
+      <div class="text-[10px] text-rose-300/70 pt-1.5 mt-1 border-t border-rose-900/30 text-right">
+        指導：楊詒茹、徐敏瓊、林承翰老師
+      </div>
+    </aside>
+
+    <!-- 🏆 中軸核心舞台：南興魔法聖火盃 ＆ 唱名大看板 -->
+    <main class="flex-1 flex flex-col items-center justify-center p-2 sm:p-4 min-h-0 overflow-hidden relative z-10">
+      
+      <!-- 頂部神秘符文環 (微縮適配) -->
+      <div class="absolute top-1/2 -translate-y-1/2 w-96 h-96 rounded-full border border-amber-500/10 pointer-events-none animate-spin-slow flex items-center justify-center">
+        <div class="w-72 h-72 rounded-full border border-dashed border-amber-400/20"></div>
+      </div>
+
+      <!-- 舞台中央包裹層 -->
+      <div id="stage-wrapper" class="w-full flex flex-col items-center text-center relative max-h-full justify-center">
+        
+        <!-- 南興魔法聖火盃 (Goblet of Fire - 象徵運動大會聖火與榮譽勇士) -->
+        <div id="goblet-container" class="relative z-10 animate-float cursor-pointer flex-shrink-0" onclick="handleStageAction()" title="點擊聖火盃感應分隊">
+          <div id="goblet-glow" class="w-36 h-36 sm:w-44 sm:h-44 xl:w-52 xl:h-52 mx-auto flex items-center justify-center transition-all duration-500 filter drop-shadow(0 0 30px rgba(245,158,11,0.5))">
+            <!-- 魔法聖火金盃 SVG -->
+            <svg class="w-full h-full" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              
+              <!-- 背後神聖召喚光環 -->
+              <circle cx="100" cy="110" r="82" stroke="#fbbf24" stroke-width="1.2" stroke-dasharray="6 8" opacity="0.4" class="animate-spin-slow" />
+              <circle cx="100" cy="110" r="62" stroke="#d97706" stroke-width="0.8" opacity="0.3" />
+
+              <!-- ================= 魔法聖火火焰層 (動態跳動與變色) ================= -->
+              <g id="fire-group" class="animate-flame">
+                <!-- 聖火外焰 (Outer Flame) -->
+                <path id="flame-outer" d="M100 15 C 80 40, 50 65, 58 95 C 64 116, 85 125, 100 125 C 115 125, 136 116, 142 95 C 150 65, 120 40, 100 15 Z" 
+                      fill="url(#fireOuterGrad)" opacity="0.85" filter="blur(1.5px)" />
+                
+                <!-- 聖火中焰 (Mid Flame - 跳動舌火) -->
+                <path id="flame-mid" d="M100 30 C 85 50, 68 70, 72 98 C 76 118, 92 122, 100 122 C 108 122, 124 118, 128 98 C 132 70, 115 50, 100 30 Z" 
+                      fill="url(#fireMidGrad)" opacity="0.95" />
+
+                <!-- 聖火內焰 (Inner Core - 極熾核心) -->
+                <path id="flame-inner" d="M100 50 C 90 65, 80 80, 84 105 C 88 120, 96 120, 100 120 C 104 120, 112 120, 116 105 C 120 80, 110 65, 100 50 Z" 
+                      fill="url(#fireInnerGrad)" />
+
+                <!-- 浮動昇華火星 (Embers) -->
+                <circle cx="95" cy="40" r="2.5" fill="#fef08a" class="ember-1" />
+                <circle cx="108" cy="30" r="2" fill="#fed7aa" class="ember-2" />
+                <circle cx="82" cy="55" r="1.8" fill="#fef08a" class="ember-3" />
+                <circle cx="118" cy="50" r="2.2" fill="#fff" class="ember-4" />
+              </g>
+
+              <!-- ================= 古老黃金聖火盃 (Goblet Body) ================= -->
+              <!-- 雙側古典榮譽耳柄 (Handles) -->
+              <path d="M52 112 C 30 110, 22 135, 36 150 C 44 158, 56 152, 60 145" stroke="url(#goldGradLight)" stroke-width="4.5" stroke-linecap="round" fill="none" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))" />
+              <path d="M148 112 C 170 110, 178 135, 164 150 C 156 158, 144 152, 140 145" stroke="url(#goldGradLight)" stroke-width="4.5" stroke-linecap="round" fill="none" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))" />
+
+              <!-- 盃身基座底盤 (Base & Pedestal) -->
+              <ellipse cx="100" cy="186" rx="42" ry="7" fill="url(#goldGradDark)" stroke="#78350f" stroke-width="1.5" />
+              <path d="M62 186 C 65 176, 76 170, 84 168 L 116 168 C 124 170, 135 176, 138 186 Z" fill="url(#goldGradMid)" stroke="#92400e" stroke-width="1.5" />
+              <!-- 盃莖與榮耀寶環 (Stem & Ring) -->
+              <rect x="94" y="152" width="12" height="18" fill="url(#goldGradLight)" stroke="#78350f" stroke-width="1" />
+              <ellipse cx="100" cy="160" rx="10" ry="3.5" fill="#fef08a" stroke="#b45309" stroke-width="1" />
+
+              <!-- 聖火盃主碗體 (Chalice Bowl) -->
+              <path d="M56 108 C 54 135, 76 154, 100 154 C 124 154, 146 135, 144 108 Z" fill="url(#goldGradBowl)" stroke="#78350f" stroke-width="2" />
+
+              <!-- 盃面南興神獸戰紋浮雕銘牌 -->
+              <path d="M85 125 C 92 121, 108 121, 115 125 C 112 135, 88 135, 85 125 Z" fill="#451a03" stroke="#f59e0b" stroke-width="1" />
+              <circle cx="100" cy="128" r="2.5" fill="#fde047" class="animate-pulse" />
+
+              <!-- 盃口厚重鍛金輪緣 (Rim) -->
+              <ellipse cx="100" cy="108" rx="46" ry="7" fill="url(#goldGradRim)" stroke="#78350f" stroke-width="2" />
+              <!-- 盃內暗金火光反射 -->
+              <ellipse cx="100" cy="108" rx="40" ry="5" fill="#451a03" />
+
+              <!-- ================= 漸層濾鏡定義 ================= -->
+              <defs>
+                <!-- 預設金色魔法聖火 -->
+                <linearGradient id="fireOuterGrad" x1="100" y1="15" x2="100" y2="125" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ef4444" stop-opacity="0.9" />
+                  <stop offset="40%" stop-color="#f59e0b" />
+                  <stop offset="85%" stop-color="#fbbf24" stop-opacity="0.6" />
+                </linearGradient>
+                <linearGradient id="fireMidGrad" x1="100" y1="30" x2="100" y2="122" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="50%" stop-color="#f59e0b" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+                <linearGradient id="fireInnerGrad" x1="100" y1="50" x2="100" y2="120" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="60%" stop-color="#fef08a" />
+                  <stop offset="100%" stop-color="#f59e0b" />
+                </linearGradient>
+
+                <!-- 紅隊赤焰 (烈火金獅) -->
+                <linearGradient id="fireRedOuter" x1="100" y1="15" x2="100" y2="125" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#b91c1c" />
+                  <stop offset="40%" stop-color="#ef4444" />
+                  <stop offset="85%" stop-color="#f87171" stop-opacity="0.6" />
+                </linearGradient>
+                <linearGradient id="fireRedMid" x1="100" y1="30" x2="100" y2="122" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#f87171" />
+                  <stop offset="50%" stop-color="#ef4444" />
+                  <stop offset="100%" stop-color="#991b1b" />
+                </linearGradient>
+                <linearGradient id="fireRedInner" x1="100" y1="50" x2="100" y2="120" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="60%" stop-color="#fecdd3" />
+                  <stop offset="100%" stop-color="#ef4444" />
+                </linearGradient>
+
+                <!-- 綠隊翠焰 (翠玉蜈蚣) -->
+                <linearGradient id="fireGreenOuter" x1="100" y1="15" x2="100" y2="125" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#047857" />
+                  <stop offset="40%" stop-color="#10b981" />
+                  <stop offset="85%" stop-color="#34d399" stop-opacity="0.6" />
+                </linearGradient>
+                <linearGradient id="fireGreenMid" x1="100" y1="30" x2="100" y2="122" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#34d399" />
+                  <stop offset="50%" stop-color="#10b981" />
+                  <stop offset="100%" stop-color="#065f46" />
+                </linearGradient>
+                <linearGradient id="fireGreenInner" x1="100" y1="50" x2="100" y2="120" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="60%" stop-color="#a7f3d0" />
+                  <stop offset="100%" stop-color="#10b981" />
+                </linearGradient>
+
+                <!-- 藍隊青焰 (碧海晨曦) -->
+                <linearGradient id="fireBlueOuter" x1="100" y1="15" x2="100" y2="125" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#0369a1" />
+                  <stop offset="40%" stop-color="#0ea5e9" />
+                  <stop offset="85%" stop-color="#38bdf8" stop-opacity="0.6" />
+                </linearGradient>
+                <linearGradient id="fireBlueMid" x1="100" y1="30" x2="100" y2="122" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#38bdf8" />
+                  <stop offset="50%" stop-color="#0ea5e9" />
+                  <stop offset="100%" stop-color="#075985" />
+                </linearGradient>
+                <linearGradient id="fireBlueInner" x1="100" y1="50" x2="100" y2="120" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="60%" stop-color="#bae6fd" />
+                  <stop offset="100%" stop-color="#0ea5e9" />
+                </linearGradient>
+
+                <!-- 金色聖盃鍛造漸層 -->
+                <linearGradient id="goldGradRim" x1="54" y1="108" x2="146" y2="108" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#d97706" />
+                  <stop offset="25%" stop-color="#fef08a" />
+                  <stop offset="50%" stop-color="#f59e0b" />
+                  <stop offset="75%" stop-color="#fef08a" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+                <linearGradient id="goldGradBowl" x1="56" y1="108" x2="144" y2="154" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#fef08a" />
+                  <stop offset="25%" stop-color="#d97706" />
+                  <stop offset="70%" stop-color="#b45309" />
+                  <stop offset="100%" stop-color="#78350f" />
+                </linearGradient>
+                <linearGradient id="goldGradLight" x1="30" y1="110" x2="170" y2="150" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#fef08a" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+                <linearGradient id="goldGradMid" x1="62" y1="168" x2="138" y2="186" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#f59e0b" />
+                  <stop offset="50%" stop-color="#fef08a" />
+                  <stop offset="100%" stop-color="#92400e" />
+                </linearGradient>
+                <linearGradient id="goldGradDark" x1="58" y1="186" x2="142" y2="186" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#78350f" />
+                  <stop offset="50%" stop-color="#d97706" />
+                  <stop offset="100%" stop-color="#451a03" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+
+        <!-- 聖火神聖感應 (Thinking / Speech Bubble) -->
+        <div id="whisper-box" class="h-8 flex items-center justify-center my-1 z-20 flex-shrink-0">
+          <div id="whisper-text" class="px-3.5 py-1 rounded-full bg-slate-900/90 border border-amber-500/40 text-amber-200 text-xs font-bold shadow-lg flex items-center gap-1.5 transition-all duration-300">
+            <i class="fa-solid fa-fire-flame-curved text-amber-400 text-xs animate-pulse"></i>
+            <span id="whisper-content">「請下一位勇士上前，感應魔法聖火盃...」</span>
+          </div>
+        </div>
+
+        <!-- 核心舞台：學生唱名大看板 -->
+        <div class="mt-1 w-full bg-slate-900/85 backdrop-blur-md rounded-2xl p-4 sm:p-5 border-2 border-amber-500/50 shadow-2xl relative overflow-hidden transition-all duration-300 flex-shrink-0" id="stage-card">
+          
+          <div id="card-glow-bg" class="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent pointer-events-none transition-all duration-700"></div>
+
+          <!-- 序號與年級標籤 -->
+          <div class="flex items-center justify-between text-xs text-slate-400 font-bold mb-1">
+            <span id="current-seq" class="px-2.5 py-0.5 rounded-full bg-slate-800 text-amber-300 border border-slate-700 font-cinzel">
+              NO. 01 / 99
+            </span>
+            <span id="current-grade-badge" class="px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-200 border border-amber-500/40">
+              六年甲班
+            </span>
+          </div>
+
+          <!-- 學生大名 (巨幅投影超清晰) -->
+          <div class="my-1.5">
+            <div id="student-name" class="text-4xl sm:text-5xl xl:text-6xl font-black tracking-widest text-white gold-text-glow font-serif py-1 transition-all duration-300">
+              許 聖 緣
+            </div>
+          </div>
+
+          <!-- 揭曉戰隊徽章區域 -->
+          <div id="team-result-box" class="min-h-[68px] sm:min-h-[75px] flex flex-col items-center justify-center my-1 transition-all duration-300">
+            <!-- 尚未揭曉提示 -->
+            <div id="unrevealed-hint" class="text-slate-400 text-xs sm:text-sm flex items-center gap-2">
+              <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+              <span>站在命運之石前，聆聽古老神獸的感應...</span>
+            </div>
+
+            <!-- 揭曉成果 -->
+            <div id="revealed-badge" class="hidden flex-col items-center gap-1 transform transition-all duration-300 scale-95">
+              <div id="revealed-team-pill" class="px-5 py-1.5 rounded-full text-base sm:text-xl font-black shadow-xl tracking-wider flex items-center gap-2 border-2">
+                <i id="revealed-team-icon" class="fa-solid fa-shield-halved"></i>
+                <span id="revealed-team-name">烈火金獅隊</span>
+              </div>
+              <div id="revealed-team-motto" class="text-xs font-bold text-slate-300 tracking-wide">
+                「勇猛精進 • 如火燎原」
+              </div>
+            </div>
+          </div>
+
+          <!-- 核心操作大按鈕區 -->
+          <div class="mt-2.5 flex items-center justify-center gap-2 sm:gap-3 pt-2 border-t border-slate-800">
+            <!-- 上一位 -->
+            <button id="btn-prev" onclick="prevStudent()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold border border-slate-700 transition flex items-center gap-1.5">
+              <i class="fa-solid fa-arrow-left"></i>
+              <span class="hidden sm:inline">上一位</span>
+            </button>
+
+            <!-- 命運大按鈕 (空格鍵 / Enter 鍵觸發) -->
+            <button id="btn-action" onclick="handleStageAction()" class="px-5 sm:px-8 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs sm:text-sm font-black shadow-lg shadow-amber-500/25 transition transform hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <i id="btn-action-icon" class="fa-solid fa-fire"></i>
+              <span id="btn-action-text">感應聖火盃 (空白鍵)</span>
+            </button>
+
+            <!-- 下一位 -->
+            <button id="btn-next" onclick="nextStudent()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold border border-slate-700 transition flex items-center gap-1.5">
+              <span class="hidden sm:inline">下一位</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- 🟢 & 🔵 右翼面板：翠玉蜈蚣隊 ＆ 碧海晨曦隊 (劇院模式下常駐於右側，上下平分！) -->
+    <aside id="wings-right" class="w-64 xl:w-72 flex-shrink-0 flex flex-col gap-2 p-2.5 bg-slate-950/70 border-l border-sky-900/40 z-20 transition-all duration-300">
+      
+      <!-- 右翼上段：翠玉蜈蚣隊 -->
+      <div class="flex-1 flex flex-col p-2 rounded-xl bg-emerald-950/30 border border-emerald-500/30 min-h-0">
+        <div class="flex items-center justify-between border-b border-emerald-900/60 pb-1 mb-1.5 flex-shrink-0">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500 animate-pulse"></span>
+            <span class="font-black text-emerald-200 text-xs sm:text-sm">🟢 翠玉蜈蚣隊</span>
+          </div>
+          <div class="text-[11px] font-cinzel font-black px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+            <span id="wings-count-green">0</span> / 33 人
+          </div>
+        </div>
+        <div id="wings-roster-green" class="flex-1 overflow-y-auto flex flex-wrap gap-1 content-start pr-1">
+          <span class="text-[10px] text-slate-500 italic p-1">等待神獸召喚中...</span>
+        </div>
+        <div class="text-[9px] text-emerald-300/70 pt-1 mt-1 border-t border-emerald-900/30 text-right flex-shrink-0">
+          指導：蔡武憲、羅珮華、鄭潔、林立樺老師
+        </div>
+      </div>
+
+      <!-- 右翼下段：碧海晨曦隊 -->
+      <div class="flex-1 flex flex-col p-2 rounded-xl bg-sky-950/30 border border-sky-500/30 min-h-0">
+        <div class="flex items-center justify-between border-b border-sky-900/60 pb-1 mb-1.5 flex-shrink-0">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-sky-500 shadow-sm shadow-sky-500 animate-pulse"></span>
+            <span class="font-black text-sky-200 text-xs sm:text-sm">🔵 碧海晨曦隊</span>
+          </div>
+          <div class="text-[11px] font-cinzel font-black px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40">
+            <span id="wings-count-blue">0</span> / 33 人
+          </div>
+        </div>
+        <div id="wings-roster-blue" class="flex-1 overflow-y-auto flex flex-wrap gap-1 content-start pr-1">
+          <span class="text-[10px] text-slate-500 italic p-1">等待神獸召喚中...</span>
+        </div>
+        <div class="text-[9px] text-sky-300/70 pt-1 mt-1 border-t border-sky-900/30 text-right flex-shrink-0">
+          指導：黃美雅、施喬恩、周婉琳老師
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- ==================== 經典模式底部三大席位長桌 (在經典上下視圖時顯示，高度緊湊保證100%同屏) ==================== -->
+  <footer id="classic-bottom" class="w-full bg-slate-950/95 border-t border-slate-800 p-2 sm:p-2.5 z-30 shadow-2xl backdrop-blur-md flex-shrink-0" style="display: none;">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center justify-between mb-1.5 px-1">
+        <div class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
+          <i class="fa-solid fa-users-rays text-amber-400"></i>
+          <span>三大戰隊席位即時名冊（唱名完成自動入列）</span>
+        </div>
+        <div class="text-[10px] text-slate-400 font-medium hidden sm:block">
+          點擊同學名牌可快速定位 ｜ 按空白鍵快速揭曉
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+        <!-- 🔴 紅隊 -->
+        <div class="rounded-xl bg-rose-950/30 border border-rose-500/30 p-2 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-rose-900/40 pb-1 mb-1">
+              <span class="font-bold text-rose-200 text-xs">🔴 烈火金獅隊</span>
+              <span class="text-[11px] font-cinzel text-rose-300 font-bold"><span id="count-red">0</span> / 33 人</span>
+            </div>
+            <div id="roster-red" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1 content-start"></div>
+          </div>
+        </div>
+
+        <!-- 🟢 綠隊 -->
+        <div class="rounded-xl bg-emerald-950/30 border border-emerald-500/30 p-2 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-emerald-900/40 pb-1 mb-1">
+              <span class="font-bold text-emerald-200 text-xs">🟢 翠玉蜈蚣隊</span>
+              <span class="text-[11px] font-cinzel text-emerald-300 font-bold"><span id="count-green">0</span> / 33 人</span>
+            </div>
+            <div id="roster-green" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1 content-start"></div>
+          </div>
+        </div>
+
+        <!-- 🔵 藍隊 -->
+        <div class="rounded-xl bg-sky-950/30 border border-sky-500/30 p-2 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-sky-900/40 pb-1 mb-1">
+              <span class="font-bold text-sky-200 text-xs">🔵 碧海晨曦隊</span>
+              <span class="text-[11px] font-cinzel text-sky-300 font-bold"><span id="count-blue">0</span> / 33 人</span>
+            </div>
+            <div id="roster-blue" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1 content-start"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== 彈窗 1：點名冊快速定位選人 (Roster Modal) ==================== -->
+  <div id="roster-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border-2 border-amber-500/50 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-list-ol text-amber-400 text-lg"></i>
+          <h3 class="text-base font-bold text-amber-100">全校學生點名冊（點擊姓名立即唱名登台）</h3>
+        </div>
+        <button onclick="closeRosterModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-1.5 p-3 bg-slate-950/50 border-b border-slate-800 overflow-x-auto" id="grade-filter-tabs">
+        <button onclick="filterRosterByGrade('all')" class="px-3 py-1 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 font-sans" id="tab-grade-all">全部 (99人)</button>
+        <button onclick="filterRosterByGrade(1)" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700" id="tab-grade-1">一年級 (13人)</button>
+        <button onclick="filterRosterByGrade(2)" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700" id="tab-grade-2">二年級 (18人)</button>
+        <button onclick="filterRosterByGrade(3)" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700" id="tab-grade-3">三年級 (14人)</button>
+        <button onclick="filterRosterByGrade(4)" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700" id="tab-grade-4">四年級 (18人)</button>
+        <button onclick="filterRosterByGrade(5)" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700" id="tab-grade-5">五年級 (17人)</button>
+        <button onclick="filterRosterByGrade(6)" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700" id="tab-grade-6">六年級 (19人)</button>
+      </div>
+
+      <div class="p-4 overflow-y-auto flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5" id="roster-modal-grid"></div>
+
+      <div class="p-3 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+        <span>綠色打勾表示已揭曉，點擊未揭曉學生可直接切換至該學生。</span>
+        <button onclick="revealAllStudentsFast()" class="px-3 py-1.5 rounded-lg bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 border border-indigo-700 font-bold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-forward-fast"></i>
+          <span>一鍵全校快速揭曉</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+    <!-- ==================== 彈窗 2：三大戰隊總名冊與列印專區 (Summary Modal) ==================== -->
+  <div id="summary-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-slate-900 border-2 border-amber-500/50 rounded-2xl max-w-6xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+      
+      <!-- 列印專用正式公文抬頭 (螢幕上隱藏，列印時自動出現在紙張頂部) -->
+      <div class="print-header-banner hidden">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img src="images/school_logo.jpg" alt="校徽" style="width: 42px; height: 42px; object-fit: contain;">
+          <div>
+            <h2 style="margin: 0; font-size: 15pt; font-weight: 900; color: #0f172a; letter-spacing: 0.5px;">臺南市安南區南興國民小學 115 學年度校慶運動大會</h2>
+            <div style="font-size: 11pt; font-weight: 800; color: #334155; margin-top: 2px;">紅綠藍三大戰隊學生分隊總名冊</div>
+          </div>
+        </div>
+        <div style="text-align: right; font-size: 8.5pt; color: #475569; line-height: 1.4;">
+          <div>全校國小學生：99 位 ｜ 各隊 33 位（均質分組）</div>
+          <div>列印時間：<span id="print-time-str">民國115年</span> ｜ 學生朝會魔法分隊籌備小組</div>
+        </div>
+      </div>
+
+      <!-- 螢幕顯示專用頂部標題列 -->
+      <div class="screen-modal-header p-3.5 sm:p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30">
+            <i class="fa-solid fa-users-line text-base"></i>
+          </div>
+          <div>
+            <h3 class="text-sm sm:text-base font-black text-amber-100 flex items-center gap-2">
+              <span>南興國小 115 校慶 • 紅綠藍三大戰隊總名冊</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">全校 99 位學生</span>
+            </h3>
+            <p class="text-[11px] text-slate-400">儀式完成後，請各戰隊老師帶隊進行破冰與隊長遴選 ｜ 支援 A4 橫向一頁完整列印</p>
+          </div>
+        </div>
+        <button onclick="closeSummaryModal()" class="modal-close-btn w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- 三大戰隊並列內容區 (螢幕與列印均為三大直式戰隊卡) -->
+      <div class="summary-print-container p-3 sm:p-4 overflow-y-auto flex-1">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-3.5 print-grid-3">
+          
+          <!-- 🔴 紅隊：烈火金獅隊 -->
+          <div class="team-print-column team-red-card rounded-xl bg-rose-950/30 border-2 border-rose-500/40 p-3 sm:p-3.5 flex flex-col justify-between shadow-lg">
+            <div>
+              <div class="border-b border-rose-500/30 pb-2 mb-2">
+                <div class="flex items-center justify-between">
+                  <span class="team-sub-badge text-[10px] font-bold text-rose-400 tracking-wider">RED TEAM • 烈火金獅</span>
+                  <span class="team-count-badge text-xs font-bold text-rose-300 font-cinzel"><span id="summary-count-red">33</span> 人</span>
+                </div>
+                <div class="team-title-text text-base sm:text-lg font-black text-rose-100 flex items-center gap-1.5 mt-0.5">
+                  <span>🔴 烈火金獅隊</span>
+                </div>
+                <div class="teacher-box mt-1.5 text-xs bg-rose-900/40 text-rose-100 p-2 rounded-lg border border-rose-700/50">
+                  <div class="font-bold text-rose-300 flex items-center gap-1 text-[11px]"><i class="fa-solid fa-user-tie"></i> 帶隊指導老師：</div>
+                  <div class="font-bold text-white text-xs sm:text-sm mt-0.5 pl-4">楊詒茹、徐敏瓊、林承翰 老師</div>
+                </div>
+              </div>
+
+              <div class="text-[11px] font-medium text-rose-300/80 mb-1.5 flex items-center justify-between">
+                <span class="font-bold">各年級隊員名冊</span>
+                <span id="summary-grade-stats-red" class="text-[10px] text-slate-400 font-mono"></span>
+              </div>
+
+              <div id="summary-list-red" class="space-y-1.5 text-xs text-slate-200"></div>
+            </div>
+          </div>
+
+          <!-- 🟢 綠隊：翠玉蜈蚣隊 -->
+          <div class="team-print-column team-green-card rounded-xl bg-emerald-950/30 border-2 border-emerald-500/40 p-3 sm:p-3.5 flex flex-col justify-between shadow-lg">
+            <div>
+              <div class="border-b border-emerald-500/30 pb-2 mb-2">
+                <div class="flex items-center justify-between">
+                  <span class="team-sub-badge text-[10px] font-bold text-emerald-400 tracking-wider">GREEN TEAM • 翠玉蜈蚣</span>
+                  <span class="team-count-badge text-xs font-bold text-emerald-300 font-cinzel"><span id="summary-count-green">33</span> 人</span>
+                </div>
+                <div class="team-title-text text-base sm:text-lg font-black text-emerald-100 flex items-center gap-1.5 mt-0.5">
+                  <span>🟢 翠玉蜈蚣隊</span>
+                </div>
+                <div class="teacher-box mt-1.5 text-xs bg-emerald-900/40 text-emerald-100 p-2 rounded-lg border border-emerald-700/50">
+                  <div class="font-bold text-emerald-300 flex items-center gap-1 text-[11px]"><i class="fa-solid fa-user-tie"></i> 帶隊指導老師：</div>
+                  <div class="font-bold text-white text-xs sm:text-sm mt-0.5 pl-4">蔡武憲、羅珮華、鄭潔、林立樺 老師</div>
+                </div>
+              </div>
+
+              <div class="text-[11px] font-medium text-emerald-300/80 mb-1.5 flex items-center justify-between">
+                <span class="font-bold">各年級隊員名冊</span>
+                <span id="summary-grade-stats-green" class="text-[10px] text-slate-400 font-mono"></span>
+              </div>
+
+              <div id="summary-list-green" class="space-y-1.5 text-xs text-slate-200"></div>
+            </div>
+          </div>
+
+          <!-- 🔵 藍隊：碧海晨曦隊 -->
+          <div class="team-print-column team-blue-card rounded-xl bg-sky-950/30 border-2 border-sky-500/40 p-3 sm:p-3.5 flex flex-col justify-between shadow-lg">
+            <div>
+              <div class="border-b border-sky-500/30 pb-2 mb-2">
+                <div class="flex items-center justify-between">
+                  <span class="team-sub-badge text-[10px] font-bold text-sky-400 tracking-wider">BLUE TEAM • 碧海晨曦</span>
+                  <span class="team-count-badge text-xs font-bold text-sky-300 font-cinzel"><span id="summary-count-blue">33</span> 人</span>
+                </div>
+                <div class="team-title-text text-base sm:text-lg font-black text-sky-100 flex items-center gap-1.5 mt-0.5">
+                  <span>🔵 碧海晨曦隊</span>
+                </div>
+                <div class="teacher-box mt-1.5 text-xs bg-sky-900/40 text-sky-100 p-2 rounded-lg border border-sky-700/50">
+                  <div class="font-bold text-sky-300 flex items-center gap-1 text-[11px]"><i class="fa-solid fa-user-tie"></i> 帶隊指導老師：</div>
+                  <div class="font-bold text-white text-xs sm:text-sm mt-0.5 pl-4">黃美雅、施喬恩、周婉琳 老師</div>
+                </div>
+              </div>
+
+              <div class="text-[11px] font-medium text-sky-300/80 mb-1.5 flex items-center justify-between">
+                <span class="font-bold">各年級隊員名冊</span>
+                <span id="summary-grade-stats-blue" class="text-[10px] text-slate-400 font-mono"></span>
+              </div>
+
+              <div id="summary-list-blue" class="space-y-1.5 text-xs text-slate-200"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 螢幕底層操作按鈕 -->
+      <div class="screen-modal-footer p-3 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-xs flex-shrink-0">
+        <span class="text-slate-400 flex items-center gap-1.5">
+          <i class="fa-solid fa-circle-info text-amber-400"></i>
+          <span>支援直覺列印：點擊右側按鈕即可一鍵列印（建議於預覽頁面選擇「橫向」即可一頁全覽）</span>
+        </span>
+        <div class="flex items-center gap-2">
+          <button onclick="printSummaryRoster()" class="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black transition flex items-center gap-1.5 shadow-md shadow-amber-500/20">
+            <i class="fa-solid fa-print"></i> 友善列印 (A4橫向一頁)
+          </button>
+          <button onclick="closeSummaryModal()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition">
+            返回大典
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== 彈窗 3：名單自訂與匯入管理 (Settings Modal) ==================== -->
+  <div id="settings-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border-2 border-amber-500/50 rounded-2xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-sky-400 text-lg"></i>
+          <div>
+            <h3 class="text-base font-bold text-slate-100">分組名單管理與重置</h3>
+            <p class="text-xs text-slate-400">支援個別調整學生隊伍、智慧重新平衡、或直接重設進度</p>
+          </div>
+        </div>
+        <button onclick="closeSettingsModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-4 overflow-y-auto flex-1 space-y-4">
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div>
+            <span class="text-slate-400">學生總數：</span>
+            <span id="settings-total-students" class="font-bold text-amber-300">99 人</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-rose-400 font-bold">🔴 紅隊: <span id="settings-cnt-red">33</span></span>
+            <span class="text-emerald-400 font-bold">🟢 綠隊: <span id="settings-cnt-green">33</span></span>
+            <span class="text-sky-400 font-bold">🔵 藍隊: <span id="settings-cnt-blue">33</span></span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <button onclick="rebalanceTeamsSmart()" class="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-2 justify-center">
+            <i class="fa-solid fa-scale-balanced text-amber-400"></i>
+            <span>重新智慧均分 (33/33/33)</span>
+          </button>
+          <button onclick="resetCeremonyProgress()" class="p-3 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/50 text-xs font-bold transition flex items-center gap-2 justify-center">
+            <i class="fa-solid fa-rotate-left text-rose-400"></i>
+            <span>重置儀式進度 (從第1位開始)</span>
+          </button>
+          <button onclick="exportRosterCSV()" class="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-2 justify-center">
+            <i class="fa-solid fa-file-arrow-down text-emerald-400"></i>
+            <span>匯出分隊 CSV</span>
+          </button>
+        </div>
+
+        <div class="border border-slate-800 rounded-xl overflow-hidden bg-slate-950">
+          <div class="p-2.5 bg-slate-900 text-xs font-bold text-slate-300 border-b border-slate-800 flex items-center justify-between">
+            <span>學生名冊與戰隊分配（可下拉手動微調）</span>
+            <input type="text" id="table-search" placeholder="搜尋姓名或年級..." oninput="renderSettingsTable()" class="px-2 py-1 text-xs rounded bg-slate-800 text-slate-200 border border-slate-700 focus:outline-none focus:border-amber-400 w-36">
+          </div>
+          <div class="max-h-64 overflow-y-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-slate-900/80 sticky top-0 text-[11px] text-slate-400 border-b border-slate-800">
+                <tr>
+                  <th class="py-2 px-3">序號</th>
+                  <th class="py-2 px-3">班級</th>
+                  <th class="py-2 px-3">姓名</th>
+                  <th class="py-2 px-3">分配戰隊</th>
+                  <th class="py-2 px-3">狀態</th>
+                </tr>
+              </thead>
+              <tbody id="settings-table-body" class="divide-y divide-slate-800/60"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-3 bg-slate-950 border-t border-slate-800 flex items-center justify-end text-xs">
+        <button onclick="closeSettingsModal()" class="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black transition">
+          完成並儲存
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_STUDENTS = [
+  {
+    "id": 1,
+    "grade": 1,
+    "class": "甲",
+    "name": "黃修齊",
+    "team": "blue"
+  },
+  {
+    "id": 2,
+    "grade": 1,
+    "class": "甲",
+    "name": "林宇宸",
+    "team": "blue"
+  },
+  {
+    "id": 3,
+    "grade": 1,
+    "class": "甲",
+    "name": "黃羿暘",
+    "team": "blue"
+  },
+  {
+    "id": 4,
+    "grade": 1,
+    "class": "甲",
+    "name": "蔡孟言",
+    "team": "red"
+  },
+  {
+    "id": 5,
+    "grade": 1,
+    "class": "甲",
+    "name": "蔡昕佳",
+    "team": "green"
+  },
+  {
+    "id": 6,
+    "grade": 1,
+    "class": "甲",
+    "name": "郭于瑈",
+    "team": "blue"
+  },
+  {
+    "id": 7,
+    "grade": 1,
+    "class": "甲",
+    "name": "黃卉丞",
+    "team": "red"
+  },
+  {
+    "id": 8,
+    "grade": 1,
+    "class": "甲",
+    "name": "林羽彤",
+    "team": "green"
+  },
+  {
+    "id": 9,
+    "grade": 1,
+    "class": "甲",
+    "name": "黃妙金",
+    "team": "blue"
+  },
+  {
+    "id": 10,
+    "grade": 1,
+    "class": "甲",
+    "name": "黃羽晨",
+    "team": "red"
+  },
+  {
+    "id": 11,
+    "grade": 1,
+    "class": "甲",
+    "name": "郭子綺",
+    "team": "green"
+  },
+  {
+    "id": 12,
+    "grade": 1,
+    "class": "甲",
+    "name": "施語凡",
+    "team": "blue"
+  },
+  {
+    "id": 13,
+    "grade": 1,
+    "class": "甲",
+    "name": "黎宛潔",
+    "team": "red"
+  },
+  {
+    "id": 14,
+    "grade": 2,
+    "class": "甲",
+    "name": "黃建霆",
+    "team": "red"
+  },
+  {
+    "id": 15,
+    "grade": 2,
+    "class": "甲",
+    "name": "黃世瑋",
+    "team": "green"
+  },
+  {
+    "id": 16,
+    "grade": 2,
+    "class": "甲",
+    "name": "曾紹愷",
+    "team": "blue"
+  },
+  {
+    "id": 17,
+    "grade": 2,
+    "class": "甲",
+    "name": "邱恩俊",
+    "team": "red"
+  },
+  {
+    "id": 18,
+    "grade": 2,
+    "class": "甲",
+    "name": "吳楷鈞",
+    "team": "green"
+  },
+  {
+    "id": 19,
+    "grade": 2,
+    "class": "甲",
+    "name": "邱士軒",
+    "team": "blue"
+  },
+  {
+    "id": 20,
+    "grade": 2,
+    "class": "甲",
+    "name": "顏淓鋙",
+    "team": "red"
+  },
+  {
+    "id": 21,
+    "grade": 2,
+    "class": "甲",
+    "name": "楊佳瑜",
+    "team": "green"
+  },
+  {
+    "id": 22,
+    "grade": 2,
+    "class": "甲",
+    "name": "樊沛恩",
+    "team": "blue"
+  },
+  {
+    "id": 23,
+    "grade": 2,
+    "class": "甲",
+    "name": "蘇潁心",
+    "team": "red"
+  },
+  {
+    "id": 24,
+    "grade": 2,
+    "class": "甲",
+    "name": "楊珍恬",
+    "team": "green"
+  },
+  {
+    "id": 25,
+    "grade": 2,
+    "class": "甲",
+    "name": "黃姵潔",
+    "team": "blue"
+  },
+  {
+    "id": 26,
+    "grade": 2,
+    "class": "甲",
+    "name": "劉恩語",
+    "team": "red"
+  },
+  {
+    "id": 27,
+    "grade": 2,
+    "class": "甲",
+    "name": "黃詩柔",
+    "team": "green"
+  },
+  {
+    "id": 28,
+    "grade": 2,
+    "class": "甲",
+    "name": "郭沛貽",
+    "team": "blue"
+  },
+  {
+    "id": 29,
+    "grade": 2,
+    "class": "甲",
+    "name": "蔡理璇",
+    "team": "red"
+  },
+  {
+    "id": 30,
+    "grade": 2,
+    "class": "甲",
+    "name": "張巧沛",
+    "team": "green"
+  },
+  {
+    "id": 31,
+    "grade": 2,
+    "class": "甲",
+    "name": "柯允菲",
+    "team": "blue"
+  },
+  {
+    "id": 32,
+    "grade": 3,
+    "class": "甲",
+    "name": "林進陞",
+    "team": "red"
+  },
+  {
+    "id": 33,
+    "grade": 3,
+    "class": "甲",
+    "name": "黃柏嘉",
+    "team": "blue"
+  },
+  {
+    "id": 34,
+    "grade": 3,
+    "class": "甲",
+    "name": "陳睿謙",
+    "team": "blue"
+  },
+  {
+    "id": 35,
+    "grade": 3,
+    "class": "甲",
+    "name": "施慎和",
+    "team": "red"
+  },
+  {
+    "id": 36,
+    "grade": 3,
+    "class": "甲",
+    "name": "葉涅山",
+    "team": "green"
+  },
+  {
+    "id": 37,
+    "grade": 3,
+    "class": "甲",
+    "name": "黃邦睿",
+    "team": "blue"
+  },
+  {
+    "id": 38,
+    "grade": 3,
+    "class": "甲",
+    "name": "李宇樂",
+    "team": "red"
+  },
+  {
+    "id": 39,
+    "grade": 3,
+    "class": "甲",
+    "name": "郭子翔",
+    "team": "green"
+  },
+  {
+    "id": 40,
+    "grade": 3,
+    "class": "甲",
+    "name": "邱亞忻",
+    "team": "green"
+  },
+  {
+    "id": 41,
+    "grade": 3,
+    "class": "甲",
+    "name": "蔡喬捷",
+    "team": "red"
+  },
+  {
+    "id": 42,
+    "grade": 3,
+    "class": "甲",
+    "name": "林姿妤",
+    "team": "green"
+  },
+  {
+    "id": 43,
+    "grade": 3,
+    "class": "甲",
+    "name": "郭俞岑",
+    "team": "blue"
+  },
+  {
+    "id": 44,
+    "grade": 3,
+    "class": "甲",
+    "name": "葉芷安",
+    "team": "red"
+  },
+  {
+    "id": 45,
+    "grade": 3,
+    "class": "甲",
+    "name": "王畇霏",
+    "team": "green"
+  },
+  {
+    "id": 46,
+    "grade": 4,
+    "class": "甲",
+    "name": "黃祐嘉",
+    "team": "red"
+  },
+  {
+    "id": 47,
+    "grade": 4,
+    "class": "甲",
+    "name": "陳敬倫",
+    "team": "blue"
+  },
+  {
+    "id": 48,
+    "grade": 4,
+    "class": "甲",
+    "name": "邱弘富",
+    "team": "blue"
+  },
+  {
+    "id": 49,
+    "grade": 4,
+    "class": "甲",
+    "name": "黃凱崙",
+    "team": "red"
+  },
+  {
+    "id": 50,
+    "grade": 4,
+    "class": "甲",
+    "name": "王宣錡",
+    "team": "green"
+  },
+  {
+    "id": 51,
+    "grade": 4,
+    "class": "甲",
+    "name": "黃震興",
+    "team": "blue"
+  },
+  {
+    "id": 52,
+    "grade": 4,
+    "class": "甲",
+    "name": "陳伯瑞",
+    "team": "red"
+  },
+  {
+    "id": 53,
+    "grade": 4,
+    "class": "甲",
+    "name": "吳家樂",
+    "team": "green"
+  },
+  {
+    "id": 54,
+    "grade": 4,
+    "class": "甲",
+    "name": "林雨晴",
+    "team": "blue"
+  },
+  {
+    "id": 55,
+    "grade": 4,
+    "class": "甲",
+    "name": "蔡依璇",
+    "team": "red"
+  },
+  {
+    "id": 56,
+    "grade": 4,
+    "class": "甲",
+    "name": "翁梓綝",
+    "team": "green"
+  },
+  {
+    "id": 57,
+    "grade": 4,
+    "class": "甲",
+    "name": "陳品彤",
+    "team": "blue"
+  },
+  {
+    "id": 58,
+    "grade": 4,
+    "class": "甲",
+    "name": "蘇亮伃",
+    "team": "red"
+  },
+  {
+    "id": 59,
+    "grade": 4,
+    "class": "甲",
+    "name": "方婕薰",
+    "team": "green"
+  },
+  {
+    "id": 60,
+    "grade": 4,
+    "class": "甲",
+    "name": "黃晨瑄",
+    "team": "blue"
+  },
+  {
+    "id": 61,
+    "grade": 4,
+    "class": "甲",
+    "name": "邱子瑜",
+    "team": "red"
+  },
+  {
+    "id": 62,
+    "grade": 4,
+    "class": "甲",
+    "name": "楊佳恩",
+    "team": "green"
+  },
+  {
+    "id": 63,
+    "grade": 4,
+    "class": "甲",
+    "name": "陳采緹",
+    "team": "green"
+  },
+  {
+    "id": 64,
+    "grade": 5,
+    "class": "甲",
+    "name": "陳致愷",
+    "team": "red"
+  },
+  {
+    "id": 65,
+    "grade": 5,
+    "class": "甲",
+    "name": "黃鈞瑋",
+    "team": "green"
+  },
+  {
+    "id": 66,
+    "grade": 5,
+    "class": "甲",
+    "name": "黃俊佑",
+    "team": "blue"
+  },
+  {
+    "id": 67,
+    "grade": 5,
+    "class": "甲",
+    "name": "莊迪元",
+    "team": "red"
+  },
+  {
+    "id": 68,
+    "grade": 5,
+    "class": "甲",
+    "name": "夘嵊彬",
+    "team": "green"
+  },
+  {
+    "id": 69,
+    "grade": 5,
+    "class": "甲",
+    "name": "吳羿辰",
+    "team": "blue"
+  },
+  {
+    "id": 70,
+    "grade": 5,
+    "class": "甲",
+    "name": "王浩宸",
+    "team": "red"
+  },
+  {
+    "id": 71,
+    "grade": 5,
+    "class": "甲",
+    "name": "陳奕辰",
+    "team": "green"
+  },
+  {
+    "id": 72,
+    "grade": 5,
+    "class": "甲",
+    "name": "陳浩銘",
+    "team": "blue"
+  },
+  {
+    "id": 73,
+    "grade": 5,
+    "class": "甲",
+    "name": "王威霖",
+    "team": "red"
+  },
+  {
+    "id": 74,
+    "grade": 5,
+    "class": "甲",
+    "name": "劉濬賓",
+    "team": "green"
+  },
+  {
+    "id": 75,
+    "grade": 5,
+    "class": "甲",
+    "name": "林浩哲",
+    "team": "blue"
+  },
+  {
+    "id": 76,
+    "grade": 5,
+    "class": "甲",
+    "name": "蔡岳辰",
+    "team": "red"
+  },
+  {
+    "id": 77,
+    "grade": 5,
+    "class": "甲",
+    "name": "黃晨涵",
+    "team": "green"
+  },
+  {
+    "id": 78,
+    "grade": 5,
+    "class": "甲",
+    "name": "李姿錡",
+    "team": "blue"
+  },
+  {
+    "id": 79,
+    "grade": 5,
+    "class": "甲",
+    "name": "黃宥榛",
+    "team": "red"
+  },
+  {
+    "id": 80,
+    "grade": 5,
+    "class": "甲",
+    "name": "李晨馨",
+    "team": "green"
+  },
+  {
+    "id": 81,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃振宸",
+    "team": "red"
+  },
+  {
+    "id": 82,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃明哲",
+    "team": "green"
+  },
+  {
+    "id": 83,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃睿澄",
+    "team": "blue"
+  },
+  {
+    "id": 84,
+    "grade": 6,
+    "class": "甲",
+    "name": "郭韋辰",
+    "team": "red"
+  },
+  {
+    "id": 85,
+    "grade": 6,
+    "class": "甲",
+    "name": "方晨宇",
+    "team": "green"
+  },
+  {
+    "id": 86,
+    "grade": 6,
+    "class": "甲",
+    "name": "陳駿鈜",
+    "team": "blue"
+  },
+  {
+    "id": 87,
+    "grade": 6,
+    "class": "甲",
+    "name": "施竑群",
+    "team": "green"
+  },
+  {
+    "id": 88,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃若驊",
+    "team": "green"
+  },
+  {
+    "id": 89,
+    "grade": 6,
+    "class": "甲",
+    "name": "李順興",
+    "team": "blue"
+  },
+  {
+    "id": 90,
+    "grade": 6,
+    "class": "甲",
+    "name": "李帷雍",
+    "team": "red"
+  },
+  {
+    "id": 91,
+    "grade": 6,
+    "class": "甲",
+    "name": "吳宜樂",
+    "team": "green"
+  },
+  {
+    "id": 92,
+    "grade": 6,
+    "class": "甲",
+    "name": "顏儀芳",
+    "team": "blue"
+  },
+  {
+    "id": 93,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃品璇",
+    "team": "red"
+  },
+  {
+    "id": 94,
+    "grade": 6,
+    "class": "甲",
+    "name": "陳品甯",
+    "team": "green"
+  },
+  {
+    "id": 95,
+    "grade": 6,
+    "class": "甲",
+    "name": "林勤容",
+    "team": "blue"
+  },
+  {
+    "id": 96,
+    "grade": 6,
+    "class": "甲",
+    "name": "黃婕洺",
+    "team": "red"
+  },
+  {
+    "id": 97,
+    "grade": 6,
+    "class": "甲",
+    "name": "羅苡芸",
+    "team": "green"
+  },
+  {
+    "id": 98,
+    "grade": 6,
+    "class": "甲",
+    "name": "劉雯玲",
+    "team": "blue"
+  },
+  {
+    "id": 99,
+    "grade": 6,
+    "class": "甲",
+    "name": "戴瑋辰",
+    "team": "red"
+  }
+];
+  </script>
+
+  <script>
+    const TEAMS = {
+      red: {
+        id: 'red',
+        name: '烈火金獅隊',
+        motto: '「勇猛精進 • 如火燎原」',
+        color: '#e11d48',
+        bgPill: 'bg-gradient-to-r from-rose-600 to-rose-700 text-white border-rose-400',
+        icon: 'fa-solid fa-fire-flame-curved',
+        shadow: 'rgba(225, 29, 72, 0.6)',
+        confettiColors: ['#e11d48', '#f59e0b', '#fbbf24', '#ffffff', '#ff0055']
+      },
+      green: {
+        id: 'green',
+        name: '翠玉蜈蚣隊',
+        motto: '「步步為營 • 團結破浪」',
+        color: '#10b981',
+        bgPill: 'bg-gradient-to-r from-emerald-600 to-emerald-700 text-white border-emerald-400',
+        icon: 'fa-solid fa-dragon',
+        shadow: 'rgba(16, 185, 129, 0.6)',
+        confettiColors: ['#10b981', '#34d399', '#fef08a', '#ffffff', '#059669']
+      },
+      blue: {
+        id: 'blue',
+        name: '碧海晨曦隊',
+        motto: '「浩瀚開闊 • 晨曦破曉」',
+        color: '#0284c7',
+        bgPill: 'bg-gradient-to-r from-sky-600 to-sky-700 text-white border-sky-400',
+        icon: 'fa-solid fa-water',
+        shadow: 'rgba(2, 132, 199, 0.6)',
+        confettiColors: ['#0284c7', '#38bdf8', '#e0f2fe', '#ffffff', '#2563eb']
+      }
+    };
+
+    const GOBLET_WHISPERS = [
+      "「嗯... 步伐穩健，眼神充滿無畏的勇氣與衝勁！」",
+      "「這股澎湃的力量... 靈動如風，必定是團隊的靈魂人物！」",
+      "「我看見了堅毅不拔的恆毅力與滿滿的自信心！」",
+      "「太優秀了！這股氣勢，非這個傳奇戰隊莫屬了！」",
+      "「心性善良沉著，且具備照顧學弟妹的溫暖胸懷！」",
+      "「敏捷、聰慧，在賽場上將成為無人能擋的破風手！」",
+      "「神獸已經對你微笑，去吧！發揮你的無限光芒！」"
+    ];
+
+    let students = [];
+    let currentIndex = 0;
+    let stageState = 'WAITING';
+    let soundEnabled = true;
+    let voiceEnabled = true;
+    let audioCtx = null;
+    let currentLayout = 'wings'; // 'wings' 或 'classic'
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initLayoutMode();
+      loadStudentsFromStorage();
+      renderCurrentStudent();
+      updateDashboardCounts();
+      renderAllRosters();
+      setupKeyboardShortcuts();
+    });
+
+    // 🪟 視圖切換邏輯 (劇院雙翼 vs 經典上下)
+    function initLayoutMode() {
+      const savedLayout = localStorage.getItem('nanxing_sorting_layout');
+      if (savedLayout) {
+        currentLayout = savedLayout;
+      } else {
+        // 大螢幕預設為雙翼劇院模式 (超清晰即時看名單)
+        currentLayout = window.innerWidth >= 900 ? 'wings' : 'classic';
+      }
+      applyLayoutMode();
+    }
+
+    function toggleLayoutMode() {
+      currentLayout = currentLayout === 'wings' ? 'classic' : 'wings';
+      localStorage.setItem('nanxing_sorting_layout', currentLayout);
+      applyLayoutMode();
+    }
+
+    function applyLayoutMode() {
+      const container = document.getElementById('app-container');
+      const classicBottom = document.getElementById('classic-bottom');
+      const wingsLeft = document.getElementById('wings-left');
+      const wingsRight = document.getElementById('wings-right');
+      const label = document.getElementById('layout-toggle-label');
+
+      if (currentLayout === 'wings') {
+        document.body.classList.remove('layout-classic');
+        document.body.classList.add('layout-wings');
+        if (container) {
+          container.className = 'flex-1 flex overflow-hidden min-h-0 w-full relative justify-between items-stretch';
+        }
+        if (wingsLeft) wingsLeft.style.display = 'flex';
+        if (wingsRight) wingsRight.style.display = 'flex';
+        if (classicBottom) {
+          classicBottom.style.display = 'none';
+        }
+        if (label) label.textContent = '劇院雙翼視圖';
+      } else {
+        document.body.classList.remove('layout-wings');
+        document.body.classList.add('layout-classic');
+        if (container) {
+          container.className = 'flex-1 flex flex-col overflow-hidden min-h-0 w-full relative justify-between items-center';
+        }
+        if (wingsLeft) wingsLeft.style.display = 'none';
+        if (wingsRight) wingsRight.style.display = 'none';
+        if (classicBottom) {
+          classicBottom.style.display = 'block';
+        }
+        if (label) label.textContent = '經典上下視圖';
+      }
+      // 重新捲動至最新名單
+      renderAllRosters();
+    }
+
+    function loadStudentsFromStorage() {
+      const saved = localStorage.getItem('nanxing_sorting_students');
+      if (saved) {
+        try {
+          students = JSON.parse(saved);
+        } catch(e) {
+          students = JSON.parse(JSON.stringify(DEFAULT_STUDENTS));
+        }
+      } else {
+        students = JSON.parse(JSON.stringify(DEFAULT_STUDENTS));
+      }
+
+      students.forEach((s, idx) => {
+        if (s.revealed === undefined) s.revealed = false;
+        s.seq = idx + 1;
+      });
+
+      const firstUnrevealed = students.findIndex(s => !s.revealed);
+      currentIndex = firstUnrevealed !== -1 ? firstUnrevealed : 0;
+    }
+
+    function saveStudentsToStorage() {
+      localStorage.setItem('nanxing_sorting_students', JSON.stringify(students));
+    }
+
+    function renderCurrentStudent() {
+      if (!students || students.length === 0) return;
+      const s = students[currentIndex];
+      
+      document.getElementById('current-seq').textContent = `NO. ${String(s.seq).padStart(2, '0')} / ${students.length}`;
+      document.getElementById('current-grade-badge').textContent = `${numberToChineseGrade(s.grade)}年${s.class}班`;
+      document.getElementById('student-name').textContent = s.name;
+
+      const revealedCount = students.filter(x => x.revealed).length;
+      const pct = Math.round((revealedCount / students.length) * 100);
+      document.getElementById('progress-text').textContent = `${revealedCount} / ${students.length} 人 (${pct}%)`;
+      document.getElementById('progress-bar').style.width = `${pct}%`;
+
+      if (s.revealed) {
+        showRevealedState(s.team, false);
+      } else {
+        showWaitingState();
+      }
+
+      document.getElementById('btn-prev').disabled = currentIndex === 0;
+      document.getElementById('btn-prev').classList.toggle('opacity-40', currentIndex === 0);
+      document.getElementById('btn-next').disabled = currentIndex === students.length - 1;
+      document.getElementById('btn-next').classList.toggle('opacity-40', currentIndex === students.length - 1);
+    }
+
+    function numberToChineseGrade(g) {
+      const map = { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六' };
+      return map[g] || g;
+    }
+
+    function showWaitingState() {
+      stageState = 'WAITING';
+      const s = students[currentIndex];
+
+      document.getElementById('unrevealed-hint').classList.remove('hidden');
+      document.getElementById('revealed-badge').classList.add('hidden');
+      document.getElementById('stage-card').style.borderColor = 'rgba(245, 158, 11, 0.5)';
+      document.getElementById('card-glow-bg').style.background = 'radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.15) 0%, transparent 70%)';
+      
+      document.getElementById('whisper-content').textContent = `「請 ${numberToChineseGrade(s.grade)}年${s.class}班 ${s.name} 上前，感應聖火盃...」`;
+      
+      document.getElementById('btn-action-text').textContent = '感應聖火盃 (空白鍵)';
+      document.getElementById('btn-action-icon').className = 'fa-solid fa-fire';
+      document.getElementById('btn-action').className = 'px-5 sm:px-8 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs sm:text-sm font-black shadow-lg shadow-amber-500/25 transition transform hover:scale-105 active:scale-95 flex items-center gap-1.5';
+
+      // 恢復預設金色聖火
+      resetGobletFlameToDefault();
+      const glow = document.getElementById('goblet-glow');
+      if (glow) glow.style.filter = 'drop-shadow(0 0 30px rgba(245,158,11,0.5))';
+    }
+
+    function resetGobletFlameToDefault() {
+      const fOuter = document.getElementById('flame-outer');
+      const fMid = document.getElementById('flame-mid');
+      const fInner = document.getElementById('flame-inner');
+      const fGroup = document.getElementById('fire-group');
+
+      if (fOuter) fOuter.setAttribute('fill', 'url(#fireOuterGrad)');
+      if (fMid) fMid.setAttribute('fill', 'url(#fireMidGrad)');
+      if (fInner) fInner.setAttribute('fill', 'url(#fireInnerGrad)');
+      if (fGroup) fGroup.classList.remove('animate-flame-surge');
+    }
+
+    function handleStageAction() {
+      if (stageState === 'WAITING') {
+        startSortingCeremony();
+      } else if (stageState === 'REVEALED') {
+        nextStudent();
+      }
+    }
+
+    function startSortingCeremony() {
+      stageState = 'THINKING';
+      const s = students[currentIndex];
+      const targetTeam = TEAMS[s.team] || TEAMS.red;
+
+      playSuspenseSound();
+
+      const hatContainer = document.getElementById('goblet-container');
+      hatContainer.classList.add('animate-wiggle'); const fg = document.getElementById('fire-group'); if (fg) fg.classList.add('animate-flame-surge');;
+
+      let whisperIdx = Math.floor(Math.random() * GOBLET_WHISPERS.length);
+      document.getElementById('whisper-content').textContent = GOBLET_WHISPERS[whisperIdx];
+
+      document.getElementById('btn-action-text').textContent = '聖火激盪中...';
+      document.getElementById('btn-action').disabled = true;
+      document.getElementById('btn-action').classList.add('opacity-80');
+
+      // 1.1 秒極速感應
+      setTimeout(() => {
+        hatContainer.classList.remove('animate-wiggle'); const fg2 = document.getElementById('fire-group'); if (fg2) fg2.classList.remove('animate-flame-surge');;
+        document.getElementById('btn-action').disabled = false;
+        document.getElementById('btn-action').classList.remove('opacity-80');
+
+        s.revealed = true;
+        saveStudentsToStorage();
+
+        showRevealedState(s.team, true);
+
+        // 語音俐落只唱名「O隊！」
+        if (voiceEnabled) {
+          speakStudentSorting(s.team);
+        }
+
+      }, 1100);
+    }
+
+    function showRevealedState(teamKey, isNewReveal) {
+      stageState = 'REVEALED';
+      const s = students[currentIndex];
+      const team = TEAMS[teamKey] || TEAMS.red;
+
+      document.getElementById('unrevealed-hint').classList.add('hidden');
+      const badge = document.getElementById('revealed-badge');
+      badge.classList.remove('hidden');
+
+      const pill = document.getElementById('revealed-team-pill');
+      pill.className = `px-5 py-1.5 rounded-full text-base sm:text-xl font-black shadow-xl tracking-wider flex items-center gap-2 border-2 ${team.bgPill}`;
+      document.getElementById('revealed-team-icon').className = team.icon;
+      document.getElementById('revealed-team-name').textContent = team.name;
+      document.getElementById('revealed-team-motto').textContent = team.motto;
+
+      document.getElementById('stage-card').style.borderColor = team.color;
+      document.getElementById('card-glow-bg').style.background = `radial-gradient(circle at 50% 0%, ${team.color}33 0%, transparent 75%)`;
+      
+      const glow = document.getElementById('goblet-glow');
+      if (glow) glow.style.filter = `drop-shadow(0 0 45px ${team.shadow})`;
+
+      // 聖火根據隊伍變色爆發！
+      applyTeamFlame(teamKey);
+
+      document.getElementById('whisper-content').textContent = `「聖火爆發！太棒了！${s.name} 正式歸入 —— ${team.name}！」`;
+
+      document.getElementById('btn-action-text').textContent = currentIndex < students.length - 1 ? '下一位同學 (空白鍵)' : '大典完成！查看指引';
+      document.getElementById('btn-action-icon').className = 'fa-solid fa-arrow-right';
+
+      if (isNewReveal) {
+        playTriumphSound();
+        shootTeamConfetti(team.confettiColors);
+      }
+
+      updateDashboardCounts();
+      renderAllRosters();
+    }
+
+        function applyTeamFlame(teamKey) {
+      const fOuter = document.getElementById('flame-outer');
+      const fMid = document.getElementById('flame-mid');
+      const fInner = document.getElementById('flame-inner');
+
+      if (teamKey === 'red') {
+        if (fOuter) fOuter.setAttribute('fill', 'url(#fireRedOuter)');
+        if (fMid) fMid.setAttribute('fill', 'url(#fireRedMid)');
+        if (fInner) fInner.setAttribute('fill', 'url(#fireRedInner)');
+      } else if (teamKey === 'green') {
+        if (fOuter) fOuter.setAttribute('fill', 'url(#fireGreenOuter)');
+        if (fMid) fMid.setAttribute('fill', 'url(#fireGreenMid)');
+        if (fInner) fInner.setAttribute('fill', 'url(#fireGreenInner)');
+      } else if (teamKey === 'blue') {
+        if (fOuter) fOuter.setAttribute('fill', 'url(#fireBlueOuter)');
+        if (fMid) fMid.setAttribute('fill', 'url(#fireBlueMid)');
+        if (fInner) fInner.setAttribute('fill', 'url(#fireBlueInner)');
+      }
+    }
+
+    function shootTeamConfetti(colors) {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: colors
+        });
+        setTimeout(() => {
+          confetti({
+            particleCount: 50,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: colors
+          });
+          confetti({
+            particleCount: 50,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: colors
+          });
+        }, 200);
+      }
+    }
+
+    function nextStudent() {
+      if (currentIndex < students.length - 1) {
+        currentIndex++;
+        renderCurrentStudent();
+      } else {
+        openSummaryModal();
+      }
+    }
+
+    function prevStudent() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderCurrentStudent();
+      }
+    }
+
+    function setupKeyboardShortcuts() {
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        if (e.code === 'Space' || e.code === 'Enter') {
+          e.preventDefault();
+          handleStageAction();
+        } else if (e.code === 'ArrowRight') {
+          e.preventDefault();
+          nextStudent();
+        } else if (e.code === 'ArrowLeft') {
+          e.preventDefault();
+          prevStudent();
+        } else if (e.key === 'f' || e.key === 'F') {
+          toggleFullScreen();
+        } else if (e.key === 't' || e.key === 'T') {
+          toggleLayoutMode();
+        } else if (e.key === 'Escape') {
+          closeRosterModal();
+          closeSummaryModal();
+          closeSettingsModal();
+        }
+      });
+    }
+
+    function updateDashboardCounts() {
+      const redRevealed = students.filter(s => s.team === 'red' && s.revealed).length;
+      const greenRevealed = students.filter(s => s.team === 'green' && s.revealed).length;
+      const blueRevealed = students.filter(s => s.team === 'blue' && s.revealed).length;
+
+      // 雙翼面板計數
+      const wRed = document.getElementById('wings-count-red');
+      const wGreen = document.getElementById('wings-count-green');
+      const wBlue = document.getElementById('wings-count-blue');
+      if (wRed) wRed.textContent = redRevealed;
+      if (wGreen) wGreen.textContent = greenRevealed;
+      if (wBlue) wBlue.textContent = blueRevealed;
+
+      // 經典底部計數
+      const cRed = document.getElementById('count-red');
+      const cGreen = document.getElementById('count-green');
+      const cBlue = document.getElementById('count-blue');
+      if (cRed) cRed.textContent = redRevealed;
+      if (cGreen) cGreen.textContent = greenRevealed;
+      if (cBlue) cBlue.textContent = blueRevealed;
+
+      // 總結彈窗計數
+      if (document.getElementById('summary-count-red')) {
+        document.getElementById('summary-count-red').textContent = students.filter(s => s.team === 'red').length;
+        document.getElementById('summary-count-green').textContent = students.filter(s => s.team === 'green').length;
+        document.getElementById('summary-count-blue').textContent = students.filter(s => s.team === 'blue').length;
+      }
+    }
+
+    // 渲染雙翼名單與經典底部名單
+    function renderAllRosters() {
+      ['red', 'green', 'blue'].forEach(teamKey => {
+        const teamStudents = students.filter(s => s.team === teamKey && s.revealed);
+        
+        const teamColorClass = teamKey === 'red' 
+          ? 'bg-rose-900/40 text-rose-200 border-rose-700/60' 
+          : teamKey === 'green'
+            ? 'bg-emerald-900/40 text-emerald-200 border-emerald-700/60'
+            : 'bg-sky-900/40 text-sky-200 border-sky-700/60';
+
+        const chipsHtml = teamStudents.length === 0 
+          ? '<span class="text-[10px] text-slate-500 italic p-1">等待神獸召喚中...</span>'
+          : teamStudents.map(s => {
+              const isCurrent = s.seq - 1 === currentIndex;
+              return `
+                <button onclick="jumpToStudent(${s.seq - 1})" class="px-2 py-0.5 rounded text-[11px] font-bold border transition transform hover:scale-105 active:scale-95 flex items-center gap-1 ${teamColorClass} ${isCurrent ? 'ring-2 ring-amber-400 shadow-md shadow-amber-400/50' : ''}" title="點擊聚焦 ${s.name}">
+                  <span class="opacity-75">${s.grade}甲</span>
+                  <span>${s.name}</span>
+                </button>
+              `;
+            }).join('');
+
+        // 注入雙翼側欄
+        const wingsContainer = document.getElementById(`wings-roster-${teamKey}`);
+        if (wingsContainer) {
+          wingsContainer.innerHTML = chipsHtml;
+          // 平滑滾動至最新加入的孩子
+          wingsContainer.scrollTop = wingsContainer.scrollHeight;
+        }
+
+        // 注入經典底欄
+        const classicContainer = document.getElementById(`roster-${teamKey}`);
+        if (classicContainer) {
+          classicContainer.innerHTML = chipsHtml;
+          classicContainer.scrollTop = classicContainer.scrollHeight;
+        }
+      });
+    }
+
+    function jumpToStudent(idx) {
+      if (idx >= 0 && idx < students.length) {
+        currentIndex = idx;
+        renderCurrentStudent();
+        closeRosterModal();
+      }
+    }
+
+    let currentRosterFilter = 'all';
+
+    function openRosterModal() {
+      document.getElementById('roster-modal').classList.remove('hidden');
+      renderRosterModalContent();
+    }
+
+    function closeRosterModal() {
+      document.getElementById('roster-modal').classList.add('hidden');
+    }
+
+    function filterRosterByGrade(grade) {
+      currentRosterFilter = grade;
+      for (let i = 1; i <= 6; i++) {
+        const btn = document.getElementById(`tab-grade-${i}`);
+        if (btn) btn.className = `px-3 py-1 rounded-lg text-xs font-bold ${grade == i ? 'bg-amber-500 text-slate-950 font-sans' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`;
+      }
+      const allBtn = document.getElementById('tab-grade-all');
+      if (allBtn) allBtn.className = `px-3 py-1 rounded-lg text-xs font-bold ${grade === 'all' ? 'bg-amber-500 text-slate-950 font-sans' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`;
+
+      renderRosterModalContent();
+    }
+
+    function renderRosterModalContent() {
+      const grid = document.getElementById('roster-modal-grid');
+      let filtered = students;
+      if (currentRosterFilter !== 'all') {
+        filtered = students.filter(s => s.grade === parseInt(currentRosterFilter));
+      }
+
+      grid.innerHTML = filtered.map((s) => {
+        const realIdx = students.findIndex(x => x.id === s.id);
+        const teamObj = TEAMS[s.team] || TEAMS.red;
+        const isCurrent = realIdx === currentIndex;
+
+        return `
+          <div onclick="jumpToStudent(${realIdx})" class="p-2.5 rounded-xl border transition cursor-pointer flex items-center justify-between ${
+            s.revealed 
+              ? s.team === 'red' ? 'bg-rose-950/40 border-rose-700/60 hover:bg-rose-900/60' : s.team === 'green' ? 'bg-emerald-950/40 border-emerald-700/60 hover:bg-emerald-900/60' : 'bg-sky-950/40 border-sky-700/60 hover:bg-sky-900/60'
+              : 'bg-slate-800/60 border-slate-700 hover:bg-slate-800'
+          } ${isCurrent ? 'ring-2 ring-amber-400' : ''}">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-slate-400 font-cinzel">${String(s.seq).padStart(2,'0')}</span>
+              <div>
+                <div class="text-xs font-bold text-white">${s.name}</div>
+                <div class="text-[10px] text-slate-400">${s.grade}年${s.class}班</div>
+              </div>
+            </div>
+            <div>
+              ${s.revealed ? `<span class="text-xs font-bold" style="color: ${teamObj.color}">${s.team === 'red' ? '🔴 紅' : s.team === 'green' ? '🟢 綠' : '🔵 藍'}</span>` : `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-slate-300">待揭曉</span>`}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function revealAllStudentsFast() {
+      if (confirm('確定要一鍵將全校 99 位學生全數揭曉分隊嗎？（適合想直接進入三隊集合檢核）')) {
+        students.forEach(s => s.revealed = true);
+        saveStudentsToStorage();
+        renderCurrentStudent();
+        updateDashboardCounts();
+        renderAllRosters();
+        closeRosterModal();
+        openSummaryModal();
+      }
+    }
+
+    function openSummaryModal() {
+      document.getElementById('summary-modal').classList.remove('hidden');
+      renderSummaryModalContent();
+    }
+
+    function closeSummaryModal() {
+      document.getElementById('summary-modal').classList.add('hidden');
+    }
+
+    function renderSummaryModalContent() {
+      // 更新列印時間
+      const now = new Date();
+      const timeStr = `${now.getFullYear() - 1911}年${now.getMonth() + 1}月${now.getDate()}日 ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const printTimeElem = document.getElementById('print-time-str');
+      if (printTimeElem) printTimeElem.textContent = timeStr;
+
+      ['red', 'green', 'blue'].forEach(teamKey => {
+        const listContainer = document.getElementById(`summary-list-${teamKey}`);
+        const statsContainer = document.getElementById(`summary-grade-stats-${teamKey}`);
+        const countContainer = document.getElementById(`summary-count-${teamKey}`);
+        const teamStudents = students.filter(s => s.team === teamKey);
+
+        if (countContainer) countContainer.textContent = teamStudents.length;
+
+        const gradeCounts = {};
+        for (let g = 1; g <= 6; g++) gradeCounts[g] = 0;
+        teamStudents.forEach(s => { gradeCounts[s.grade] = (gradeCounts[s.grade] || 0) + 1; });
+        if (statsContainer) {
+          statsContainer.textContent = `1~6年級: ${gradeCounts[1]}, ${gradeCounts[2]}, ${gradeCounts[3]}, ${gradeCounts[4]}, ${gradeCounts[5]}, ${gradeCounts[6]}人`;
+        }
+
+        let html = '';
+        for (let g = 1; g <= 6; g++) {
+          const gStudents = teamStudents.filter(s => s.grade === g);
+          if (gStudents.length > 0) {
+            html += `
+              <div class="grade-group pb-1.5 border-b border-slate-800/80 last:border-0">
+                <div class="grade-row-title text-[11px] font-bold text-amber-300 mb-1 flex items-center justify-between">
+                  <span>${numberToChineseGrade(g)}年級 (${gStudents.length}人)</span>
+                </div>
+                <div class="flex flex-wrap gap-1">
+                  ${gStudents.map(s => `<span class="student-tag-print px-1.5 py-0.5 rounded bg-slate-900/90 border border-slate-700/80 text-[11px] font-medium text-slate-200">${s.name}</span>`).join('')}
+                </div>
+              </div>
+            `;
+          }
+        }
+        if (listContainer) listContainer.innerHTML = html;
+      });
+    }
+
+    function printSummaryRoster() {
+      // 確保資料已最新渲染
+      renderSummaryModalContent();
+      window.print();
+    }
+
+    function openSettingsModal() {
+      document.getElementById('settings-modal').classList.remove('hidden');
+      renderSettingsTable();
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settings-modal').classList.add('hidden');
+    }
+
+    function renderSettingsTable() {
+      const tbody = document.getElementById('settings-table-body');
+      const query = (document.getElementById('table-search')?.value || '').trim().toLowerCase();
+
+      let filtered = students;
+      if (query) {
+        filtered = students.filter(s => s.name.includes(query) || `${s.grade}`.includes(query));
+      }
+
+      const r = students.filter(s => s.team === 'red').length;
+      const g = students.filter(s => s.team === 'green').length;
+      const b = students.filter(s => s.team === 'blue').length;
+      document.getElementById('settings-cnt-red').textContent = r;
+      document.getElementById('settings-cnt-green').textContent = g;
+      document.getElementById('settings-cnt-blue').textContent = b;
+
+      tbody.innerHTML = filtered.map((s) => {
+        const realIdx = students.findIndex(x => x.id === s.id);
+        return `
+          <tr class="hover:bg-slate-900/50">
+            <td class="py-2 px-3 font-cinzel text-slate-400">${String(s.seq).padStart(2,'0')}</td>
+            <td class="py-2 px-3">${s.grade}年${s.class}班</td>
+            <td class="py-2 px-3 font-bold text-white">${s.name}</td>
+            <td class="py-2 px-3">
+              <select onchange="updateStudentTeam(${realIdx}, this.value)" class="bg-slate-800 text-xs text-slate-200 rounded px-2 py-1 border border-slate-700 focus:outline-none">
+                <option value="red" ${s.team === 'red' ? 'selected' : ''}>🔴 紅隊 (金獅)</option>
+                <option value="green" ${s.team === 'green' ? 'selected' : ''}>🟢 綠隊 (蜈蚣)</option>
+                <option value="blue" ${s.team === 'blue' ? 'selected' : ''}>🔵 藍隊 (晨曦)</option>
+              </select>
+            </td>
+            <td class="py-2 px-3">
+              ${s.revealed ? '<span class="text-emerald-400">✓ 已揭曉</span>' : '<span class="text-slate-500">未揭曉</span>'}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updateStudentTeam(idx, newTeam) {
+      if (students[idx]) {
+        students[idx].team = newTeam;
+        saveStudentsToStorage();
+        renderSettingsTable();
+        updateDashboardCounts();
+        renderAllRosters();
+      }
+    }
+
+    function rebalanceTeamsSmart() {
+      if (!confirm('確定要重新均衡自動分隊嗎？系統將確保各年級人數 100% 均勻分配至紅、綠、藍三隊。')) return;
+      
+      const byGrade = {};
+      students.forEach(s => {
+        byGrade[s.grade] = byGrade[s.grade] || [];
+        byGrade[s.grade].push(s);
+      });
+
+      const tCycle = ['red', 'green', 'blue'];
+      let cycleIdx = 0;
+
+      for (let g = 1; g <= 6; g++) {
+        const gList = byGrade[g] || [];
+        gList.forEach(s => {
+          s.team = tCycle[cycleIdx % 3];
+          cycleIdx++;
+        });
+      }
+
+      saveStudentsToStorage();
+      renderSettingsTable();
+      updateDashboardCounts();
+      renderAllRosters();
+      renderCurrentStudent();
+      alert('已完成全校 6 個年級智慧均勻分隊！');
+    }
+
+    function resetCeremonyProgress() {
+      if (!confirm('確定要重置儀式進度嗎？所有學生將重設為「未揭曉」狀態，從第 1 位重新開始。')) return;
+      students.forEach(s => s.revealed = false);
+      currentIndex = 0;
+      saveStudentsToStorage();
+      renderCurrentStudent();
+      updateDashboardCounts();
+      renderAllRosters();
+      closeSettingsModal();
+    }
+
+    function exportRosterCSV() {
+      let csv = '序號,年級,班級,姓名,分配戰隊,揭曉狀態\n';
+      students.forEach(s => {
+        const tName = s.team === 'red' ? '紅隊(烈火金獅)' : s.team === 'green' ? '綠隊(翠玉蜈蚣)' : '藍隊(碧海晨曦)';
+        csv += `${s.seq},${s.grade},${s.class},${s.name},${tName},${s.revealed ? '已揭曉' : '未揭曉'}\n`;
+      });
+      const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '南興國小115校慶_紅綠藍分隊名單.csv';
+      a.click();
+    }
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('btn-sound');
+      btn.className = `p-1.5 sm:px-2 sm:py-1.5 rounded-lg bg-slate-800/80 text-xs border border-slate-700 transition ${soundEnabled ? 'text-amber-400' : 'text-slate-500'}`;
+      btn.innerHTML = soundEnabled ? '<i class="fa-solid fa-music"></i>' : '<i class="fa-solid fa-volume-xmark"></i>';
+    }
+
+    function toggleVoice() {
+      voiceEnabled = !voiceEnabled;
+      const btn = document.getElementById('btn-voice');
+      btn.className = `p-1.5 sm:px-2 sm:py-1.5 rounded-lg bg-slate-800/80 text-xs border border-slate-700 transition ${voiceEnabled ? 'text-emerald-400' : 'text-slate-500'}`;
+      btn.innerHTML = voiceEnabled ? '<i class="fa-solid fa-volume-high"></i>' : '<i class="fa-solid fa-volume-off"></i>';
+    }
+
+    function playSuspenseSound() {
+      if (!soundEnabled) return;
+      initAudio();
+      try {
+        const now = audioCtx.currentTime;
+        for (let i = 0; i < 2; i++) {
+          const t = now + (i * 0.45);
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(85, t);
+          osc.frequency.exponentialRampToValueAtTime(30, t + 0.18);
+          gain.gain.setValueAtTime(0.65, t);
+          gain.gain.exponentialRampToValueAtTime(0.01, t + 0.18);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(t);
+          osc.stop(t + 0.2);
+        }
+
+        const riser = audioCtx.createOscillator();
+        const riserGain = audioCtx.createGain();
+        riser.type = 'sine';
+        riser.frequency.setValueAtTime(280, now);
+        riser.frequency.exponentialRampToValueAtTime(800, now + 1.0);
+        riserGain.gain.setValueAtTime(0.05, now);
+        riserGain.gain.linearRampToValueAtTime(0.3, now + 0.95);
+        riserGain.gain.exponentialRampToValueAtTime(0.01, now + 1.08);
+        riser.connect(riserGain);
+        riserGain.connect(audioCtx.destination);
+        riser.start(now);
+        riser.stop(now + 1.1);
+      } catch(e) {
+        console.warn('Audio error:', e);
+      }
+    }
+
+    function playTriumphSound() {
+      if (!soundEnabled) return;
+      initAudio();
+      try {
+        const now = audioCtx.currentTime;
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+          const t = now + (idx * 0.08);
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(freq, t);
+          
+          gain.gain.setValueAtTime(0, t);
+          gain.gain.linearRampToValueAtTime(0.25, t + 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 1.2);
+
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(2200, t);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(t);
+          osc.stop(t + 1.3);
+        });
+      } catch(e) {
+        console.warn('Audio error:', e);
+      }
+    }
+
+    function speakStudentSorting(teamKey) {
+      if (!('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const teamText = teamKey === 'red' ? '紅隊！' : (teamKey === 'green' ? '綠隊！' : '藍隊！');
+        const utter = new SpeechSynthesisUtterance(teamText);
+        utter.lang = 'zh-TW';
+        utter.rate = 1.15;
+        utter.pitch = 1.1;
+        window.speechSynthesis.speak(utter);
+      } catch(e) {
+        console.warn('Speech error:', e);
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          alert('無法進入全螢幕：' + err.message);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+  </script>
+</body>
+</html>
