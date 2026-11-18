@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>南興魔法聖火盃 • 紅綠藍三大戰隊火盃點將 ｜ 臺南市南興國小115校慶</title>
+  <title>南興校慶運動聖火盃 • 紅綠藍三大戰隊點將大典 ｜ 臺南市南興國小115校慶</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -285,7 +285,7 @@
 </head>
 <body class="layout-wings h-screen overflow-hidden flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
 
-  <!-- 頂部魔法控制列 -->
+  <!-- 頂部典禮控制列 -->
   <header class="w-full h-14 border-b border-amber-900/40 bg-slate-950/85 backdrop-blur-md z-40 px-3 sm:px-6 flex items-center justify-between flex-shrink-0">
     <!-- 左：校徽與儀式標題 -->
     <div class="flex items-center gap-2.5">
@@ -294,9 +294,9 @@
           <img src="images/school_logo.jpg" alt="校徽" class="w-full h-full object-contain">
         </div>
         <div>
-          <div class="text-[10px] text-amber-400 font-cinzel tracking-wider font-bold leading-none">NANXING GOBLET OF FIRE CEREMONY</div>
+          <div class="text-[10px] text-amber-400 font-cinzel tracking-wider font-bold leading-none">NANXING SPORTS FLAME CEREMONY</div>
           <div class="text-xs sm:text-sm font-black text-amber-100 flex items-center gap-1.5 mt-0.5">
-            <span>南興魔法聖火盃</span>
+            <span>南興運動聖火盃</span>
             <span class="text-[10px] px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">朝會專用</span>
           </div>
         </div>
@@ -345,7 +345,7 @@
       </button>
 
       <!-- 音效開關 -->
-      <button id="btn-sound" onclick="toggleSound()" class="p-1.5 sm:px-2 sm:py-1.5 rounded-lg bg-slate-800/80 text-amber-400 text-xs border border-slate-700 transition" title="背景魔法音效開關">
+      <button id="btn-sound" onclick="toggleSound()" class="p-1.5 sm:px-2 sm:py-1.5 rounded-lg bg-slate-800/80 text-amber-400 text-xs border border-slate-700 transition" title="典禮音效開關">
         <i class="fa-solid fa-music"></i>
       </button>
 
@@ -380,7 +380,7 @@
       </div>
     </aside>
 
-    <!-- 🏆 中軸核心舞台：南興魔法聖火盃 ＆ 唱名大看板 -->
+    <!-- 🏆 中軸核心舞台：南興運動聖火盃 ＆ 唱名大看板 -->
     <main class="flex-1 flex flex-col items-center justify-center p-2 sm:p-4 min-h-0 overflow-hidden relative z-10">
       
       <!-- 頂部神秘符文環 (微縮適配) -->
@@ -391,161 +391,81 @@
       <!-- 舞台中央包裹層 -->
       <div id="stage-wrapper" class="w-full flex flex-col items-center text-center relative max-h-full justify-center">
         
-        <!-- 南興魔法聖火盃 (Goblet of Fire - 象徵運動大會聖火與榮譽勇士) -->
-        <div id="goblet-container" class="relative z-10 animate-float cursor-pointer flex-shrink-0" onclick="handleStageAction()" title="點擊聖火盃感應分隊">
-          <div id="goblet-glow" class="w-36 h-36 sm:w-44 sm:h-44 xl:w-52 xl:h-52 mx-auto flex items-center justify-center transition-all duration-500 filter drop-shadow(0 0 30px rgba(245,158,11,0.5))">
-            <!-- 魔法聖火金盃 SVG -->
-            <svg class="w-full h-full" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-              
-              <!-- 背後神聖召喚光環 -->
-              <circle cx="100" cy="110" r="82" stroke="#fbbf24" stroke-width="1.2" stroke-dasharray="6 8" opacity="0.4" class="animate-spin-slow" />
-              <circle cx="100" cy="110" r="62" stroke="#d97706" stroke-width="0.8" opacity="0.3" />
+        <!-- 🏆 南興校慶運動聖火盃 (Olympic Sports Flame Cauldron - 靈動流體粒子火焰) -->
+        <div id="goblet-container" class="relative z-10 cursor-pointer flex-shrink-0 flex flex-col items-center justify-center my-1" onclick="handleStageAction()" title="點擊運動聖火盃進行點將">
+          <!-- 聖火盃動態舞台容器 -->
+          <div class="relative w-52 h-48 sm:w-64 sm:h-56 xl:w-72 xl:h-60 flex items-center justify-center">
+            
+            <!-- 1. 背景動態運動榮譽金環 -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div class="w-44 h-44 sm:w-52 sm:h-52 rounded-full border border-amber-500/20 border-dashed animate-spin-slow"></div>
+            </div>
 
-              <!-- ================= 魔法聖火火焰層 (動態跳動與變色) ================= -->
-              <g id="fire-group" class="animate-flame">
-                <!-- 聖火外焰 (Outer Flame) -->
-                <path id="flame-outer" d="M100 15 C 80 40, 50 65, 58 95 C 64 116, 85 125, 100 125 C 115 125, 136 116, 142 95 C 150 65, 120 40, 100 15 Z" 
-                      fill="url(#fireOuterGrad)" opacity="0.85" filter="blur(1.5px)" />
+            <!-- 2. 靈動流體粒子火焰 Canvas (60FPS 自然有機跳動・流體火舌與飛舞火星) -->
+            <canvas id="sports-flame-canvas" class="absolute top-0 left-0 w-full h-full z-10 pointer-events-none"></canvas>
+
+            <!-- 3. 前景典雅運動聖火金盃 (Olympic Cauldron) -->
+            <div id="goblet-bowl" class="absolute bottom-1 z-20 w-44 sm:w-52 xl:w-56 transition-all duration-300 pointer-events-none filter drop-shadow(0 8px 16px rgba(0,0,0,0.8))">
+              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                <!-- 聖火盆基座 -->
+                <ellipse cx="100" cy="112" rx="46" ry="7" fill="url(#torchBaseGrad)" stroke="#78350f" stroke-width="1.5" />
+                <path d="M60 112 C 64 100, 78 94, 88 92 L 112 92 C 122 94, 136 100, 140 112 Z" fill="url(#torchStemGrad)" stroke="#92400e" stroke-width="1.5" />
+                <rect x="92" y="78" width="16" height="15" fill="url(#torchGoldGrad)" stroke="#78350f" stroke-width="1" />
+                <ellipse cx="100" cy="85" rx="12" ry="4" fill="#fef08a" stroke="#b45309" stroke-width="1" />
+
+                <!-- 運動聖火盆 主體寬口碗 (Olympic Bowl) -->
+                <path d="M38 32 C 34 68, 66 84, 100 84 C 134 84, 166 68, 162 32 Z" fill="url(#torchBowlGrad)" stroke="#78350f" stroke-width="2" />
                 
-                <!-- 聖火中焰 (Mid Flame - 跳動舌火) -->
-                <path id="flame-mid" d="M100 30 C 85 50, 68 70, 72 98 C 76 118, 92 122, 100 122 C 108 122, 124 118, 128 98 C 132 70, 115 50, 100 30 Z" 
-                      fill="url(#fireMidGrad)" opacity="0.95" />
+                <!-- 兩側古典運動榮譽雙環 (Athletic Laurel Rings) -->
+                <path d="M34 36 C 18 36, 12 56, 24 68 C 30 74, 38 68, 42 62" stroke="url(#torchGoldGrad)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+                <path d="M166 36 C 182 36, 188 56, 176 68 C 170 74, 162 68, 158 62" stroke="url(#torchGoldGrad)" stroke-width="3.5" stroke-linecap="round" fill="none" />
 
-                <!-- 聖火內焰 (Inner Core - 極熾核心) -->
-                <path id="flame-inner" d="M100 50 C 90 65, 80 80, 84 105 C 88 120, 96 120, 100 120 C 104 120, 112 120, 116 105 C 120 80, 110 65, 100 50 Z" 
-                      fill="url(#fireInnerGrad)" />
+                <!-- 盆身雕花銘紋與運動星芒 -->
+                <path d="M80 52 C 90 48, 110 48, 120 52 C 116 64, 84 64, 80 52 Z" fill="#451a03" stroke="#f59e0b" stroke-width="1" />
+                <polygon points="100,52 102,56 107,57 103,61 104,66 100,63 96,66 97,61 93,57 98,56" fill="#fef08a" />
 
-                <!-- 浮動昇華火星 (Embers) -->
-                <circle cx="95" cy="40" r="2.5" fill="#fef08a" class="ember-1" />
-                <circle cx="108" cy="30" r="2" fill="#fed7aa" class="ember-2" />
-                <circle cx="82" cy="55" r="1.8" fill="#fef08a" class="ember-3" />
-                <circle cx="118" cy="50" r="2.2" fill="#fff" class="ember-4" />
-              </g>
+                <!-- 聖火盆厚重鍍金邊緣 (Rim) -->
+                <ellipse cx="100" cy="32" rx="62" ry="9" fill="url(#torchRimGrad)" stroke="#78350f" stroke-width="2" />
+                <!-- 盆內反射聖火火光的深邃內膽 -->
+                <ellipse cx="100" cy="32" rx="55" ry="6.5" fill="url(#torchInnerGrad)" />
 
-              <!-- ================= 古老黃金聖火盃 (Goblet Body) ================= -->
-              <!-- 雙側古典榮譽耳柄 (Handles) -->
-              <path d="M52 112 C 30 110, 22 135, 36 150 C 44 158, 56 152, 60 145" stroke="url(#goldGradLight)" stroke-width="4.5" stroke-linecap="round" fill="none" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))" />
-              <path d="M148 112 C 170 110, 178 135, 164 150 C 156 158, 144 152, 140 145" stroke="url(#goldGradLight)" stroke-width="4.5" stroke-linecap="round" fill="none" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))" />
+                <defs>
+                  <linearGradient id="torchRimGrad" x1="38" y1="32" x2="162" y2="32" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#b45309" />
+                    <stop offset="25%" stop-color="#fef08a" />
+                    <stop offset="50%" stop-color="#f59e0b" />
+                    <stop offset="75%" stop-color="#fef08a" />
+                    <stop offset="100%" stop-color="#92400e" />
+                  </linearGradient>
+                  <linearGradient id="torchBowlGrad" x1="40" y1="32" x2="160" y2="84" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#fef08a" />
+                    <stop offset="30%" stop-color="#d97706" />
+                    <stop offset="70%" stop-color="#b45309" />
+                    <stop offset="100%" stop-color="#78350f" />
+                  </linearGradient>
+                  <linearGradient id="torchInnerGrad" x1="45" y1="32" x2="155" y2="32" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#2d1002" />
+                    <stop offset="50%" stop-color="#451a03" />
+                    <stop offset="100%" stop-color="#2d1002" />
+                  </linearGradient>
+                  <linearGradient id="torchGoldGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#fef08a" />
+                    <stop offset="100%" stop-color="#b45309" />
+                  </linearGradient>
+                  <linearGradient id="torchStemGrad" x1="60" y1="92" x2="140" y2="112" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#f59e0b" />
+                    <stop offset="50%" stop-color="#fef08a" />
+                    <stop offset="100%" stop-color="#92400e" />
+                  </linearGradient>
+                  <linearGradient id="torchBaseGrad" x1="54" y1="112" x2="146" y2="112" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#78350f" />
+                    <stop offset="50%" stop-color="#d97706" />
+                    <stop offset="100%" stop-color="#451a03" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
 
-              <!-- 盃身基座底盤 (Base & Pedestal) -->
-              <ellipse cx="100" cy="186" rx="42" ry="7" fill="url(#goldGradDark)" stroke="#78350f" stroke-width="1.5" />
-              <path d="M62 186 C 65 176, 76 170, 84 168 L 116 168 C 124 170, 135 176, 138 186 Z" fill="url(#goldGradMid)" stroke="#92400e" stroke-width="1.5" />
-              <!-- 盃莖與榮耀寶環 (Stem & Ring) -->
-              <rect x="94" y="152" width="12" height="18" fill="url(#goldGradLight)" stroke="#78350f" stroke-width="1" />
-              <ellipse cx="100" cy="160" rx="10" ry="3.5" fill="#fef08a" stroke="#b45309" stroke-width="1" />
-
-              <!-- 聖火盃主碗體 (Chalice Bowl) -->
-              <path d="M56 108 C 54 135, 76 154, 100 154 C 124 154, 146 135, 144 108 Z" fill="url(#goldGradBowl)" stroke="#78350f" stroke-width="2" />
-
-              <!-- 盃面南興神獸戰紋浮雕銘牌 -->
-              <path d="M85 125 C 92 121, 108 121, 115 125 C 112 135, 88 135, 85 125 Z" fill="#451a03" stroke="#f59e0b" stroke-width="1" />
-              <circle cx="100" cy="128" r="2.5" fill="#fde047" class="animate-pulse" />
-
-              <!-- 盃口厚重鍛金輪緣 (Rim) -->
-              <ellipse cx="100" cy="108" rx="46" ry="7" fill="url(#goldGradRim)" stroke="#78350f" stroke-width="2" />
-              <!-- 盃內暗金火光反射 -->
-              <ellipse cx="100" cy="108" rx="40" ry="5" fill="#451a03" />
-
-              <!-- ================= 漸層濾鏡定義 ================= -->
-              <defs>
-                <!-- 預設金色魔法聖火 -->
-                <linearGradient id="fireOuterGrad" x1="100" y1="15" x2="100" y2="125" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#ef4444" stop-opacity="0.9" />
-                  <stop offset="40%" stop-color="#f59e0b" />
-                  <stop offset="85%" stop-color="#fbbf24" stop-opacity="0.6" />
-                </linearGradient>
-                <linearGradient id="fireMidGrad" x1="100" y1="30" x2="100" y2="122" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#fbbf24" />
-                  <stop offset="50%" stop-color="#f59e0b" />
-                  <stop offset="100%" stop-color="#b45309" />
-                </linearGradient>
-                <linearGradient id="fireInnerGrad" x1="100" y1="50" x2="100" y2="120" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#ffffff" />
-                  <stop offset="60%" stop-color="#fef08a" />
-                  <stop offset="100%" stop-color="#f59e0b" />
-                </linearGradient>
-
-                <!-- 紅隊赤焰 (烈火金獅) -->
-                <linearGradient id="fireRedOuter" x1="100" y1="15" x2="100" y2="125" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#b91c1c" />
-                  <stop offset="40%" stop-color="#ef4444" />
-                  <stop offset="85%" stop-color="#f87171" stop-opacity="0.6" />
-                </linearGradient>
-                <linearGradient id="fireRedMid" x1="100" y1="30" x2="100" y2="122" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#f87171" />
-                  <stop offset="50%" stop-color="#ef4444" />
-                  <stop offset="100%" stop-color="#991b1b" />
-                </linearGradient>
-                <linearGradient id="fireRedInner" x1="100" y1="50" x2="100" y2="120" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#ffffff" />
-                  <stop offset="60%" stop-color="#fecdd3" />
-                  <stop offset="100%" stop-color="#ef4444" />
-                </linearGradient>
-
-                <!-- 綠隊翠焰 (翠玉蜈蚣) -->
-                <linearGradient id="fireGreenOuter" x1="100" y1="15" x2="100" y2="125" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#047857" />
-                  <stop offset="40%" stop-color="#10b981" />
-                  <stop offset="85%" stop-color="#34d399" stop-opacity="0.6" />
-                </linearGradient>
-                <linearGradient id="fireGreenMid" x1="100" y1="30" x2="100" y2="122" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#34d399" />
-                  <stop offset="50%" stop-color="#10b981" />
-                  <stop offset="100%" stop-color="#065f46" />
-                </linearGradient>
-                <linearGradient id="fireGreenInner" x1="100" y1="50" x2="100" y2="120" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#ffffff" />
-                  <stop offset="60%" stop-color="#a7f3d0" />
-                  <stop offset="100%" stop-color="#10b981" />
-                </linearGradient>
-
-                <!-- 藍隊青焰 (碧海晨曦) -->
-                <linearGradient id="fireBlueOuter" x1="100" y1="15" x2="100" y2="125" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#0369a1" />
-                  <stop offset="40%" stop-color="#0ea5e9" />
-                  <stop offset="85%" stop-color="#38bdf8" stop-opacity="0.6" />
-                </linearGradient>
-                <linearGradient id="fireBlueMid" x1="100" y1="30" x2="100" y2="122" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#38bdf8" />
-                  <stop offset="50%" stop-color="#0ea5e9" />
-                  <stop offset="100%" stop-color="#075985" />
-                </linearGradient>
-                <linearGradient id="fireBlueInner" x1="100" y1="50" x2="100" y2="120" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#ffffff" />
-                  <stop offset="60%" stop-color="#bae6fd" />
-                  <stop offset="100%" stop-color="#0ea5e9" />
-                </linearGradient>
-
-                <!-- 金色聖盃鍛造漸層 -->
-                <linearGradient id="goldGradRim" x1="54" y1="108" x2="146" y2="108" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#d97706" />
-                  <stop offset="25%" stop-color="#fef08a" />
-                  <stop offset="50%" stop-color="#f59e0b" />
-                  <stop offset="75%" stop-color="#fef08a" />
-                  <stop offset="100%" stop-color="#b45309" />
-                </linearGradient>
-                <linearGradient id="goldGradBowl" x1="56" y1="108" x2="144" y2="154" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#fef08a" />
-                  <stop offset="25%" stop-color="#d97706" />
-                  <stop offset="70%" stop-color="#b45309" />
-                  <stop offset="100%" stop-color="#78350f" />
-                </linearGradient>
-                <linearGradient id="goldGradLight" x1="30" y1="110" x2="170" y2="150" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#fef08a" />
-                  <stop offset="100%" stop-color="#b45309" />
-                </linearGradient>
-                <linearGradient id="goldGradMid" x1="62" y1="168" x2="138" y2="186" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#f59e0b" />
-                  <stop offset="50%" stop-color="#fef08a" />
-                  <stop offset="100%" stop-color="#92400e" />
-                </linearGradient>
-                <linearGradient id="goldGradDark" x1="58" y1="186" x2="142" y2="186" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#78350f" />
-                  <stop offset="50%" stop-color="#d97706" />
-                  <stop offset="100%" stop-color="#451a03" />
-                </linearGradient>
-              </defs>
-            </svg>
           </div>
         </div>
 
@@ -553,7 +473,7 @@
         <div id="whisper-box" class="h-8 flex items-center justify-center my-1 z-20 flex-shrink-0">
           <div id="whisper-text" class="px-3.5 py-1 rounded-full bg-slate-900/90 border border-amber-500/40 text-amber-200 text-xs font-bold shadow-lg flex items-center gap-1.5 transition-all duration-300">
             <i class="fa-solid fa-fire-flame-curved text-amber-400 text-xs animate-pulse"></i>
-            <span id="whisper-content">「請下一位勇士上前，感應魔法聖火盃...」</span>
+            <span id="whisper-content">「請下一位運動健兒上前，感應運動聖火盃...」</span>
           </div>
         </div>
 
@@ -771,7 +691,7 @@
         </div>
         <div style="text-align: right; font-size: 8.5pt; color: #475569; line-height: 1.4;">
           <div>全校國小學生：99 位 ｜ 各隊 33 位（均質分組）</div>
-          <div>列印時間：<span id="print-time-str">民國115年</span> ｜ 學生朝會魔法分隊籌備小組</div>
+          <div>列印時間：<span id="print-time-str">民國115年</span> ｜ 校慶運動大會分隊籌備小組</div>
         </div>
       </div>
 
@@ -1720,9 +1640,234 @@
     let soundEnabled = true;
     let voiceEnabled = true;
     let audioCtx = null;
-    let currentLayout = 'wings'; // 'wings' 或 'classic'
+    let currentLayout = 'wings';
+    let sportsFlame = null; // 'wings' 或 'classic'
+
+    
+    // ==================== 運動聖火盃 靈動流體粒子火焰引擎 (Fluid Sports Flame Engine) ====================
+    class SportsFlameEngine {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.embers = [];
+        this.mode = 'idle'; // 'idle', 'thinking', 'revealed'
+        this.team = 'gold'; // 'gold', 'red', 'green', 'blue'
+        this.surge = 1.0;
+        this.time = 0;
+
+        // 四大色系調色盤 (預設神聖金、烈火金獅紅、翠玉蜈蚣綠、碧海晨曦藍)
+        this.palettes = {
+          gold: {
+            core: '#ffffff',
+            inner: 'rgba(255, 235, 130, 0.95)',
+            mid: 'rgba(251, 146, 60, 0.85)',
+            outer: 'rgba(234, 88, 12, 0.4)',
+            glow: 'rgba(245, 158, 11, 0.45)',
+            ember: '#fef08a'
+          },
+          red: {
+            core: '#fff5f5',
+            inner: 'rgba(254, 205, 211, 0.95)',
+            mid: 'rgba(239, 68, 68, 0.9)',
+            outer: 'rgba(185, 28, 28, 0.45)',
+            glow: 'rgba(244, 63, 94, 0.65)',
+            ember: '#fca5a5'
+          },
+          green: {
+            core: '#f0fdf4',
+            inner: 'rgba(167, 243, 208, 0.95)',
+            mid: 'rgba(16, 185, 129, 0.9)',
+            outer: 'rgba(4, 120, 87, 0.45)',
+            glow: 'rgba(16, 185, 129, 0.65)',
+            ember: '#86efac'
+          },
+          blue: {
+            core: '#f0f9ff',
+            inner: 'rgba(186, 230, 253, 0.95)',
+            mid: 'rgba(14, 165, 233, 0.9)',
+            outer: 'rgba(3, 105, 161, 0.45)',
+            glow: 'rgba(14, 165, 233, 0.65)',
+            ember: '#7dd3fc'
+          }
+        };
+
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        this.loop();
+      }
+
+      resize() {
+        if (!this.canvas) return;
+        const rect = this.canvas.getBoundingClientRect();
+        this.canvas.width = rect.width || 260;
+        this.canvas.height = rect.height || 220;
+        this.cx = this.canvas.width / 2;
+        this.baseY = this.canvas.height * 0.72; // 火焰發源處 (聖火盆口深處)
+      }
+
+      setMode(mode, team = 'gold') {
+        this.mode = mode;
+        this.team = team;
+        if (mode === 'thinking') {
+          this.surge = 1.6;
+        } else if (mode === 'revealed') {
+          this.surge = 1.85;
+          // 爆發大批火星 (Embers Burst)
+          for (let i = 0; i < 30; i++) this.spawnEmber(true);
+        } else {
+          this.surge = 1.0;
+        }
+      }
+
+      spawnParticle() {
+        const pCount = this.mode === 'thinking' ? 5 : (this.mode === 'revealed' ? 6 : 3);
+        for (let i = 0; i < pCount; i++) {
+          const angle = (Math.random() - 0.5) * 0.45;
+          const speed = (2.2 + Math.random() * 3.8) * (this.surge * 0.95);
+          const life = 22 + Math.random() * 26;
+          const size = (13 + Math.random() * 18) * (this.surge * 0.9);
+          const spreadX = (Math.random() - 0.5) * 58;
+
+          this.particles.push({
+            x: this.cx + spreadX,
+            y: this.baseY,
+            vx: Math.sin(angle) * speed * 0.45 + (Math.random() - 0.5) * 0.8,
+            vy: -Math.cos(angle) * speed,
+            size: size,
+            maxSize: size,
+            life: life,
+            maxLife: life,
+            swayOffset: Math.random() * 10
+          });
+        }
+      }
+
+      spawnEmber(burst = false) {
+        const spreadX = (Math.random() - 0.5) * 65;
+        const vy = burst ? -(3.5 + Math.random() * 5.5) : -(1.5 + Math.random() * 2.8);
+        const vx = (Math.random() - 0.5) * (burst ? 3.5 : 1.8);
+        this.embers.push({
+          x: this.cx + spreadX,
+          y: this.baseY - (burst ? 8 : 0),
+          vx: vx,
+          vy: vy,
+          size: 1 + Math.random() * 2.5,
+          life: 40 + Math.random() * 45,
+          maxLife: 85,
+          alpha: 1
+        });
+      }
+
+      update() {
+        this.time += 0.05;
+        this.spawnParticle();
+
+        if (Math.random() < (this.mode === 'revealed' ? 0.75 : 0.4)) {
+          this.spawnEmber();
+        }
+
+        // 更新動態火焰粒子
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.life--;
+          p.x += p.vx + Math.sin(this.time * 2 + p.swayOffset) * 1.1;
+          p.y += p.vy;
+          p.vy *= 0.985;
+          p.size = p.maxSize * (p.life / p.maxLife);
+
+          if (p.life <= 0) {
+            this.particles.splice(i, 1);
+          }
+        }
+
+        // 更新火星
+        for (let i = this.embers.length - 1; i >= 0; i--) {
+          const e = this.embers[i];
+          e.life--;
+          e.x += e.vx + Math.sin(this.time * 2.5 + e.y * 0.04) * 0.9;
+          e.y += e.vy;
+          e.alpha = e.life / e.maxLife;
+
+          if (e.life <= 0 || e.y < 0) {
+            this.embers.splice(i, 1);
+          }
+        }
+      }
+
+      draw() {
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        const colors = this.palettes[this.team] || this.palettes.gold;
+
+        // 1. 聖火背後環境大光暈 (Ambient Atmospheric Glow)
+        const glowRadius = (65 + Math.sin(this.time * 2.5) * 8) * this.surge;
+        const radial = ctx.createRadialGradient(this.cx, this.baseY - 25, 8, this.cx, this.baseY - 25, glowRadius * 1.6);
+        radial.addColorStop(0, colors.glow);
+        radial.addColorStop(0.55, colors.glow.replace(/[\d\.]+\)$/, '0.12)'));
+        radial.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = radial;
+        ctx.beginPath();
+        ctx.arc(this.cx, this.baseY - 25, glowRadius * 1.6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 2. 疊加合成模式 (Additive / Screen Blending) 形成高光白熱中心！
+        ctx.globalCompositeOperation = 'screen';
+
+        for (let p of this.particles) {
+          const progress = 1 - (p.life / p.maxLife);
+          const rad = Math.max(1, p.size);
+          const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
+
+          if (progress < 0.22) {
+            grad.addColorStop(0, colors.core);
+            grad.addColorStop(0.45, colors.inner);
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+          } else if (progress < 0.6) {
+            grad.addColorStop(0, colors.inner);
+            grad.addColorStop(0.5, colors.mid);
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+          } else {
+            grad.addColorStop(0, colors.mid);
+            grad.addColorStop(0.65, colors.outer);
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+          }
+
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, rad, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // 3. 繪製靈動飛舞火星 (Dancing Embers)
+        for (let e of this.embers) {
+          ctx.fillStyle = colors.ember;
+          ctx.globalAlpha = e.alpha;
+          ctx.shadowColor = colors.ember;
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = 1.0;
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      loop() {
+        this.update();
+        this.draw();
+        requestAnimationFrame(() => this.loop());
+      }
+    }
+
+    let sportsFlame = null;
 
     document.addEventListener('DOMContentLoaded', () => {
+      sportsFlame = new SportsFlameEngine('sports-flame-canvas');
       initLayoutMode();
       loadStudentsFromStorage();
       renderCurrentStudent();
@@ -1849,28 +1994,14 @@
       document.getElementById('stage-card').style.borderColor = 'rgba(245, 158, 11, 0.5)';
       document.getElementById('card-glow-bg').style.background = 'radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.15) 0%, transparent 70%)';
       
-      document.getElementById('whisper-content').textContent = `「請 ${numberToChineseGrade(s.grade)}年${s.class}班 ${s.name} 上前，感應聖火盃...」`;
+      document.getElementById('whisper-content').textContent = `「請 ${numberToChineseGrade(s.grade)}年${s.class}班 ${s.name} 上前，感應運動聖火盃...」`;
       
       document.getElementById('btn-action-text').textContent = '感應聖火盃 (空白鍵)';
       document.getElementById('btn-action-icon').className = 'fa-solid fa-fire';
       document.getElementById('btn-action').className = 'px-5 sm:px-8 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs sm:text-sm font-black shadow-lg shadow-amber-500/25 transition transform hover:scale-105 active:scale-95 flex items-center gap-1.5';
 
-      // 恢復預設金色聖火
-      resetGobletFlameToDefault();
-      const glow = document.getElementById('goblet-glow');
-      if (glow) glow.style.filter = 'drop-shadow(0 0 30px rgba(245,158,11,0.5))';
-    }
-
-    function resetGobletFlameToDefault() {
-      const fOuter = document.getElementById('flame-outer');
-      const fMid = document.getElementById('flame-mid');
-      const fInner = document.getElementById('flame-inner');
-      const fGroup = document.getElementById('fire-group');
-
-      if (fOuter) fOuter.setAttribute('fill', 'url(#fireOuterGrad)');
-      if (fMid) fMid.setAttribute('fill', 'url(#fireMidGrad)');
-      if (fInner) fInner.setAttribute('fill', 'url(#fireInnerGrad)');
-      if (fGroup) fGroup.classList.remove('animate-flame-surge');
+      // 聖火引擎切換至預設金色聖火
+      if (sportsFlame) sportsFlame.setMode('idle', 'gold');
     }
 
     function handleStageAction() {
@@ -1888,8 +2019,9 @@
 
       playSuspenseSound();
 
-      const hatContainer = document.getElementById('goblet-container');
-      hatContainer.classList.add('animate-wiggle'); const fg = document.getElementById('fire-group'); if (fg) fg.classList.add('animate-flame-surge');;
+      const gobletContainer = document.getElementById('goblet-container');
+      if (gobletContainer) gobletContainer.classList.add('animate-wiggle');
+      if (sportsFlame) sportsFlame.setMode('thinking', 'gold');
 
       let whisperIdx = Math.floor(Math.random() * GOBLET_WHISPERS.length);
       document.getElementById('whisper-content').textContent = GOBLET_WHISPERS[whisperIdx];
@@ -1900,7 +2032,7 @@
 
       // 1.1 秒極速感應
       setTimeout(() => {
-        hatContainer.classList.remove('animate-wiggle'); const fg2 = document.getElementById('fire-group'); if (fg2) fg2.classList.remove('animate-flame-surge');;
+        if (gobletContainer) gobletContainer.classList.remove('animate-wiggle');
         document.getElementById('btn-action').disabled = false;
         document.getElementById('btn-action').classList.remove('opacity-80');
 
@@ -1935,13 +2067,10 @@
       document.getElementById('stage-card').style.borderColor = team.color;
       document.getElementById('card-glow-bg').style.background = `radial-gradient(circle at 50% 0%, ${team.color}33 0%, transparent 75%)`;
       
-      const glow = document.getElementById('goblet-glow');
-      if (glow) glow.style.filter = `drop-shadow(0 0 45px ${team.shadow})`;
+      // 靈動聖火粒子引擎爆發並變色為隊伍專屬色系！
+      if (sportsFlame) sportsFlame.setMode('revealed', teamKey);
 
-      // 聖火根據隊伍變色爆發！
-      applyTeamFlame(teamKey);
-
-      document.getElementById('whisper-content').textContent = `「聖火爆發！太棒了！${s.name} 正式歸入 —— ${team.name}！」`;
+      document.getElementById('whisper-content').textContent = `「聖火激昂爆發！太棒了！${s.name} 正式歸入 —— ${team.name}！」`;
 
       document.getElementById('btn-action-text').textContent = currentIndex < students.length - 1 ? '下一位同學 (空白鍵)' : '大典完成！查看指引';
       document.getElementById('btn-action-icon').className = 'fa-solid fa-arrow-right';
