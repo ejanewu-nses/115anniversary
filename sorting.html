@@ -1471,18 +1471,15 @@
       const hatContainer = document.getElementById('hat-container');
       hatContainer.classList.add('animate-wiggle');
 
-      let whisperIdx = 0;
-      const whisperInterval = setInterval(() => {
-        whisperIdx = (whisperIdx + 1) % HAT_WHISPERS.length;
-        document.getElementById('whisper-content').textContent = HAT_WHISPERS[whisperIdx];
-      }, 700);
+      let whisperIdx = Math.floor(Math.random() * HAT_WHISPERS.length);
+      document.getElementById('whisper-content').textContent = HAT_WHISPERS[whisperIdx];
 
       document.getElementById('btn-action-text').textContent = '神獸感應中...';
       document.getElementById('btn-action').disabled = true;
       document.getElementById('btn-action').classList.add('opacity-80');
 
+      // ⚡ 縮短至 1.1 秒極速感應（俐落不拖沓，維持朝會全場高昂情緒）
       setTimeout(() => {
-        clearInterval(whisperInterval);
         hatContainer.classList.remove('animate-wiggle');
         document.getElementById('btn-action').disabled = false;
         document.getElementById('btn-action').classList.remove('opacity-80');
@@ -1492,11 +1489,12 @@
 
         showRevealedState(s.team, true);
 
+        // 🗣️ 揭曉後直接俐落唱名「O隊！」，不再唸冗長名字
         if (voiceEnabled) {
-          speakStudentSorting(s.grade, s.class, s.name, targetTeam.name);
+          speakStudentSorting(s.team);
         }
 
-      }, 2200);
+      }, 1100);
     }
 
     function showRevealedState(teamKey, isNewReveal) {
@@ -1900,33 +1898,35 @@
       initAudio();
       try {
         const now = audioCtx.currentTime;
-        for (let i = 0; i < 4; i++) {
-          const t = now + (i * 0.55);
+        // 2 聲緊湊心跳鼓聲 (0.45s 間隔)
+        for (let i = 0; i < 2; i++) {
+          const t = now + (i * 0.45);
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(80, t);
-          osc.frequency.exponentialRampToValueAtTime(30, t + 0.2);
-          gain.gain.setValueAtTime(0.6, t);
-          gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+          osc.frequency.setValueAtTime(85, t);
+          osc.frequency.exponentialRampToValueAtTime(30, t + 0.18);
+          gain.gain.setValueAtTime(0.65, t);
+          gain.gain.exponentialRampToValueAtTime(0.01, t + 0.18);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start(t);
-          osc.stop(t + 0.25);
+          osc.stop(t + 0.2);
         }
 
+        // 1.0 秒緊湊俐落上升音
         const riser = audioCtx.createOscillator();
         const riserGain = audioCtx.createGain();
         riser.type = 'sine';
-        riser.frequency.setValueAtTime(260, now);
-        riser.frequency.exponentialRampToValueAtTime(750, now + 2.1);
+        riser.frequency.setValueAtTime(280, now);
+        riser.frequency.exponentialRampToValueAtTime(800, now + 1.0);
         riserGain.gain.setValueAtTime(0.05, now);
-        riserGain.gain.linearRampToValueAtTime(0.3, now + 2.0);
-        riserGain.gain.exponentialRampToValueAtTime(0.01, now + 2.2);
+        riserGain.gain.linearRampToValueAtTime(0.3, now + 0.95);
+        riserGain.gain.exponentialRampToValueAtTime(0.01, now + 1.08);
         riser.connect(riserGain);
         riserGain.connect(audioCtx.destination);
         riser.start(now);
-        riser.stop(now + 2.2);
+        riser.stop(now + 1.1);
       } catch(e) {
         console.warn('Audio error:', e);
       }
@@ -1965,15 +1965,16 @@
       }
     }
 
-    function speakStudentSorting(grade, cls, name, teamName) {
+    // 🗣️ 語音唱名：只唸讀「O隊！」，俐落響亮、全場不拖沓！
+    function speakStudentSorting(teamKey) {
       if (!('speechSynthesis' in window)) return;
       try {
         window.speechSynthesis.cancel();
-        const text = `${numberToChineseGrade(grade)}年${cls}班 ${name} 同學... 歸屬於 —— ${teamName}！`;
-        const utter = new SpeechSynthesisUtterance(text);
+        const teamText = teamKey === 'red' ? '紅隊！' : (teamKey === 'green' ? '綠隊！' : '藍隊！');
+        const utter = new SpeechSynthesisUtterance(teamText);
         utter.lang = 'zh-TW';
-        utter.rate = 0.95;
-        utter.pitch = 1.05;
+        utter.rate = 1.15; // 俐落有精神
+        utter.pitch = 1.1;
         window.speechSynthesis.speak(utter);
       } catch(e) {
         console.warn('Speech error:', e);
