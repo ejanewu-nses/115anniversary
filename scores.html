@@ -142,9 +142,9 @@
             </p>
           </div>
           <div class="flex items-center gap-2 text-xs font-bold" id="dashboard-badges">
-            <span id="badge-green" class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg">🥇 綠隊 84 分</span>
-            <span id="badge-blue" class="px-3 py-1 bg-blue-100 text-blue-800 rounded-lg">🥈 藍隊 81 分</span>
-            <span id="badge-red" class="px-3 py-1 bg-rose-100 text-rose-800 rounded-lg">🥉 紅隊 80 分</span>
+            <span id="badge-red" class="px-3 py-1 bg-rose-100 text-rose-800 rounded-lg">🥇 紅隊 10 分</span>
+            <span id="badge-blue" class="px-3 py-1 bg-blue-100 text-blue-800 rounded-lg">🥈 藍隊 7 分</span>
+            <span id="badge-green" class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg">🥉 綠隊 2 分</span>
           </div>
         </div>
 
@@ -155,12 +155,12 @@
             <div class="flex justify-between text-xs font-bold mb-1">
               <span class="text-emerald-800 flex items-center gap-1.5">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                <strong>綠隊 • 翠玉蜈蚣</strong><span id="detail-green">（體育 50 分 ＋ 精神 34 分）</span>
+                <strong>綠隊 • 翠玉蜈蚣</strong><span id="detail-green">（體育 0 分 ＋ 精神 2 分）</span>
               </span>
-              <span id="bar-green-text" class="text-emerald-700 font-mono text-sm font-bold">84 分 (目前領先)</span>
+              <span id="bar-green-text" class="text-emerald-700 font-mono text-sm font-bold">2 分（差距 8 分）</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-200">
-              <div id="bar-green" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 84%"></div>
+              <div id="bar-green" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 18%"></div>
             </div>
           </div>
 
@@ -169,12 +169,12 @@
             <div class="flex justify-between text-xs font-bold mb-1">
               <span class="text-blue-800 flex items-center gap-1.5">
                 <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                <strong>藍隊 • 碧海晨曦</strong><span id="detail-blue">（體育 47 分 ＋ 精神 34 分）</span>
+                <strong>藍隊 • 碧海晨曦</strong><span id="detail-blue">（體育 0 分 ＋ 精神 7 分）</span>
               </span>
-              <span id="bar-blue-text" class="text-blue-700 font-mono text-sm font-bold">81 分（差距 3 分）</span>
+              <span id="bar-blue-text" class="text-blue-700 font-mono text-sm font-bold">7 分（差距 3 分）</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-200">
-              <div id="bar-blue" class="bg-gradient-to-r from-blue-500 to-indigo-400 h-full rounded-full transition-all duration-500" style="width: 81%"></div>
+              <div id="bar-blue" class="bg-gradient-to-r from-blue-500 to-indigo-400 h-full rounded-full transition-all duration-500" style="width: 62%"></div>
             </div>
           </div>
 
@@ -183,12 +183,12 @@
             <div class="flex justify-between text-xs font-bold mb-1">
               <span class="text-rose-800 flex items-center gap-1.5">
                 <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                <strong>紅隊 • 烈火金獅</strong><span id="detail-red">（體育 48 分 ＋ 精神 32 分）</span>
+                <strong>紅隊 • 烈火金獅</strong><span id="detail-red">（體育 0 分 ＋ 精神 10 分）</span>
               </span>
-              <span id="bar-red-text" class="text-rose-700 font-mono text-sm font-bold">80 分（差距 4 分）</span>
+              <span id="bar-red-text" class="text-rose-700 font-mono text-sm font-bold">10 分 (目前領先)</span>
             </div>
             <div class="w-full bg-slate-100 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-200">
-              <div id="bar-red" class="bg-gradient-to-r from-rose-500 to-amber-500 h-full rounded-full transition-all duration-500" style="width: 80%"></div>
+              <div id="bar-red" class="bg-gradient-to-r from-rose-500 to-amber-500 h-full rounded-full transition-all duration-500" style="width: 88%"></div>
             </div>
           </div>
         </div>
@@ -218,16 +218,19 @@
 
         <!-- 卡片 1：11/26 熱血躲避球賽 -->
         <div id="sec-dodgeball" class="score-card warmup bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
-            <div class="flex items-center gap-2.5">
-              <span class="px-2.5 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded-lg">🏆 戰隊計分</span>
-              <h4 class="text-base sm:text-lg font-bold text-slate-900">11/26 (四) 躲避球賽（分紅、綠、藍三隊比賽排名計算積分）</h4>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
+            <div class="flex items-start gap-2.5">
+              <span class="px-2.5 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded-lg shrink-0 mt-0.5">🏆 戰隊計分</span>
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">11/26 (四) 躲避球熱血對抗賽</h4>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">分紅、綠、藍三隊循環競技 • 排名計算積分</p>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-1 bg-blue-50 text-blue-800 text-xs font-bold rounded-md border border-blue-200">
+            <div class="flex-shrink-0 flex flex-wrap sm:flex-nowrap items-center gap-2">
+              <span class="px-2.5 py-1 bg-blue-50 text-blue-800 text-xs font-bold rounded-md border border-blue-200 whitespace-nowrap">
                 給分基準：🥇第1名 12分 ｜ 🥈第2名 8分 ｜ 🥉第3名 4分
               </span>
-              <span class="text-xs font-bold text-slate-500">操場球場</span>
+              <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-md whitespace-nowrap">操場球場</span>
             </div>
           </div>
 
@@ -273,16 +276,19 @@
 
         <!-- 卡片 2：12/01 活力慢跑（依計畫書分組與門檻，1人完成加1分） -->
         <div id="sec-running" class="score-card warmup bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
-            <div class="flex items-center gap-2.5">
-              <span class="px-2.5 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-lg">🏆 戰隊計分</span>
-              <h4 class="text-base sm:text-lg font-bold text-slate-900">12/01 (二) 校園慢跑（分別計算所屬隊伍完成人數）</h4>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
+            <div class="flex items-start gap-2.5">
+              <span class="px-2.5 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-lg shrink-0 mt-0.5">🏆 戰隊計分</span>
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">12/01 (二) 校園活力耐力慢跑</h4>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">分別計算所屬隊伍各年級達標完成人數</p>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-1 bg-amber-50 text-amber-900 text-xs font-bold rounded-md border border-amber-300">
+            <div class="flex-shrink-0 flex flex-wrap sm:flex-nowrap items-center gap-2">
+              <span class="px-2.5 py-1 bg-amber-50 text-amber-900 text-xs font-bold rounded-md border border-amber-300 whitespace-nowrap">
                 給分基準：1 人達標完成 ＝ 為所屬戰隊加 1 分
               </span>
-              <span class="text-xs font-bold text-slate-500">操場環形跑道</span>
+              <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-md whitespace-nowrap">操場環形跑道</span>
             </div>
           </div>
 
@@ -335,18 +341,21 @@
           </div>
         </div>
 
-        <!-- 卡片 4：12/05 個人短跑徑賽決賽（純個人榮譽 • 不計入戰隊分） -->
+        <!-- 卡片 3：12/05 個人短跑徑賽決賽（純個人榮譽 • 不計入戰隊分） -->
         <div id="sec-sprint" class="score-card track bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
-            <div class="flex items-center gap-2.5">
-              <span class="px-2.5 py-1 bg-blue-600 text-white text-xs font-bold rounded-lg shadow-2xs">個人獎項</span>
-              <h4 class="text-base sm:text-lg font-bold text-slate-900">12/05 (六) 個人短跑徑賽決賽（純個人榮譽 • 不計入戰隊分）</h4>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
+            <div class="flex items-start gap-2.5">
+              <span class="px-2.5 py-1 bg-blue-600 text-white text-xs font-bold rounded-lg shadow-2xs shrink-0 mt-0.5">個人獎項</span>
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">12/05 (六) 個人短跑徑賽決賽</h4>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">國小六組金銀銅牌個人爭霸 • 不計入戰隊總錦標</p>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-1 bg-blue-50 text-blue-800 text-xs font-bold rounded-md border border-blue-200">
+            <div class="flex-shrink-0 flex flex-wrap sm:flex-nowrap items-center gap-2">
+              <span class="px-2.5 py-1 bg-blue-50 text-blue-800 text-xs font-bold rounded-md border border-blue-200 whitespace-nowrap">
                 頒發國小六組金、銀、銅牌
               </span>
-              <span class="text-xs font-bold text-blue-700">09:25 ~ 10:00 • 操場環形跑道</span>
+              <span class="text-xs font-bold text-blue-700 bg-blue-100/60 px-2 py-1 rounded-md whitespace-nowrap">09:25 ~ 10:00 • 跑道</span>
             </div>
           </div>
 
@@ -450,16 +459,19 @@
 
         <!-- 卡片 4：12/05 拔河熱血大對抗（依計畫書人數與分組） -->
         <div id="sec-tug" class="score-card tug bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
-            <div class="flex items-center gap-2.5">
-              <span class="px-2.5 py-1 bg-orange-500 text-white text-xs font-bold rounded-lg shadow-2xs">🏆 戰隊計分</span>
-              <h4 class="text-base sm:text-lg font-bold text-slate-900">12/05 (六) 拔河賽（三隊循環賽 • 三戰二勝排名計算積分）</h4>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
+            <div class="flex items-start gap-2.5">
+              <span class="px-2.5 py-1 bg-orange-500 text-white text-xs font-bold rounded-lg shadow-2xs shrink-0 mt-0.5">🏆 戰隊計分</span>
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">12/05 (六) 拔河熱血大對抗</h4>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">三隊循環賽 • 三戰二勝排名計算積分</p>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-1 bg-orange-50 text-orange-900 text-xs font-bold rounded-md border border-orange-200">
+            <div class="flex-shrink-0 flex flex-wrap sm:flex-nowrap items-center gap-2">
+              <span class="px-2.5 py-1 bg-orange-50 text-orange-900 text-xs font-bold rounded-md border border-orange-200 whitespace-nowrap">
                 給分基準：🥇第1名 8分 ｜ 🥈第2名 6分 ｜ 🥉第3名 4分
               </span>
-              <span class="text-xs font-bold text-orange-700">10:00 ~ 10:35</span>
+              <span class="text-xs font-bold text-orange-700 bg-orange-100/60 px-2 py-1 rounded-md whitespace-nowrap">10:00 ~ 10:35</span>
             </div>
           </div>
 
@@ -490,16 +502,19 @@
 
         <!-- 卡片 5：12/05 趣味競賽（1到6年級全員「蟲蟲危機」） -->
         <div class="score-card tug bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
-            <div class="flex items-center gap-2.5">
-              <span class="px-2.5 py-1 bg-emerald-600 text-white text-xs font-bold rounded-lg shadow-2xs">🏆 戰隊計分</span>
-              <h4 class="text-base sm:text-lg font-bold text-slate-900">12/05 (六) 趣味競賽：蟲蟲危機（1至6年級全員三隊對抗排名計分）</h4>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
+            <div class="flex items-start gap-2.5">
+              <span class="px-2.5 py-1 bg-emerald-600 text-white text-xs font-bold rounded-lg shadow-2xs shrink-0 mt-0.5">🏆 戰隊計分</span>
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">12/05 (六) 趣味競賽：蟲蟲危機</h4>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">1 至 6 年級全員三隊跨齡對抗 • 排名計算積分</p>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-1 bg-emerald-50 text-emerald-900 text-xs font-bold rounded-md border border-emerald-300">
+            <div class="flex-shrink-0 flex flex-wrap sm:flex-nowrap items-center gap-2">
+              <span class="px-2.5 py-1 bg-emerald-50 text-emerald-900 text-xs font-bold rounded-md border border-emerald-300 whitespace-nowrap">
                 給分基準：🥇第1名 12分 ｜ 🥈第2名 8分 ｜ 🥉第3名 6分
               </span>
-              <span class="text-xs font-bold text-emerald-700">10:35 ~ 11:10</span>
+              <span class="text-xs font-bold text-emerald-700 bg-emerald-100/60 px-2 py-1 rounded-md whitespace-nowrap">10:35 ~ 11:10</span>
             </div>
           </div>
 
@@ -526,16 +541,19 @@
 
         <!-- 卡片 6：12/05 壓軸大隊接力（依計畫書精準名稱與人數） -->
         <div id="sec-relay" class="score-card track bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
-            <div class="flex items-center gap-2.5">
-              <span class="px-2.5 py-1 bg-rose-600 text-white text-xs font-bold rounded-lg shadow-2xs">🏆 壓軸戰隊計分</span>
-              <h4 class="text-base sm:text-lg font-bold text-slate-900">12/05 (六) 大隊接力錦標賽（全場最高榮譽對決）</h4>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
+            <div class="flex items-start gap-2.5">
+              <span class="px-2.5 py-1 bg-rose-600 text-white text-xs font-bold rounded-lg shadow-2xs shrink-0 mt-0.5">🏆 壓軸戰隊計分</span>
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">12/05 (六) 大隊接力錦標賽</h4>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">全場最高榮譽對決 • 低高年級雙組爭霸</p>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-1 bg-rose-50 text-rose-900 text-xs font-bold rounded-md border border-rose-200">
+            <div class="flex-shrink-0 flex flex-wrap sm:flex-nowrap items-center gap-2">
+              <span class="px-2.5 py-1 bg-rose-50 text-rose-900 text-xs font-bold rounded-md border border-rose-200 whitespace-nowrap">
                 各組給分基準：🥇第1名 12分 ｜ 🥈第2名 10分 ｜ 🥉第3名 8分
               </span>
-              <span class="text-xs font-bold text-rose-700">11:10 ~ 11:40</span>
+              <span class="text-xs font-bold text-rose-700 bg-rose-100/60 px-2 py-1 rounded-md whitespace-nowrap">11:10 ~ 11:40</span>
             </div>
           </div>
 
@@ -570,14 +588,17 @@
 
         <!-- 卡片 8：互助合作精神加分明細日誌 -->
         <div id="sec-spirit" class="score-card spirit bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
-            <div class="flex items-center gap-2.5">
-              <span class="px-2.5 py-1 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-2xs">精神總錦標</span>
-              <h4 class="text-base sm:text-lg font-bold text-slate-900">互助合作精神加分審核紀錄簿</h4>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
+            <div class="flex items-start gap-2.5">
+              <span class="px-2.5 py-1 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-2xs shrink-0 mt-0.5">精神總錦標</span>
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">互助合作精神加分審核紀錄簿</h4>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">即時記錄各戰隊友愛包容、運動家風度與團隊凝聚加分</p>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <span id="spirit-summary-text" class="text-xs font-bold text-indigo-700">累積總分：綠 34 分 ｜ 藍 34 分 ｜ 紅 32 分</span>
-              <a href="spirit.html" class="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg text-xs font-bold shadow-2xs hover:shadow-sm transition">
+            <div class="flex-shrink-0 flex flex-wrap sm:flex-nowrap items-center gap-2">
+              <span id="spirit-summary-text" class="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-md whitespace-nowrap">累積總分：綠 2 分 ｜ 藍 7 分 ｜ 紅 10 分</span>
+              <a href="spirit.html" class="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg text-xs font-bold shadow-2xs hover:shadow-sm transition whitespace-nowrap">
                 <i class="fa-solid fa-heart"></i>
                 <span>查看事蹟故事專頁 ➔</span>
               </a>
@@ -827,22 +848,33 @@
         if (badge) badge.innerText = `${medals[idx]} ${r.name} ${r.score} 分`;
       });
 
-      // 更新儀表板長條圖與文字 (領先或差距)
-      const maxScore = Math.max(total.green, total.blue, total.red, 100);
+      // 更新儀表板長條圖與文字 (領先或差距 - 動態自適應比例尺)
       const topScore = ranking[0].score;
+      const TARGET_LEADER_PCT = 88; // 領先者呈現 88% 飽滿長度，美觀具張力
 
       ['green', 'blue', 'red'].forEach(team => {
+        const score = total[team];
         const barText = document.getElementById(`bar-${team}-text`);
         const bar = document.getElementById(`bar-${team}`);
         if (barText) {
-          if (total[team] === topScore) {
-            barText.innerText = `${total[team]} 分 (目前領先)`;
+          if (topScore === 0) {
+            barText.innerText = `0 分 (準備開賽)`;
+          } else if (score === topScore) {
+            barText.innerText = `${score} 分 (目前領先)`;
           } else {
-            barText.innerText = `${total[team]} 分（差距 ${topScore - total[team]} 分）`;
+            barText.innerText = `${score} 分（差距 ${topScore - score} 分）`;
           }
         }
         if (bar) {
-          const pct = Math.min(100, Math.max(15, (total[team] / maxScore) * 100));
+          let pct = 8;
+          if (topScore > 0) {
+            if (score > 0) {
+              // 依據與最高分的比例動態縮放，保證最小 15% 可讀性
+              pct = Math.min(100, Math.max(15, Math.round((score / topScore) * TARGET_LEADER_PCT)));
+            } else {
+              pct = 6;
+            }
+          }
           bar.style.width = pct + '%';
         }
       });
