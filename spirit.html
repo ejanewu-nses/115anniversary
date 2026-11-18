@@ -341,22 +341,35 @@
   </div>
 
   <!-- 頁尾 -->
+  <!-- 全站統一頁尾 -->
   <footer class="bg-slate-900 text-slate-400 py-10 text-xs text-center border-t border-slate-800">
-    <div class="max-w-6xl mx-auto px-4 space-y-2">
-      <div class="flex items-center justify-center gap-2.5 text-white font-bold text-sm">
-        <div class="w-7 h-7 rounded-full bg-white p-0.5 flex items-center justify-center shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 space-y-3">
+      <div class="flex items-center justify-center gap-2.5 text-white font-bold text-sm sm:text-base">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white p-0.5 flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">
           <img src="images/school_logo.jpg" alt="南興國小校徽" class="w-full h-full object-contain">
         </div>
         <span>臺南市安南區南興國民小學</span>
       </div>
-      <p>
-        校址：709 臺南市安南區公學路五段627號 ｜ 電話：(06)2873204 ｜
-        <a href="index.html" class="text-indigo-400 hover:text-indigo-300 underline font-bold">校慶大會首頁</a> ｜
-        <a href="scores.html" class="text-amber-400 hover:text-amber-300 underline font-bold">賽事成績榜</a>
+      <p class="leading-relaxed">
+        校址：709 臺南市安南區公學路五段627號 ｜ 學校電話：(06)2873204 ｜ 學校傳真：(06)2871343 ｜
+        <a href="https://maps.app.goo.gl/KmkbEg8UpaySf6EE9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 underline font-bold">
+          <i class="fa-solid fa-diamond-turn-right text-[11px]"></i> Google 地圖導航
+        </a>
       </p>
-      <p class="text-slate-500">
-        115學年度校慶運動大會籌備委員會 • 互助合作精神總錦標審查組
+      <p class="text-slate-500 font-medium">
+        115學年度校慶運動大會籌備委員會 • 吳宜蓁校長率全體教職員工 竭誠歡迎
       </p>
+      <div class="pt-2 flex flex-wrap justify-center items-center gap-3 sm:gap-5 text-slate-400 font-medium">
+        <a href="index.html" class="hover:text-amber-400 transition">大會首頁</a>
+        <span>•</span>
+        <a href="scores.html" class="hover:text-amber-400 transition">賽事成績榜</a>
+        <span>•</span>
+        <a href="spirit.html" class="hover:text-amber-400 transition">精神事蹟館</a>
+        <span>•</span>
+        <a href="invite.html" class="hover:text-amber-400 transition underline">長官貴賓線上邀請函</a>
+        <span>•</span>
+        <a href="#top" class="hover:text-amber-400 transition" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">回到頂端 ↑</a>
+      </div>
     </div>
   </footer>
 

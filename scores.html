@@ -42,6 +42,10 @@
       background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
       border-color: #3b82f6;
     }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 7rem;
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-rose-500 selection:text-white">
@@ -95,6 +99,19 @@
     </div>
   </header>
 
+  <!-- 賽事成績榜專屬章節快速跳轉導覽列 (Sub-nav) -->
+  <nav class="bg-rose-50/90 border-b border-rose-200/80 py-2.5 px-4 sticky top-16 z-40 backdrop-blur-xs shadow-2xs">
+    <div class="max-w-6xl mx-auto flex items-center justify-center gap-2 sm:gap-4 overflow-x-auto text-xs sm:text-sm font-bold text-slate-700 whitespace-nowrap">
+      <a href="#sec-dashboard" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">📊 戰況總覽</a>
+      <a href="#sec-dodgeball" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">🤾 躲避球賽</a>
+      <a href="#sec-running" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">🏃 校園慢跑</a>
+      <a href="#sec-sprint" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">⚡ 個人短跑</a>
+      <a href="#sec-tug" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">🎪 拔河趣味</a>
+      <a href="#sec-relay" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">🤝 大隊接力</a>
+      <a href="#sec-spirit" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">🌟 精神加分</a>
+    </div>
+  </nav>
+
   <!-- 主視覺與即時戰況總覽 -->
   <section class="py-10 bg-gradient-to-b from-rose-50/70 via-amber-50/40 to-slate-50 border-b border-slate-200">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
@@ -113,7 +130,7 @@
       </div>
 
       <!-- 三隊即時長條圖儀表板 -->
-      <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-slate-200 box-3d-static mb-8">
+      <div id="sec-dashboard" class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-slate-200 box-3d-static mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
           <div>
             <div class="flex items-center gap-2">
@@ -200,7 +217,7 @@
       <div class="space-y-6">
 
         <!-- 卡片 1：11/26 熱血躲避球賽 -->
-        <div class="score-card warmup bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
+        <div id="sec-dodgeball" class="score-card warmup bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-center gap-2.5">
               <span class="px-2.5 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded-lg">🏆 戰隊計分</span>
@@ -255,7 +272,7 @@
         </div>
 
         <!-- 卡片 2：12/01 活力慢跑（依計畫書分組與門檻，1人完成加1分） -->
-        <div class="score-card warmup bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
+        <div id="sec-running" class="score-card warmup bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-center gap-2.5">
               <span class="px-2.5 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-lg">🏆 戰隊計分</span>
@@ -319,7 +336,7 @@
         </div>
 
         <!-- 卡片 4：12/05 個人短跑徑賽決賽（純個人榮譽 • 不計入戰隊分） -->
-        <div class="score-card track bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
+        <div id="sec-sprint" class="score-card track bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-center gap-2.5">
               <span class="px-2.5 py-1 bg-blue-600 text-white text-xs font-bold rounded-lg shadow-2xs">個人獎項</span>
@@ -432,7 +449,7 @@
         </div>
 
         <!-- 卡片 4：12/05 拔河熱血大對抗（依計畫書人數與分組） -->
-        <div class="score-card tug bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
+        <div id="sec-tug" class="score-card tug bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-center gap-2.5">
               <span class="px-2.5 py-1 bg-orange-500 text-white text-xs font-bold rounded-lg shadow-2xs">🏆 戰隊計分</span>
@@ -508,7 +525,7 @@
         </div>
 
         <!-- 卡片 6：12/05 壓軸大隊接力（依計畫書精準名稱與人數） -->
-        <div class="score-card track bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
+        <div id="sec-relay" class="score-card track bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-center gap-2.5">
               <span class="px-2.5 py-1 bg-rose-600 text-white text-xs font-bold rounded-lg shadow-2xs">🏆 壓軸戰隊計分</span>
@@ -552,7 +569,7 @@
         </div>
 
         <!-- 卡片 8：互助合作精神加分明細日誌 -->
-        <div class="score-card spirit bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
+        <div id="sec-spirit" class="score-card spirit bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-center gap-2.5">
               <span class="px-2.5 py-1 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-2xs">精神總錦標</span>
@@ -614,27 +631,34 @@
   </section>
 
   <!-- 頁尾 -->
+  <!-- 全站統一頁尾 -->
   <footer class="bg-slate-900 text-slate-400 py-10 text-xs text-center border-t border-slate-800">
-    <div class="max-w-6xl mx-auto px-4 space-y-2">
-      <div class="flex items-center justify-center gap-2.5 text-white font-bold text-sm">
-        <div class="w-7 h-7 rounded-full bg-white p-0.5 flex items-center justify-center shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 space-y-3">
+      <div class="flex items-center justify-center gap-2.5 text-white font-bold text-sm sm:text-base">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white p-0.5 flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">
           <img src="images/school_logo.jpg" alt="南興國小校徽" class="w-full h-full object-contain">
         </div>
         <span>臺南市安南區南興國民小學</span>
       </div>
-      <p>
+      <p class="leading-relaxed">
         校址：709 臺南市安南區公學路五段627號 ｜ 學校電話：(06)2873204 ｜ 學校傳真：(06)2871343 ｜
         <a href="https://maps.app.goo.gl/KmkbEg8UpaySf6EE9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 underline font-bold">
           <i class="fa-solid fa-diamond-turn-right text-[11px]"></i> Google 地圖導航
         </a>
       </p>
-      <p class="text-slate-500">
-        115學年度校慶運動大會大會紀錄裁判組 • 秀麗主任、淇淇老師 共同登錄核布
+      <p class="text-slate-500 font-medium">
+        115學年度校慶運動大會籌備委員會 • 吳宜蓁校長率全體教職員工 竭誠歡迎
       </p>
-      <div class="pt-4 flex justify-center gap-4 text-slate-400">
-        <a href="index.html" class="hover:text-amber-400 underline">返回校慶官方網站</a>
+      <div class="pt-2 flex flex-wrap justify-center items-center gap-3 sm:gap-5 text-slate-400 font-medium">
+        <a href="index.html" class="hover:text-amber-400 transition">大會首頁</a>
         <span>•</span>
-        <a href="invite.html" class="hover:text-amber-400 underline">長官貴賓線上邀請函</a>
+        <a href="scores.html" class="hover:text-amber-400 transition">賽事成績榜</a>
+        <span>•</span>
+        <a href="spirit.html" class="hover:text-amber-400 transition">精神事蹟館</a>
+        <span>•</span>
+        <a href="invite.html" class="hover:text-amber-400 transition underline">長官貴賓線上邀請函</a>
+        <span>•</span>
+        <a href="#top" class="hover:text-amber-400 transition" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">回到頂端 ↑</a>
       </div>
     </div>
   </footer>
