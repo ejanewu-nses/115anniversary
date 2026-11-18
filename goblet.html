@@ -2514,75 +2514,215 @@
       btn.innerHTML = voiceEnabled ? '<i class="fa-solid fa-volume-high"></i>' : '<i class="fa-solid fa-volume-off"></i>';
     }
 
-    function playSuspenseSound() {
+    // 1. 聖火燃燒與呼嘯音效 (Flame Ignition & Whoosh Roar)
+    function playFlameIgnitionSound() {
       if (!soundEnabled) return;
       initAudio();
       try {
         const now = audioCtx.currentTime;
-        for (let i = 0; i < 2; i++) {
-          const t = now + (i * 0.45);
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(85, t);
-          osc.frequency.exponentialRampToValueAtTime(30, t + 0.18);
-          gain.gain.setValueAtTime(0.65, t);
-          gain.gain.exponentialRampToValueAtTime(0.01, t + 0.18);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(t);
-          osc.stop(t + 0.2);
+        const duration = 1.1;
+
+        // A. 烈焰呼嘯氣流聲 (Filtered Wind/Fire Roar via White Noise)
+        const bufferSize = audioCtx.sampleRate * duration;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        let lastOut = 0.0;
+        for (let i = 0; i < bufferSize; i++) {
+          // 產生棕色噪聲 (Brown Noise - 渾厚火焰氣流)
+          const white = Math.random() * 2 - 1;
+          data[i] = (lastOut + (0.04 * white)) / 1.04;
+          lastOut = data[i];
+          data[i] *= 3.5; // 適度放大
         }
 
-        const riser = audioCtx.createOscillator();
-        const riserGain = audioCtx.createGain();
-        riser.type = 'sine';
-        riser.frequency.setValueAtTime(280, now);
-        riser.frequency.exponentialRampToValueAtTime(800, now + 1.0);
-        riserGain.gain.setValueAtTime(0.05, now);
-        riserGain.gain.linearRampToValueAtTime(0.3, now + 0.95);
-        riserGain.gain.exponentialRampToValueAtTime(0.01, now + 1.08);
-        riser.connect(riserGain);
-        riserGain.connect(audioCtx.destination);
-        riser.start(now);
-        riser.stop(now + 1.1);
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
+
+        // 火焰濾波器：頻率自 160Hz 隨火舌攀升至 550Hz，再回落
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.Q.setValueAtTime(2.2, now);
+        filter.frequency.setValueAtTime(180, now);
+        filter.frequency.exponentialRampToValueAtTime(580, now + 0.6);
+        filter.frequency.exponentialRampToValueAtTime(240, now + duration);
+
+        const noiseGain = audioCtx.createGain();
+        noiseGain.gain.setValueAtTime(0.01, now);
+        noiseGain.gain.linearRampToValueAtTime(0.75, now + 0.35);
+        noiseGain.gain.linearRampToValueAtTime(0.65, now + 0.8);
+        noiseGain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+
+        noise.connect(filter);
+        filter.connect(noiseGain);
+        noiseGain.connect(audioCtx.destination);
+        noise.start(now);
+        noise.stop(now + duration);
+
+        // B. 低頻聖火熱能共振底層 (Warm Flame Drone)
+        const subOsc = audioCtx.createOscillator();
+        const subGain = audioCtx.createGain();
+        subOsc.type = 'triangle';
+        subOsc.frequency.setValueAtTime(80, now);
+        subOsc.frequency.linearRampToValueAtTime(140, now + 0.7);
+        subGain.gain.setValueAtTime(0.05, now);
+        subGain.gain.linearRampToValueAtTime(0.35, now + 0.4);
+        subGain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+
+        subOsc.connect(subGain);
+        subGain.connect(audioCtx.destination);
+        subOsc.start(now);
+        subOsc.stop(now + duration);
+
+        // C. 火星微劈啪聲 (Crackling Embers)
+        const popTimes = [0.15, 0.38, 0.62, 0.85];
+        popTimes.forEach(pt => {
+          const t = now + pt;
+          const pop = audioCtx.createOscillator();
+          const popGain = audioCtx.createGain();
+          pop.type = 'sine';
+          pop.frequency.setValueAtTime(1200 + Math.random() * 800, t);
+          pop.frequency.exponentialRampToValueAtTime(200, t + 0.04);
+          popGain.gain.setValueAtTime(0.12, t);
+          popGain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+          pop.connect(popGain);
+          popGain.connect(audioCtx.destination);
+          pop.start(t);
+          pop.stop(t + 0.05);
+        });
+
       } catch(e) {
-        console.warn('Audio error:', e);
+        console.warn('Flame sound error:', e);
       }
     }
 
-    function playTriumphSound() {
+    // 2. 聖火爆發 ＋ 全場體育場歡呼掌聲 (Flame Burst & Stadium Cheering)
+    function playTriumphCheerSound() {
       if (!soundEnabled) return;
       initAudio();
       try {
         const now = audioCtx.currentTime;
-        const notes = [523.25, 659.25, 783.99, 1046.50];
-        notes.forEach((freq, idx) => {
-          const t = now + (idx * 0.08);
+
+        // A. 火焰轟然爆發 (Fiery Explosion / Whoosh Burst)
+        const burstOsc = audioCtx.createOscillator();
+        const burstGain = audioCtx.createGain();
+        burstOsc.type = 'triangle';
+        burstOsc.frequency.setValueAtTime(150, now);
+        burstOsc.frequency.exponentialRampToValueAtTime(45, now + 0.45);
+        burstGain.gain.setValueAtTime(0.8, now);
+        burstGain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+        burstOsc.connect(burstGain);
+        burstGain.connect(audioCtx.destination);
+        burstOsc.start(now);
+        burstOsc.stop(now + 0.55);
+
+        // B. 榮耀勝利號角和弦 (Victory Fanfare Chords)
+        const chords = [523.25, 659.25, 783.99, 1046.50]; // C - E - G - High C
+        chords.forEach((freq, idx) => {
+          const t = now + (idx * 0.06);
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
+          const filter = audioCtx.createBiquadFilter();
+
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(freq, t);
-          
-          gain.gain.setValueAtTime(0, t);
-          gain.gain.linearRampToValueAtTime(0.25, t + 0.05);
-          gain.gain.exponentialRampToValueAtTime(0.001, t + 1.2);
 
-          const filter = audioCtx.createBiquadFilter();
           filter.type = 'lowpass';
-          filter.frequency.setValueAtTime(2200, t);
+          filter.frequency.setValueAtTime(1800, t);
+          filter.frequency.linearRampToValueAtTime(3200, t + 0.2);
+
+          gain.gain.setValueAtTime(0.001, t);
+          gain.gain.linearRampToValueAtTime(0.22, t + 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 1.4);
 
           osc.connect(filter);
           filter.connect(gain);
           gain.connect(audioCtx.destination);
 
           osc.start(t);
-          osc.stop(t + 1.3);
+          osc.stop(t + 1.5);
         });
+
+        // C. 全場體育場熱烈歡呼聲 (Stadium Crowd Cheering "Wooooo!")
+        const cheerDuration = 2.2;
+        const cheerBufferSize = audioCtx.sampleRate * cheerDuration;
+        const cheerBuffer = audioCtx.createBuffer(1, cheerBufferSize, audioCtx.sampleRate);
+        const cheerData = cheerBuffer.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0;
+        for (let i = 0; i < cheerBufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          // 粉紅噪聲 (Pink Noise - 人群聲浪質感)
+          b0 = 0.99886 * b0 + white * 0.0555179;
+          b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520;
+          cheerData[i] = (b0 + b1 + b2) * 0.8;
+        }
+
+        const cheerNoise = audioCtx.createBufferSource();
+        cheerNoise.buffer = cheerBuffer;
+
+        // 人群歡呼共鳴帶通濾波器 (Formant Filter: 人聲 "Woah/Yeah" 共鳴區間 750Hz~1200Hz)
+        const cheerFilter = audioCtx.createBiquadFilter();
+        cheerFilter.type = 'bandpass';
+        cheerFilter.Q.setValueAtTime(1.8, now);
+        cheerFilter.frequency.setValueAtTime(750, now);
+        cheerFilter.frequency.linearRampToValueAtTime(1150, now + 0.4);
+        cheerFilter.frequency.linearRampToValueAtTime(850, now + cheerDuration);
+
+        const cheerGain = audioCtx.createGain();
+        cheerGain.gain.setValueAtTime(0.01, now);
+        cheerGain.gain.linearRampToValueAtTime(0.55, now + 0.35); // 歡呼浪潮迅速湧現
+        cheerGain.gain.linearRampToValueAtTime(0.45, now + 1.2);
+        cheerGain.gain.exponentialRampToValueAtTime(0.01, now + cheerDuration);
+
+        cheerNoise.connect(cheerFilter);
+        cheerFilter.connect(cheerGain);
+        cheerGain.connect(audioCtx.destination);
+        cheerNoise.start(now);
+        cheerNoise.stop(now + cheerDuration);
+
+        // D. 熱烈掌聲顆粒層 (Dense Applause Clapping Texture)
+        const clapDuration = 1.8;
+        const clapBufferSize = audioCtx.sampleRate * clapDuration;
+        const clapBuffer = audioCtx.createBuffer(1, clapBufferSize, audioCtx.sampleRate);
+        const clapData = clapBuffer.getChannelData(0);
+        for (let i = 0; i < clapBufferSize; i++) {
+          // 密集高頻隨機爆破
+          clapData[i] = (Math.random() * 2 - 1) * (Math.random() > 0.65 ? 1 : 0.2);
+        }
+
+        const clapNoise = audioCtx.createBufferSource();
+        clapNoise.buffer = clapBuffer;
+
+        const clapFilter = audioCtx.createBiquadFilter();
+        clapFilter.type = 'highpass';
+        clapFilter.frequency.setValueAtTime(2200, now);
+
+        const clapGain = audioCtx.createGain();
+        clapGain.gain.setValueAtTime(0.01, now);
+        clapGain.gain.linearRampToValueAtTime(0.25, now + 0.4);
+        clapGain.gain.linearRampToValueAtTime(0.20, now + 1.2);
+        clapGain.gain.exponentialRampToValueAtTime(0.01, now + clapDuration);
+
+        clapNoise.connect(clapFilter);
+        clapFilter.connect(clapGain);
+        clapGain.connect(audioCtx.destination);
+        clapNoise.start(now);
+        clapNoise.stop(now + clapDuration);
+
       } catch(e) {
-        console.warn('Audio error:', e);
+        console.warn('Cheer sound error:', e);
       }
     }
+
+    // 兼容別名
+    function playSuspenseSound() {
+      playFlameIgnitionSound();
+    }
+
+    function playTriumphSound() {
+      playTriumphCheerSound();
+    }
+
 
     function speakStudentSorting(teamKey) {
       if (!('speechSynthesis' in window)) return;
@@ -2593,7 +2733,7 @@
         utter.lang = 'zh-TW';
         utter.rate = 1.15;
         utter.pitch = 1.1;
-        window.speechSynthesis.speak(utter);
+        setTimeout(() => window.speechSynthesis.speak(utter), 320);
       } catch(e) {
         console.warn('Speech error:', e);
       }
