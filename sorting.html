@@ -38,7 +38,7 @@
           animation: {
             'pulse-glow': 'pulseGlow 2.5s infinite',
             'float': 'floatAnim 3.5s ease-in-out infinite',
-            'wiggle': 'wiggle 0.3s ease-in-out infinite',
+            'wiggle': 'wiggle 0.25s ease-in-out infinite',
             'spin-slow': 'spin 12s linear infinite'
           },
           keyframes: {
@@ -48,11 +48,11 @@
             },
             floatAnim: {
               '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-              '50%': { transform: 'translateY(-12px) rotate(2deg)' }
+              '50%': { transform: 'translateY(-8px) rotate(1.5deg)' }
             },
             wiggle: {
-              '0%, 100%': { transform: 'rotate(-4deg) scale(1.05)' },
-              '50%': { transform: 'rotate(4deg) scale(1.08)' }
+              '0%, 100%': { transform: 'rotate(-5deg) scale(1.06)' },
+              '50%': { transform: 'rotate(5deg) scale(1.08)' }
             }
           }
         }
@@ -73,30 +73,13 @@
       font-family: 'Noto Serif TC', serif;
     }
 
-    .magic-border-gold {
-      border: 2px solid transparent;
-      border-image: linear-gradient(to bottom right, #fef08a, #ca8a04, #eab308, #78350f) 1;
-    }
-    
     .gold-text-glow {
       text-shadow: 0 0 12px rgba(253, 224, 71, 0.6), 0 0 25px rgba(234, 179, 8, 0.3);
     }
     
-    .red-text-glow {
-      text-shadow: 0 0 20px rgba(244, 63, 94, 0.8), 0 0 40px rgba(225, 29, 72, 0.5);
-    }
-    
-    .green-text-glow {
-      text-shadow: 0 0 20px rgba(52, 211, 153, 0.8), 0 0 40px rgba(16, 185, 129, 0.5);
-    }
-    
-    .blue-text-glow {
-      text-shadow: 0 0 20px rgba(56, 189, 248, 0.8), 0 0 40px rgba(2, 132, 199, 0.5);
-    }
-
     ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
     }
     ::-webkit-scrollbar-track {
       background: rgba(15, 23, 42, 0.6);
@@ -105,300 +88,347 @@
       background: #c5a059;
       border-radius: 3px;
     }
+
+    /* 左右雙翼模式與上下模式切換樣式 */
+    .layout-wings #wings-left,
+    .layout-wings #wings-right {
+      display: flex !important;
+    }
+    .layout-wings #classic-bottom {
+      display: none !important;
+    }
+    .layout-wings #stage-wrapper {
+      max-width: 48rem;
+    }
+
+    .layout-classic #wings-left,
+    .layout-classic #wings-right {
+      display: none !important;
+    }
+    .layout-classic #classic-bottom {
+      display: block !important;
+    }
+    .layout-classic #stage-wrapper {
+      max-width: 40rem;
+    }
   </style>
 </head>
-<body class="min-h-full flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
+<body class="h-screen overflow-hidden flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
 
   <!-- 頂部魔法控制列 -->
-  <header class="w-full border-b border-amber-900/40 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40 px-4 py-2.5 sm:px-6">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      
-      <!-- 左：校徽與儀式標題 -->
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="flex items-center gap-2 group" title="返回校慶首頁">
-          <div class="w-9 h-9 rounded-full bg-white p-1 border-2 border-amber-400/80 shadow-md flex items-center justify-center overflow-hidden group-hover:scale-105 transition">
-            <img src="images/school_logo.jpg" alt="校徽" class="w-full h-full object-contain">
-          </div>
-          <div>
-            <div class="text-xs text-amber-400 font-cinzel tracking-wider font-bold">NANXING SORTING CEREMONY</div>
-            <div class="text-sm sm:text-base font-black text-amber-100 flex items-center gap-1.5">
-              <span>南興魔法分院大典</span>
-              <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">學生朝會專用</span>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <!-- 中：進度條與目前人數 -->
-      <div class="hidden md:flex flex-col items-center gap-1 min-w-[260px]">
-        <div class="flex items-center justify-between w-full text-xs text-slate-300 font-bold px-1">
-          <span>分隊進度</span>
-          <span id="progress-text" class="text-amber-400 font-cinzel">0 / 99 人 (0%)</span>
+  <header class="w-full h-14 border-b border-amber-900/40 bg-slate-950/85 backdrop-blur-md z-40 px-3 sm:px-6 flex items-center justify-between flex-shrink-0">
+    <!-- 左：校徽與儀式標題 -->
+    <div class="flex items-center gap-2.5">
+      <a href="index.html" class="flex items-center gap-2 group" title="返回校慶首頁">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white p-1 border-2 border-amber-400/80 shadow-md flex items-center justify-center overflow-hidden group-hover:scale-105 transition">
+          <img src="images/school_logo.jpg" alt="校徽" class="w-full h-full object-contain">
         </div>
-        <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
-          <div id="progress-bar" class="bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-300 h-full w-0 transition-all duration-500"></div>
+        <div>
+          <div class="text-[10px] text-amber-400 font-cinzel tracking-wider font-bold leading-none">NANXING SORTING CEREMONY</div>
+          <div class="text-xs sm:text-sm font-black text-amber-100 flex items-center gap-1.5 mt-0.5">
+            <span>南興魔法分院大典</span>
+            <span class="text-[10px] px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">朝會專用</span>
+          </div>
         </div>
+      </a>
+    </div>
+
+    <!-- 中：進度條與目前人數 -->
+    <div class="hidden md:flex flex-col items-center gap-0.5 min-w-[220px]">
+      <div class="flex items-center justify-between w-full text-[11px] text-slate-300 font-bold px-1">
+        <span>分隊進度</span>
+        <span id="progress-text" class="text-amber-400 font-cinzel">0 / 99 人 (0%)</span>
       </div>
-
-      <!-- 右：大典操控輔助快捷按鈕 -->
-      <div class="flex items-center gap-1.5 sm:gap-2">
-        <!-- 點名冊選人 -->
-        <button onclick="openRosterModal()" class="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 flex items-center gap-1.5 transition" title="展開全校名單，可直接點選指定學生">
-          <i class="fa-solid fa-list-check text-amber-400"></i>
-          <span class="hidden sm:inline">點名冊選人</span>
-        </button>
-
-        <!-- 三隊集合指引 -->
-        <button onclick="openSummaryModal()" class="px-2.5 py-1.5 rounded-lg bg-amber-950/40 hover:bg-amber-900/60 text-amber-200 text-xs font-bold border border-amber-700/60 flex items-center gap-1.5 transition" title="查看三隊大集合分區指引">
-          <i class="fa-solid fa-map-location-dot text-amber-300"></i>
-          <span class="hidden sm:inline">三隊集合指引</span>
-        </button>
-
-        <!-- 名單與設定 -->
-        <button onclick="openSettingsModal()" class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 flex items-center gap-1.5 transition" title="自訂與匯入分組名單">
-          <i class="fa-solid fa-sliders text-sky-400"></i>
-          <span class="hidden lg:inline">名單設定</span>
-        </button>
-
-        <!-- 語音播報開關 -->
-        <button id="btn-voice" onclick="toggleVoice()" class="p-1.5 sm:px-2 sm:py-1.5 rounded-lg bg-slate-800/80 text-emerald-400 text-xs border border-slate-700 transition" title="語音唱名開關">
-          <i class="fa-solid fa-volume-high"></i>
-        </button>
-
-        <!-- 音效開關 -->
-        <button id="btn-sound" onclick="toggleSound()" class="p-1.5 sm:px-2 sm:py-1.5 rounded-lg bg-slate-800/80 text-amber-400 text-xs border border-slate-700 transition" title="背景魔法音效開關">
-          <i class="fa-solid fa-music"></i>
-        </button>
-
-        <!-- 全螢幕切換 -->
-        <button onclick="toggleFullScreen()" class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white text-xs font-bold shadow-md transition" title="全螢幕模式 (大螢幕/投影機必備)">
-          <i class="fa-solid fa-expand"></i>
-          <span class="hidden sm:inline ml-1">全螢幕</span>
-        </button>
+      <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700">
+        <div id="progress-bar" class="bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-300 h-full w-0 transition-all duration-500"></div>
       </div>
+    </div>
 
+    <!-- 右：大典操控輔助快捷按鈕 -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <!-- 🪟 關鍵核心：版面切換按鈕 (左右雙翼 ⟷ 上下全屏) -->
+      <button onclick="toggleLayoutMode()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-bold border border-amber-500/50 flex items-center gap-1.5 transition" title="切換排版：劇院雙翼模式(左右即時看著名單) 或 經典上下模式">
+        <i class="fa-solid fa-table-columns text-amber-400"></i>
+        <span id="layout-toggle-label" class="hidden sm:inline">劇院雙翼視圖</span>
+      </button>
+
+      <!-- 點名冊選人 -->
+      <button onclick="openRosterModal()" class="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 flex items-center gap-1.5 transition" title="展開全校名單，可直接點選指定學生">
+        <i class="fa-solid fa-list-check text-amber-400"></i>
+        <span class="hidden lg:inline">點名冊選人</span>
+      </button>
+
+      <!-- 三隊集合指引 -->
+      <button onclick="openSummaryModal()" class="px-2.5 py-1.5 rounded-lg bg-amber-950/40 hover:bg-amber-900/60 text-amber-200 text-xs font-bold border border-amber-700/60 flex items-center gap-1.5 transition" title="查看三隊大集合分區指引">
+        <i class="fa-solid fa-map-location-dot text-amber-300"></i>
+        <span class="hidden lg:inline">三隊集合指引</span>
+      </button>
+
+      <!-- 名單與設定 -->
+      <button onclick="openSettingsModal()" class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 flex items-center gap-1.5 transition" title="自訂與匯入分組名單">
+        <i class="fa-solid fa-sliders text-sky-400"></i>
+      </button>
+
+      <!-- 語音播報開關 -->
+      <button id="btn-voice" onclick="toggleVoice()" class="p-1.5 sm:px-2 sm:py-1.5 rounded-lg bg-slate-800/80 text-emerald-400 text-xs border border-slate-700 transition" title="語音唱名開關">
+        <i class="fa-solid fa-volume-high"></i>
+      </button>
+
+      <!-- 音效開關 -->
+      <button id="btn-sound" onclick="toggleSound()" class="p-1.5 sm:px-2 sm:py-1.5 rounded-lg bg-slate-800/80 text-amber-400 text-xs border border-slate-700 transition" title="背景魔法音效開關">
+        <i class="fa-solid fa-music"></i>
+      </button>
+
+      <!-- 全螢幕切換 -->
+      <button onclick="toggleFullScreen()" class="px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white text-xs font-bold shadow-md transition flex items-center gap-1" title="全螢幕模式 (大螢幕/投影機必備)">
+        <i class="fa-solid fa-expand"></i>
+        <span class="hidden sm:inline">全螢幕</span>
+      </button>
     </div>
   </header>
 
-  <!-- 主舞台：大螢幕儀式核心展演區 -->
-  <main class="flex-1 flex flex-col items-center justify-center px-4 py-4 sm:py-6 relative z-10 max-w-6xl mx-auto w-full">
-    
-    <!-- 舞台中央：分類帽與學生卡片 -->
-    <div class="w-full flex flex-col items-center text-center relative">
+  <!-- ==================== 主舞台與彈性版面容器 ==================== -->
+  <div id="app-container" class="layout-wings flex-1 flex overflow-hidden min-h-0 w-full relative">
 
-      <!-- 頂部神秘符文環 -->
-      <div class="absolute -top-12 w-80 h-80 rounded-full border border-amber-500/10 pointer-events-none animate-spin-slow flex items-center justify-center">
-        <div class="w-64 h-64 rounded-full border border-dashed border-amber-400/20"></div>
-      </div>
-
-      <!-- 分類帽神動態 SVG -->
-      <div id="hat-container" class="relative z-10 my-1 animate-float cursor-pointer" onclick="handleStageAction()" title="點擊分類帽進行分隊">
-        <div id="hat-glow" class="w-44 h-44 sm:w-52 sm:h-52 mx-auto flex items-center justify-center transition-all duration-700 filter drop-shadow(0 0 25px rgba(212,175,55,0.4))">
-          <!-- 魔法分類帽 SVG -->
-          <svg class="w-full h-full" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="100" cy="100" r="85" stroke="#ffd700" stroke-width="1.5" stroke-dasharray="6 8" opacity="0.4" class="animate-spin-slow" />
-            <circle cx="100" cy="100" r="65" stroke="#d4af37" stroke-width="1" opacity="0.3" />
-            
-            <!-- 寬帽簷 -->
-            <path d="M20 160 C 50 145, 150 145, 180 160 C 188 164, 175 174, 150 174 C 100 175, 45 174, 20 166 C 15 163, 14 161, 20 160 Z" fill="#3d2817" stroke="#8b5a2b" stroke-width="3" filter="drop-shadow(0 8px 12px rgba(0,0,0,0.8))" />
-            <!-- 帽身立體縐褶與向上彎折的尖頂 -->
-            <path id="hat-body" d="M50 152 C 45 130, 60 100, 68 85 C 75 70, 85 45, 115 25 C 122 19, 138 22, 132 35 C 122 55, 110 65, 118 80 C 126 95, 145 125, 148 152 C 120 158, 80 158, 50 152 Z" fill="url(#hatGradient)" stroke="#a0652d" stroke-width="3" />
-            <!-- 帽眼縐褶 -->
-            <path d="M75 110 C 82 104, 92 108, 88 116 C 85 120, 76 117, 75 110 Z" fill="#1c1006" />
-            <path d="M112 110 C 118 104, 128 108, 124 116 C 121 120, 113 117, 112 110 Z" fill="#1c1006" />
-            <!-- 眼神光芒 -->
-            <circle id="eye-glow-left" cx="82" cy="112" r="2.5" fill="#fef08a" class="animate-pulse" />
-            <circle id="eye-glow-right" cx="118" cy="112" r="2.5" fill="#fef08a" class="animate-pulse" />
-            <!-- 帽嘴 -->
-            <path id="hat-mouth" d="M78 132 C 95 142, 110 142, 126 132 C 112 136, 92 136, 78 132 Z" fill="#1c1006" stroke="#8b5a2b" stroke-width="1.5" />
-            <!-- 漂浮金粉星芒 -->
-            <polygon points="145,55 148,63 156,65 149,70 152,78 145,73 138,78 141,70 134,65 142,63" fill="#fef08a" opacity="0.8" class="animate-ping" />
-            <polygon points="55,75 57,80 63,81 58,85 60,90 55,87 50,90 52,85 47,81 53,80" fill="#fef08a" opacity="0.7" />
-            
-            <defs>
-              <linearGradient id="hatGradient" x1="50" y1="25" x2="150" y2="160" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#633917" />
-                <stop offset="50%" stop-color="#42220b" />
-                <stop offset="100%" stop-color="#271305" />
-              </linearGradient>
-            </defs>
-          </svg>
+    <!-- 🔴 左翼面板：烈火金獅隊 (劇院模式下常駐於左側，一覽無遺！) -->
+    <aside id="wings-left" class="w-64 xl:w-72 flex-shrink-0 flex flex-col p-2.5 bg-slate-950/70 border-r border-rose-900/40 z-20 transition-all duration-300">
+      <div class="flex items-center justify-between border-b border-rose-900/60 pb-1.5 mb-2">
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500 animate-pulse"></span>
+          <span class="font-black text-rose-200 text-sm">🔴 烈火金獅隊</span>
+        </div>
+        <div class="text-xs font-cinzel font-black px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">
+          <span id="wings-count-red">0</span> / 33 人
         </div>
       </div>
-
-      <!-- 分類帽沉思悄悄話對話框 (Thinking / Speech Bubble) -->
-      <div id="whisper-box" class="h-12 flex items-center justify-center my-1 z-20">
-        <div id="whisper-text" class="px-4 py-1.5 rounded-full bg-slate-900/90 border border-amber-500/40 text-amber-200 text-xs sm:text-sm font-bold shadow-lg flex items-center gap-2 transition-all duration-300">
-          <i class="fa-solid fa-hat-wizard text-amber-400"></i>
-          <span id="whisper-content">「請下一位勇士上前，戴上分類帽...」</span>
-        </div>
+      <!-- 學生名單晶片區（自動平滑捲動至最新同學） -->
+      <div id="wings-roster-red" class="flex-1 overflow-y-auto flex flex-wrap gap-1.5 content-start pr-1">
+        <span class="text-[11px] text-slate-500 italic p-1">等待神獸召喚中...</span>
       </div>
-
-      <!-- 核心舞台：學生唱名大看板 -->
-      <div class="mt-2 w-full max-w-xl mx-auto bg-slate-900/85 backdrop-blur-md rounded-2xl p-5 sm:p-7 border-2 border-amber-500/50 shadow-2xl relative overflow-hidden transition-all duration-500" id="stage-card">
-        
-        <!-- 背景裝飾光束 -->
-        <div id="card-glow-bg" class="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent pointer-events-none transition-all duration-700"></div>
-
-        <!-- 序號與年級標籤 -->
-        <div class="flex items-center justify-between text-xs sm:text-sm text-slate-400 font-bold mb-2">
-          <span id="current-seq" class="px-2.5 py-0.5 rounded-full bg-slate-800 text-amber-300 border border-slate-700 font-cinzel">
-            NO. 01 / 99
-          </span>
-          <span id="current-grade-badge" class="px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-200 border border-amber-500/40">
-            六年甲班
-          </span>
-        </div>
-
-        <!-- 學生大名 (巨幅、投影機超清晰) -->
-        <div class="my-3">
-          <div id="student-name" class="text-4xl sm:text-6xl font-black tracking-widest text-white gold-text-glow font-serif py-1 transition-all duration-300">
-            許 聖 緣
-          </div>
-        </div>
-
-        <!-- 揭曉戰隊徽章區域 (預設隱藏，揭曉時霸氣跳出) -->
-        <div id="team-result-box" class="min-h-[85px] flex flex-col items-center justify-center my-2 transition-all duration-500">
-          
-          <!-- 尚未揭曉時：引導提示 -->
-          <div id="unrevealed-hint" class="text-slate-400 text-sm flex items-center gap-2">
-            <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-            <span>站在命運之石前，聆聽古老神獸的感應...</span>
-          </div>
-
-          <!-- 揭曉成果 (初始隱藏) -->
-          <div id="revealed-badge" class="hidden flex-col items-center gap-1.5 transform transition-all duration-500 scale-95">
-            <div id="revealed-team-pill" class="px-6 py-2 rounded-full text-lg sm:text-2xl font-black shadow-xl tracking-wider flex items-center gap-2.5 border-2">
-              <i id="revealed-team-icon" class="fa-solid fa-shield-halved"></i>
-              <span id="revealed-team-name">烈火金獅隊</span>
-            </div>
-            <div id="revealed-team-motto" class="text-xs sm:text-sm font-bold text-slate-300 tracking-wide mt-1">
-              「勇猛精進 • 如火燎原」
-            </div>
-          </div>
-
-        </div>
-
-        <!-- 核心操作大按鈕區 -->
-        <div class="mt-4 flex flex-wrap items-center justify-center gap-3 pt-2 border-t border-slate-800">
-          
-          <!-- 上一位按鈕 -->
-          <button id="btn-prev" onclick="prevStudent()" class="px-3 sm:px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold border border-slate-700 transition flex items-center gap-1.5">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span>上一位</span>
-          </button>
-
-          <!-- 命運大按鈕 (空格鍵 / Enter 鍵觸發) -->
-          <button id="btn-action" onclick="handleStageAction()" class="px-6 sm:px-9 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-sm sm:text-base font-black shadow-lg shadow-amber-500/25 transition transform hover:scale-105 active:scale-95 flex items-center gap-2">
-            <i id="btn-action-icon" class="fa-solid fa-wand-magic-sparkles"></i>
-            <span id="btn-action-text">戴上分類帽 (空白鍵)</span>
-          </button>
-
-          <!-- 下一位按鈕 -->
-          <button id="btn-next" onclick="nextStudent()" class="px-3 sm:px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold border border-slate-700 transition flex items-center gap-1.5">
-            <span>下一位</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-
-        </div>
-
+      <div class="text-[10px] text-rose-300/70 pt-1.5 mt-1 border-t border-rose-900/30 text-right">
+        指導：楊詒茹、徐敏瓊、林承翰老師
       </div>
+    </aside>
 
-    </div>
-
-  </main>
-
-  <!-- 底部：霍格華茲三大戰隊即時席位長桌 -->
-  <footer class="w-full bg-slate-950/95 border-t border-slate-800 p-3 sm:p-4 z-30 shadow-2xl backdrop-blur-md">
-    <div class="max-w-7xl mx-auto">
+    <!-- 🎩 中軸核心舞台：魔法分類帽 ＆ 唱名大看板 -->
+    <main class="flex-1 flex flex-col items-center justify-center p-2 sm:p-4 min-h-0 overflow-hidden relative z-10">
       
-      <div class="flex items-center justify-between mb-2 px-1">
-        <div class="text-xs text-amber-300 font-bold flex items-center gap-2">
+      <!-- 頂部神秘符文環 (微縮適配) -->
+      <div class="absolute top-1/2 -translate-y-1/2 w-96 h-96 rounded-full border border-amber-500/10 pointer-events-none animate-spin-slow flex items-center justify-center">
+        <div class="w-72 h-72 rounded-full border border-dashed border-amber-400/20"></div>
+      </div>
+
+      <!-- 舞台中央包裹層 -->
+      <div id="stage-wrapper" class="w-full flex flex-col items-center text-center relative max-h-full justify-center">
+        
+        <!-- 分類帽神動態 SVG (保留大版面，同時高彈性適配螢幕高度) -->
+        <div id="hat-container" class="relative z-10 animate-float cursor-pointer flex-shrink-0" onclick="handleStageAction()" title="點擊分類帽進行分隊">
+          <div id="hat-glow" class="w-36 h-36 sm:w-44 sm:h-44 xl:w-52 xl:h-52 mx-auto flex items-center justify-center transition-all duration-500 filter drop-shadow(0 0 25px rgba(212,175,55,0.4))">
+            <!-- 魔法分類帽 SVG -->
+            <svg class="w-full h-full" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="100" cy="100" r="85" stroke="#ffd700" stroke-width="1.5" stroke-dasharray="6 8" opacity="0.4" class="animate-spin-slow" />
+              <circle cx="100" cy="100" r="65" stroke="#d4af37" stroke-width="1" opacity="0.3" />
+              <!-- 寬帽簷 -->
+              <path d="M20 160 C 50 145, 150 145, 180 160 C 188 164, 175 174, 150 174 C 100 175, 45 174, 20 166 C 15 163, 14 161, 20 160 Z" fill="#3d2817" stroke="#8b5a2b" stroke-width="3" filter="drop-shadow(0 8px 12px rgba(0,0,0,0.8))" />
+              <!-- 帽身立體縐褶與尖頂 -->
+              <path id="hat-body" d="M50 152 C 45 130, 60 100, 68 85 C 75 70, 85 45, 115 25 C 122 19, 138 22, 132 35 C 122 55, 110 65, 118 80 C 126 95, 145 125, 148 152 C 120 158, 80 158, 50 152 Z" fill="url(#hatGradient)" stroke="#a0652d" stroke-width="3" />
+              <!-- 帽眼縐褶與神祕光芒 -->
+              <path d="M75 110 C 82 104, 92 108, 88 116 C 85 120, 76 117, 75 110 Z" fill="#1c1006" />
+              <path d="M112 110 C 118 104, 128 108, 124 116 C 121 120, 113 117, 112 110 Z" fill="#1c1006" />
+              <circle id="eye-glow-left" cx="82" cy="112" r="2.5" fill="#fef08a" class="animate-pulse" />
+              <circle id="eye-glow-right" cx="118" cy="112" r="2.5" fill="#fef08a" class="animate-pulse" />
+              <!-- 帽嘴 -->
+              <path id="hat-mouth" d="M78 132 C 95 142, 110 142, 126 132 C 112 136, 92 136, 78 132 Z" fill="#1c1006" stroke="#8b5a2b" stroke-width="1.5" />
+              <!-- 漂浮金粉星芒 -->
+              <polygon points="145,55 148,63 156,65 149,70 152,78 145,73 138,78 141,70 134,65 142,63" fill="#fef08a" opacity="0.8" class="animate-ping" />
+              <polygon points="55,75 57,80 63,81 58,85 60,90 55,87 50,90 52,85 47,81 53,80" fill="#fef08a" opacity="0.7" />
+              
+              <defs>
+                <linearGradient id="hatGradient" x1="50" y1="25" x2="150" y2="160" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#633917" />
+                  <stop offset="50%" stop-color="#42220b" />
+                  <stop offset="100%" stop-color="#271305" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+
+        <!-- 分類帽沉思耳語 (Thinking / Speech Bubble) -->
+        <div id="whisper-box" class="h-8 flex items-center justify-center my-1 z-20 flex-shrink-0">
+          <div id="whisper-text" class="px-3.5 py-1 rounded-full bg-slate-900/90 border border-amber-500/40 text-amber-200 text-xs font-bold shadow-lg flex items-center gap-1.5 transition-all duration-300">
+            <i class="fa-solid fa-hat-wizard text-amber-400 text-xs"></i>
+            <span id="whisper-content">「請下一位勇士上前，戴上分類帽...」</span>
+          </div>
+        </div>
+
+        <!-- 核心舞台：學生唱名大看板 -->
+        <div class="mt-1 w-full bg-slate-900/85 backdrop-blur-md rounded-2xl p-4 sm:p-5 border-2 border-amber-500/50 shadow-2xl relative overflow-hidden transition-all duration-300 flex-shrink-0" id="stage-card">
+          
+          <div id="card-glow-bg" class="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent pointer-events-none transition-all duration-700"></div>
+
+          <!-- 序號與年級標籤 -->
+          <div class="flex items-center justify-between text-xs text-slate-400 font-bold mb-1">
+            <span id="current-seq" class="px-2.5 py-0.5 rounded-full bg-slate-800 text-amber-300 border border-slate-700 font-cinzel">
+              NO. 01 / 99
+            </span>
+            <span id="current-grade-badge" class="px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-200 border border-amber-500/40">
+              六年甲班
+            </span>
+          </div>
+
+          <!-- 學生大名 (巨幅投影超清晰) -->
+          <div class="my-1.5">
+            <div id="student-name" class="text-4xl sm:text-5xl xl:text-6xl font-black tracking-widest text-white gold-text-glow font-serif py-1 transition-all duration-300">
+              許 聖 緣
+            </div>
+          </div>
+
+          <!-- 揭曉戰隊徽章區域 -->
+          <div id="team-result-box" class="min-h-[68px] sm:min-h-[75px] flex flex-col items-center justify-center my-1 transition-all duration-300">
+            <!-- 尚未揭曉提示 -->
+            <div id="unrevealed-hint" class="text-slate-400 text-xs sm:text-sm flex items-center gap-2">
+              <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+              <span>站在命運之石前，聆聽古老神獸的感應...</span>
+            </div>
+
+            <!-- 揭曉成果 -->
+            <div id="revealed-badge" class="hidden flex-col items-center gap-1 transform transition-all duration-300 scale-95">
+              <div id="revealed-team-pill" class="px-5 py-1.5 rounded-full text-base sm:text-xl font-black shadow-xl tracking-wider flex items-center gap-2 border-2">
+                <i id="revealed-team-icon" class="fa-solid fa-shield-halved"></i>
+                <span id="revealed-team-name">烈火金獅隊</span>
+              </div>
+              <div id="revealed-team-motto" class="text-xs font-bold text-slate-300 tracking-wide">
+                「勇猛精進 • 如火燎原」
+              </div>
+            </div>
+          </div>
+
+          <!-- 核心操作大按鈕區 -->
+          <div class="mt-2.5 flex items-center justify-center gap-2 sm:gap-3 pt-2 border-t border-slate-800">
+            <!-- 上一位 -->
+            <button id="btn-prev" onclick="prevStudent()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold border border-slate-700 transition flex items-center gap-1.5">
+              <i class="fa-solid fa-arrow-left"></i>
+              <span class="hidden sm:inline">上一位</span>
+            </button>
+
+            <!-- 命運大按鈕 (空格鍵 / Enter 鍵觸發) -->
+            <button id="btn-action" onclick="handleStageAction()" class="px-5 sm:px-8 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs sm:text-sm font-black shadow-lg shadow-amber-500/25 transition transform hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <i id="btn-action-icon" class="fa-solid fa-wand-magic-sparkles"></i>
+              <span id="btn-action-text">戴上分類帽 (空白鍵)</span>
+            </button>
+
+            <!-- 下一位 -->
+            <button id="btn-next" onclick="nextStudent()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold border border-slate-700 transition flex items-center gap-1.5">
+              <span class="hidden sm:inline">下一位</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- 🟢 & 🔵 右翼面板：翠玉蜈蚣隊 ＆ 碧海晨曦隊 (劇院模式下常駐於右側，上下平分！) -->
+    <aside id="wings-right" class="w-64 xl:w-72 flex-shrink-0 flex flex-col gap-2 p-2.5 bg-slate-950/70 border-l border-sky-900/40 z-20 transition-all duration-300">
+      
+      <!-- 右翼上段：翠玉蜈蚣隊 -->
+      <div class="flex-1 flex flex-col p-2 rounded-xl bg-emerald-950/30 border border-emerald-500/30 min-h-0">
+        <div class="flex items-center justify-between border-b border-emerald-900/60 pb-1 mb-1.5 flex-shrink-0">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500 animate-pulse"></span>
+            <span class="font-black text-emerald-200 text-xs sm:text-sm">🟢 翠玉蜈蚣隊</span>
+          </div>
+          <div class="text-[11px] font-cinzel font-black px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+            <span id="wings-count-green">0</span> / 33 人
+          </div>
+        </div>
+        <div id="wings-roster-green" class="flex-1 overflow-y-auto flex flex-wrap gap-1 content-start pr-1">
+          <span class="text-[10px] text-slate-500 italic p-1">等待神獸召喚中...</span>
+        </div>
+        <div class="text-[9px] text-emerald-300/70 pt-1 mt-1 border-t border-emerald-900/30 text-right flex-shrink-0">
+          指導：蔡武憲、羅珮華、鄭潔、林立樺老師
+        </div>
+      </div>
+
+      <!-- 右翼下段：碧海晨曦隊 -->
+      <div class="flex-1 flex flex-col p-2 rounded-xl bg-sky-950/30 border border-sky-500/30 min-h-0">
+        <div class="flex items-center justify-between border-b border-sky-900/60 pb-1 mb-1.5 flex-shrink-0">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-sky-500 shadow-sm shadow-sky-500 animate-pulse"></span>
+            <span class="font-black text-sky-200 text-xs sm:text-sm">🔵 碧海晨曦隊</span>
+          </div>
+          <div class="text-[11px] font-cinzel font-black px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40">
+            <span id="wings-count-blue">0</span> / 33 人
+          </div>
+        </div>
+        <div id="wings-roster-blue" class="flex-1 overflow-y-auto flex flex-wrap gap-1 content-start pr-1">
+          <span class="text-[10px] text-slate-500 italic p-1">等待神獸召喚中...</span>
+        </div>
+        <div class="text-[9px] text-sky-300/70 pt-1 mt-1 border-t border-sky-900/30 text-right flex-shrink-0">
+          指導：黃美雅、施喬恩、周婉琳老師
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- ==================== 經典模式底部三大席位長桌 (在經典上下視圖時顯示，高度緊湊保證100%同屏) ==================== -->
+  <footer id="classic-bottom" class="w-full bg-slate-950/95 border-t border-slate-800 p-2 sm:p-2.5 z-30 shadow-2xl backdrop-blur-md flex-shrink-0">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center justify-between mb-1.5 px-1">
+        <div class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
           <i class="fa-solid fa-users-rays text-amber-400"></i>
           <span>三大戰隊席位即時名冊（唱名完成自動入列）</span>
         </div>
-        <div class="text-[11px] text-slate-400 font-medium hidden sm:block">
-          提示：點擊任何同學名牌可快速定位 ｜ 按空白鍵快速揭曉
+        <div class="text-[10px] text-slate-400 font-medium hidden sm:block">
+          點擊同學名牌可快速定位 ｜ 按空白鍵快速揭曉
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-
-        <!-- 🔴 紅隊 • 烈火金獅 -->
-        <div class="rounded-xl bg-rose-950/30 border border-rose-500/30 p-2.5 flex flex-col justify-between transition hover:border-rose-500/60">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+        <!-- 🔴 紅隊 -->
+        <div class="rounded-xl bg-rose-950/30 border border-rose-500/30 p-2 flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between border-b border-rose-900/40 pb-1.5 mb-2">
-              <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-rose-500 shadow-sm shadow-rose-500/80 animate-pulse"></span>
-                <span class="font-black text-rose-200 text-sm sm:text-base">烈火金獅隊</span>
-                <span class="text-[10px] text-rose-400/80 font-bold hidden lg:inline">勇猛精進</span>
-              </div>
-              <div class="text-xs font-cinzel font-black px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">
-                <span id="count-red">0</span> / <span id="target-red">33</span> 人
-              </div>
+            <div class="flex items-center justify-between border-b border-rose-900/40 pb-1 mb-1">
+              <span class="font-bold text-rose-200 text-xs">🔴 烈火金獅隊</span>
+              <span class="text-[11px] font-cinzel text-rose-300 font-bold"><span id="count-red">0</span> / 33 人</span>
             </div>
-            <div id="roster-red" class="flex flex-wrap gap-1.5 max-h-24 sm:max-h-28 overflow-y-auto pr-1 content-start">
-              <span class="text-[11px] text-slate-500 italic p-1">等待神獸召喚中...</span>
-            </div>
-          </div>
-          <div class="text-[10px] text-rose-300/70 pt-1.5 mt-1 border-t border-rose-900/30 text-right">
-            指導：楊詒茹、徐敏瓊、林承翰老師
+            <div id="roster-red" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1 content-start"></div>
           </div>
         </div>
 
-        <!-- 🟢 綠隊 • 翠玉蜈蚣 -->
-        <div class="rounded-xl bg-emerald-950/30 border border-emerald-500/30 p-2.5 flex flex-col justify-between transition hover:border-emerald-500/60">
+        <!-- 🟢 綠隊 -->
+        <div class="rounded-xl bg-emerald-950/30 border border-emerald-500/30 p-2 flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between border-b border-emerald-900/40 pb-1.5 mb-2">
-              <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/80 animate-pulse"></span>
-                <span class="font-black text-emerald-200 text-sm sm:text-base">翠玉蜈蚣隊</span>
-                <span class="text-[10px] text-emerald-400/80 font-bold hidden lg:inline">步步為營</span>
-              </div>
-              <div class="text-xs font-cinzel font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                <span id="count-green">0</span> / <span id="target-green">33</span> 人
-              </div>
+            <div class="flex items-center justify-between border-b border-emerald-900/40 pb-1 mb-1">
+              <span class="font-bold text-emerald-200 text-xs">🟢 翠玉蜈蚣隊</span>
+              <span class="text-[11px] font-cinzel text-emerald-300 font-bold"><span id="count-green">0</span> / 33 人</span>
             </div>
-            <div id="roster-green" class="flex flex-wrap gap-1.5 max-h-24 sm:max-h-28 overflow-y-auto pr-1 content-start">
-              <span class="text-[11px] text-slate-500 italic p-1">等待神獸召喚中...</span>
-            </div>
-          </div>
-          <div class="text-[10px] text-emerald-300/70 pt-1.5 mt-1 border-t border-emerald-900/30 text-right">
-            指導：蔡武憲、羅珮華、鄭潔、林立樺老師
+            <div id="roster-green" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1 content-start"></div>
           </div>
         </div>
 
-        <!-- 🔵 藍隊 • 碧海晨曦 -->
-        <div class="rounded-xl bg-sky-950/30 border border-sky-500/30 p-2.5 flex flex-col justify-between transition hover:border-sky-500/60">
+        <!-- 🔵 藍隊 -->
+        <div class="rounded-xl bg-sky-950/30 border border-sky-500/30 p-2 flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between border-b border-sky-900/40 pb-1.5 mb-2">
-              <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-sky-500 shadow-sm shadow-sky-500/80 animate-pulse"></span>
-                <span class="font-black text-sky-200 text-sm sm:text-base">碧海晨曦隊</span>
-                <span class="text-[10px] text-sky-400/80 font-bold hidden lg:inline">浩瀚開闊</span>
-              </div>
-              <div class="text-xs font-cinzel font-black px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40">
-                <span id="count-blue">0</span> / <span id="target-blue">33</span> 人
-              </div>
+            <div class="flex items-center justify-between border-b border-sky-900/40 pb-1 mb-1">
+              <span class="font-bold text-sky-200 text-xs">🔵 碧海晨曦隊</span>
+              <span class="text-[11px] font-cinzel text-sky-300 font-bold"><span id="count-blue">0</span> / 33 人</span>
             </div>
-            <div id="roster-blue" class="flex flex-wrap gap-1.5 max-h-24 sm:max-h-28 overflow-y-auto pr-1 content-start">
-              <span class="text-[11px] text-slate-500 italic p-1">等待神獸召喚中...</span>
-            </div>
-          </div>
-          <div class="text-[10px] text-sky-300/70 pt-1.5 mt-1 border-t border-sky-900/30 text-right">
-            指導：黃美雅、施喬恩、周婉琳老師
+            <div id="roster-blue" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1 content-start"></div>
           </div>
         </div>
-
       </div>
-
     </div>
   </footer>
 
   <!-- ==================== 彈窗 1：點名冊快速定位選人 (Roster Modal) ==================== -->
   <div id="roster-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border-2 border-amber-500/50 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
-      
       <div class="p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-list-ol text-amber-400 text-lg"></i>
@@ -419,8 +449,7 @@
         <button onclick="filterRosterByGrade(6)" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700" id="tab-grade-6">六年級 (19人)</button>
       </div>
 
-      <div class="p-4 overflow-y-auto flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5" id="roster-modal-grid">
-      </div>
+      <div class="p-4 overflow-y-auto flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5" id="roster-modal-grid"></div>
 
       <div class="p-3 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
         <span>綠色打勾表示已揭曉，點擊未揭曉學生可直接切換至該學生。</span>
@@ -429,14 +458,12 @@
           <span>一鍵全校快速揭曉</span>
         </button>
       </div>
-
     </div>
   </div>
 
   <!-- ==================== 彈窗 2：三大戰隊集合指引看板 (Summary Modal) ==================== -->
   <div id="summary-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border-2 border-amber-500/50 rounded-2xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-      
       <div class="p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-map-location-dot text-amber-400 text-xl"></i>
@@ -451,9 +478,7 @@
       </div>
 
       <div class="p-4 overflow-y-auto flex-1 space-y-4">
-        
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          
           <!-- 紅隊方位 -->
           <div class="p-3.5 rounded-xl bg-rose-950/40 border-2 border-rose-500/50 flex flex-col justify-between">
             <div>
@@ -464,9 +489,7 @@
                 <div class="mt-1 text-slate-300">指導：楊詒茹、徐敏瓊、林承翰老師</div>
               </div>
             </div>
-            <div class="mt-3 text-xs font-bold text-rose-300">
-              總人數：<span id="summary-count-red" class="font-cinzel text-sm">33</span> 人
-            </div>
+            <div class="mt-3 text-xs font-bold text-rose-300">總人數：<span id="summary-count-red" class="font-cinzel text-sm">33</span> 人</div>
           </div>
 
           <!-- 綠隊方位 -->
@@ -479,9 +502,7 @@
                 <div class="mt-1 text-slate-300">指導：蔡武憲、羅珮華、鄭潔、林立樺老師</div>
               </div>
             </div>
-            <div class="mt-3 text-xs font-bold text-emerald-300">
-              總人數：<span id="summary-count-green" class="font-cinzel text-sm">33</span> 人
-            </div>
+            <div class="mt-3 text-xs font-bold text-emerald-300">總人數：<span id="summary-count-green" class="font-cinzel text-sm">33</span> 人</div>
           </div>
 
           <!-- 藍隊方位 -->
@@ -494,11 +515,8 @@
                 <div class="mt-1 text-slate-300">指導：黃美雅、施喬恩、周婉琳老師</div>
               </div>
             </div>
-            <div class="mt-3 text-xs font-bold text-sky-300">
-              總人數：<span id="summary-count-blue" class="font-cinzel text-sm">33</span> 人
-            </div>
+            <div class="mt-3 text-xs font-bold text-sky-300">總人數：<span id="summary-count-blue" class="font-cinzel text-sm">33</span> 人</div>
           </div>
-
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
@@ -526,7 +544,6 @@
             <div id="summary-list-blue" class="space-y-1.5 text-xs text-slate-300"></div>
           </div>
         </div>
-
       </div>
 
       <div class="p-3 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-xs">
@@ -540,14 +557,12 @@
           </button>
         </div>
       </div>
-
     </div>
   </div>
 
   <!-- ==================== 彈窗 3：名單自訂與匯入管理 (Settings Modal) ==================== -->
   <div id="settings-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border-2 border-amber-500/50 rounded-2xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
-      
       <div class="p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-sliders text-sky-400 text-lg"></i>
@@ -562,7 +577,6 @@
       </div>
 
       <div class="p-4 overflow-y-auto flex-1 space-y-4">
-        
         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div>
             <span class="text-slate-400">學生總數：</span>
@@ -606,12 +620,10 @@
                   <th class="py-2 px-3">狀態</th>
                 </tr>
               </thead>
-              <tbody id="settings-table-body" class="divide-y divide-slate-800/60">
-              </tbody>
+              <tbody id="settings-table-body" class="divide-y divide-slate-800/60"></tbody>
             </table>
           </div>
         </div>
-
       </div>
 
       <div class="p-3 bg-slate-950 border-t border-slate-800 flex items-center justify-end text-xs">
@@ -619,7 +631,6 @@
           完成並儲存
         </button>
       </div>
-
     </div>
   </div>
 
@@ -1367,18 +1378,52 @@
 
     let students = [];
     let currentIndex = 0;
-    let stageState = 'WAITING'; // 'WAITING', 'THINKING', 'REVEALED'
+    let stageState = 'WAITING';
     let soundEnabled = true;
     let voiceEnabled = true;
     let audioCtx = null;
+    let currentLayout = 'wings'; // 'wings' 或 'classic'
 
     document.addEventListener('DOMContentLoaded', () => {
+      initLayoutMode();
       loadStudentsFromStorage();
       renderCurrentStudent();
       updateDashboardCounts();
       renderAllRosters();
       setupKeyboardShortcuts();
     });
+
+    // 🪟 視圖切換邏輯 (劇院雙翼 vs 經典上下)
+    function initLayoutMode() {
+      const savedLayout = localStorage.getItem('nanxing_sorting_layout');
+      if (savedLayout) {
+        currentLayout = savedLayout;
+      } else {
+        // 大螢幕預設為雙翼劇院模式 (超清晰即時看名單)
+        currentLayout = window.innerWidth >= 900 ? 'wings' : 'classic';
+      }
+      applyLayoutMode();
+    }
+
+    function toggleLayoutMode() {
+      currentLayout = currentLayout === 'wings' ? 'classic' : 'wings';
+      localStorage.setItem('nanxing_sorting_layout', currentLayout);
+      applyLayoutMode();
+    }
+
+    function applyLayoutMode() {
+      const container = document.getElementById('app-container');
+      const label = document.getElementById('layout-toggle-label');
+      if (currentLayout === 'wings') {
+        container.className = 'layout-wings flex-1 flex overflow-hidden min-h-0 w-full relative justify-between items-stretch';
+        if (label) label.textContent = '劇院雙翼視圖';
+      } else {
+        container.className = 'layout-classic flex-1 flex flex-col overflow-hidden min-h-0 w-full relative justify-between items-center';
+        if (label) label.textContent = '經典上下視圖';
+      }
+      // 重新捲動至最新名單
+      renderAllRosters();
+    }
 
     function loadStudentsFromStorage() {
       const saved = localStorage.getItem('nanxing_sorting_students');
@@ -1448,7 +1493,7 @@
       
       document.getElementById('btn-action-text').textContent = '戴上分類帽 (空白鍵)';
       document.getElementById('btn-action-icon').className = 'fa-solid fa-wand-magic-sparkles';
-      document.getElementById('btn-action').className = 'px-6 sm:px-9 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-sm sm:text-base font-black shadow-lg shadow-amber-500/25 transition transform hover:scale-105 active:scale-95 flex items-center gap-2';
+      document.getElementById('btn-action').className = 'px-5 sm:px-8 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs sm:text-sm font-black shadow-lg shadow-amber-500/25 transition transform hover:scale-105 active:scale-95 flex items-center gap-1.5';
 
       document.getElementById('hat-glow').style.filter = 'drop-shadow(0 0 25px rgba(212,175,55,0.4))';
     }
@@ -1478,7 +1523,7 @@
       document.getElementById('btn-action').disabled = true;
       document.getElementById('btn-action').classList.add('opacity-80');
 
-      // ⚡ 縮短至 1.1 秒極速感應（俐落不拖沓，維持朝會全場高昂情緒）
+      // 1.1 秒極速感應
       setTimeout(() => {
         hatContainer.classList.remove('animate-wiggle');
         document.getElementById('btn-action').disabled = false;
@@ -1489,7 +1534,7 @@
 
         showRevealedState(s.team, true);
 
-        // 🗣️ 揭曉後直接俐落唱名「O隊！」，不再唸冗長名字
+        // 語音俐落只唱名「O隊！」
         if (voiceEnabled) {
           speakStudentSorting(s.team);
         }
@@ -1507,7 +1552,7 @@
       badge.classList.remove('hidden');
 
       const pill = document.getElementById('revealed-team-pill');
-      pill.className = `px-6 py-2 rounded-full text-lg sm:text-2xl font-black shadow-2xl tracking-wider flex items-center gap-2.5 border-2 ${team.bgPill}`;
+      pill.className = `px-5 py-1.5 rounded-full text-base sm:text-xl font-black shadow-xl tracking-wider flex items-center gap-2 border-2 ${team.bgPill}`;
       document.getElementById('revealed-team-icon').className = team.icon;
       document.getElementById('revealed-team-name').textContent = team.name;
       document.getElementById('revealed-team-motto').textContent = team.motto;
@@ -1518,7 +1563,7 @@
 
       document.getElementById('whisper-content').textContent = `「太棒了！${s.name} 正式歸入 —— ${team.name}！」`;
 
-      document.getElementById('btn-action-text').textContent = currentIndex < students.length - 1 ? '下一位同學 (按空白鍵)' : '分院大典完成！查看指引';
+      document.getElementById('btn-action-text').textContent = currentIndex < students.length - 1 ? '下一位同學 (空白鍵)' : '大典完成！查看指引';
       document.getElementById('btn-action-icon').className = 'fa-solid fa-arrow-right';
 
       if (isNewReveal) {
@@ -1588,6 +1633,8 @@
           prevStudent();
         } else if (e.key === 'f' || e.key === 'F') {
           toggleFullScreen();
+        } else if (e.key === 't' || e.key === 'T') {
+          toggleLayoutMode();
         } else if (e.key === 'Escape') {
           closeRosterModal();
           closeSummaryModal();
@@ -1601,48 +1648,67 @@
       const greenRevealed = students.filter(s => s.team === 'green' && s.revealed).length;
       const blueRevealed = students.filter(s => s.team === 'blue' && s.revealed).length;
 
-      const redTotal = students.filter(s => s.team === 'red').length;
-      const greenTotal = students.filter(s => s.team === 'green').length;
-      const blueTotal = students.filter(s => s.team === 'blue').length;
+      // 雙翼面板計數
+      const wRed = document.getElementById('wings-count-red');
+      const wGreen = document.getElementById('wings-count-green');
+      const wBlue = document.getElementById('wings-count-blue');
+      if (wRed) wRed.textContent = redRevealed;
+      if (wGreen) wGreen.textContent = greenRevealed;
+      if (wBlue) wBlue.textContent = blueRevealed;
 
-      document.getElementById('count-red').textContent = redRevealed;
-      document.getElementById('count-green').textContent = greenRevealed;
-      document.getElementById('count-blue').textContent = blueRevealed;
+      // 經典底部計數
+      const cRed = document.getElementById('count-red');
+      const cGreen = document.getElementById('count-green');
+      const cBlue = document.getElementById('count-blue');
+      if (cRed) cRed.textContent = redRevealed;
+      if (cGreen) cGreen.textContent = greenRevealed;
+      if (cBlue) cBlue.textContent = blueRevealed;
 
-      document.getElementById('target-red').textContent = redTotal;
-      document.getElementById('target-green').textContent = greenTotal;
-      document.getElementById('target-blue').textContent = blueTotal;
-
+      // 總結彈窗計數
       if (document.getElementById('summary-count-red')) {
-        document.getElementById('summary-count-red').textContent = redTotal;
-        document.getElementById('summary-count-green').textContent = greenTotal;
-        document.getElementById('summary-count-blue').textContent = blueTotal;
+        document.getElementById('summary-count-red').textContent = students.filter(s => s.team === 'red').length;
+        document.getElementById('summary-count-green').textContent = students.filter(s => s.team === 'green').length;
+        document.getElementById('summary-count-blue').textContent = students.filter(s => s.team === 'blue').length;
       }
     }
 
+    // 渲染雙翼名單與經典底部名單
     function renderAllRosters() {
       ['red', 'green', 'blue'].forEach(teamKey => {
-        const rosterContainer = document.getElementById(`roster-${teamKey}`);
-        if (!rosterContainer) return;
-
         const teamStudents = students.filter(s => s.team === teamKey && s.revealed);
-        if (teamStudents.length === 0) {
-          rosterContainer.innerHTML = '<span class="text-[11px] text-slate-500 italic p-1">等待神獸召喚中...</span>';
-          return;
-        }
-
+        
         const teamColorClass = teamKey === 'red' 
           ? 'bg-rose-900/40 text-rose-200 border-rose-700/60' 
           : teamKey === 'green'
             ? 'bg-emerald-900/40 text-emerald-200 border-emerald-700/60'
             : 'bg-sky-900/40 text-sky-200 border-sky-700/60';
 
-        rosterContainer.innerHTML = teamStudents.map(s => `
-          <button onclick="jumpToStudent(${s.seq - 1})" class="px-2 py-0.5 rounded text-[11px] font-bold border transition transform hover:scale-105 active:scale-95 flex items-center gap-1 ${teamColorClass} ${s.seq - 1 === currentIndex ? 'ring-2 ring-amber-400' : ''}" title="點擊聚焦 ${s.name}">
-            <span class="opacity-75">${s.grade}甲</span>
-            <span>${s.name}</span>
-          </button>
-        `).join('');
+        const chipsHtml = teamStudents.length === 0 
+          ? '<span class="text-[10px] text-slate-500 italic p-1">等待神獸召喚中...</span>'
+          : teamStudents.map(s => {
+              const isCurrent = s.seq - 1 === currentIndex;
+              return `
+                <button onclick="jumpToStudent(${s.seq - 1})" class="px-2 py-0.5 rounded text-[11px] font-bold border transition transform hover:scale-105 active:scale-95 flex items-center gap-1 ${teamColorClass} ${isCurrent ? 'ring-2 ring-amber-400 shadow-md shadow-amber-400/50' : ''}" title="點擊聚焦 ${s.name}">
+                  <span class="opacity-75">${s.grade}甲</span>
+                  <span>${s.name}</span>
+                </button>
+              `;
+            }).join('');
+
+        // 注入雙翼側欄
+        const wingsContainer = document.getElementById(`wings-roster-${teamKey}`);
+        if (wingsContainer) {
+          wingsContainer.innerHTML = chipsHtml;
+          // 平滑滾動至最新加入的孩子
+          wingsContainer.scrollTop = wingsContainer.scrollHeight;
+        }
+
+        // 注入經典底欄
+        const classicContainer = document.getElementById(`roster-${teamKey}`);
+        if (classicContainer) {
+          classicContainer.innerHTML = chipsHtml;
+          classicContainer.scrollTop = classicContainer.scrollHeight;
+        }
       });
     }
 
@@ -1898,7 +1964,6 @@
       initAudio();
       try {
         const now = audioCtx.currentTime;
-        // 2 聲緊湊心跳鼓聲 (0.45s 間隔)
         for (let i = 0; i < 2; i++) {
           const t = now + (i * 0.45);
           const osc = audioCtx.createOscillator();
@@ -1914,7 +1979,6 @@
           osc.stop(t + 0.2);
         }
 
-        // 1.0 秒緊湊俐落上升音
         const riser = audioCtx.createOscillator();
         const riserGain = audioCtx.createGain();
         riser.type = 'sine';
@@ -1965,7 +2029,6 @@
       }
     }
 
-    // 🗣️ 語音唱名：只唸讀「O隊！」，俐落響亮、全場不拖沓！
     function speakStudentSorting(teamKey) {
       if (!('speechSynthesis' in window)) return;
       try {
@@ -1973,7 +2036,7 @@
         const teamText = teamKey === 'red' ? '紅隊！' : (teamKey === 'green' ? '綠隊！' : '藍隊！');
         const utter = new SpeechSynthesisUtterance(teamText);
         utter.lang = 'zh-TW';
-        utter.rate = 1.15; // 俐落有精神
+        utter.rate = 1.15;
         utter.pitch = 1.1;
         window.speechSynthesis.speak(utter);
       } catch(e) {
