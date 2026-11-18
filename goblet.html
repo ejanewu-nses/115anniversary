@@ -401,34 +401,34 @@
               <div class="w-44 h-44 sm:w-52 sm:h-52 rounded-full border border-amber-500/20 border-dashed animate-spin-slow"></div>
             </div>
 
-            <!-- 2. 靈動流體粒子火焰 Canvas (60FPS 自然有機跳動・流體火舌與飛舞火星) -->
-            <canvas id="sports-flame-canvas" class="absolute top-0 left-0 w-full h-full z-10 pointer-events-none"></canvas>
-
-            <!-- 3. 前景典雅運動聖火金盃 (Olympic Cauldron) -->
-            <div id="goblet-bowl" class="absolute bottom-1 z-20 w-44 sm:w-52 xl:w-56 transition-all duration-300 pointer-events-none filter drop-shadow(0 8px 16px rgba(0,0,0,0.8))">
+            <!-- 2. 後景：聖火金盃後壁與深邃內腔 (Back Cauldron & Inner Lip - 位於火焰背後，營造杯內深邃空間) -->
+            <div id="goblet-back" class="absolute bottom-1 w-44 sm:w-52 xl:w-56 pointer-events-none" style="z-index: 5;">
               <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-                <!-- 聖火盆基座 -->
-                <ellipse cx="100" cy="112" rx="46" ry="7" fill="url(#torchBaseGrad)" stroke="#78350f" stroke-width="1.5" />
-                <path d="M60 112 C 64 100, 78 94, 88 92 L 112 92 C 122 94, 136 100, 140 112 Z" fill="url(#torchStemGrad)" stroke="#92400e" stroke-width="1.5" />
-                <rect x="92" y="78" width="16" height="15" fill="url(#torchGoldGrad)" stroke="#78350f" stroke-width="1" />
-                <ellipse cx="100" cy="85" rx="12" ry="4" fill="#fef08a" stroke="#b45309" stroke-width="1" />
+                <defs>
+                  <linearGradient id="torchInnerGrad" x1="45" y1="32" x2="155" y2="32" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#1c0a02" />
+                    <stop offset="50%" stop-color="#431407" />
+                    <stop offset="100%" stop-color="#1c0a02" />
+                  </linearGradient>
+                  <linearGradient id="torchBackRimGrad" x1="38" y1="23" x2="162" y2="32" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#78350f" />
+                    <stop offset="50%" stop-color="#d97706" />
+                    <stop offset="100%" stop-color="#78350f" />
+                  </linearGradient>
+                </defs>
+                <!-- 聖火杯深邃內部腔體 (熔火內膽) -->
+                <ellipse cx="100" cy="32" rx="58" ry="8.5" fill="url(#torchInnerGrad)" />
+                <!-- 聖火杯後唇金屬邊緣 -->
+                <path d="M 38 32 A 62 9 0 0 1 162 32" stroke="url(#torchBackRimGrad)" stroke-width="2.5" fill="none" />
+              </svg>
+            </div>
 
-                <!-- 運動聖火盆 主體寬口碗 (Olympic Bowl) -->
-                <path d="M38 32 C 34 68, 66 84, 100 84 C 134 84, 166 68, 162 32 Z" fill="url(#torchBowlGrad)" stroke="#78350f" stroke-width="2" />
-                
-                <!-- 兩側古典運動榮譽雙環 (Athletic Laurel Rings) -->
-                <path d="M34 36 C 18 36, 12 56, 24 68 C 30 74, 38 68, 42 62" stroke="url(#torchGoldGrad)" stroke-width="3.5" stroke-linecap="round" fill="none" />
-                <path d="M166 36 C 182 36, 188 56, 176 68 C 170 74, 162 68, 158 62" stroke="url(#torchGoldGrad)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            <!-- 3. 中景：靈動流體粒子火焰 Canvas (位於杯後壁與杯前壁之間，真正從聖火杯內部向上燃燒竄出！) -->
+            <canvas id="sports-flame-canvas" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 15;"></canvas>
 
-                <!-- 盆身雕花銘紋與運動星芒 -->
-                <path d="M80 52 C 90 48, 110 48, 120 52 C 116 64, 84 64, 80 52 Z" fill="#451a03" stroke="#f59e0b" stroke-width="1" />
-                <polygon points="100,52 102,56 107,57 103,61 104,66 100,63 96,66 97,61 93,57 98,56" fill="#fef08a" />
-
-                <!-- 聖火盆厚重鍍金邊緣 (Rim) -->
-                <ellipse cx="100" cy="32" rx="62" ry="9" fill="url(#torchRimGrad)" stroke="#78350f" stroke-width="2" />
-                <!-- 盆內反射聖火火光的深邃內膽 -->
-                <ellipse cx="100" cy="32" rx="55" ry="6.5" fill="url(#torchInnerGrad)" />
-
+            <!-- 4. 前景：典雅運動聖火金盃本體與前唇 (Front Cauldron & Nanxing Crest - 遮擋火焰下半部，宛如火焰在金盃內躍動) -->
+            <div id="goblet-front" class="absolute bottom-1 w-44 sm:w-52 xl:w-56 transition-all duration-300 pointer-events-none filter drop-shadow(0 8px 16px rgba(0,0,0,0.8))" style="z-index: 25;">
+              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
                 <defs>
                   <linearGradient id="torchRimGrad" x1="38" y1="32" x2="162" y2="32" gradientUnits="userSpaceOnUse">
                     <stop offset="0%" stop-color="#b45309" />
@@ -442,11 +442,6 @@
                     <stop offset="30%" stop-color="#d97706" />
                     <stop offset="70%" stop-color="#b45309" />
                     <stop offset="100%" stop-color="#78350f" />
-                  </linearGradient>
-                  <linearGradient id="torchInnerGrad" x1="45" y1="32" x2="155" y2="32" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#2d1002" />
-                    <stop offset="50%" stop-color="#451a03" />
-                    <stop offset="100%" stop-color="#2d1002" />
                   </linearGradient>
                   <linearGradient id="torchGoldGrad" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stop-color="#fef08a" />
@@ -462,7 +457,36 @@
                     <stop offset="50%" stop-color="#d97706" />
                     <stop offset="100%" stop-color="#451a03" />
                   </linearGradient>
+                  <!-- 南興國小專屬校徽圓形遮罩 -->
+                  <clipPath id="schoolLogoClip">
+                    <circle cx="100" cy="58" r="12.5" />
+                  </clipPath>
                 </defs>
+
+                <!-- 聖火盆基座底橢圓 -->
+                <ellipse cx="100" cy="112" rx="46" ry="7" fill="url(#torchBaseGrad)" stroke="#78350f" stroke-width="1.5" />
+                <!-- 基座斜坡柱身 -->
+                <path d="M60 112 C 64 100, 78 94, 88 92 L 112 92 C 122 94, 136 100, 140 112 Z" fill="url(#torchStemGrad)" stroke="#92400e" stroke-width="1.5" />
+                <rect x="92" y="78" width="16" height="15" fill="url(#torchGoldGrad)" stroke="#78350f" stroke-width="1" />
+                <ellipse cx="100" cy="85" rx="12" ry="4" fill="#fef08a" stroke="#b45309" stroke-width="1" />
+
+                <!-- 運動聖火盆 前景主體金身 (完全遮住火焰底端，視覺上宛如火焰深埋在盆內燃燒) -->
+                <path d="M38 32 C 34 68, 66 84, 100 84 C 134 84, 166 68, 162 32 A 62 9 0 0 1 38 32 Z" fill="url(#torchBowlGrad)" stroke="#78350f" stroke-width="2" />
+
+                <!-- 兩側古典運動榮譽雙環 (Handles) -->
+                <path d="M34 36 C 18 36, 12 56, 24 68 C 30 74, 38 68, 42 62" stroke="url(#torchGoldGrad)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+                <path d="M166 36 C 182 36, 188 56, 176 68 C 170 74, 162 68, 158 62" stroke="url(#torchGoldGrad)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+
+                <!-- 杯口立體鍍金前唇 (Front Rim - 正面金屬厚唇) -->
+                <path d="M 38 32 A 62 9 0 0 0 162 32 A 62 6.5 0 0 1 38 32 Z" fill="url(#torchRimGrad)" stroke="#78350f" stroke-width="1.2" />
+                <!-- 前唇高光邊線 -->
+                <path d="M 44 33 A 56 7.5 0 0 0 156 33" stroke="#fef08a" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.85" />
+
+                <!-- 盆身中央：南興國小專屬純金校徽浮雕勳章 (取代舊有五角星，尊貴校本榮譽) -->
+                <rect x="78" y="43" width="44" height="30" rx="15" fill="#451a03" stroke="#f59e0b" stroke-width="1.2" />
+                <circle cx="100" cy="58" r="14" fill="#ffffff" stroke="url(#torchGoldGrad)" stroke-width="2.5" />
+                <image href="images/school_logo.jpg" x="87.5" y="45.5" width="25" height="25" clip-path="url(#schoolLogoClip)" preserveAspectRatio="xMidYMid slice" />
+                <circle cx="100" cy="58" r="13.5" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="0.8" />
               </svg>
             </div>
 
@@ -1707,7 +1731,7 @@
         this.canvas.width = w;
         this.canvas.height = h;
         this.cx = w / 2;
-        this.baseY = h * 0.60; // 火焰發源處 (聖火盆口深處)
+        this.baseY = h * 0.58; // 精確對準聖火盃口內部中心 (前唇與後唇之間深處)
       }
 
       setMode(mode, team = 'gold') {
@@ -2725,18 +2749,8 @@
 
 
     function speakStudentSorting(teamKey) {
-      if (!('speechSynthesis' in window)) return;
-      try {
-        window.speechSynthesis.cancel();
-        const teamText = teamKey === 'red' ? '紅隊！' : (teamKey === 'green' ? '綠隊！' : '藍隊！');
-        const utter = new SpeechSynthesisUtterance(teamText);
-        utter.lang = 'zh-TW';
-        utter.rate = 1.15;
-        utter.pitch = 1.1;
-        setTimeout(() => window.speechSynthesis.speak(utter), 320);
-      } catch(e) {
-        console.warn('Speech error:', e);
-      }
+      // 依校長指示：保留純淨磅礴火焰燃燒音效與抽出歡呼音效，不再另外語音朗讀隊名
+      return;
     }
 
     function toggleFullScreen() {
