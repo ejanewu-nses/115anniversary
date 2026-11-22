@@ -814,13 +814,16 @@ function recordEventScores(p) {
   } 
   // 模式 B：以第一名、第二名、第三名名次登記 (p.rank1)
   else if (p.rank1) {
-    const isTug = (p.event === 'tugLow' || p.event === 'tugHigh');
-    const isRelay = p.event.includes('relay');
-    const isRainbow = (p.event === 'rainbow');
+    // 依據 115 學年度校慶實施計畫暨工作手冊（正式定稿版）競賽積分規範：
+    // 1. 全體一起的全員趣味賽（1~6年級全員混合參賽，如：蟲蟲危機 rainbow 等）：
+    //    採【第一名 16 分、第二名 12 分、第三名 8 分】
+    // 2. 分一二三年級組、四五六年級組各自對抗的積分賽（分組拔河 tugLow/tugHigh、分組大隊接力 relayLow/relayHigh、躲避球 dodge 等）：
+    //    採【第一名 8 分、第二名 6 分、第三名 4 分】
+    const isAllTogether = (p.event === 'rainbow' || p.event === 'allTogether');
 
-    const pts1 = isTug ? 8 : 12;
-    const pts2 = isTug ? 6 : (isRelay ? 10 : 8);
-    const pts3 = isTug ? 4 : (isRelay ? 8 : (isRainbow ? 6 : 4));
+    const pts1 = isAllTogether ? 16 : 8;
+    const pts2 = isAllTogether ? 12 : 6;
+    const pts3 = isAllTogether ? 8 : 4;
 
     const scores = { green: 0, blue: 0, red: 0 };
     if (p.rank1) scores[p.rank1] = pts1;
@@ -890,17 +893,17 @@ function ensureSheetHeaders(ss) {
     eventSheet.getRange(1, 1, 1, 9).setBackground('#0f766e').setFontColor('#ffffff').setFontWeight('bold');
     eventSheet.setFrozenRows(1);
 
-    // 寫入預設賽事架構
+    // 寫入預設賽事架構（依 115 校慶工作手冊定稿標準計分：全員趣味 16/12/8；分組對抗 8/6/4）
     const defaultEvents = [
-      ['11/26 (四)', '熱血美式躲避球循環賽', 'dodge', 12, 4, 8, '綠隊冠軍(+12)、紅隊亞軍(+8)、藍隊季軍(+4)', '大會裁判組', new Date()],
+      ['11/26 (四)', '熱血美式躲避球循環賽', 'dodge', 8, 4, 6, '綠隊冠軍(+8)、紅隊亞軍(+6)、藍隊季軍(+4)', '大會裁判組', new Date()],
       ['12/01 (二)', '校園慢跑-低年級3圈(5分內)', 'runLow', 6, 7, 5, '藍7人、綠6人、紅5人達標(每人1分)', '大會裁判組', new Date()],
       ['12/01 (二)', '校園慢跑-中年級800m(7分內)', 'runMid', 6, 4, 5, '綠6人、紅5人、藍4人達標(每人1分)', '大會裁判組', new Date()],
       ['12/01 (二)', '校園慢跑-高年級800m(6分內)', 'runHigh', 5, 4, 6, '紅6人、綠5人、藍4人達標(每人1分)', '大會裁判組', new Date()],
       ['12/05 (六)', '拔河賽-一二三年級組', 'tugLow', 8, 6, 4, '綠隊冠軍(+8)、藍隊亞軍(+6)、紅隊季軍(+4)', '大會裁判組', new Date()],
       ['12/05 (六)', '拔河賽-四五六年級組', 'tugHigh', 6, 4, 8, '紅隊冠軍(+8)、綠隊亞軍(+6)、藍隊季軍(+4)', '大會裁判組', new Date()],
-      ['12/05 (六)', '趣味競賽-蟲蟲危機', 'rainbow', 6, 12, 8, '藍隊冠軍(+12)、紅隊亞軍(+8)、綠隊季軍(+6)', '大會裁判組', new Date()],
-      ['12/05 (六)', '大隊接力-一二三年級組', 'relayLow', 10, 12, 8, '藍隊冠軍(+12)、綠隊亞軍(+10)、紅隊季軍(+8)', '大會裁判組', new Date()],
-      ['12/05 (六)', '大隊接力-四五六年級組', 'relayHigh', 12, 8, 10, '綠隊冠軍(+12)、紅隊亞軍(+10)、藍隊季軍(+8)', '大會裁判組', new Date()]
+      ['12/05 (六)', '趣味競賽-蟲蟲危機', 'rainbow', 8, 16, 12, '藍隊冠軍(+16)、紅隊亞軍(+12)、綠隊季軍(+8)', '大會裁判組', new Date()],
+      ['12/05 (六)', '大隊接力-一二三年級組', 'relayLow', 6, 8, 4, '藍隊冠軍(+8)、綠隊亞軍(+6)、紅隊季軍(+4)', '大會裁判組', new Date()],
+      ['12/05 (六)', '大隊接力-四五六年級組', 'relayHigh', 8, 4, 6, '綠隊冠軍(+8)、紅隊亞軍(+6)、藍隊季軍(+4)', '大會裁判組', new Date()]
     ];
     eventSheet.getRange(2, 1, defaultEvents.length, 9).setValues(defaultEvents);
   }
