@@ -311,7 +311,7 @@ function fastLocalParse(text) {
 
   // A. 精神加分匹配（最常用）
   const isEventWord = /(?:拔河|躲避球|接力|趣味|蟲蟲|彩虹|慢跑|短跑|100m|60m|80m|第一名|第二名|第三名|金牌|銀牌|銅牌)/.test(text);
-  const isSpiritTrigger = /(?:精神|暖心|事蹟|好品德|大帶小|運動家|歡呼|隊呼|自律|整齊|互助|清潔|環境|勉勵)|(?:紅隊|綠隊|藍隊)?\s*(?:加|得)?\s*[1-9一二兩三]\s*分/.test(text);
+  const isSpiritTrigger = /(?:精神|暖心|事蹟|好品德|大帶小|運動家|歡呼|隊呼|自律|整齊|互助|清潔|環境|勉勵|照顧|幫忙|禮貌)|(?:紅隊|綠隊|藍隊)?\s*(?:加|得|[+＋])\s*[1-9一二兩三\d]\s*分?/.test(text);
 
   if (isSpiritTrigger && !isEventWord) {
     let team = 'green';
@@ -319,14 +319,16 @@ function fastLocalParse(text) {
     else if (text.includes('藍') || text.includes('碧海')) team = 'blue';
     else if (text.includes('紅') || text.includes('烈火')) team = 'red';
 
-    let pts = 2;
-    const ptsMatch = text.match(/([1-9一二兩三])\s*分/);
+    let pts = 1;
+    const ptsMatch = text.match(/(?:(?:加|得|[+＋])\s*([1-9一二兩三\d])\s*分?|([1-9一二兩三\d])\s*分)/);
     if (ptsMatch) {
-      const v = ptsMatch[1];
+      const v = ptsMatch[1] || ptsMatch[2];
       if (v === '一' || v === '1') pts = 1;
       else if (v === '二' || v === '兩' || v === '2') pts = 2;
       else if (v === '三' || v === '3') pts = 3;
-      else pts = parseInt(v, 10) || 2;
+      else pts = parseInt(v, 10) || 1;
+    } else {
+      pts = 2; // 預設加2分
     }
 
     // 1. 精準提取登記人 / 見證人（支援冒號或空格隔開，如「見證人 校長」）
@@ -383,12 +385,12 @@ function fastLocalParse(text) {
       else category = 'sports';
     }
 
-    // 4. 清洗事蹟文字（徹底剔除中文「一分」、登記人、地點、以及開頭的加分引言贅字）
+    // 4. 清洗事蹟文字（徹底剔除隊名、+1/+2/加分符號、中文「一分」、登記人、地點等前綴贅字）
     let story = text;
     story = story.replace(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]+[^\s,，、。\n\r]+/g, '');
     story = story.replace(/(?:地點|位置)[：:\s]+[^\s,，、。\n\r]+/g, '');
-    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊)?\s*(?:精神(?:加分|分|加)?|加分|加|[1-9一二兩三]|分|[，,、。\s])+/i, '');
-    story = story.replace(/^[，,、。\s]+|[，,、。\s]+$/g, '').trim();
+    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊)?\s*(?:精神(?:加分|分|加)?|加分|加|得|[+＋加]\s*[1-9一二兩三\d]\s*分?|[1-9一二兩三\d]\s*分|[，,、。\s\+＋])+/i, '');
+    story = story.replace(/^[，,、。\s\+＋\-=]+|[，,、。\s]+$/g, '').trim();
     if (!story) story = text;
 
     // 5. 智慧下標題（自動提煉 8~16 字精美大標題）
@@ -639,6 +641,19 @@ function callGeminiParser(userText, userId) {
 }
 
 /**
+ * 試算表公式注入與剖析防禦（徹底根除 Google Sheets #ERROR! 公式剖析錯誤）
+ * 當文字開頭為 = + - @ 等符號時，主動補上單引號轉為強制純文字
+ */
+function safeSheetText(str) {
+  if (str === null || str === undefined) return '';
+  str = String(str).trim();
+  if (/^[=+\-@]/.test(str)) {
+    return "'" + str;
+  }
+  return str;
+}
+
+/**
  * ----------------------------------------------------------------------
  * 5. 寫入資料庫：精神加分記錄
  * ----------------------------------------------------------------------
@@ -652,15 +667,16 @@ function recordSpiritPoint(p) {
   const catNameMap = { cross: '🤝 跨齡扶持', sports: '🏃 運動家風度', eco: '🌿 環保自律', cheer: '📣 團隊歡呼' };
 
   const now = new Date();
+  const cleanStory = safeSheetText(p.story);
   const row = [
     now,
     teamNameMap[p.team] || p.team,
     p.team,
     catNameMap[p.category] || p.category,
-    p.points || 2,
-    p.story,
-    p.author || '大會裁判',
-    p.place || ''
+    p.points || 1,
+    cleanStory,
+    safeSheetText(p.author || '大會裁判'),
+    safeSheetText(p.place || '')
   ];
 
   sheet.appendRow(row);
@@ -673,7 +689,7 @@ function recordSpiritPoint(p) {
 
   return `🎉【精神加分登記成功！】\n` +
          `━━━━━━━━━━━━━━\n` +
-         `戰隊：${teamNameMap[p.team] || p.team} (+${p.points || 2}分)\n` +
+         `戰隊：${teamNameMap[p.team] || p.team} (+${p.points || 1}分)\n` +
          `向度：${catNameMap[p.category] || p.category}\n` +
          `標題：${titleText}\n` +
          `事蹟：${p.story}\n` +
