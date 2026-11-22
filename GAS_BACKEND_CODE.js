@@ -327,7 +327,7 @@ function fastLocalParse(text) {
 
     let team = null;
     if (text.includes('綠') || text.includes('翠玉')) team = 'green';
-    else if (text.includes('藍') || text.includes('碧海')) team = 'blue';
+    else if (text.includes('藍') || text.includes('跳鼓') || text.includes('雷鳴') || text.includes('碧海')) team = 'blue';
     else if (text.includes('紅') || text.includes('烈火')) team = 'red';
 
     if (!team) {
@@ -460,7 +460,7 @@ function fastLocalParse(text) {
     const parseTeam = (str) => {
       if (!str) return null;
       if (/綠|翠玉/.test(str)) return 'green';
-      if (/藍|碧海/.test(str)) return 'blue';
+      if (/藍|跳鼓|雷鳴|碧海/.test(str)) return 'blue';
       if (/紅|烈火/.test(str)) return 'red';
       return 'INVALID';
     };
@@ -612,7 +612,7 @@ function callGeminiParser(userText, userId) {
 你的任務是將校長或老師輸入的隨性文字或語音轉錄內容，解析為嚴格的結構化 JSON。
 
 學校賽事基本定義：
-1. 戰隊：'green' (綠隊/翠玉蜈蚣), 'blue' (藍隊/碧海晨曦), 'red' (紅隊/烈火金獅)。
+1. 戰隊：'green' (綠隊/翠玉蜈蚣), 'blue' (藍隊/雷鳴跳鼓), 'red' (紅隊/烈火金獅)。
 2. 精神加分向度（四大向度）：
    - 'cross' (跨齡扶持 / 大帶小)
    - 'sports' (運動家風度)

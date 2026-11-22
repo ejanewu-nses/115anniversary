@@ -501,7 +501,7 @@
 
     </main>
 
-    <!-- 🟢 & 🔵 右翼面板：翠玉蜈蚣隊 ＆ 碧海晨曦隊 (劇院模式下常駐於右側，上下平分！) -->
+    <!-- 🟢 & 🔵 右翼面板：翠玉蜈蚣隊 ＆ 雷鳴跳鼓隊 (劇院模式下常駐於右側，上下平分！) -->
     <aside id="wings-right" class="w-64 xl:w-72 flex-shrink-0 flex flex-col gap-2 p-2.5 bg-slate-950/70 border-l border-sky-900/40 z-20 transition-all duration-300">
       
       <!-- 右翼上段：翠玉蜈蚣隊 -->
@@ -523,12 +523,12 @@
         </div>
       </div>
 
-      <!-- 右翼下段：碧海晨曦隊 -->
+      <!-- 右翼下段：雷鳴跳鼓隊 -->
       <div class="flex-1 flex flex-col p-2 rounded-xl bg-sky-950/30 border border-sky-500/30 min-h-0">
         <div class="flex items-center justify-between border-b border-sky-900/60 pb-1 mb-1.5 flex-shrink-0">
           <div class="flex items-center gap-1.5">
             <span class="w-2.5 h-2.5 rounded-full bg-sky-500 shadow-sm shadow-sky-500 animate-pulse"></span>
-            <span class="font-black text-sky-200 text-xs sm:text-sm">🔵 碧海晨曦隊</span>
+            <span class="font-black text-sky-200 text-xs sm:text-sm">🔵 雷鳴跳鼓隊</span>
           </div>
           <div class="text-[11px] font-cinzel font-black px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40">
             <span id="wings-count-blue">0</span> / 33 人
@@ -586,7 +586,7 @@
         <div class="rounded-xl bg-sky-950/30 border border-sky-500/30 p-2 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between border-b border-sky-900/40 pb-1 mb-1">
-              <span class="font-bold text-sky-200 text-xs">🔵 碧海晨曦隊</span>
+              <span class="font-bold text-sky-200 text-xs">🔵 雷鳴跳鼓隊</span>
               <span class="text-[11px] font-cinzel text-sky-300 font-bold"><span id="count-blue">0</span> / 33 人</span>
             </div>
             <div id="roster-blue" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1 content-start"></div>
@@ -725,16 +725,16 @@
             </div>
           </div>
 
-          <!-- 🔵 藍隊：碧海晨曦隊 -->
+          <!-- 🔵 藍隊：雷鳴跳鼓隊 -->
           <div class="team-print-column team-blue-card rounded-xl bg-sky-950/30 border-2 border-sky-500/40 p-3 sm:p-3.5 flex flex-col justify-between shadow-lg">
             <div>
               <div class="border-b border-sky-500/30 pb-2 mb-2">
                 <div class="flex items-center justify-between">
-                  <span class="team-sub-badge text-[10px] font-bold text-sky-400 tracking-wider">BLUE TEAM • 碧海晨曦</span>
+                  <span class="team-sub-badge text-[10px] font-bold text-sky-400 tracking-wider">BLUE TEAM • 雷鳴跳鼓</span>
                   <span class="team-count-badge text-xs font-bold text-sky-300 font-cinzel"><span id="summary-count-blue">33</span> 人</span>
                 </div>
                 <div class="team-title-text text-base sm:text-lg font-black text-sky-100 flex items-center gap-1.5 mt-0.5">
-                  <span>🔵 碧海晨曦隊</span>
+                  <span>🔵 雷鳴跳鼓隊</span>
                 </div>
                 <div class="teacher-box mt-1.5 text-xs bg-sky-900/40 text-sky-100 p-2 rounded-lg border border-sky-700/50">
                   <div class="font-bold text-sky-300 flex items-center gap-1 text-[11px]"><i class="fa-solid fa-user-tie"></i> 帶隊指導老師：</div>
@@ -1569,11 +1569,11 @@
       },
       blue: {
         id: 'blue',
-        name: '碧海晨曦隊',
-        motto: '「浩瀚開闊 • 晨曦破曉」',
+        name: '雷鳴跳鼓隊',
+        motto: '「鼓聲撼地 • 氣勢破雲」',
         color: '#0284c7',
         bgPill: 'bg-gradient-to-r from-sky-600 to-sky-700 text-white border-sky-400',
-        icon: 'fa-solid fa-water',
+        icon: 'fa-solid fa-drum',
         shadow: 'rgba(2, 132, 199, 0.6)',
         confettiColors: ['#0284c7', '#38bdf8', '#e0f2fe', '#ffffff', '#2563eb']
       }
@@ -2122,7 +2122,7 @@
               <select onchange="updateStudentTeam(${realIdx}, this.value)" class="bg-slate-800 text-xs text-slate-200 rounded px-2 py-1 border border-slate-700 focus:outline-none">
                 <option value="red" ${s.team === 'red' ? 'selected' : ''}>🔴 紅隊 (金獅)</option>
                 <option value="green" ${s.team === 'green' ? 'selected' : ''}>🟢 綠隊 (蜈蚣)</option>
-                <option value="blue" ${s.team === 'blue' ? 'selected' : ''}>🔵 藍隊 (晨曦)</option>
+                <option value="blue" ${s.team === 'blue' ? 'selected' : ''}>🔵 藍隊 (跳鼓)</option>
               </select>
             </td>
             <td class="py-2 px-3">
@@ -2185,7 +2185,7 @@
     function exportRosterCSV() {
       let csv = '序號,年級,班級,姓名,分配戰隊,揭曉狀態\n';
       students.forEach(s => {
-        const tName = s.team === 'red' ? '紅隊(烈火金獅)' : s.team === 'green' ? '綠隊(翠玉蜈蚣)' : '藍隊(碧海晨曦)';
+        const tName = s.team === 'red' ? '紅隊(烈火金獅)' : s.team === 'green' ? '綠隊(翠玉蜈蚣)' : '藍隊(雷鳴跳鼓)';
         csv += `${s.seq},${s.grade},${s.class},${s.name},${tName},${s.revealed ? '已揭曉' : '未揭曉'}\n`;
       });
       const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
