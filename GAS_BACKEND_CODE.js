@@ -280,7 +280,9 @@ function doPost(e) {
 
     // 執行寫入動作
     let replyText = '';
-    if (parsed.intent === 'ADD_SPIRIT') {
+    if (parsed.intent === 'INVALID_TEAM') {
+      replyText = parsed.message;
+    } else if (parsed.intent === 'ADD_SPIRIT') {
       replyText = recordSpiritPoint(parsed);
     } else if (parsed.intent === 'UPDATE_SPRINT') {
       replyText = recordSprintWinner(parsed);
@@ -314,10 +316,26 @@ function fastLocalParse(text) {
   const isSpiritTrigger = /(?:精神|暖心|事蹟|好品德|大帶小|運動家|歡呼|隊呼|自律|整齊|互助|清潔|環境|勉勵|照顧|幫忙|禮貌)|(?:紅隊|綠隊|藍隊)?\s*(?:加|得|[+＋])\s*[1-9一二兩三\d]\s*分?/.test(text);
 
   if (isSpiritTrigger && !isEventWord) {
-    let team = 'green';
+    // 🛡️ 戰隊名稱防呆檢核（防止打錯為黃隊、白隊、黑隊等非本校戰隊）
+    const wrongTeamMatch = text.match(/([黃白黑紫橘粉灰棕橙])(?:隊)?/);
+    if (wrongTeamMatch) {
+      return {
+        intent: 'INVALID_TEAM',
+        message: `⚠️【隊伍名稱輸入有誤：${wrongTeamMatch[0]}】\n南興國小僅有「🔴 紅隊」、「🟢 綠隊」、「🔵 藍隊」三大戰隊。\n本次精神加分未登記，請確認隊伍後重新輸入！`
+      };
+    }
+
+    let team = null;
     if (text.includes('綠') || text.includes('翠玉')) team = 'green';
     else if (text.includes('藍') || text.includes('碧海')) team = 'blue';
     else if (text.includes('紅') || text.includes('烈火')) team = 'red';
+
+    if (!team) {
+      return {
+        intent: 'INVALID_TEAM',
+        message: `⚠️【未指定有效戰隊】\n南興國小僅有「🔴 紅隊」、「🟢 綠隊」、「🔵 藍隊」三大戰隊。\n請於訊息中指明為哪一隊（紅/綠/藍隊）加分喔！`
+      };
+    }
 
     let pts = 1;
     const ptsMatch = text.match(/(?:(?:加|得|[+＋])\s*([1-9一二兩三\d])\s*分?|([1-9一二兩三\d])\s*分)/);
@@ -428,31 +446,49 @@ function fastLocalParse(text) {
       event = 'dodge';
     }
 
+    // 🛡️ 戰隊名稱防呆檢核（防止打錯為黃隊、白隊、黑隊等非本校戰隊）
+    const wrongTeamMatch = text.match(/([黃白黑紫橘粉灰棕橙])(?:隊)?/);
+    if (wrongTeamMatch) {
+      return {
+        intent: 'INVALID_TEAM',
+        message: `⚠️【隊伍名稱輸入有誤：${wrongTeamMatch[0]}】\n南興國小僅有「🔴 紅隊」、「🟢 綠隊」、「🔵 藍隊」三大戰隊。\n您輸入的訊息包含非本校戰隊，本次成績未登錄，請修正後重新輸入！`
+      };
+    }
+
     const isHeadcount = /人/.test(text) || event.startsWith('run');
 
     const parseTeam = (str) => {
-      if (/綠/.test(str)) return 'green';
-      if (/藍/.test(str)) return 'blue';
-      if (/紅/.test(str)) return 'red';
-      return 'green';
+      if (!str) return null;
+      if (/綠|翠玉/.test(str)) return 'green';
+      if (/藍|碧海/.test(str)) return 'blue';
+      if (/紅|烈火/.test(str)) return 'red';
+      return 'INVALID';
     };
 
     // 1. 優先檢查名次模式（支援「名次在前」與「隊伍在前」雙向自然語序）
     let t1 = null, t2 = null, t3 = null;
 
-    // 語序 A：名次在前（例如：第一名藍隊、第一名：藍隊、冠軍藍隊、第1名藍隊、第一藍隊）
-    const m1Prefix = text.match(/(?:第一名|第1名|第一|第1|冠軍)[：:\s]*([^\s,，、\d]+)/);
-    const m2Prefix = text.match(/(?:第二名|第2名|第二|第2|亞軍)[：:\s]*([^\s,，、\d]+)/);
-    const m3Prefix = text.match(/(?:第三名|第3名|第三|第3|季軍)[：:\s]*([^\s,，、\d]+)/);
+    // 語序 A：名次在前（例如：第一名藍隊、第一名：藍隊、冠軍藍隊、第1名藍隊）
+    const m1Prefix = text.match(/(?:第一名|第1名|第一|第1|冠軍)[：:\s]*(?:為|是)?\s*([^\s,，、。\n\r]+)/);
+    const m2Prefix = text.match(/(?:第二名|第2名|第二|第2|亞軍)[：:\s]*(?:為|是)?\s*([^\s,，、。\n\r]+)/);
+    const m3Prefix = text.match(/(?:第三名|第3名|第三|第3|季軍)[：:\s]*(?:為|是)?\s*([^\s,，、。\n\r]+)/);
 
-    if (m1Prefix) {
+    // 只有當 m1 抓取出的字詞包含隊伍特徵（如包含「隊」或隊名關鍵字）時才判定為語序 A
+    if (m1Prefix && /隊|紅|綠|藍|翠|碧|烈/.test(m1Prefix[1])) {
       t1 = parseTeam(m1Prefix[1]);
       if (m2Prefix) t2 = parseTeam(m2Prefix[1]);
       if (m3Prefix) t3 = parseTeam(m3Prefix[1]);
+
+      if (t1 === 'INVALID' || t2 === 'INVALID' || t3 === 'INVALID') {
+        return {
+          intent: 'INVALID_TEAM',
+          message: `⚠️【名次隊伍名稱有誤】\n南興國小僅有「🔴 紅隊」、「🟢 綠隊」、「🔵 藍隊」三大戰隊。\n您輸入的名次包含非本校戰隊，本次成績未登錄，請修正後重新輸入！`
+        };
+      }
     }
 
     // 語序 B：隊伍在前（例如：紅隊第一、紅隊第一名、紅隊第1、紅隊冠軍、紅第一）
-    if (!t1) {
+    if (!t1 || t1 === 'INVALID') {
       const redM = text.match(/紅(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
       const greenM = text.match(/綠(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
       const blueM = text.match(/藍(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
@@ -476,6 +512,14 @@ function fastLocalParse(text) {
       if (red3) t3 = 'red';
       else if (green3) t3 = 'green';
       else if (blue3) t3 = 'blue';
+    }
+
+    // 🛡️ 名次重複檢核防呆
+    if ((t1 && t2 && t1 === t2) || (t1 && t3 && t1 === t3) || (t2 && t3 && t2 === t3)) {
+      return {
+        intent: 'INVALID_TEAM',
+        message: `⚠️【名次隊伍重複】\n各名次戰隊不可重複！\n本次成績未登錄，請確認第一名、第二名、第三名之戰隊後重新輸入！`
+      };
     }
 
     if (t1) {
