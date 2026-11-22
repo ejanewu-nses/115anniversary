@@ -212,22 +212,25 @@ function doPost(e) {
 
     const event = events[0];
     const replyToken = event.replyToken;
-    const userId = event.source.userId;
+    const sourceType = (event.source && event.source.type) ? event.source.type : 'user';
+    const isGroup = (sourceType === 'group' || sourceType === 'room');
+    const userId = (event.source && event.source.userId) ? event.source.userId : '';
     const messageType = event.message ? event.message.type : '';
 
-    // 🛡️ 支柱 1：白名單防禦檢核
-    if (!isUserAuthorized(userId)) {
+    // 🛡️ 支柱 1：白名單與群組防禦檢核
+    // 若來自校內工作群組（group / room），全員自動授權免個別登記！若為個人 1 對 1 私聊，則檢核白名單防禦
+    if (!isGroup && !isUserAuthorized(userId)) {
       replyLineMessage(replyToken, '您好！南興國小 115 校慶賽事秘書系統目前為【管理員與裁判教師專用】。\n若您是南興教職員，請先將您的 User ID 回報給吳校長進行綁定授權：\n' + userId);
       return ContentService.createTextOutput('BLOCKED');
     }
 
-    // 處理管理員特殊指令
+    // 處理管理員與系統特殊指令
     if (messageType === 'text') {
       const text = event.message.text.trim();
       
       // 查詢自己的 ID
       if (text === '我的ID' || text === '我的id') {
-        replyLineMessage(replyToken, `您的 LINE User ID 為：\n${userId}\n（請將此代碼交由管理者加入白名單）`);
+        replyLineMessage(replyToken, `您的 LINE User ID 為：\n${userId || '（未提供）'}\n${isGroup ? '💡 提示：您正在南興校慶裁判工作群中，本群同仁皆已自動具備登記權限！' : '（請將此代碼交由管理者加入白名單）'}`);
         return ContentService.createTextOutput('OK');
       }
 
@@ -247,18 +250,30 @@ function doPost(e) {
       // 語音多模態辨識（需使用 LINE Content API 下載後傳入 Gemini）
       userPrompt = fetchAndTranscribeAudio(event.message.id);
       if (!userPrompt) {
-        replyLineMessage(replyToken, '語音辨識未完成，請嘗試改以打字輸入，謝謝！');
+        if (!isGroup) {
+          replyLineMessage(replyToken, '語音辨識未完成，請嘗試改以打字輸入，謝謝！');
+        }
         return ContentService.createTextOutput('OK');
       }
     } else {
-      replyLineMessage(replyToken, '目前支援【文字輸入】與【語音訊息】登記賽事與精神加分喔！');
+      // 貼圖或其它非文字訊息：在群組中靜默忽略防洗版，私聊才提示
+      if (!isGroup) {
+        replyLineMessage(replyToken, '目前支援【文字輸入】與【語音訊息】登記賽事與精神加分喔！');
+      }
       return ContentService.createTextOutput('OK');
     }
 
-    // 🧠 支柱 2：Gemini 2.5 Flash 智慧語意解析
+    // 🧠 支柱 2：雙引擎智慧語意解析 (Fast Local + Gemini Flash)
     const parsed = callGeminiParser(userPrompt, userId);
 
     if (!parsed || !parsed.intent) {
+      // 🔇 關鍵防洗版機制：
+      // 若在群組內，一般同仁日常討論或非賽事指令（如「辛苦了」、「便當到了」、「收到」），機器人保持靜音（Silent），絕不插嘴打擾！
+      if (isGroup) {
+        return ContentService.createTextOutput('IGNORE_CHAT');
+      }
+
+      // 若為 1 對 1 私聊，才提供提示與範例指引
       replyLineMessage(replyToken, '收到訊息，但未能清楚辨識意圖。\n建議範例：\n【精神加分】「綠隊精神加分2分，六年級主動牽一年級去檢錄」\n【賽事報分】「拔河低年級綠隊8分、藍隊6分、紅隊4分」\n【慢跑人數】「慢跑低年級藍隊7人、綠隊6人、紅隊5人」\n【短跑名次】「高年級男生100m第一名陳小明、第二名林大華、第三名張小傑」');
       return ContentService.createTextOutput('OK');
     }
@@ -272,6 +287,7 @@ function doPost(e) {
     } else if (parsed.intent === 'UPDATE_EVENT') {
       replyText = recordEventScores(parsed);
     } else {
+      if (isGroup) return ContentService.createTextOutput('IGNORE_CHAT');
       replyText = `收到您的訊息：${userPrompt}\n（目前未對應至已定義的賽事項目）`;
     }
 
