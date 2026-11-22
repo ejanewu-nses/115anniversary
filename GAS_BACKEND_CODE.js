@@ -326,9 +326,9 @@ function fastLocalParse(text) {
     }
 
     let team = null;
-    if (text.includes('綠') || text.includes('翠玉')) team = 'green';
+    if (text.includes('綠') || text.includes('翠玉') || text.includes('蜈蚣')) team = 'green';
     else if (text.includes('藍') || text.includes('跳鼓') || text.includes('雷鳴') || text.includes('碧海')) team = 'blue';
-    else if (text.includes('紅') || text.includes('烈火')) team = 'red';
+    else if (text.includes('紅') || text.includes('烈火') || text.includes('金獅')) team = 'red';
 
     if (!team) {
       return {
@@ -459,9 +459,9 @@ function fastLocalParse(text) {
 
     const parseTeam = (str) => {
       if (!str) return null;
-      if (/綠|翠玉/.test(str)) return 'green';
+      if (/綠|翠玉|蜈蚣/.test(str)) return 'green';
       if (/藍|跳鼓|雷鳴|碧海/.test(str)) return 'blue';
-      if (/紅|烈火/.test(str)) return 'red';
+      if (/紅|烈火|金獅/.test(str)) return 'red';
       return 'INVALID';
     };
 
@@ -474,7 +474,7 @@ function fastLocalParse(text) {
     const m3Prefix = text.match(/(?:第三名|第3名|第三|第3|季軍)[：:\s]*(?:為|是)?\s*([^\s,，、。\n\r]+)/);
 
     // 只有當 m1 抓取出的字詞包含隊伍特徵（如包含「隊」或隊名關鍵字）時才判定為語序 A
-    if (m1Prefix && /隊|紅|綠|藍|翠|碧|烈/.test(m1Prefix[1])) {
+    if (m1Prefix && /隊|紅|綠|藍|翠|碧|烈|蜈蚣|金獅|跳鼓|雷鳴/.test(m1Prefix[1])) {
       t1 = parseTeam(m1Prefix[1]);
       if (m2Prefix) t2 = parseTeam(m2Prefix[1]);
       if (m3Prefix) t3 = parseTeam(m3Prefix[1]);
@@ -489,25 +489,25 @@ function fastLocalParse(text) {
 
     // 語序 B：隊伍在前（例如：紅隊第一、紅隊第一名、紅隊第1、紅隊冠軍、紅第一）
     if (!t1 || t1 === 'INVALID') {
-      const redM = text.match(/紅(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
-      const greenM = text.match(/綠(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
-      const blueM = text.match(/藍(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
+      const redM = text.match(/(?:紅|烈火|金獅)(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
+      const greenM = text.match(/(?:綠|翠玉|蜈蚣)(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
+      const blueM = text.match(/(?:藍|跳鼓|雷鳴|碧海)(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
 
       if (redM) t1 = 'red';
       else if (greenM) t1 = 'green';
       else if (blueM) t1 = 'blue';
 
-      const red2 = text.match(/紅(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[二2兩]名?|亞軍)/);
-      const green2 = text.match(/綠(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[二2兩]名?|亞軍)/);
-      const blue2 = text.match(/藍(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[二2兩]名?|亞軍)/);
+      const red2 = text.match(/(?:紅|烈火|金獅)(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[二2兩]名?|亞軍)/);
+      const green2 = text.match(/(?:綠|翠玉|蜈蚣)(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[二2兩]名?|亞軍)/);
+      const blue2 = text.match(/(?:藍|跳鼓|雷鳴|碧海)(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[二2兩]名?|亞軍)/);
 
       if (red2) t2 = 'red';
       else if (green2) t2 = 'green';
       else if (blue2) t2 = 'blue';
 
-      const red3 = text.match(/紅(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[三3]名?|季軍)/);
-      const green3 = text.match(/綠(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[三3]名?|季軍)/);
-      const blue3 = text.match(/藍(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[三3]名?|季軍)/);
+      const red3 = text.match(/(?:紅|烈火|金獅)(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[三3]名?|季軍)/);
+      const green3 = text.match(/(?:綠|翠玉|蜈蚣)(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[三3]名?|季軍)/);
+      const blue3 = text.match(/(?:藍|跳鼓|雷鳴|碧海)(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[三3]名?|季軍)/);
 
       if (red3) t3 = 'red';
       else if (green3) t3 = 'green';
@@ -544,9 +544,9 @@ function fastLocalParse(text) {
 
     // 2. 檢查是否有直接報得分或人數（例如：綠隊8分、藍隊6分、紅隊4分 或 藍7人、綠6人、紅5人）
     // 嚴格強制必須包含「分」或「人」單位，避免將條列序號「2. 第二名」誤判為「2分」
-    const greenM = text.match(/綠(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)/);
-    const blueM = text.match(/藍(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)/);
-    const redM = text.match(/紅(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)/);
+    const greenM = text.match(/(?:綠|翠玉|蜈蚣)(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)/);
+    const blueM = text.match(/(?:藍|跳鼓|雷鳴|碧海)(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)/);
+    const redM = text.match(/(?:紅|烈火|金獅)(?:隊)?\s*(?:得|為|有)?\s*(\d+)\s*(?:分|人)/);
 
     if (greenM || blueM || redM) {
       return {
@@ -1104,9 +1104,9 @@ function pushLineNotification(textMessage) {
 }
 
 function normalizeTeam(t) {
-  if (t === 'green' || t.includes('綠')) return 'green';
-  if (t === 'blue' || t.includes('藍')) return 'blue';
-  if (t === 'red' || t.includes('紅')) return 'red';
+  if (/綠|翠玉|蜈蚣/.test(t)) return 'green';
+  if (/藍|跳鼓|雷鳴|碧海/.test(t)) return 'blue';
+  if (/紅|烈火|金獅/.test(t)) return 'red';
   return 'green';
 }
 
