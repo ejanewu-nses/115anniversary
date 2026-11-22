@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>南興國小 115學年度校慶大摸彩券套印系統 (極致滿版大字版)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+    
+    /* 核心列印版面設定：頂層定義 @page 消除瀏覽器自帶頁首頁尾與邊界 */
+    @page {
+      size: A4 portrait;
+      margin: 0mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* A4 實體規格：210mm x 297mm，嚴格鎖定滿版 */
+    .a4-page {
+      width: 210mm;
+      height: 297mm;
+      max-height: 297mm;
+      margin: 15mm auto;
+      background: white;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      padding: 6mm 6mm;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: repeat(2, 97mm);
+      grid-template-rows: repeat(4, 69mm);
+      gap: 3mm 3mm;
+      justify-content: center;
+      align-content: center;
+      page-break-after: always;
+      break-after: page;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      overflow: hidden;
+    }
+
+    .a4-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    /* 摸彩券卡片本體：填滿 97mm x 69mm */
+    .ticket-card {
+      position: relative;
+      border: 2.5px dashed #dc2626;
+      border-radius: 8px;
+      padding: 5px 8px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      background: #fff;
+      height: 69mm;
+    }
+
+    .ticket-card.kindergarten { background: #fff1f2; }
+    .ticket-card.staff { background: #f0fdf4; }
+    .ticket-card.guest { background: #faf5ff; }
+    .ticket-card.student { background: #fefce8; }
+
+    .ticket-bg-watermark {
+      position: absolute;
+      right: -8px;
+      bottom: -15px;
+      font-size: 80px;
+      opacity: 0.05;
+      pointer-events: none;
+      color: #991b1b;
+    }
+
+    @media print {
+      html, body {
+        width: 210mm !important;
+        height: 297mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .a4-page {
+        margin: 0 !important;
+        box-shadow: none !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        max-height: 297mm !important;
+        padding: 5mm 6mm !important;
+        gap: 2.5mm 2.5mm !important;
+      }
+    }
+  </style>
+</head>
+<body class="p-0 md:p-6">
+
+  <!-- 控制列 (列印時自動隱藏) -->
+  <header class="no-print max-w-5xl mx-auto my-6 bg-white p-6 rounded-3xl shadow-xl border border-red-100">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-gray-100 pb-5">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-2xl shadow-md">
+          <i class="fa-solid fa-ticket"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl font-black text-gray-900 tracking-tight">南興國小 115學年度校慶大摸彩券套印系統</h1>
+          <p class="text-xs text-gray-500 font-bold mt-0.5">【極致滿版超大字版】A4 滿版 8 格 ｜ 零留白 ｜ 消除跨頁溢出問題</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="115學年度南興國小校慶大摸彩券套印名冊(154人完整版).docx" download class="px-4 py-2.5 rounded-xl border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 font-bold transition flex items-center gap-2 text-xs shadow-sm">
+          <i class="fa-solid fa-file-word text-base"></i> 下載 Word 檔
+        </a>
+        <button onclick="window.print()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-700 hover:to-amber-700 text-white font-black transition flex items-center gap-2 text-sm shadow-md hover:shadow-lg transform active:scale-95">
+          <i class="fa-solid fa-print text-base"></i> 立即列印 / 存為 PDF (Ctrl+P)
+        </button>
+      </div>
+    </div>
+
+    <!-- 篩選列 -->
+    <div class="mt-4 flex flex-wrap items-center gap-1.5" id="filter-container">
+      <span class="text-xs font-black text-gray-400 mr-2 uppercase tracking-wider">班級快速篩選：</span>
+      <button onclick="filterTickets('all')" class="filter-btn active px-3 py-1.5 rounded-lg text-xs font-bold bg-red-600 text-white shadow-sm transition">全部 (160張 / 20頁)</button>
+      <button onclick="filterTickets('kindergarten')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">幼兒園 (16人)</button>
+      <button onclick="filterTickets('grade1')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">一甲 (13人)</button>
+      <button onclick="filterTickets('grade2')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">二甲 (18人)</button>
+      <button onclick="filterTickets('grade3')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">三甲 (14人)</button>
+      <button onclick="filterTickets('grade4')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">四甲 (18人)</button>
+      <button onclick="filterTickets('grade5')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">五甲 (17人)</button>
+      <button onclick="filterTickets('grade6')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">六甲 (19人)</button>
+      <button onclick="filterTickets('staff')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">教職員 (39人)</button>
+      <button onclick="filterTickets('guest')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">現場備用 (6張)</button>
+    </div>
+
+    <div class="mt-4 p-3 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+        <span><strong>已修正列印滿版排版：</strong>已鎖定每頁精準 8 格滿版（消除底下留白與分頁溢出！）。列印時請確認<strong>「邊界：無」</strong>並勾選<strong>「背景圖形」</strong>，即可精準印出剛好 20 頁！</span>
+      </div>
+      <span id="ticket-stats" class="font-black bg-white px-3 py-1 rounded-lg border border-amber-300">顯示中：160 張</span>
+    </div>
+  </header>
+
+  <!-- 摸彩券頁面輸出區 -->
+  <main id="pages-container"></main>
+
+  <script>
+    const EMBEDDED_MEMBERS = [{"id": 1, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 1, "seat_str": "01", "name": "黃偉杉", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 01號 黃偉杉"}, {"id": 2, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 2, "seat_str": "02", "name": "邱振倫", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 02號 邱振倫"}, {"id": 3, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 3, "seat_str": "03", "name": "陳鎰鈞", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 03號 陳鎰鈞"}, {"id": 4, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 4, "seat_str": "04", "name": "柯允昊", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 04號 柯允昊"}, {"id": 5, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 5, "seat_str": "05", "name": "黃群澔", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 05號 黃群澔"}, {"id": 6, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 6, "seat_str": "06", "name": "許名鋐", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 06號 許名鋐"}, {"id": 7, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 7, "seat_str": "07", "name": "李倪", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 07號 李倪"}, {"id": 8, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 8, "seat_str": "08", "name": "黃苡芹", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 08號 黃苡芹"}, {"id": 9, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 9, "seat_str": "09", "name": "黃若芯", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 09號 黃若芯"}, {"id": 10, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 10, "seat_str": "10", "name": "黃平荷", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 10號 黃平荷"}, {"id": 11, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 11, "seat_str": "11", "name": "黃妙鈺", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 11號 黃妙鈺"}, {"id": 12, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 12, "seat_str": "12", "name": "黃紫凝", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 12號 黃紫凝"}, {"id": 13, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 13, "seat_str": "13", "name": "施又菲", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 13號 施又菲"}, {"id": 14, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 14, "seat_str": "14", "name": "郭子菲", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 14號 郭子菲"}, {"id": 15, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 15, "seat_str": "15", "name": "邱品潔", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 15號 邱品潔"}, {"id": 16, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 16, "seat_str": "16", "name": "黃唯溱", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 16號 黃唯溱"}, {"id": 17, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 1, "seat_str": "01", "name": "黃修齊", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 01號 黃修齊"}, {"id": 18, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 2, "seat_str": "02", "name": "林宇宸", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 02號 林宇宸"}, {"id": 19, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 3, "seat_str": "03", "name": "黃羿暘", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 03號 黃羿暘"}, {"id": 20, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 4, "seat_str": "04", "name": "蔡孟言", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 04號 蔡孟言"}, {"id": 21, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 5, "seat_str": "05", "name": "蔡昕佳", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 05號 蔡昕佳"}, {"id": 22, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 6, "seat_str": "06", "name": "郭于瑈", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 06號 郭于瑈"}, {"id": 23, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 7, "seat_str": "07", "name": "黃卉丞", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 07號 黃卉丞"}, {"id": 24, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 8, "seat_str": "08", "name": "林羽彤", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 08號 林羽彤"}, {"id": 25, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 9, "seat_str": "09", "name": "黃妙金", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 09號 黃妙金"}, {"id": 26, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 10, "seat_str": "10", "name": "黃羽晨", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 10號 黃羽晨"}, {"id": 27, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 11, "seat_str": "11", "name": "郭子綺", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 11號 郭子綺"}, {"id": 28, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 12, "seat_str": "12", "name": "施語凡", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 12號 施語凡"}, {"id": 29, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 13, "seat_str": "13", "name": "黎宛潔", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 13號 黎宛潔"}, {"id": 30, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 1, "seat_str": "01", "name": "黃建霆", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 01號 黃建霆"}, {"id": 31, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 2, "seat_str": "02", "name": "黃世瑋", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 02號 黃世瑋"}, {"id": 32, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 3, "seat_str": "03", "name": "曾紹愷", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 03號 曾紹愷"}, {"id": 33, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 4, "seat_str": "04", "name": "邱恩俊", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 04號 邱恩俊"}, {"id": 34, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 5, "seat_str": "05", "name": "吳楷鈞", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 05號 吳楷鈞"}, {"id": 35, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 6, "seat_str": "06", "name": "邱士軒", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 06號 邱士軒"}, {"id": 36, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 7, "seat_str": "07", "name": "顏淓鋙", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 07號 顏淓鋙"}, {"id": 37, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 8, "seat_str": "08", "name": "楊佳瑜", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 08號 楊佳瑜"}, {"id": 38, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 9, "seat_str": "09", "name": "樊沛恩", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 09號 樊沛恩"}, {"id": 39, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 10, "seat_str": "10", "name": "蘇潁心", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 10號 蘇潁心"}, {"id": 40, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 11, "seat_str": "11", "name": "楊珍恬", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 11號 楊珍恬"}, {"id": 41, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 12, "seat_str": "12", "name": "黃姵潔", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 12號 黃姵潔"}, {"id": 42, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 13, "seat_str": "13", "name": "劉恩語", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 13號 劉恩語"}, {"id": 43, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 14, "seat_str": "14", "name": "黃詩柔", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 14號 黃詩柔"}, {"id": 44, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 15, "seat_str": "15", "name": "郭沛貽", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 15號 郭沛貽"}, {"id": 45, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 16, "seat_str": "16", "name": "蔡理璇", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 16號 蔡理璇"}, {"id": 46, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 17, "seat_str": "17", "name": "張巧沛", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 17號 張巧沛"}, {"id": 47, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 18, "seat_str": "18", "name": "柯允菲", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 18號 柯允菲"}, {"id": 48, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 1, "seat_str": "01", "name": "林進陞", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 01號 林進陞"}, {"id": 49, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 2, "seat_str": "02", "name": "黃柏嘉", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 02號 黃柏嘉"}, {"id": 50, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 3, "seat_str": "03", "name": "陳睿謙", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 03號 陳睿謙"}, {"id": 51, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 4, "seat_str": "04", "name": "施慎和", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 04號 施慎和"}, {"id": 52, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 5, "seat_str": "05", "name": "葉涅山", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 05號 葉涅山"}, {"id": 53, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 6, "seat_str": "06", "name": "黃邦睿", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 06號 黃邦睿"}, {"id": 54, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 7, "seat_str": "07", "name": "李宇樂", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 07號 李宇樂"}, {"id": 55, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 8, "seat_str": "08", "name": "郭子翔", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 08號 郭子翔"}, {"id": 56, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 9, "seat_str": "09", "name": "邱亞忻", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 09號 邱亞忻"}, {"id": 57, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 10, "seat_str": "10", "name": "蔡喬捷", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 10號 蔡喬捷"}, {"id": 58, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 11, "seat_str": "11", "name": "林姿妤", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 11號 林姿妤"}, {"id": 59, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 12, "seat_str": "12", "name": "郭俞岑", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 12號 郭俞岑"}, {"id": 60, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 13, "seat_str": "13", "name": "葉芷安", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 13號 葉芷安"}, {"id": 61, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 14, "seat_str": "14", "name": "王畇霏", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 14號 王畇霏"}, {"id": 62, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 1, "seat_str": "01", "name": "黃祐嘉", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 01號 黃祐嘉"}, {"id": 63, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 2, "seat_str": "02", "name": "陳敬倫", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 02號 陳敬倫"}, {"id": 64, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 3, "seat_str": "03", "name": "邱弘富", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 03號 邱弘富"}, {"id": 65, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 4, "seat_str": "04", "name": "黃凱崙", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 04號 黃凱崙"}, {"id": 66, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 5, "seat_str": "05", "name": "王宣錡", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 05號 王宣錡"}, {"id": 67, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 6, "seat_str": "06", "name": "黃震興", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 06號 黃震興"}, {"id": 68, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 7, "seat_str": "07", "name": "陳伯瑞", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 07號 陳伯瑞"}, {"id": 69, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 8, "seat_str": "08", "name": "吳家樂", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 08號 吳家樂"}, {"id": 70, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 9, "seat_str": "09", "name": "林雨晴", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 09號 林雨晴"}, {"id": 71, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 10, "seat_str": "10", "name": "蔡依璇", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 10號 蔡依璇"}, {"id": 72, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 11, "seat_str": "11", "name": "翁梓綝", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 11號 翁梓綝"}, {"id": 73, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 12, "seat_str": "12", "name": "陳品彤", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 12號 陳品彤"}, {"id": 74, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 13, "seat_str": "13", "name": "蘇亮伃", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 13號 蘇亮伃"}, {"id": 75, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 14, "seat_str": "14", "name": "方婕薰", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 14號 方婕薰"}, {"id": 76, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 15, "seat_str": "15", "name": "黃晨瑄", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 15號 黃晨瑄"}, {"id": 77, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 16, "seat_str": "16", "name": "邱子瑜", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 16號 邱子瑜"}, {"id": 78, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 17, "seat_str": "17", "name": "楊佳恩", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 17號 楊佳恩"}, {"id": 79, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 18, "seat_str": "18", "name": "陳采緹", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 18號 陳采緹"}, {"id": 80, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 1, "seat_str": "01", "name": "陳致愷", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 01號 陳致愷"}, {"id": 81, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 2, "seat_str": "02", "name": "黃鈞瑋", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 02號 黃鈞瑋"}, {"id": 82, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 3, "seat_str": "03", "name": "黃俊佑", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 03號 黃俊佑"}, {"id": 83, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 4, "seat_str": "04", "name": "莊迪元", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 04號 莊迪元"}, {"id": 84, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 5, "seat_str": "05", "name": "夘嵊彬", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 05號 夘嵊彬"}, {"id": 85, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 6, "seat_str": "06", "name": "吳羿辰", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 06號 吳羿辰"}, {"id": 86, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 7, "seat_str": "07", "name": "王浩宸", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 07號 王浩宸"}, {"id": 87, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 8, "seat_str": "08", "name": "陳奕辰", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 08號 陳奕辰"}, {"id": 88, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 9, "seat_str": "09", "name": "陳浩銘", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 09號 陳浩銘"}, {"id": 89, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 10, "seat_str": "10", "name": "王威霖", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 10號 王威霖"}, {"id": 90, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 11, "seat_str": "11", "name": "劉濬賓", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 11號 劉濬賓"}, {"id": 91, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 12, "seat_str": "12", "name": "林浩哲", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 12號 林浩哲"}, {"id": 92, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 13, "seat_str": "13", "name": "蔡岳辰", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 13號 蔡岳辰"}, {"id": 93, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 14, "seat_str": "14", "name": "黃晨涵", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 14號 黃晨涵"}, {"id": 94, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 15, "seat_str": "15", "name": "李姿錡", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 15號 李姿錡"}, {"id": 95, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 16, "seat_str": "16", "name": "黃宥榛", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 16號 黃宥榛"}, {"id": 96, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 17, "seat_str": "17", "name": "李晨馨", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 17號 李晨馨"}, {"id": 97, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 1, "seat_str": "01", "name": "黃振宸", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 01號 黃振宸"}, {"id": 98, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 2, "seat_str": "02", "name": "黃明哲", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 02號 黃明哲"}, {"id": 99, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 3, "seat_str": "03", "name": "黃睿澄", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 03號 黃睿澄"}, {"id": 100, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 4, "seat_str": "04", "name": "郭韋辰", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 04號 郭韋辰"}, {"id": 101, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 5, "seat_str": "05", "name": "方晨宇", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 05號 方晨宇"}, {"id": 102, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 6, "seat_str": "06", "name": "陳駿鈜", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 06號 陳駿鈜"}, {"id": 103, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 7, "seat_str": "07", "name": "施竑群", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 07號 施竑群"}, {"id": 104, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 8, "seat_str": "08", "name": "黃若驊", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 08號 黃若驊"}, {"id": 105, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 9, "seat_str": "09", "name": "李順興", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 09號 李順興"}, {"id": 106, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 10, "seat_str": "10", "name": "李帷雍", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 10號 李帷雍"}, {"id": 107, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 11, "seat_str": "11", "name": "吳宜樂", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 11號 吳宜樂"}, {"id": 108, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 12, "seat_str": "12", "name": "顏儀芳", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 12號 顏儀芳"}, {"id": 109, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 13, "seat_str": "13", "name": "黃品璇", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 13號 黃品璇"}, {"id": 110, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 14, "seat_str": "14", "name": "陳品甯", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 14號 陳品甯"}, {"id": 111, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 15, "seat_str": "15", "name": "林勤容", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 15號 林勤容"}, {"id": 112, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 16, "seat_str": "16", "name": "黃婕洺", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 16號 黃婕洺"}, {"id": 113, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 17, "seat_str": "17", "name": "羅苡芸", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 17號 羅苡芸"}, {"id": 114, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 18, "seat_str": "18", "name": "劉雯玲", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 18號 劉雯玲"}, {"id": 115, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 19, "seat_str": "19", "name": "戴瑋辰", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 19號 戴瑋辰"}, {"id": 116, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 1, "seat_str": "T01", "name": "吳宜蓁", "role": "教職員", "title": "校長", "display_label": "教職員 校長 吳宜蓁"}, {"id": 117, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 2, "seat_str": "T02", "name": "為秀麗", "role": "教職員", "title": "教導主任", "display_label": "教職員 教導主任 為秀麗"}, {"id": 118, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 3, "seat_str": "T03", "name": "陳建榮", "role": "教職員", "title": "總務主任", "display_label": "教職員 總務主任 陳建榮"}, {"id": 119, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 4, "seat_str": "T04", "name": "林佩君", "role": "教職員", "title": "人事主任", "display_label": "教職員 人事主任 林佩君"}, {"id": 120, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 5, "seat_str": "T05", "name": "汪淑慧", "role": "教職員", "title": "會計主任", "display_label": "教職員 會計主任 汪淑慧"}, {"id": 121, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 6, "seat_str": "T06", "name": "林承翰", "role": "教職員", "title": "教務組長", "display_label": "教職員 教務組長 林承翰"}, {"id": 122, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 7, "seat_str": "T07", "name": "李宗修", "role": "教職員", "title": "學務組長", "display_label": "教職員 學務組長 李宗修"}, {"id": 123, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 8, "seat_str": "T08", "name": "曾鈺真", "role": "教職員", "title": "事務組長", "display_label": "教職員 事務組長 曾鈺真"}, {"id": 124, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 9, "seat_str": "T09", "name": "黃千芳", "role": "教職員", "title": "護理師", "display_label": "教職員 護理師 黃千芳"}, {"id": 125, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 10, "seat_str": "T10", "name": "楊詒茹", "role": "教職員", "title": "六甲導師", "display_label": "教職員 六甲導師 楊詒茹"}, {"id": 126, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 11, "seat_str": "T11", "name": "蔡武憲", "role": "教職員", "title": "五甲導師", "display_label": "教職員 五甲導師 蔡武憲"}, {"id": 127, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 12, "seat_str": "T12", "name": "施喬恩", "role": "教職員", "title": "四甲導師", "display_label": "教職員 四甲導師 施喬恩"}, {"id": 128, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 13, "seat_str": "T13", "name": "鄭潔", "role": "教職員", "title": "三甲導師", "display_label": "教職員 三甲導師 鄭潔"}, {"id": 129, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 14, "seat_str": "T14", "name": "黃美雅", "role": "教職員", "title": "二甲導師", "display_label": "教職員 二甲導師 黃美雅"}, {"id": 130, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 15, "seat_str": "T15", "name": "徐敏瓊", "role": "教職員", "title": "一甲導師", "display_label": "教職員 一甲導師 徐敏瓊"}, {"id": 131, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 16, "seat_str": "T16", "name": "羅珮華", "role": "教職員", "title": "科任教師", "display_label": "教職員 科任教師 羅珮華"}, {"id": 132, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 17, "seat_str": "T17", "name": "周婉琳", "role": "教職員", "title": "資源班", "display_label": "教職員 資源班 周婉琳"}, {"id": 133, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 18, "seat_str": "T18", "name": "許靖昀", "role": "教職員", "title": "星星班主任", "display_label": "教職員 星星班主任 許靖昀"}, {"id": 134, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 19, "seat_str": "T19", "name": "莊雅筑", "role": "教職員", "title": "導師", "display_label": "教職員 導師 莊雅筑"}, {"id": 135, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 20, "seat_str": "T20", "name": "黃筱筠", "role": "教職員", "title": "教保員", "display_label": "教職員 教保員 黃筱筠"}, {"id": 136, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 21, "seat_str": "T21", "name": "林杏華", "role": "教職員", "title": "加置人力教保員", "display_label": "教職員 加置人力教保員 林杏華"}, {"id": 137, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 22, "seat_str": "T22", "name": "楊秀珍", "role": "教職員", "title": "幼兒園廚工", "display_label": "教職員 幼兒園廚工 楊秀珍"}, {"id": 138, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 23, "seat_str": "T23", "name": "楊宗朋", "role": "教職員", "title": "警衛", "display_label": "教職員 警衛 楊宗朋"}, {"id": 139, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 24, "seat_str": "T24", "name": "李枝香", "role": "教職員", "title": "警衛", "display_label": "教職員 警衛 李枝香"}, {"id": 140, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 25, "seat_str": "T25", "name": "張惠華", "role": "教職員", "title": "課輔班教師", "display_label": "教職員 課輔班教師 張惠華"}, {"id": 141, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 26, "seat_str": "T26", "name": "翁佳淇", "role": "教職員", "title": "課輔班教師", "display_label": "教職員 課輔班教師 翁佳淇"}, {"id": 142, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 27, "seat_str": "T27", "name": "周家妤", "role": "教職員", "title": "課輔班教師", "display_label": "教職員 課輔班教師 周家妤"}, {"id": 143, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 28, "seat_str": "T28", "name": "黃水樹", "role": "教職員", "title": "金獅陣教練", "display_label": "教職員 金獅陣教練 黃水樹"}, {"id": 144, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 29, "seat_str": "T29", "name": "陳孟菱", "role": "教職員", "title": "音樂老師", "display_label": "教職員 音樂老師 陳孟菱"}, {"id": 145, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 30, "seat_str": "T30", "name": "吳雪如", "role": "教職員", "title": "校園大姊", "display_label": "教職員 校園大姊 吳雪如"}, {"id": 146, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 31, "seat_str": "T31", "name": "林立樺", "role": "教職員", "title": "實習老師", "display_label": "教職員 實習老師 林立樺"}, {"id": 147, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 32, "seat_str": "T32", "name": "魏仲偉", "role": "教職員", "title": "本土語老師", "display_label": "教職員 本土語老師 魏仲偉"}, {"id": 148, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 33, "seat_str": "T33", "name": "王琮雅", "role": "教職員", "title": "美勞老師", "display_label": "教職員 美勞老師 王琮雅"}, {"id": 149, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 34, "seat_str": "T34", "name": "侯庭慧", "role": "教職員", "title": "舞蹈老師", "display_label": "教職員 舞蹈老師 侯庭慧"}, {"id": 150, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 35, "seat_str": "T35", "name": "蔡佩紋", "role": "教職員", "title": "跳鼓陣教練", "display_label": "教職員 跳鼓陣教練 蔡佩紋"}, {"id": 151, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 36, "seat_str": "T36", "name": "蔡招治", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 蔡招治"}, {"id": 152, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 37, "seat_str": "T37", "name": "洪美娟", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 洪美娟"}, {"id": 153, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 38, "seat_str": "T38", "name": "鄭育姍", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 鄭育姍"}, {"id": 154, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 39, "seat_str": "T39", "name": "高阿忍", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 高阿忍"}];
+    let allMembersData = [];
+    const TICKETS_PER_PAGE = 8;
+
+    const backupTickets = Array.from({ length: 6 }, (_, i) => ({
+      id: 155 + i,
+      category: 'guest',
+      category_name: '貴賓／志工專用',
+      seat_str: '現場加碼',
+      name: '＿＿＿＿＿＿',
+      role: '貴賓',
+      title: '現場備用摸彩券',
+      display_label: `現場備用券 ${String(i + 1).padStart(2, '0')}`
+    }));
+
+    function loadTickets() {
+      allMembersData = [...EMBEDDED_MEMBERS, ...backupTickets];
+      renderPages(allMembersData);
+    }
+
+    function renderPages(tickets) {
+      const container = document.getElementById('pages-container');
+      container.innerHTML = '';
+
+      const totalPages = Math.ceil(tickets.length / TICKETS_PER_PAGE);
+      document.getElementById('ticket-stats').textContent = `顯示中：${tickets.length} 張（精準 ${totalPages} 頁）`;
+
+      for (let p = 0; p < totalPages; p++) {
+        const pageDiv = document.createElement('div');
+        pageDiv.className = 'a4-page';
+
+        const pageTickets = tickets.slice(p * TICKETS_PER_PAGE, (p + 1) * TICKETS_PER_PAGE);
+
+        pageTickets.forEach(t => {
+          let catClass = 'student';
+          let badgeColor = 'bg-amber-200/80 text-amber-950 border-amber-300';
+          let subInfo = `${t.category_name} ｜ 座號 ${t.seat_str} 號`;
+
+          if (t.category === 'kindergarten') {
+            catClass = 'kindergarten';
+            badgeColor = 'bg-rose-200/80 text-rose-950 border-rose-300';
+            subInfo = `${t.category_name} ｜ 座號 ${t.seat_str} 號`;
+          } else if (t.category === 'staff') {
+            catClass = 'staff';
+            badgeColor = 'bg-emerald-200/80 text-emerald-950 border-emerald-300';
+            subInfo = `${t.category_name} ｜ ${t.title}`;
+          } else if (t.category === 'guest') {
+            catClass = 'guest';
+            badgeColor = 'bg-purple-200/80 text-purple-950 border-purple-300';
+            subInfo = `${t.category_name} ｜ 現場同樂`;
+          }
+
+          const card = document.createElement('div');
+          card.className = `ticket-card ${catClass}`;
+          card.innerHTML = `
+            <i class="fa-solid fa-award ticket-bg-watermark"></i>
+            
+            <!-- 1. 頂部大會抬頭 (極致簡約窄條) -->
+            <div class="text-center border-b border-red-300/60 pb-0.5">
+              <div class="text-[9px] font-black text-red-900 tracking-wider">
+                南興國小 115學年度校慶運動大會 ｜ 🧧 全校大摸彩券 🧧
+              </div>
+            </div>
+
+            <!-- 2. 班級與座號 (極大滿版橫幅) -->
+            <div class="mt-1 text-center">
+              <div class="inline-block w-full py-1 rounded-md text-sm md:text-base font-black border ${badgeColor} shadow-2xs tracking-wide">
+                ${subInfo}
+              </div>
+            </div>
+
+            <!-- 3. 姓名 (震撼滿版特大字 54px，長官抽出秒念出！) -->
+            <div class="my-auto text-center py-1 flex items-center justify-center">
+              <div class="text-5xl md:text-6xl font-black text-black tracking-widest font-serif leading-none transform scale-y-105">
+                ${t.name}
+              </div>
+            </div>
+
+            <!-- 4. 底部裁切提示 (極窄) -->
+            <div class="text-[8px] text-gray-500 font-bold text-center flex items-center justify-between border-t border-dashed border-red-300/80 pt-0.5">
+              <span>✂️ 沿虛線裁切</span>
+              <span class="text-red-800 font-black">投入摸彩箱・人人有獎</span>
+              <span>南興三寶金獅獻瑞</span>
+            </div>
+          `;
+          pageDiv.appendChild(card);
+        });
+
+        container.appendChild(pageDiv);
+      }
+    }
+
+    function filterTickets(cat) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-red-600', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-gray-700');
+      });
+      event.target.classList.remove('bg-gray-100', 'text-gray-700');
+      event.target.classList.add('active', 'bg-red-600', 'text-white');
+
+      if (cat === 'all') {
+        renderPages(allMembersData);
+      } else {
+        const filtered = allMembersData.filter(t => t.category === cat);
+        renderPages(filtered);
+      }
+    }
+
+    loadTickets();
+  </script>
+</body>
+</html>

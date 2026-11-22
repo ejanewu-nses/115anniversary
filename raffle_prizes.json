@@ -1,0 +1,200 @@
+[
+  {
+    "id": "p01",
+    "tier": "grand",
+    "tier_name": "特獎",
+    "name": "高級直立式電風扇",
+    "total": 2,
+    "remaining": 2,
+    "image": "images/raffle/高級直立式電風扇.jpg",
+    "unit": "台",
+    "icon": "fa-fan"
+  },
+  {
+    "id": "p02",
+    "tier": "grand",
+    "tier_name": "特獎",
+    "name": "智慧感應式垃圾桶",
+    "total": 1,
+    "remaining": 1,
+    "image": "images/raffle/智慧感應式垃圾桶.jpg",
+    "unit": "台",
+    "icon": "fa-trash-can"
+  },
+  {
+    "id": "p03",
+    "tier": "first",
+    "tier_name": "頭獎",
+    "name": "彼得兔不鏽鋼保溫杯",
+    "total": 2,
+    "remaining": 2,
+    "image": "images/raffle/彼得兔不鏽鋼保溫杯.jpg",
+    "unit": "個",
+    "icon": "fa-mug-hot"
+  },
+  {
+    "id": "p04",
+    "tier": "first",
+    "tier_name": "頭獎",
+    "name": "超萌水豚造型後背包",
+    "total": 1,
+    "remaining": 1,
+    "image": "images/raffle/超萌水豚造型後背包.jpg",
+    "unit": "個",
+    "icon": "fa-bag-shopping"
+  },
+  {
+    "id": "p05",
+    "tier": "first",
+    "tier_name": "頭獎",
+    "name": "多功能減壓實用後背包",
+    "total": 1,
+    "remaining": 1,
+    "image": "images/raffle/多功能減壓實用後背包.jpg",
+    "unit": "個",
+    "icon": "fa-briefcase"
+  },
+  {
+    "id": "p06",
+    "tier": "second",
+    "tier_name": "貳獎",
+    "name": "蠟筆小新餐具餐盒套裝組",
+    "total": 1,
+    "remaining": 1,
+    "image": "images/raffle/蠟筆小新餐具餐盒套裝組.jpg",
+    "unit": "組",
+    "icon": "fa-utensils"
+  },
+  {
+    "id": "p07",
+    "tier": "second",
+    "tier_name": "貳獎",
+    "name": "精選水果刀具組",
+    "total": 1,
+    "remaining": 1,
+    "image": "images/raffle/精選水果刀具組.jpg",
+    "unit": "套",
+    "icon": "fa-kitchen-set"
+  },
+  {
+    "id": "p08",
+    "tier": "second",
+    "tier_name": "貳獎",
+    "name": "方形親膚舒適大抱枕",
+    "total": 1,
+    "remaining": 1,
+    "image": "images/raffle/方形親膚舒適大抱枕.jpg",
+    "unit": "個",
+    "icon": "fa-couch"
+  },
+  {
+    "id": "p09",
+    "tier": "second",
+    "tier_name": "貳獎",
+    "name": "長形萌萌趴趴狗抱枕",
+    "total": 2,
+    "remaining": 2,
+    "image": "images/raffle/長形萌萌趴趴狗抱枕.jpg",
+    "unit": "隻",
+    "icon": "fa-dog"
+  },
+  {
+    "id": "p10",
+    "tier": "second",
+    "tier_name": "貳獎",
+    "name": "短型萌萌趴趴狗抱枕",
+    "total": 2,
+    "remaining": 2,
+    "image": "images/raffle/短型萌萌趴趴狗抱枕.jpg",
+    "unit": "隻",
+    "icon": "fa-dog"
+  },
+  {
+    "id": "p11",
+    "tier": "third",
+    "tier_name": "參獎",
+    "name": "Smartivity 木質益智拼組玩具",
+    "total": 5,
+    "remaining": 5,
+    "image": "images/raffle/Smartivity 木質益智拼組玩具.jpg",
+    "unit": "盒",
+    "icon": "fa-puzzle-piece"
+  },
+  {
+    "id": "p12",
+    "tier": "third",
+    "tier_name": "參獎",
+    "name": "Panasonic 負離子吹風機",
+    "total": 5,
+    "remaining": 5,
+    "image": "images/raffle/Panasonic吹風機.jpg",
+    "unit": "台",
+    "icon": "fa-wind"
+  },
+  {
+    "id": "p13",
+    "tier": "third",
+    "tier_name": "參獎",
+    "name": "Kinyo 大風量吹風機",
+    "total": 5,
+    "remaining": 5,
+    "image": "images/raffle/Kinyo吹風機.jpg",
+    "unit": "台",
+    "icon": "fa-wind"
+  },
+  {
+    "id": "p14",
+    "tier": "third",
+    "tier_name": "參獎",
+    "name": "迷你型便攜旅行吹風機",
+    "total": 5,
+    "remaining": 5,
+    "image": "images/raffle/迷你型便攜旅行吹風機.jpg",
+    "unit": "台",
+    "icon": "fa-wind"
+  },
+  {
+    "id": "p15",
+    "tier": "lucky",
+    "tier_name": "幸運獎",
+    "name": "隨身手持小風扇",
+    "total": 10,
+    "remaining": 10,
+    "image": "images/raffle/隨身手持小風扇.jpg",
+    "unit": "台",
+    "icon": "fa-fan"
+  },
+  {
+    "id": "p16",
+    "tier": "lucky",
+    "tier_name": "幸運獎",
+    "name": "台灣優質在地好米 (3kg)",
+    "total": 5,
+    "remaining": 5,
+    "image": "images/raffle/台灣優質在地好米 (3kg).jpg",
+    "unit": "包",
+    "icon": "fa-bowl-rice"
+  },
+  {
+    "id": "p17",
+    "tier": "general",
+    "tier_name": "普獎",
+    "name": "典雅美型面紙盒",
+    "total": 30,
+    "remaining": 30,
+    "image": "images/raffle/典雅美型面紙盒.jpg",
+    "unit": "個",
+    "icon": "fa-box-open"
+  },
+  {
+    "id": "p18",
+    "tier": "general",
+    "tier_name": "普獎",
+    "name": "居家優雅防水桌巾",
+    "total": 30,
+    "remaining": 30,
+    "image": "images/raffle/居家優雅防水桌巾.jpg",
+    "unit": "條",
+    "icon": "fa-table-cells"
+  }
+]

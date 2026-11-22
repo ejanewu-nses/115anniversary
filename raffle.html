@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>臺南市南興國小 115學年度校慶大摸彩即時系統與智慧導航台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    @keyframes pulse-gold {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(234, 179, 8, 0); }
+    }
+    .glow-gold {
+      animation: pulse-gold 2s infinite;
+    }
+    .modal-backdrop {
+      background-color: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+  <!-- 頂部主導覽列 -->
+  <header class="bg-gradient-to-r from-red-700 via-rose-700 to-amber-700 text-white shadow-lg sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- 品牌 LOGO 與校慶標題 -->
+        <div class="flex items-center space-x-3">
+          <a href="index.html" class="flex items-center space-x-3 hover:opacity-90 transition">
+            <div class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-amber-300 text-xl shadow-inner">
+              <i class="fa-solid fa-gift"></i>
+            </div>
+            <div>
+              <div class="text-xs text-amber-200 font-semibold tracking-wider">南興國小 115學年度校慶運動大會</div>
+              <div class="text-lg font-black tracking-tight flex items-center gap-1.5">
+                全校大摸彩專區
+                <span class="bg-amber-400 text-red-950 text-[10px] font-black px-1.5 py-0.5 rounded shadow-sm">人人有獎</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- 視圖切換標籤 (Tab Switcher) -->
+        <nav class="hidden lg:flex items-center space-x-1 bg-black/25 p-1.5 rounded-xl border border-white/10 backdrop-blur-md text-xs sm:text-sm">
+          <button onclick="switchView('board')" id="tab-board" class="view-tab active px-3.5 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 bg-white text-red-700 shadow-md">
+            <i class="fa-solid fa-bullhorn"></i> 中獎即時公告榜
+          </button>
+          <button onclick="handleProtectedTabClick('station')" id="tab-station" class="view-tab px-3.5 py-1.5 rounded-lg font-bold text-white/90 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-laptop"></i> 摸彩台極速登記
+            <span class="lock-indicator text-[10px] bg-red-900/80 px-1.5 py-0.5 rounded text-amber-300"><i class="fa-solid fa-lock"></i> 密碼</span>
+          </button>
+          <button onclick="handleProtectedTabClick('claim')" id="tab-claim" class="view-tab px-3.5 py-1.5 rounded-lg font-bold text-white/90 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-clipboard-check"></i> 現場兌獎核銷管理
+            <span class="lock-indicator text-[10px] bg-red-900/80 px-1.5 py-0.5 rounded text-amber-300"><i class="fa-solid fa-lock"></i> 密碼</span>
+            <span id="tab-unclaimed-badge" class="bg-amber-400 text-red-950 text-[10px] font-black px-1.5 py-0.2 rounded-full hidden">0</span>
+          </button>
+          <button onclick="switchView('projector')" id="tab-projector" class="view-tab px-3.5 py-1.5 rounded-lg font-bold text-white/90 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-tv"></i> 大螢幕開獎投影
+          </button>
+        </nav>
+
+        <!-- 右側快速捷徑 -->
+        <div class="flex items-center space-x-2">
+          <a href="print_tickets.html" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-red-950 text-xs font-black px-3 py-2 rounded-lg shadow transition">
+            <i class="fa-solid fa-print"></i> 套印摸彩券
+          </a>
+          <a href="index.html" class="inline-flex items-center gap-1 bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3 py-2 rounded-lg transition border border-white/20">
+            <i class="fa-solid fa-arrow-left"></i> 回官網
+          </a>
+        </div>
+      </div>
+
+      <!-- 手機/平板視圖切換標籤 -->
+      <div class="flex lg:hidden border-t border-white/10 py-2 space-x-1 justify-around text-xs font-bold overflow-x-auto">
+        <button onclick="switchView('board')" id="m-tab-board" class="m-view-tab py-1 px-2 rounded-lg bg-white text-red-700 shadow font-black flex items-center gap-1 whitespace-nowrap">
+          <i class="fa-solid fa-bullhorn"></i> 公告榜
+        </button>
+        <button onclick="handleProtectedTabClick('station')" id="m-tab-station" class="m-view-tab py-1 px-2 rounded-lg text-white/90 hover:bg-white/10 flex items-center gap-1 whitespace-nowrap">
+          <i class="fa-solid fa-laptop"></i> 摸彩登記
+        </button>
+        <button onclick="handleProtectedTabClick('claim')" id="m-tab-claim" class="m-view-tab py-1 px-2 rounded-lg text-white/90 hover:bg-white/10 flex items-center gap-1 whitespace-nowrap">
+          <i class="fa-solid fa-clipboard-check"></i> 兌獎核銷
+        </button>
+        <button onclick="switchView('projector')" id="m-tab-projector" class="m-view-tab py-1 px-2 rounded-lg text-white/90 hover:bg-white/10 flex items-center gap-1 whitespace-nowrap">
+          <i class="fa-solid fa-tv"></i> 大螢幕
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================== -->
+  <!-- 視圖一：中獎即時公告榜（親師生手機查獎專區）                     -->
+  <!-- ============================================================== -->
+  <main id="view-board" class="view-panel max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+    <!-- 頂部即時對獎搜尋橫幅 -->
+    <section class="bg-gradient-to-br from-amber-500 via-orange-500 to-red-600 rounded-3xl p-6 md:p-10 text-white shadow-xl relative overflow-hidden mb-8">
+      <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl pointer-events-none">
+        <i class="fa-solid fa-gift"></i>
+      </div>
+      <div class="max-w-3xl relative z-10">
+        <span class="inline-flex items-center gap-1.5 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase border border-white/20 mb-3 text-amber-200">
+          <i class="fa-solid fa-bolt"></i> 運動會現場 0 秒同步更新
+        </span>
+        <h2 class="text-3xl md:text-4xl font-black tracking-tight leading-tight">
+          全校人人有獎！一秒輸入查詢您的中獎好禮
+        </h2>
+        <p class="mt-2 text-white/90 text-sm md:text-base font-medium">
+          請輸入學生姓名、教職員姓名或班級座號，立即查驗最新抽出的大摸彩結果！
+        </p>
+
+        <!-- 搜尋列 -->
+        <div class="mt-6 flex flex-col sm:flex-row items-stretch gap-3">
+          <div class="relative flex-1">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 text-lg">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <input type="text" id="board-search" oninput="handleBoardSearch()" placeholder="請輸入姓名關鍵字（如：蔡昕佳、為秀麗、黃）或班級（如：一甲）..." class="w-full pl-12 pr-4 py-3.5 rounded-2xl text-slate-800 placeholder-slate-400 font-bold text-base focus:outline-none focus:ring-4 focus:ring-amber-300 shadow-inner bg-white">
+          </div>
+          <button onclick="clearBoardSearch()" class="px-5 py-3.5 rounded-2xl bg-slate-900 hover:bg-black text-white font-bold transition flex items-center justify-center gap-2 text-sm shadow-md">
+            <i class="fa-solid fa-rotate-left"></i> 清除重查
+          </button>
+        </div>
+
+        <!-- 快速個人對獎結果彈窗/警示卡 -->
+        <div id="board-search-result" class="hidden mt-4 p-4 rounded-2xl bg-white/95 backdrop-blur-md text-slate-800 shadow-2xl border border-white/40"></div>
+      </div>
+    </section>
+
+    <!-- 數據概況統計儀表板 -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center text-2xl font-bold">
+          <i class="fa-solid fa-gift"></i>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-bold">獎品募集總數</div>
+          <div class="text-2xl font-black text-slate-800" id="stat-total-prizes">109 份</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl font-bold">
+          <i class="fa-solid fa-champagne-glasses"></i>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-bold">已抽出中獎數</div>
+          <div class="text-2xl font-black text-amber-600" id="stat-drawn-prizes">0 份</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl font-bold">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-bold">已領取完成</div>
+          <div class="text-2xl font-black text-emerald-600" id="stat-claimed-prizes">0 份</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl font-bold">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-bold">全校摸彩總人數</div>
+          <div class="text-2xl font-black text-blue-600" id="stat-total-members">154 人</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 獎品圖鑑與即時中獎名冊 (依獎項分級陳列) -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+      <div>
+        <h3 class="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+          <span>🏆</span> 獎項募集圖鑑與即時開獎清單
+        </h3>
+        <p class="text-xs text-slate-500 font-medium">點擊任一照片可放大查看完整高清大圖 ｜ 即時標註「已領取 / 待領取」</p>
+      </div>
+      <!-- 篩選獎項 -->
+      <div class="flex items-center gap-1.5 text-xs font-bold flex-wrap">
+        <button onclick="filterPrizeGrid('all')" class="prize-filter-btn active px-3 py-1.5 rounded-lg bg-red-600 text-white">全部獎項</button>
+        <button onclick="filterPrizeGrid('grand')" class="prize-filter-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200">特等獎</button>
+        <button onclick="filterPrizeGrid('first')" class="prize-filter-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200">頭獎</button>
+        <button onclick="filterPrizeGrid('second')" class="prize-filter-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200">貳獎/參獎</button>
+      </div>
+    </div>
+
+    <!-- 獎品卡片網格 -->
+    <div id="prize-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- 視圖二：摸彩台極速登記工作站（含智慧司儀提詞台與批量快抽）       -->
+  <!-- ============================================================== -->
+  <main id="view-station" class="view-panel hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+    <!-- 頂部工作站操作列 -->
+    <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-md mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center text-xl font-black">
+          <i class="fa-solid fa-laptop-code"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-black flex items-center gap-2">
+            摸彩台現場快速登記工作站
+            <span class="bg-emerald-500 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full">管理權限已解鎖</span>
+          </h2>
+          <p class="text-xs text-slate-400">長官貴賓抽出彩券 ➔ 點選人員 ➔ 點選獎項 ➔ 立即完成登記並同步大螢幕與兌獎處！</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="openAddGuestModal()" class="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow">
+          <i class="fa-solid fa-user-plus"></i> ＋現場加碼
+        </button>
+        <button onclick="exportRaffleResultsCSV()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition flex items-center gap-1.5 border border-slate-700">
+          <i class="fa-solid fa-file-csv"></i> 匯出清冊
+        </button>
+        <button onclick="lockStation()" class="px-3 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition flex items-center gap-1 shadow">
+          <i class="fa-solid fa-lock"></i> 鎖定工作站
+        </button>
+        <button onclick="resetRaffleData()" class="px-3 py-2 rounded-xl bg-red-950/80 hover:bg-red-900 text-red-200 text-xs font-bold transition flex items-center gap-1">
+          <i class="fa-solid fa-trash-can"></i> 重設
+        </button>
+      </div>
+    </div>
+
+    <!-- 🌟 核心創新：大會司儀與主席台【下一抽智慧推薦看板 & 批量快抽鎖定條】 -->
+    <div id="smart-teleprompter" class="mb-4 p-4 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-red-600 text-white shadow-lg border border-amber-300 relative overflow-hidden">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 relative z-10">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-black/25 flex items-center justify-center text-amber-200 text-xl font-bold flex-shrink-0">
+            <i class="fa-solid fa-microphone-lines"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] font-black uppercase tracking-wider bg-black/30 px-2.5 py-0.5 rounded-full text-amber-200">
+                🎯 司儀/主席下一抽建議
+              </span>
+              <span id="prompter-stage-label" class="text-xs font-bold text-white/90">【階段 2：趣味童心大獎】</span>
+            </div>
+            <div class="text-lg md:text-xl font-black mt-0.5 flex items-center gap-2">
+              <span>下一棒推薦抽出：</span>
+              <span id="prompter-prize-name" class="underline decoration-amber-300 underline-offset-4 text-amber-100">隨身手持小風扇</span>
+              <span id="prompter-prize-stock" class="text-xs bg-white text-red-700 font-black px-2 py-0.5 rounded-md shadow-sm">剩 10 台</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+          <button onclick="lockCurrentPrompterPrize()" id="btn-lock-prize" class="px-4 py-2 rounded-xl bg-white text-red-700 hover:bg-amber-50 text-xs font-black transition flex items-center gap-1.5 shadow-md">
+            <i class="fa-solid fa-thumbtack"></i> 鎖定此獎項（連續快抽）
+          </button>
+          <button onclick="nextPrompterPrize()" class="px-3.5 py-2 rounded-xl bg-black/30 hover:bg-black/40 text-white text-xs font-bold transition flex items-center gap-1">
+            <i class="fa-solid fa-forward-step"></i> 換個獎項
+          </button>
+        </div>
+      </div>
+
+      <!-- 當前鎖定獎項狀態條 (Active Lock Banner) -->
+      <div id="active-locked-banner" class="hidden mt-3 pt-3 border-t border-white/20 flex items-center justify-between text-xs font-bold">
+        <div class="flex items-center gap-2 text-amber-100">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <span>⚡ 【連續快抽模式中】長官每抽一張，點左側人名即自動頒發：<strong id="locked-prize-name-text" class="text-white text-sm underline"></strong></span>
+        </div>
+        <button onclick="unlockCurrentPrize()" class="px-3 py-1 rounded-lg bg-black/40 hover:bg-black/60 text-amber-200 text-xs font-black transition">
+          <i class="fa-solid fa-xmark"></i> 解除連續鎖定
+        </button>
+      </div>
+    </div>
+
+    <!-- 最近一次開獎提示與【一鍵撤銷】列 -->
+    <div id="station-recent-box" class="hidden mb-4 p-3.5 rounded-2xl bg-amber-50 border-2 border-amber-300 shadow-sm flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <span class="w-7 h-7 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-bold">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </span>
+        <div class="text-xs text-slate-900">
+          <span class="text-amber-800 font-bold">剛剛登記：</span>
+          <span id="station-recent-text" class="font-black"></span>
+        </div>
+      </div>
+      <button onclick="undoLastDraw()" class="px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black transition flex items-center gap-1 shadow">
+        <i class="fa-solid fa-rotate-left"></i> 撤銷登記
+      </button>
+    </div>
+
+    <!-- 工作台雙欄版面：左欄選擇人員，右欄選擇獎品 -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      
+      <!-- 左欄：人員篩選與快速點選 (佔 5 欄) -->
+      <section class="lg:col-span-5 bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-[700px]">
+        <div class="border-b border-slate-100 pb-3 mb-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-black text-slate-900 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-red-600 text-white text-xs flex items-center justify-center font-bold">1</span>
+              鎖定抽中名單（點選人名）
+            </h3>
+            <span id="station-member-count" class="text-xs font-bold text-slate-400">154 人</span>
+          </div>
+
+          <!-- 年級班級快捷藥丸標籤 -->
+          <div class="mt-2.5 flex flex-wrap gap-1.5" id="station-category-pills">
+            <button onclick="filterStationMembers('all')" class="st-pill active px-2.5 py-1 rounded-lg text-xs font-black bg-red-600 text-white transition">全部</button>
+            <button onclick="filterStationMembers('kindergarten')" class="st-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">幼兒園</button>
+            <button onclick="filterStationMembers('grade1')" class="st-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">一甲</button>
+            <button onclick="filterStationMembers('grade2')" class="st-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">二甲</button>
+            <button onclick="filterStationMembers('grade3')" class="st-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">三甲</button>
+            <button onclick="filterStationMembers('grade4')" class="st-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">四甲</button>
+            <button onclick="filterStationMembers('grade5')" class="st-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">五甲</button>
+            <button onclick="filterStationMembers('grade6')" class="st-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">六甲</button>
+            <button onclick="filterStationMembers('staff')" class="st-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">教職員</button>
+            <button onclick="filterStationMembers('guest')" class="st-pill px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">貴賓加碼</button>
+          </div>
+
+          <!-- 即時關鍵字搜尋框 -->
+          <div class="mt-2.5 relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+            <input type="text" id="station-search-input" oninput="renderStationMemberList()" placeholder="輸入座號(如 05) 或 姓名(如 蔡昕佳)..." class="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-red-500">
+          </div>
+        </div>
+
+        <!-- 人員卡片列表 (Scrollable) -->
+        <div id="station-member-list" class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scroll"></div>
+      </section>
+
+      <!-- 右欄：獎品庫存與點選綁定 (佔 7 欄) -->
+      <section class="lg:col-span-7 bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-[700px]">
+        <div class="border-b border-slate-100 pb-3 mb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 class="text-base font-black text-slate-900 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 text-xs flex items-center justify-center font-bold">2</span>
+              點選所中獎品（即刻綁定並扣庫存）
+            </h3>
+            <p class="text-[11px] text-slate-400 mt-0.5">點擊獎品卡片即可綁定 ｜ 點縮圖放大預覽</p>
+          </div>
+
+          <div id="selected-member-banner" class="hidden px-3 py-1 rounded-xl bg-red-100 border border-red-200 text-red-900 text-xs font-black flex items-center gap-1.5 self-start sm:self-auto">
+            <i class="fa-solid fa-user-check"></i>
+            <span>鎖定：<span id="selected-member-name" class="underline"></span></span>
+          </div>
+        </div>
+
+        <!-- 獎項梯次與庫存篩選標籤 -->
+        <div class="mb-3 flex flex-wrap items-center gap-1.5 text-xs font-bold">
+          <button onclick="filterStationPrizes('all')" class="st-prize-pill active px-2.5 py-1 rounded-lg bg-red-600 text-white transition">全部獎項</button>
+          <button onclick="filterStationPrizes('available')" class="st-prize-pill px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">⚡ 尚有庫存</button>
+          <button onclick="filterStationPrizes('stage1')" class="st-prize-pill px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">第1階段:普獎</button>
+          <button onclick="filterStationPrizes('stage2')" class="st-prize-pill px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">第2階段:趣味</button>
+          <button onclick="filterStationPrizes('stage3')" class="st-prize-pill px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">第3階段:家電</button>
+          <button onclick="filterStationPrizes('stage4')" class="st-prize-pill px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">第4階段:壓軸</button>
+        </div>
+
+        <!-- 獎項卡片網格 (Scrollable) -->
+        <div id="station-prize-list" class="flex-1 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-2.5 pr-1 custom-scroll"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- 視圖三：現場兌獎與領取核銷管理中心 (Claim Desk - 亦受密碼保護)    -->
+  <!-- ============================================================== -->
+  <main id="view-claim" class="view-panel hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+    <!-- 頂部資訊看板 -->
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-3xl p-6 md:p-8 shadow-xl mb-6">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center gap-1.5 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase border border-white/20 mb-2 text-emerald-200">
+            <i class="fa-solid fa-clipboard-check"></i> 總務處 / 大會服務台專用（權限已解鎖）
+          </span>
+          <h2 class="text-2xl md:text-3xl font-black">現場獎品兌換與領取核銷中心</h2>
+          <p class="text-xs md:text-sm text-emerald-100 mt-1">學生或家長前來領獎時，搜尋姓名並點擊「確認領取」，自動記錄領獎時間與狀態，防止重複冒領！</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="exportRaffleResultsCSV()" class="px-4 py-2.5 rounded-xl bg-white text-emerald-800 font-bold text-xs shadow-md hover:bg-emerald-50 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-download"></i> 匯出清冊 CSV
+          </button>
+          <button onclick="lockStation()" class="px-3.5 py-2.5 rounded-xl bg-emerald-900/80 hover:bg-emerald-950 text-emerald-100 font-bold text-xs transition flex items-center gap-1 border border-emerald-500/30">
+            <i class="fa-solid fa-lock"></i> 鎖定離開
+          </button>
+        </div>
+      </div>
+
+      <!-- 統計數據 -->
+      <div class="mt-6 grid grid-cols-3 gap-3 pt-4 border-t border-white/20 text-center">
+        <div class="bg-black/20 rounded-2xl p-3">
+          <div class="text-xs text-emerald-200 font-bold">總抽出中獎</div>
+          <div class="text-xl md:text-2xl font-black mt-0.5" id="claim-stat-total">0 份</div>
+        </div>
+        <div class="bg-black/20 rounded-2xl p-3">
+          <div class="text-xs text-emerald-200 font-bold">🟢 已領取走</div>
+          <div class="text-xl md:text-2xl font-black text-amber-300 mt-0.5" id="claim-stat-claimed">0 份</div>
+        </div>
+        <div class="bg-black/20 rounded-2xl p-3">
+          <div class="text-xs text-emerald-200 font-bold">🟡 尚未領取 (待領)</div>
+          <div class="text-xl md:text-2xl font-black text-rose-300 mt-0.5" id="claim-stat-unclaimed">0 份</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 篩選與搜尋列 -->
+    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <!-- 領取狀態切換 -->
+      <div class="flex items-center gap-1.5 w-full sm:w-auto">
+        <button onclick="filterClaimList('all')" class="claim-filter-btn active px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-sm">全部已中獎</button>
+        <button onclick="filterClaimList('unclaimed')" class="claim-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">🟡 待領取 (優先)</button>
+        <button onclick="filterClaimList('claimed')" class="claim-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">🟢 已領取完成</button>
+      </div>
+
+      <!-- 關鍵字搜尋 -->
+      <div class="relative w-full sm:w-80">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+        <input type="text" id="claim-search-input" oninput="renderClaimList()" placeholder="搜尋姓名、班級或獎項..." class="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+      </div>
+    </div>
+
+    <!-- 領取名冊卡片清單 -->
+    <div id="claim-cards-container" class="space-y-3"></div>
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- 視圖四：司令台大螢幕投影模式（Projector Mode）                   -->
+  <!-- ============================================================== -->
+  <main id="view-projector" class="view-panel hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+    <div class="bg-gradient-to-br from-slate-950 via-red-950 to-slate-900 text-white rounded-3xl p-6 md:p-12 shadow-2xl border border-red-900/40 relative overflow-hidden flex flex-col items-center justify-center text-center">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent pointer-events-none"></div>
+      
+      <div class="relative z-10 max-w-4xl w-full">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 text-sm font-black tracking-widest uppercase mb-4">
+          <i class="fa-solid fa-crown text-amber-400"></i> 南興國小 115學年度校慶大摸彩即時開獎牆
+        </div>
+
+        <h2 class="text-4xl md:text-6xl font-black tracking-tight text-white drop-shadow-md">
+          🎉 恭 喜 獲 獎 幸 運 星 🎉
+        </h2>
+
+        <!-- 最新抽出巨型卡片 -->
+        <div id="projector-latest-card" class="mt-8 p-6 md:p-8 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl relative overflow-hidden max-w-2xl mx-auto glow-gold">
+          <div class="text-xs uppercase tracking-widest text-amber-300 font-bold mb-2">✦ 最新開出震撼大獎 ✦</div>
+          <div id="proj-winner-name" class="text-3xl md:text-5xl font-black text-amber-400 tracking-wider">
+            等待貴賓抽出第一棒...
+          </div>
+          <div id="proj-winner-dept" class="text-base md:text-xl font-bold text-slate-200 mt-2">
+            全校 154 位師生人人有獎
+          </div>
+          <div class="mt-5 pt-4 border-t border-white/10 flex items-center justify-center gap-3">
+            <span class="text-sm font-bold text-slate-300">榮獲獎項：</span>
+            <span id="proj-prize-name" class="text-xl md:text-2xl font-black text-white bg-red-600 px-4 py-1 rounded-xl shadow-lg">
+              即將揭曉
+            </span>
+          </div>
+        </div>
+
+        <!-- 滾動開獎跑馬燈清單 -->
+        <div class="mt-10 w-full text-left bg-black/40 backdrop-blur-md rounded-2xl p-5 border border-white/10">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
+            <div class="text-sm font-black text-amber-300 flex items-center gap-2">
+              <i class="fa-solid fa-list-check"></i> 最新開出榜單輪播
+            </div>
+            <div class="text-xs text-slate-400">
+              家長手機掃描會場 QR Code 亦可即時查榜
+            </div>
+          </div>
+          <div id="proj-history-list" class="space-y-2 max-h-56 overflow-y-auto custom-scroll text-sm">
+            <div class="text-center text-slate-400 py-6 font-bold">目前尚無抽獎紀錄，長官貴賓即將開出！</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部版權宣告與校園資訊 -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2 font-bold text-slate-700">
+        <i class="fa-solid fa-school text-red-600"></i>
+        <span>臺南市安南區南興國民小學 115學年度校慶大摸彩委員會</span>
+      </div>
+      <div>校址：臺南市安南區公學路五段627號 ｜ 電話：(06) 2873204</div>
+      <div class="text-slate-400">系統建置：資訊組 ＆ 校長教育卓越團隊</div>
+    </div>
+  </footer>
+
+  <!-- ============================================================== -->
+  <!-- 彈窗 1：獎品完整大圖燈箱 (Lightbox Modal)                        -->
+  <!-- ============================================================== -->
+  <div id="image-lightbox-modal" onclick="handleLightboxBackdropClick(event)" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 shadow-2xl border border-slate-200 relative overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
+        <div class="flex items-center gap-2">
+          <span id="modal-prize-tier" class="px-2.5 py-0.5 rounded-lg text-xs font-black bg-red-100 text-red-800">特獎</span>
+          <h3 id="modal-prize-title" class="text-lg font-black text-slate-900">獎品完整大圖</h3>
+        </div>
+        <button onclick="closeImageLightbox()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <div class="flex-1 flex items-center justify-center bg-slate-50 rounded-2xl overflow-hidden p-3 min-h-[320px]">
+        <img id="modal-prize-img" src="" alt="獎品完整照片" class="max-h-[60vh] max-w-full object-contain rounded-xl shadow-md">
+      </div>
+
+      <div class="mt-3 flex items-center justify-between text-xs text-slate-500">
+        <span id="modal-prize-desc" class="font-bold text-slate-700">總募集數量：1 台</span>
+        <span class="text-slate-400">（點擊周圍空白處亦可關閉）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 彈窗 2：管理密碼驗證解鎖彈窗 (Station & Claim Auth Modal)        -->
+  <!-- ============================================================== -->
+  <div id="station-auth-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center">
+      <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 mx-auto flex items-center justify-center text-2xl font-bold mb-3 shadow-inner">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h3 class="text-lg font-black text-slate-900">請輸入管理密碼</h3>
+      <p class="text-xs text-slate-500 mt-1 mb-4">摸彩登記與兌獎核銷僅供大會授權工作人員操作，防止民眾誤觸。</p>
+
+      <div class="mb-4">
+        <input type="password" id="station-password-input" onkeydown="if(event.key==='Enter') verifyStationPassword()" placeholder="請輸入管理密碼..." class="w-full text-center px-4 py-2.5 rounded-xl border border-slate-300 font-bold text-base tracking-widest focus:ring-4 focus:ring-red-200 focus:outline-none">
+        <div id="auth-error-msg" class="text-xs text-red-600 font-bold mt-1.5 hidden">密碼錯誤，請重新輸入！</div>
+      </div>
+
+      <div class="flex items-center justify-center gap-2">
+        <button onclick="closeStationAuthModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">返回公告</button>
+        <button onclick="verifyStationPassword()" class="px-6 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black transition shadow">確認解鎖</button>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400">
+        💡 預設大會管理密碼：<strong class="text-slate-600">115</strong>（或輸入 nanxing）
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 彈窗 3：新增現場臨時貴賓/志工加碼名額                          -->
+  <!-- ============================================================== -->
+  <div id="add-guest-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+        <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-purple-600"></i> 新增現場臨時加碼名額
+        </h3>
+        <button onclick="closeAddGuestModal()" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500 mb-4">
+        當天若有長官貴賓、志工家長現場加碼投摸彩券，可在此直接建立臨時摸彩卡納入系統。
+      </p>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">單位／身分註記</label>
+          <input type="text" id="guest-dept" placeholder="例如：家長會顧問、愛心志工隊、地方仕紳..." class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold focus:ring-2 focus:ring-purple-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">姓名</label>
+          <input type="text" id="guest-name" placeholder="請輸入貴賓或志工姓名..." class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold focus:ring-2 focus:ring-purple-500 focus:outline-none">
+        </div>
+      </div>
+      <div class="mt-6 flex items-center justify-end gap-2">
+        <button onclick="closeAddGuestModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">取消</button>
+        <button onclick="confirmAddGuest()" class="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition shadow">確認新增</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript 核心程式碼 -->
+  <script>
+    const DEFAULT_MEMBERS = [{"id": 1, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 1, "seat_str": "01", "name": "黃偉杉", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 01號 黃偉杉"}, {"id": 2, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 2, "seat_str": "02", "name": "邱振倫", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 02號 邱振倫"}, {"id": 3, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 3, "seat_str": "03", "name": "陳鎰鈞", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 03號 陳鎰鈞"}, {"id": 4, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 4, "seat_str": "04", "name": "柯允昊", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 04號 柯允昊"}, {"id": 5, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 5, "seat_str": "05", "name": "黃群澔", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 05號 黃群澔"}, {"id": 6, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 6, "seat_str": "06", "name": "許名鋐", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 06號 許名鋐"}, {"id": 7, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 7, "seat_str": "07", "name": "李倪", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 07號 李倪"}, {"id": 8, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 8, "seat_str": "08", "name": "黃苡芹", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 08號 黃苡芹"}, {"id": 9, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 9, "seat_str": "09", "name": "黃若芯", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 09號 黃若芯"}, {"id": 10, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 10, "seat_str": "10", "name": "黃平荷", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 10號 黃平荷"}, {"id": 11, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 11, "seat_str": "11", "name": "黃妙鈺", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 11號 黃妙鈺"}, {"id": 12, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 12, "seat_str": "12", "name": "黃紫凝", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 12號 黃紫凝"}, {"id": 13, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 13, "seat_str": "13", "name": "施又菲", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 13號 施又菲"}, {"id": 14, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 14, "seat_str": "14", "name": "郭子菲", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 14號 郭子菲"}, {"id": 15, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 15, "seat_str": "15", "name": "邱品潔", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 15號 邱品潔"}, {"id": 16, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 16, "seat_str": "16", "name": "黃唯溱", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 16號 黃唯溱"}, {"id": 17, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 1, "seat_str": "01", "name": "黃修齊", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 01號 黃修齊"}, {"id": 18, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 2, "seat_str": "02", "name": "林宇宸", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 02號 林宇宸"}, {"id": 19, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 3, "seat_str": "03", "name": "黃羿暘", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 03號 黃羿暘"}, {"id": 20, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 4, "seat_str": "04", "name": "蔡孟言", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 04號 蔡孟言"}, {"id": 21, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 5, "seat_str": "05", "name": "蔡昕佳", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 05號 蔡昕佳"}, {"id": 22, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 6, "seat_str": "06", "name": "郭于瑈", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 06號 郭于瑈"}, {"id": 23, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 7, "seat_str": "07", "name": "黃卉丞", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 07號 黃卉丞"}, {"id": 24, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 8, "seat_str": "08", "name": "林羽彤", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 08號 林羽彤"}, {"id": 25, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 9, "seat_str": "09", "name": "黃妙金", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 09號 黃妙金"}, {"id": 26, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 10, "seat_str": "10", "name": "黃羽晨", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 10號 黃羽晨"}, {"id": 27, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 11, "seat_str": "11", "name": "郭子綺", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 11號 郭子綺"}, {"id": 28, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 12, "seat_str": "12", "name": "施語凡", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 12號 施語凡"}, {"id": 29, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 13, "seat_str": "13", "name": "黎宛潔", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 13號 黎宛潔"}, {"id": 30, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 1, "seat_str": "01", "name": "黃建霆", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 01號 黃建霆"}, {"id": 31, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 2, "seat_str": "02", "name": "黃世瑋", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 02號 黃世瑋"}, {"id": 32, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 3, "seat_str": "03", "name": "曾紹愷", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 03號 曾紹愷"}, {"id": 33, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 4, "seat_str": "04", "name": "邱恩俊", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 04號 邱恩俊"}, {"id": 34, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 5, "seat_str": "05", "name": "吳楷鈞", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 05號 吳楷鈞"}, {"id": 35, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 6, "seat_str": "06", "name": "邱士軒", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 06號 邱士軒"}, {"id": 36, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 7, "seat_str": "07", "name": "顏淓鋙", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 07號 顏淓鋙"}, {"id": 37, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 8, "seat_str": "08", "name": "楊佳瑜", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 08號 楊佳瑜"}, {"id": 38, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 9, "seat_str": "09", "name": "樊沛恩", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 09號 樊沛恩"}, {"id": 39, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 10, "seat_str": "10", "name": "蘇潁心", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 10號 蘇潁心"}, {"id": 40, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 11, "seat_str": "11", "name": "楊珍恬", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 11號 楊珍恬"}, {"id": 41, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 12, "seat_str": "12", "name": "黃姵潔", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 12號 黃姵潔"}, {"id": 42, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 13, "seat_str": "13", "name": "劉恩語", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 13號 劉恩語"}, {"id": 43, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 14, "seat_str": "14", "name": "黃詩柔", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 14號 黃詩柔"}, {"id": 44, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 15, "seat_str": "15", "name": "郭沛貽", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 15號 郭沛貽"}, {"id": 45, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 16, "seat_str": "16", "name": "蔡理璇", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 16號 蔡理璇"}, {"id": 46, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 17, "seat_str": "17", "name": "張巧沛", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 17號 張巧沛"}, {"id": 47, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 18, "seat_str": "18", "name": "柯允菲", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 18號 柯允菲"}, {"id": 48, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 1, "seat_str": "01", "name": "林進陞", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 01號 林進陞"}, {"id": 49, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 2, "seat_str": "02", "name": "黃柏嘉", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 02號 黃柏嘉"}, {"id": 50, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 3, "seat_str": "03", "name": "陳睿謙", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 03號 陳睿謙"}, {"id": 51, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 4, "seat_str": "04", "name": "施慎和", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 04號 施慎和"}, {"id": 52, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 5, "seat_str": "05", "name": "葉涅山", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 05號 葉涅山"}, {"id": 53, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 6, "seat_str": "06", "name": "黃邦睿", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 06號 黃邦睿"}, {"id": 54, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 7, "seat_str": "07", "name": "李宇樂", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 07號 李宇樂"}, {"id": 55, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 8, "seat_str": "08", "name": "郭子翔", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 08號 郭子翔"}, {"id": 56, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 9, "seat_str": "09", "name": "邱亞忻", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 09號 邱亞忻"}, {"id": 57, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 10, "seat_str": "10", "name": "蔡喬捷", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 10號 蔡喬捷"}, {"id": 58, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 11, "seat_str": "11", "name": "林姿妤", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 11號 林姿妤"}, {"id": 59, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 12, "seat_str": "12", "name": "郭俞岑", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 12號 郭俞岑"}, {"id": 60, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 13, "seat_str": "13", "name": "葉芷安", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 13號 葉芷安"}, {"id": 61, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 14, "seat_str": "14", "name": "王畇霏", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 14號 王畇霏"}, {"id": 62, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 1, "seat_str": "01", "name": "黃祐嘉", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 01號 黃祐嘉"}, {"id": 63, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 2, "seat_str": "02", "name": "陳敬倫", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 02號 陳敬倫"}, {"id": 64, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 3, "seat_str": "03", "name": "邱弘富", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 03號 邱弘富"}, {"id": 65, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 4, "seat_str": "04", "name": "黃凱崙", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 04號 黃凱崙"}, {"id": 66, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 5, "seat_str": "05", "name": "王宣錡", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 05號 王宣錡"}, {"id": 67, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 6, "seat_str": "06", "name": "黃震興", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 06號 黃震興"}, {"id": 68, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 7, "seat_str": "07", "name": "陳伯瑞", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 07號 陳伯瑞"}, {"id": 69, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 8, "seat_str": "08", "name": "吳家樂", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 08號 吳家樂"}, {"id": 70, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 9, "seat_str": "09", "name": "林雨晴", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 09號 林雨晴"}, {"id": 71, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 10, "seat_str": "10", "name": "蔡依璇", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 10號 蔡依璇"}, {"id": 72, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 11, "seat_str": "11", "name": "翁梓綝", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 11號 翁梓綝"}, {"id": 73, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 12, "seat_str": "12", "name": "陳品彤", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 12號 陳品彤"}, {"id": 74, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 13, "seat_str": "13", "name": "蘇亮伃", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 13號 蘇亮伃"}, {"id": 75, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 14, "seat_str": "14", "name": "方婕薰", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 14號 方婕薰"}, {"id": 76, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 15, "seat_str": "15", "name": "黃晨瑄", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 15號 黃晨瑄"}, {"id": 77, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 16, "seat_str": "16", "name": "邱子瑜", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 16號 邱子瑜"}, {"id": 78, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 17, "seat_str": "17", "name": "楊佳恩", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 17號 楊佳恩"}, {"id": 79, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 18, "seat_str": "18", "name": "陳采緹", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 18號 陳采緹"}, {"id": 80, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 1, "seat_str": "01", "name": "陳致愷", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 01號 陳致愷"}, {"id": 81, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 2, "seat_str": "02", "name": "黃鈞瑋", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 02號 黃鈞瑋"}, {"id": 82, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 3, "seat_str": "03", "name": "黃俊佑", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 03號 黃俊佑"}, {"id": 83, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 4, "seat_str": "04", "name": "莊迪元", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 04號 莊迪元"}, {"id": 84, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 5, "seat_str": "05", "name": "夘嵊彬", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 05號 夘嵊彬"}, {"id": 85, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 6, "seat_str": "06", "name": "吳羿辰", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 06號 吳羿辰"}, {"id": 86, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 7, "seat_str": "07", "name": "王浩宸", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 07號 王浩宸"}, {"id": 87, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 8, "seat_str": "08", "name": "陳奕辰", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 08號 陳奕辰"}, {"id": 88, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 9, "seat_str": "09", "name": "陳浩銘", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 09號 陳浩銘"}, {"id": 89, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 10, "seat_str": "10", "name": "王威霖", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 10號 王威霖"}, {"id": 90, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 11, "seat_str": "11", "name": "劉濬賓", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 11號 劉濬賓"}, {"id": 91, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 12, "seat_str": "12", "name": "林浩哲", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 12號 林浩哲"}, {"id": 92, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 13, "seat_str": "13", "name": "蔡岳辰", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 13號 蔡岳辰"}, {"id": 93, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 14, "seat_str": "14", "name": "黃晨涵", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 14號 黃晨涵"}, {"id": 94, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 15, "seat_str": "15", "name": "李姿錡", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 15號 李姿錡"}, {"id": 95, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 16, "seat_str": "16", "name": "黃宥榛", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 16號 黃宥榛"}, {"id": 96, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 17, "seat_str": "17", "name": "李晨馨", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 17號 李晨馨"}, {"id": 97, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 1, "seat_str": "01", "name": "黃振宸", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 01號 黃振宸"}, {"id": 98, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 2, "seat_str": "02", "name": "黃明哲", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 02號 黃明哲"}, {"id": 99, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 3, "seat_str": "03", "name": "黃睿澄", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 03號 黃睿澄"}, {"id": 100, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 4, "seat_str": "04", "name": "郭韋辰", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 04號 郭韋辰"}, {"id": 101, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 5, "seat_str": "05", "name": "方晨宇", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 05號 方晨宇"}, {"id": 102, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 6, "seat_str": "06", "name": "陳駿鈜", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 06號 陳駿鈜"}, {"id": 103, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 7, "seat_str": "07", "name": "施竑群", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 07號 施竑群"}, {"id": 104, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 8, "seat_str": "08", "name": "黃若驊", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 08號 黃若驊"}, {"id": 105, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 9, "seat_str": "09", "name": "李順興", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 09號 李順興"}, {"id": 106, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 10, "seat_str": "10", "name": "李帷雍", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 10號 李帷雍"}, {"id": 107, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 11, "seat_str": "11", "name": "吳宜樂", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 11號 吳宜樂"}, {"id": 108, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 12, "seat_str": "12", "name": "顏儀芳", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 12號 顏儀芳"}, {"id": 109, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 13, "seat_str": "13", "name": "黃品璇", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 13號 黃品璇"}, {"id": 110, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 14, "seat_str": "14", "name": "陳品甯", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 14號 陳品甯"}, {"id": 111, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 15, "seat_str": "15", "name": "林勤容", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 15號 林勤容"}, {"id": 112, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 16, "seat_str": "16", "name": "黃婕洺", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 16號 黃婕洺"}, {"id": 113, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 17, "seat_str": "17", "name": "羅苡芸", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 17號 羅苡芸"}, {"id": 114, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 18, "seat_str": "18", "name": "劉雯玲", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 18號 劉雯玲"}, {"id": 115, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 19, "seat_str": "19", "name": "戴瑋辰", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 19號 戴瑋辰"}, {"id": 116, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 1, "seat_str": "T01", "name": "吳宜蓁", "role": "教職員", "title": "校長", "display_label": "教職員 校長 吳宜蓁"}, {"id": 117, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 2, "seat_str": "T02", "name": "為秀麗", "role": "教職員", "title": "教導主任", "display_label": "教職員 教導主任 為秀麗"}, {"id": 118, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 3, "seat_str": "T03", "name": "陳建榮", "role": "教職員", "title": "總務主任", "display_label": "教職員 總務主任 陳建榮"}, {"id": 119, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 4, "seat_str": "T04", "name": "林佩君", "role": "教職員", "title": "人事主任", "display_label": "教職員 人事主任 林佩君"}, {"id": 120, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 5, "seat_str": "T05", "name": "汪淑慧", "role": "教職員", "title": "會計主任", "display_label": "教職員 會計主任 汪淑慧"}, {"id": 121, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 6, "seat_str": "T06", "name": "林承翰", "role": "教職員", "title": "教務組長", "display_label": "教職員 教務組長 林承翰"}, {"id": 122, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 7, "seat_str": "T07", "name": "李宗修", "role": "教職員", "title": "學務組長", "display_label": "教職員 學務組長 李宗修"}, {"id": 123, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 8, "seat_str": "T08", "name": "曾鈺真", "role": "教職員", "title": "事務組長", "display_label": "教職員 事務組長 曾鈺真"}, {"id": 124, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 9, "seat_str": "T09", "name": "黃千芳", "role": "教職員", "title": "護理師", "display_label": "教職員 護理師 黃千芳"}, {"id": 125, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 10, "seat_str": "T10", "name": "楊詒茹", "role": "教職員", "title": "六甲導師", "display_label": "教職員 六甲導師 楊詒茹"}, {"id": 126, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 11, "seat_str": "T11", "name": "蔡武憲", "role": "教職員", "title": "五甲導師", "display_label": "教職員 五甲導師 蔡武憲"}, {"id": 127, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 12, "seat_str": "T12", "name": "施喬恩", "role": "教職員", "title": "四甲導師", "display_label": "教職員 四甲導師 施喬恩"}, {"id": 128, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 13, "seat_str": "T13", "name": "鄭潔", "role": "教職員", "title": "三甲導師", "display_label": "教職員 三甲導師 鄭潔"}, {"id": 129, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 14, "seat_str": "T14", "name": "黃美雅", "role": "教職員", "title": "二甲導師", "display_label": "教職員 二甲導師 黃美雅"}, {"id": 130, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 15, "seat_str": "T15", "name": "徐敏瓊", "role": "教職員", "title": "一甲導師", "display_label": "教職員 一甲導師 徐敏瓊"}, {"id": 131, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 16, "seat_str": "T16", "name": "羅珮華", "role": "教職員", "title": "科任教師", "display_label": "教職員 科任教師 羅珮華"}, {"id": 132, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 17, "seat_str": "T17", "name": "周婉琳", "role": "教職員", "title": "資源班", "display_label": "教職員 資源班 周婉琳"}, {"id": 133, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 18, "seat_str": "T18", "name": "許靖昀", "role": "教職員", "title": "星星班主任", "display_label": "教職員 星星班主任 許靖昀"}, {"id": 134, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 19, "seat_str": "T19", "name": "莊雅筑", "role": "教職員", "title": "導師", "display_label": "教職員 導師 莊雅筑"}, {"id": 135, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 20, "seat_str": "T20", "name": "黃筱筠", "role": "教職員", "title": "教保員", "display_label": "教職員 教保員 黃筱筠"}, {"id": 136, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 21, "seat_str": "T21", "name": "林杏華", "role": "教職員", "title": "加置人力教保員", "display_label": "教職員 加置人力教保員 林杏華"}, {"id": 137, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 22, "seat_str": "T22", "name": "楊秀珍", "role": "教職員", "title": "幼兒園廚工", "display_label": "教職員 幼兒園廚工 楊秀珍"}, {"id": 138, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 23, "seat_str": "T23", "name": "楊宗朋", "role": "教職員", "title": "警衛", "display_label": "教職員 警衛 楊宗朋"}, {"id": 139, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 24, "seat_str": "T24", "name": "李枝香", "role": "教職員", "title": "警衛", "display_label": "教職員 警衛 李枝香"}, {"id": 140, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 25, "seat_str": "T25", "name": "張惠華", "role": "教職員", "title": "課輔班教師", "display_label": "教職員 課輔班教師 張惠華"}, {"id": 141, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 26, "seat_str": "T26", "name": "翁佳淇", "role": "教職員", "title": "課輔班教師", "display_label": "教職員 課輔班教師 翁佳淇"}, {"id": 142, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 27, "seat_str": "T27", "name": "周家妤", "role": "教職員", "title": "課輔班教師", "display_label": "教職員 課輔班教師 周家妤"}, {"id": 143, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 28, "seat_str": "T28", "name": "黃水樹", "role": "教職員", "title": "金獅陣教練", "display_label": "教職員 金獅陣教練 黃水樹"}, {"id": 144, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 29, "seat_str": "T29", "name": "陳孟菱", "role": "教職員", "title": "音樂老師", "display_label": "教職員 音樂老師 陳孟菱"}, {"id": 145, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 30, "seat_str": "T30", "name": "吳雪如", "role": "教職員", "title": "校園大姊", "display_label": "教職員 校園大姊 吳雪如"}, {"id": 146, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 31, "seat_str": "T31", "name": "林立樺", "role": "教職員", "title": "實習老師", "display_label": "教職員 實習老師 林立樺"}, {"id": 147, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 32, "seat_str": "T32", "name": "魏仲偉", "role": "教職員", "title": "本土語老師", "display_label": "教職員 本土語老師 魏仲偉"}, {"id": 148, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 33, "seat_str": "T33", "name": "王琮雅", "role": "教職員", "title": "美勞老師", "display_label": "教職員 美勞老師 王琮雅"}, {"id": 149, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 34, "seat_str": "T34", "name": "侯庭慧", "role": "教職員", "title": "舞蹈老師", "display_label": "教職員 舞蹈老師 侯庭慧"}, {"id": 150, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 35, "seat_str": "T35", "name": "蔡佩紋", "role": "教職員", "title": "跳鼓陣教練", "display_label": "教職員 跳鼓陣教練 蔡佩紋"}, {"id": 151, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 36, "seat_str": "T36", "name": "蔡招治", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 蔡招治"}, {"id": 152, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 37, "seat_str": "T37", "name": "洪美娟", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 洪美娟"}, {"id": 153, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 38, "seat_str": "T38", "name": "鄭育姍", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 鄭育姍"}, {"id": 154, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 39, "seat_str": "T39", "name": "高阿忍", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 高阿忍"}];
+    const DEFAULT_PRIZES = [{"id": "p01", "tier": "grand", "tier_name": "特獎", "name": "高級直立式電風扇", "total": 2, "remaining": 2, "image": "images/raffle/高級直立式電風扇.jpg", "unit": "台", "icon": "fa-fan", "stage": 4}, {"id": "p02", "tier": "grand", "tier_name": "特獎", "name": "智慧感應式垃圾桶", "total": 1, "remaining": 1, "image": "images/raffle/智慧感應式垃圾桶.jpg", "unit": "台", "icon": "fa-trash-can", "stage": 4}, {"id": "p03", "tier": "first", "tier_name": "頭獎", "name": "彼得兔不鏽鋼保溫杯", "total": 2, "remaining": 2, "image": "images/raffle/彼得兔不鏽鋼保溫杯.jpg", "unit": "個", "icon": "fa-mug-hot", "stage": 4}, {"id": "p04", "tier": "first", "tier_name": "頭獎", "name": "超萌水豚造型後背包", "total": 1, "remaining": 1, "image": "images/raffle/超萌水豚造型後背包.jpg", "unit": "個", "icon": "fa-bag-shopping", "stage": 4}, {"id": "p05", "tier": "first", "tier_name": "頭獎", "name": "多功能減壓實用後背包", "total": 1, "remaining": 1, "image": "images/raffle/多功能減壓實用後背包.jpg", "unit": "個", "icon": "fa-briefcase", "stage": 4}, {"id": "p06", "tier": "second", "tier_name": "貳獎", "name": "蠟筆小新餐具餐盒套裝組", "total": 1, "remaining": 1, "image": "images/raffle/蠟筆小新餐具餐盒套裝組.jpg", "unit": "組", "icon": "fa-utensils", "stage": 4}, {"id": "p07", "tier": "second", "tier_name": "貳獎", "name": "精選水果刀具組", "total": 1, "remaining": 1, "image": "images/raffle/精選水果刀具組.jpg", "unit": "套", "icon": "fa-kitchen-set", "stage": 3}, {"id": "p08", "tier": "second", "tier_name": "貳獎", "name": "方形親膚舒適大抱枕", "total": 1, "remaining": 1, "image": "images/raffle/方形親膚舒適大抱枕.jpg", "unit": "個", "icon": "fa-couch", "stage": 2}, {"id": "p09", "tier": "second", "tier_name": "貳獎", "name": "長形萌萌趴趴狗抱枕", "total": 2, "remaining": 2, "image": "images/raffle/長形萌萌趴趴狗抱枕.jpg", "unit": "隻", "icon": "fa-dog", "stage": 2}, {"id": "p10", "tier": "second", "tier_name": "貳獎", "name": "短型萌萌趴趴狗抱枕", "total": 2, "remaining": 2, "image": "images/raffle/短型萌萌趴趴狗抱枕.jpg", "unit": "隻", "icon": "fa-dog", "stage": 2}, {"id": "p11", "tier": "third", "tier_name": "參獎", "name": "Smartivity 木質益智拼組玩具", "total": 5, "remaining": 5, "image": "images/raffle/Smartivity 木質益智拼組玩具.jpg", "unit": "盒", "icon": "fa-puzzle-piece", "stage": 3}, {"id": "p12", "tier": "third", "tier_name": "參獎", "name": "Panasonic 負離子吹風機", "total": 5, "remaining": 5, "image": "images/raffle/Panasonic吹風機.jpg", "unit": "台", "icon": "fa-wind", "stage": 3}, {"id": "p13", "tier": "third", "tier_name": "參獎", "name": "Kinyo 大風量吹風機", "total": 5, "remaining": 5, "image": "images/raffle/Kinyo吹風機.jpg", "unit": "台", "icon": "fa-wind", "stage": 3}, {"id": "p14", "tier": "third", "tier_name": "參獎", "name": "迷你型便攜旅行吹風機", "total": 5, "remaining": 5, "image": "images/raffle/迷你型便攜旅行吹風機.jpg", "unit": "台", "icon": "fa-wind", "stage": 3}, {"id": "p15", "tier": "lucky", "tier_name": "幸運獎", "name": "隨身手持小風扇", "total": 10, "remaining": 10, "image": "images/raffle/隨身手持小風扇.jpg", "unit": "台", "icon": "fa-fan", "stage": 2}, {"id": "p16", "tier": "lucky", "tier_name": "幸運獎", "name": "台灣優質在地好米 (3kg)", "total": 5, "remaining": 5, "image": "images/raffle/台灣優質在地好米 (3kg).jpg", "unit": "包", "icon": "fa-bowl-rice", "stage": 2}, {"id": "p17", "tier": "general", "tier_name": "普獎", "name": "典雅美型面紙盒", "total": 30, "remaining": 30, "image": "images/raffle/典雅美型面紙盒.jpg", "unit": "個", "icon": "fa-box-open", "stage": 1}, {"id": "p18", "tier": "general", "tier_name": "普獎", "name": "居家優雅防水桌巾", "total": 30, "remaining": 30, "image": "images/raffle/居家優雅防水桌巾.jpg", "unit": "條", "icon": "fa-table-cells", "stage": 1}];
+
+    let members = [];
+    let prizes = [];
+    let records = []; // { memberId, prizeId, timestamp, claimed: boolean, claimedTime: string }
+    let selectedMemberId = null;
+    let lockedPrizeId = null; // ⚡ 當前連續鎖定快抽之獎項 ID
+    let currentCategoryFilter = 'all';
+    let currentPrizeFilter = 'all';
+    let currentClaimFilter = 'all';
+    let currentPrompterIndex = 0;
+    let authTargetView = 'station';
+
+    const STORAGE_KEY = 'NANXING_RAFFLE_RECORDS_V1';
+    const GUESTS_STORAGE_KEY = 'NANXING_RAFFLE_GUESTS_V1';
+    const AUTH_SESSION_KEY = 'NANXING_RAFFLE_STATION_UNLOCKED';
+
+    function initSystem() {
+      try {
+        members = JSON.parse(JSON.stringify(DEFAULT_MEMBERS));
+
+        const savedGuests = localStorage.getItem(GUESTS_STORAGE_KEY);
+        if (savedGuests) {
+          const guests = JSON.parse(savedGuests);
+          members = [...members, ...guests];
+        }
+
+        prizes = JSON.parse(JSON.stringify(DEFAULT_PRIZES));
+
+        const savedRec = localStorage.getItem(STORAGE_KEY);
+        if (savedRec) {
+          records = JSON.parse(savedRec);
+        }
+
+        updateStationLockUI();
+        syncPrizeRemaining();
+        updateSmartPrompter();
+        renderAllViews();
+      } catch (err) {
+        console.error('初始化失敗:', err);
+      }
+    }
+
+    function syncPrizeRemaining() {
+      prizes.forEach(p => {
+        const drawnCount = records.filter(r => r.prizeId === p.id).length;
+        p.remaining = Math.max(0, p.total - drawnCount);
+      });
+
+      // 若目前鎖定的獎品抽完了，自動解除鎖定
+      if (lockedPrizeId) {
+        const lp = prizes.find(x => x.id === lockedPrizeId);
+        if (!lp || lp.remaining <= 0) {
+          alert(`🎉 恭喜！【${lp ? lp.name : ''}】已全數抽完！`);
+          unlockCurrentPrize();
+        }
+      }
+    }
+
+    function saveRecords() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+      syncPrizeRemaining();
+      updateSmartPrompter();
+      renderAllViews();
+    }
+
+    function renderAllViews() {
+      renderStats();
+      renderPrizeGrid();
+      renderStationMemberList();
+      renderStationPrizeList();
+      renderClaimList();
+      renderProjectorView();
+      updateStationRecentBox();
+    }
+
+    function renderStats() {
+      const totalPrizes = prizes.reduce((acc, cur) => acc + cur.total, 0);
+      const drawnCount = records.length;
+      const claimedCount = records.filter(r => r.claimed).length;
+      const unclaimedCount = drawnCount - claimedCount;
+
+      document.getElementById('stat-total-prizes').textContent = `${totalPrizes} 份`;
+      document.getElementById('stat-drawn-prizes').textContent = `${drawnCount} 份`;
+      document.getElementById('stat-claimed-prizes').textContent = `${claimedCount} 份`;
+      document.getElementById('stat-total-members').textContent = `${members.length} 人`;
+
+      document.getElementById('claim-stat-total').textContent = `${drawnCount} 份`;
+      document.getElementById('claim-stat-claimed').textContent = `${claimedCount} 份`;
+      document.getElementById('claim-stat-unclaimed').textContent = `${unclaimedCount} 份`;
+
+      const badge = document.getElementById('tab-unclaimed-badge');
+      if (unclaimedCount > 0) {
+        badge.classList.remove('hidden');
+        badge.textContent = unclaimedCount;
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    // ==========================================
+    // 🌟 司儀提詞台智慧推薦邏輯 (Smart Teleprompter)
+    // ==========================================
+    function getAvailablePrizes() {
+      // 按照階段 stage 排序：階段1 ➔ 階段2 ➔ 階段3 ➔ 階段4
+      return prizes.filter(p => p.remaining > 0).sort((a, b) => a.stage - b.stage);
+    }
+
+    function updateSmartPrompter() {
+      const available = getAvailablePrizes();
+      if (available.length === 0) {
+        document.getElementById('prompter-stage-label').textContent = '【大會圓滿】';
+        document.getElementById('prompter-prize-name').textContent = '所有獎項已全數抽出！';
+        document.getElementById('prompter-prize-stock').textContent = '完抽';
+        document.getElementById('btn-lock-prize').classList.add('hidden');
+        return;
+      }
+
+      if (currentPrompterIndex >= available.length) {
+        currentPrompterIndex = 0;
+      }
+
+      const current = available[currentPrompterIndex];
+      const stageNames = {
+        1: '階段 1：普獎暖場好禮',
+        2: '階段 2：趣味童心大獎',
+        3: '階段 3：實用生活家電',
+        4: '階段 4：閉幕特等壓軸'
+      };
+
+      document.getElementById('prompter-stage-label').textContent = `【${stageNames[current.stage] || '精選獎項'}】`;
+      document.getElementById('prompter-prize-name').textContent = current.name;
+      document.getElementById('prompter-prize-stock').textContent = `剩 ${current.remaining} ${current.unit}`;
+      document.getElementById('btn-lock-prize').classList.remove('hidden');
+    }
+
+    function nextPrompterPrize() {
+      const available = getAvailablePrizes();
+      if (available.length === 0) return;
+      currentPrompterIndex = (currentPrompterIndex + 1) % available.length;
+      updateSmartPrompter();
+    }
+
+    // ⚡ 批量快抽模式：直接鎖定獎項
+    function lockCurrentPrompterPrize() {
+      const available = getAvailablePrizes();
+      if (available.length === 0) return;
+      const target = available[currentPrompterIndex];
+      lockPrize(target.id);
+    }
+
+    function lockPrize(prizeId) {
+      const p = prizes.find(x => x.id === prizeId);
+      if (!p || p.remaining <= 0) return;
+
+      lockedPrizeId = p.id;
+      document.getElementById('active-locked-banner').classList.remove('hidden');
+      document.getElementById('locked-prize-name-text').textContent = `${p.name} (剩 ${p.remaining} ${p.unit})`;
+      renderStationPrizeList();
+    }
+
+    function unlockCurrentPrize() {
+      lockedPrizeId = null;
+      document.getElementById('active-locked-banner').classList.add('hidden');
+      renderStationPrizeList();
+    }
+
+    // ==========================================
+    // 視圖一：公告榜與圖鑑
+    // ==========================================
+    let currentPrizeTierFilter = 'all';
+
+    function renderPrizeGrid() {
+      const container = document.getElementById('prize-grid-container');
+      container.innerHTML = '';
+
+      let list = prizes;
+      if (currentPrizeTierFilter === 'grand') {
+        list = prizes.filter(p => p.tier === 'grand');
+      } else if (currentPrizeTierFilter === 'first') {
+        list = prizes.filter(p => p.tier === 'first');
+      } else if (currentPrizeTierFilter === 'second') {
+        list = prizes.filter(p => p.tier === 'second' || p.tier === 'third');
+      }
+
+      list.forEach(p => {
+        const winners = records.filter(r => r.prizeId === p.id).map(r => {
+          const m = members.find(x => x.id === r.memberId);
+          return { ...r, member: m };
+        });
+
+        let tierBadgeColor = 'bg-slate-100 text-slate-800 border-slate-200';
+        if (p.tier === 'grand') tierBadgeColor = 'bg-red-100 text-red-800 border-red-300';
+        if (p.tier === 'first') tierBadgeColor = 'bg-amber-100 text-amber-800 border-amber-300';
+        if (p.tier === 'second') tierBadgeColor = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+
+        const isDrawnOut = p.remaining <= 0;
+
+        const card = document.createElement('div');
+        card.className = `bg-white rounded-2xl border shadow-sm overflow-hidden flex flex-col transition hover:shadow-md ${
+          isDrawnOut ? 'border-slate-200 bg-slate-50/60' : 'border-slate-200'
+        }`;
+
+        card.innerHTML = `
+          <!-- 圖片容器 (object-contain 完整呈現不裁切，點擊可放大) -->
+          <div onclick="openImageLightbox('${p.id}')" class="relative h-52 bg-slate-50 cursor-pointer overflow-hidden group flex items-center justify-center p-3 border-b border-slate-100">
+            <img src="${p.image}" alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300" onerror="this.src='images/school_logo.jpg'">
+            
+            <div class="absolute top-3 left-3 flex items-center gap-1.5">
+              <span class="px-2.5 py-1 rounded-lg text-xs font-black border shadow-sm ${tierBadgeColor}">
+                ${p.tier_name}
+              </span>
+              ${isDrawnOut ? '<span class="px-2 py-1 rounded-lg text-xs font-black bg-slate-900 text-white shadow-sm">已完抽</span>' : ''}
+            </div>
+
+            <div class="absolute bottom-3 right-3 bg-black/75 backdrop-blur-md text-white text-xs font-bold px-2.5 py-1 rounded-lg shadow flex items-center gap-1.5">
+              <i class="fa-solid fa-magnifying-glass-plus text-[10px] text-amber-300"></i>
+              <span>庫存：${p.remaining} / ${p.total} ${p.unit}</span>
+            </div>
+          </div>
+
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <h4 class="text-base font-black text-slate-900">${p.name}</h4>
+              </div>
+              <p class="text-xs text-slate-400 mt-0.5">總募集數量：${p.total} ${p.unit}</p>
+
+              <!-- 中獎者清單 -->
+              <div class="mt-4 pt-3 border-t border-slate-100">
+                <div class="text-xs font-bold text-slate-500 mb-2 flex items-center justify-between">
+                  <span>🎉 已抽出幸運兒 (${winners.length}人)：</span>
+                  <span class="text-[10px] text-slate-400">已領取 ${winners.filter(w => w.claimed).length} 人</span>
+                </div>
+                ${winners.length === 0 ? `
+                  <div class="text-xs text-slate-400 italic py-2">尚未抽出，靜候佳音...</div>
+                ` : `
+                  <div class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto custom-scroll">
+                    ${winners.map(w => `
+                      <span class="inline-flex items-center gap-1.5 text-xs font-bold px-2 py-1 rounded-lg ${w.claimed ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-amber-50 text-amber-800 border border-amber-200'}">
+                        <span>${w.member ? w.member.display_label : '未知'}</span>
+                        <span class="text-[10px] px-1 rounded ${w.claimed ? 'bg-emerald-200 text-emerald-900' : 'bg-amber-200 text-amber-900'}">
+                          ${w.claimed ? '已領' : '待領'}
+                        </span>
+                      </span>
+                    `).join('')}
+                  </div>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterPrizeGrid(tier) {
+      currentPrizeTierFilter = tier;
+      document.querySelectorAll('.prize-filter-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-red-600', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+      event.target.classList.remove('bg-slate-100', 'text-slate-700');
+      event.target.classList.add('active', 'bg-red-600', 'text-white');
+      renderPrizeGrid();
+    }
+
+    function handleBoardSearch() {
+      const q = document.getElementById('board-search').value.trim().toLowerCase();
+      const resBox = document.getElementById('board-search-result');
+
+      if (!q) {
+        resBox.classList.add('hidden');
+        return;
+      }
+
+      const matchMembers = members.filter(m => 
+        m.name.toLowerCase().includes(q) ||
+        m.display_label.toLowerCase().includes(q) ||
+        m.seat_str.toLowerCase().includes(q)
+      );
+
+      if (matchMembers.length === 0) {
+        resBox.classList.remove('hidden');
+        resBox.innerHTML = `
+          <div class="text-center py-3 text-slate-500 font-bold text-sm">
+            查無「${q}」的名冊資料，請確認姓名或班級關鍵字是否正確。
+          </div>
+        `;
+        return;
+      }
+
+      resBox.classList.remove('hidden');
+      resBox.innerHTML = `
+        <div class="text-xs font-bold text-slate-500 mb-2">找到 ${matchMembers.length} 筆相符名單：</div>
+        <div class="space-y-2">
+          ${matchMembers.map(m => {
+            const myRecords = records.filter(r => r.memberId === m.id);
+            if (myRecords.length === 0) {
+              return `
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+                  <div class="font-bold text-slate-800">${m.display_label}</div>
+                  <span class="text-slate-400 font-medium italic">目前尚未中獎，請為自己集氣加油！</span>
+                </div>
+              `;
+            } else {
+              return myRecords.map(r => {
+                const prize = prizes.find(p => p.id === r.prizeId);
+                return `
+                  <div class="p-3 rounded-xl bg-gradient-to-r from-amber-50 to-red-50 border-2 border-amber-300 flex items-center justify-between text-xs shadow-sm">
+                    <div class="flex items-center gap-2">
+                      <span class="text-lg">🎉</span>
+                      <div>
+                        <div class="font-black text-red-900 text-sm">${m.display_label}</div>
+                        <div class="text-slate-600 mt-0.5">榮獲：<strong class="text-red-700">${prize ? prize.name : '未知好禮'}</strong> (${prize ? prize.tier_name : ''})</div>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <span class="inline-block px-2.5 py-1 rounded-full text-xs font-black ${r.claimed ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                        ${r.claimed ? '✅ 已領取' : '🟡 請至兌獎處領獎'}
+                      </span>
+                    </div>
+                  </div>
+                `;
+              }).join('');
+            }
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function clearBoardSearch() {
+      document.getElementById('board-search').value = '';
+      document.getElementById('board-search-result').classList.add('hidden');
+    }
+
+    // ==========================================
+    // 燈箱大圖彈窗 (Lightbox Modal - 點空白關閉)
+    // ==========================================
+    function openImageLightbox(prizeId) {
+      const p = prizes.find(x => x.id === prizeId);
+      if (!p) return;
+
+      document.getElementById('modal-prize-title').textContent = p.name;
+      document.getElementById('modal-prize-tier').textContent = p.tier_name;
+      document.getElementById('modal-prize-img').src = p.image;
+      document.getElementById('modal-prize-desc').textContent = `總募集數量：${p.total} ${p.unit} ｜ 目前剩餘庫存：${p.remaining} ${p.unit}`;
+
+      document.getElementById('image-lightbox-modal').classList.remove('hidden');
+    }
+
+    function closeImageLightbox() {
+      document.getElementById('image-lightbox-modal').classList.add('hidden');
+    }
+
+    function handleLightboxBackdropClick(e) {
+      if (e.target.id === 'image-lightbox-modal') {
+        closeImageLightbox();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeImageLightbox();
+        closeStationAuthModal();
+        closeAddGuestModal();
+      }
+    });
+
+    // ==========================================
+    // 密碼保護機制 (Station & Claim 共用)
+    // ==========================================
+    function isStationUnlocked() {
+      return sessionStorage.getItem(AUTH_SESSION_KEY) === 'true';
+    }
+
+    function handleProtectedTabClick(targetView) {
+      authTargetView = targetView;
+      if (isStationUnlocked()) {
+        switchView(targetView);
+      } else {
+        openStationAuthModal();
+      }
+    }
+
+    function openStationAuthModal() {
+      document.getElementById('station-password-input').value = '';
+      document.getElementById('auth-error-msg').classList.add('hidden');
+      document.getElementById('station-auth-modal').classList.remove('hidden');
+      setTimeout(() => document.getElementById('station-password-input').focus(), 100);
+    }
+
+    function closeStationAuthModal() {
+      document.getElementById('station-auth-modal').classList.add('hidden');
+    }
+
+    function verifyStationPassword() {
+      const pwd = document.getElementById('station-password-input').value.trim();
+      if (pwd === '115' || pwd.toLowerCase() === 'nanxing') {
+        sessionStorage.setItem(AUTH_SESSION_KEY, 'true');
+        closeStationAuthModal();
+        updateStationLockUI();
+        switchView(authTargetView);
+      } else {
+        document.getElementById('auth-error-msg').classList.remove('hidden');
+      }
+    }
+
+    function lockStation() {
+      sessionStorage.removeItem(AUTH_SESSION_KEY);
+      updateStationLockUI();
+      switchView('board');
+      alert('摸彩登記與兌獎工作站已全數安全鎖定！');
+    }
+
+    function updateStationLockUI() {
+      const indicators = document.querySelectorAll('.lock-indicator');
+      indicators.forEach(ind => {
+        if (isStationUnlocked()) {
+          ind.innerHTML = '<i class="fa-solid fa-lock-open"></i> 已解鎖';
+          ind.className = 'lock-indicator text-[10px] bg-emerald-800 px-1.5 py-0.5 rounded text-emerald-200';
+        } else {
+          ind.innerHTML = '<i class="fa-solid fa-lock"></i> 密碼';
+          ind.className = 'lock-indicator text-[10px] bg-red-900/80 px-1.5 py-0.5 rounded text-amber-300';
+        }
+      });
+    }
+
+    // ==========================================
+    // 視圖二：摸彩台登記工作站 (Laptop Station)
+    // ==========================================
+    function filterStationMembers(cat) {
+      currentCategoryFilter = cat;
+      document.querySelectorAll('.st-pill').forEach(btn => {
+        btn.classList.remove('active', 'bg-red-600', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+      event.target.classList.remove('bg-slate-100', 'text-slate-700');
+      event.target.classList.add('active', 'bg-red-600', 'text-white');
+      renderStationMemberList();
+    }
+
+    function renderStationMemberList() {
+      const container = document.getElementById('station-member-list');
+      const searchKey = document.getElementById('station-search-input').value.trim().toLowerCase();
+      container.innerHTML = '';
+
+      let list = members;
+      if (currentCategoryFilter !== 'all') {
+        list = members.filter(m => m.category === currentCategoryFilter);
+      }
+
+      if (searchKey) {
+        list = list.filter(m => 
+          m.name.toLowerCase().includes(searchKey) || 
+          m.display_label.toLowerCase().includes(searchKey) ||
+          m.seat_str.toLowerCase().includes(searchKey)
+        );
+      }
+
+      document.getElementById('station-member-count').textContent = `${list.length} 人`;
+
+      list.sort((a, b) => {
+        const aHas = records.some(r => r.memberId === a.id);
+        const bHas = records.some(r => r.memberId === b.id);
+        if (aHas === bHas) return a.id - b.id;
+        return aHas ? 1 : -1;
+      });
+
+      list.forEach(m => {
+        const myRec = records.find(r => r.memberId === m.id);
+        const isSelected = selectedMemberId === m.id;
+        const prize = myRec ? prizes.find(p => p.id === myRec.prizeId) : null;
+
+        const card = document.createElement('div');
+        card.className = `p-3 rounded-xl border text-xs cursor-pointer transition flex items-center justify-between ${
+          isSelected 
+            ? 'bg-red-500 text-white border-red-600 shadow-md transform scale-[1.01]' 
+            : myRec 
+              ? 'bg-slate-50 text-slate-500 border-slate-200' 
+              : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 hover:border-slate-300'
+        }`;
+
+        card.onclick = () => handleMemberCardClick(m.id);
+
+        card.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
+              isSelected ? 'bg-white/20 text-white' : myRec ? 'bg-slate-200 text-slate-600' : 'bg-red-100 text-red-700'
+            }">
+              ${m.seat_str}
+            </div>
+            <div>
+              <div class="font-black text-sm">${m.name}</div>
+              <div class="text-[10px] ${isSelected ? 'text-white/80' : 'text-slate-400'}">${m.category_name} ${m.title ? '｜ ' + m.title : ''}</div>
+            </div>
+          </div>
+
+          <div class="text-right flex items-center gap-2">
+            ${myRec ? `
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-[11px] ${isSelected ? 'text-amber-200' : 'text-red-700'}">中：${prize ? prize.name : '獎項'}</span>
+                <button onclick="toggleClaimStatus(${m.id}, event)" class="px-2 py-0.5 rounded text-[10px] font-black transition ${
+                  myRec.claimed ? 'bg-emerald-600 text-white' : 'bg-amber-400 text-slate-900 hover:bg-amber-500'
+                }">
+                  ${myRec.claimed ? '✅ 已領' : '🟡 領取核銷'}
+                </button>
+              </div>
+            ` : `
+              <span class="text-[10px] font-bold ${isSelected ? 'text-white' : 'text-slate-400'}">
+                ${lockedPrizeId ? '⚡ 點此直接頒獎' : '點選鎖定'}
+              </span>
+            `}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function handleMemberCardClick(memberId) {
+      // 如果目前處於「批量鎖定快抽模式」：點人名直接頒發當前鎖定獎項！
+      if (lockedPrizeId) {
+        selectedMemberId = memberId;
+        assignPrizeToSelected(lockedPrizeId);
+      } else {
+        selectMember(memberId);
+      }
+    }
+
+    function selectMember(id) {
+      selectedMemberId = id;
+      const m = members.find(x => x.id === id);
+      const banner = document.getElementById('selected-member-banner');
+      const nameSpan = document.getElementById('selected-member-name');
+
+      if (m) {
+        banner.classList.remove('hidden');
+        nameSpan.textContent = m.display_label;
+      }
+      renderStationMemberList();
+    }
+
+    function filterStationPrizes(filter) {
+      currentPrizeFilter = filter;
+      document.querySelectorAll('.st-prize-pill').forEach(btn => {
+        btn.classList.remove('active', 'bg-red-600', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+      event.target.classList.remove('bg-slate-100', 'text-slate-700');
+      event.target.classList.add('active', 'bg-red-600', 'text-white');
+      renderStationPrizeList();
+    }
+
+    function renderStationPrizeList() {
+      const container = document.getElementById('station-prize-list');
+      container.innerHTML = '';
+
+      let list = prizes;
+      if (currentPrizeFilter === 'available') {
+        list = prizes.filter(p => p.remaining > 0);
+      } else if (currentPrizeFilter === 'stage1') {
+        list = prizes.filter(p => p.stage === 1);
+      } else if (currentPrizeFilter === 'stage2') {
+        list = prizes.filter(p => p.stage === 2);
+      } else if (currentPrizeFilter === 'stage3') {
+        list = prizes.filter(p => p.stage === 3);
+      } else if (currentPrizeFilter === 'stage4') {
+        list = prizes.filter(p => p.stage === 4);
+      }
+
+      list.forEach(p => {
+        const isOutOfStock = p.remaining <= 0;
+        const isLocked = lockedPrizeId === p.id;
+
+        const card = document.createElement('div');
+        card.className = `p-2.5 rounded-xl border text-xs flex items-center justify-between transition ${
+          isLocked
+            ? 'bg-amber-100 border-amber-400 ring-2 ring-amber-400 shadow-md transform scale-[1.01]'
+            : isOutOfStock 
+              ? 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed opacity-60' 
+              : 'bg-white hover:bg-amber-50 hover:border-amber-300 border-slate-200 text-slate-800 cursor-pointer shadow-sm active:scale-95'
+        }`;
+
+        if (!isOutOfStock) {
+          card.onclick = () => assignPrizeToSelected(p.id);
+        }
+
+        card.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            <!-- 縮圖容器 (object-contain 不裁切) -->
+            <div onclick="event.stopPropagation(); openImageLightbox('${p.id}')" class="w-12 h-12 rounded-lg overflow-hidden bg-slate-50 border border-slate-200 flex-shrink-0 flex items-center justify-center p-1 cursor-zoom-in" title="點擊放大查看大圖">
+              <img src="${p.image}" class="max-h-full max-w-full object-contain" onerror="this.src='images/school_logo.jpg'">
+            </div>
+            <div>
+              <div class="font-black text-xs text-slate-900 flex items-center gap-1.5">
+                <span>${p.name}</span>
+                ${isLocked ? '<span class="text-[9px] bg-amber-500 text-white px-1.5 py-0.2 rounded font-bold">連抽鎖定中</span>' : ''}
+              </div>
+              <div class="text-[10px] text-slate-400">階段${p.stage} ｜ ${p.tier_name} ｜ 共 ${p.total} ${p.unit}</div>
+            </div>
+          </div>
+          <div class="text-right flex flex-col items-end gap-1">
+            <span class="px-2 py-0.5 rounded-lg text-xs font-black ${
+              isOutOfStock ? 'bg-slate-200 text-slate-500' : 'bg-amber-100 text-amber-900'
+            }">
+              ${isOutOfStock ? '已完抽' : `剩 ${p.remaining} ${p.unit}`}
+            </span>
+            ${!isOutOfStock ? `
+              <button onclick="event.stopPropagation(); lockPrize('${p.id}')" class="text-[9px] text-amber-800 font-bold hover:underline" title="鎖定為連續快抽">
+                ${isLocked ? '已鎖定' : '📌 鎖定快抽'}
+              </button>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function assignPrizeToSelected(prizeId) {
+      if (!selectedMemberId) {
+        alert('請先在左邊清單點選【被抽中的師生人員】！');
+        return;
+      }
+
+      const m = members.find(x => x.id === selectedMemberId);
+      const p = prizes.find(x => x.id === prizeId);
+
+      if (!m || !p) return;
+
+      const existIdx = records.findIndex(r => r.memberId === selectedMemberId);
+      if (existIdx >= 0) {
+        const prevPrize = prizes.find(x => x.id === records[existIdx].prizeId);
+        if (!confirm(`【${m.display_label}】剛剛已經抽中【${prevPrize ? prevPrize.name : ''}】，確定要改登記為【${p.name}】嗎？`)) {
+          return;
+        }
+        records.splice(existIdx, 1);
+      }
+
+      records.unshift({
+        memberId: m.id,
+        prizeId: p.id,
+        timestamp: new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        claimed: false,
+        claimedTime: ''
+      });
+
+      triggerConfetti();
+      saveRecords();
+
+      selectedMemberId = null;
+      document.getElementById('selected-member-banner').classList.add('hidden');
+      renderStationMemberList();
+    }
+
+    function toggleClaimStatus(memberId, e) {
+      if (e) e.stopPropagation();
+      const rec = records.find(r => r.memberId === memberId);
+      if (!rec) return;
+
+      rec.claimed = !rec.claimed;
+      rec.claimedTime = rec.claimed ? new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }) : '';
+      saveRecords();
+    }
+
+    function updateStationRecentBox() {
+      const box = document.getElementById('station-recent-box');
+      const text = document.getElementById('station-recent-text');
+
+      if (records.length === 0) {
+        box.classList.add('hidden');
+        return;
+      }
+
+      box.classList.remove('hidden');
+      const last = records[0];
+      const m = members.find(x => x.id === last.memberId);
+      const p = prizes.find(x => x.id === last.prizeId);
+
+      text.innerHTML = `恭喜 <strong>${m ? m.display_label : ''}</strong> 抽中 <strong>${p ? p.name : ''}</strong> (${last.timestamp}) ｜ 狀態：<span class="${last.claimed ? 'text-emerald-700 font-bold' : 'text-amber-700 font-bold'}">${last.claimed ? '已領取' : '待領取'}</span>`;
+    }
+
+    function undoLastDraw() {
+      if (records.length === 0) return;
+      const last = records[0];
+      const m = members.find(x => x.id === last.memberId);
+      const p = prizes.find(x => x.id === last.prizeId);
+
+      if (confirm(`確定要撤銷【${m ? m.display_label : ''}】獲得【${p ? p.name : ''}】的紀錄嗎？`)) {
+        records.shift();
+        saveRecords();
+      }
+    }
+
+    // ==========================================
+    // 視圖三：現場兌獎核銷管理 (Claim Desk)
+    // ==========================================
+    function filterClaimList(status) {
+      currentClaimFilter = status;
+      document.querySelectorAll('.claim-filter-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-emerald-600', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+      event.target.classList.remove('bg-slate-100', 'text-slate-700');
+      event.target.classList.add('active', 'bg-emerald-600', 'text-white');
+      renderClaimList();
+    }
+
+    function renderClaimList() {
+      const container = document.getElementById('claim-cards-container');
+      const searchKey = document.getElementById('claim-search-input').value.trim().toLowerCase();
+      container.innerHTML = '';
+
+      if (records.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 bg-white rounded-2xl border border-slate-200 p-6 text-slate-400 font-bold">
+            <i class="fa-solid fa-gift text-4xl mb-2 text-slate-300"></i>
+            <p>目前尚無中獎紀錄。長官貴賓抽出彩券並於登記台輸入後，將在此即時列出兌獎清單！</p>
+          </div>
+        `;
+        return;
+      }
+
+      let list = records.map((r, idx) => {
+        const m = members.find(x => x.id === r.memberId);
+        const p = prizes.find(x => x.id === r.prizeId);
+        return { ...r, member: m, prize: p, originalIndex: idx };
+      });
+
+      if (currentClaimFilter === 'unclaimed') {
+        list = list.filter(x => !x.claimed);
+      } else if (currentClaimFilter === 'claimed') {
+        list = list.filter(x => x.claimed);
+      }
+
+      if (searchKey) {
+        list = list.filter(x => 
+          (x.member && (x.member.name.toLowerCase().includes(searchKey) || x.member.display_label.toLowerCase().includes(searchKey))) ||
+          (x.prize && x.prize.name.toLowerCase().includes(searchKey))
+        );
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 bg-white rounded-2xl border border-slate-200 text-slate-400 font-bold text-xs">
+            查無相符的得獎紀錄。
+          </div>
+        `;
+        return;
+      }
+
+      list.forEach(item => {
+        const m = item.member;
+        const p = item.prize;
+
+        const card = document.createElement('div');
+        card.className = `p-4 rounded-2xl border transition shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 ${
+          item.claimed 
+            ? 'bg-slate-50 border-slate-200 text-slate-600' 
+            : 'bg-white border-amber-300 shadow-sm ring-1 ring-amber-200'
+        }`;
+
+        card.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div onclick="openImageLightbox('${p ? p.id : ''}')" class="w-14 h-14 rounded-xl bg-slate-50 border border-slate-200 flex-shrink-0 flex items-center justify-center p-1 cursor-zoom-in" title="點擊查看大圖">
+              <img src="${p ? p.image : ''}" class="max-h-full max-w-full object-contain" onerror="this.src='images/school_logo.jpg'">
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-base font-black text-slate-900">${m ? m.name : '未知'}</span>
+                <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                  ${m ? m.category_name + (m.seat_str ? ' ' + m.seat_str + '號' : '') : ''}
+                </span>
+                ${m && m.title ? `<span class="text-[11px] text-slate-400 font-medium">(${m.title})</span>` : ''}
+              </div>
+              <div class="text-xs font-bold text-slate-700 mt-1 flex items-center gap-2">
+                <span>抽中獎項：<strong class="text-red-700 text-sm">${p ? p.name : '未知好禮'}</strong></span>
+                <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 border border-amber-200 font-bold">${p ? p.tier_name : ''}</span>
+              </div>
+              <div class="text-[10px] text-slate-400 mt-0.5">
+                抽中時間：${item.timestamp} ${item.claimed ? '｜ 領取時間：' + item.claimedTime : ''}
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <button onclick="toggleClaimStatus(${item.memberId})" class="px-5 py-2.5 rounded-xl font-black text-xs transition shadow-sm flex items-center gap-2 ${
+              item.claimed 
+                ? 'bg-emerald-600 hover:bg-emerald-700 text-white' 
+                : 'bg-amber-400 hover:bg-amber-500 text-slate-950 font-black animate-pulse'
+            }">
+              ${item.claimed ? '<i class="fa-solid fa-circle-check text-sm"></i> ✅ 已領取完成' : '<i class="fa-solid fa-hand-holding-hand text-sm"></i> 🟡 點此確認領取'}
+            </button>
+            ${item.claimed ? `
+              <button onclick="toggleClaimStatus(${item.memberId})" class="px-2.5 py-2 rounded-xl text-[10px] text-slate-400 hover:text-red-600 hover:bg-red-50 transition border border-transparent hover:border-red-200" title="取消領取狀態">
+                撤銷
+              </button>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ==========================================
+    // 視圖四：大螢幕開獎投影模式 (Projector Mode)
+    // ==========================================
+    function renderProjectorView() {
+      const nameEl = document.getElementById('proj-winner-name');
+      const deptEl = document.getElementById('proj-winner-dept');
+      const prizeEl = document.getElementById('proj-prize-name');
+      const listEl = document.getElementById('proj-history-list');
+
+      if (records.length === 0) {
+        nameEl.textContent = '等待長官貴賓抽出第一棒...';
+        deptEl.textContent = '全校 154 位師生 人人有獎！';
+        prizeEl.textContent = '即將揭曉';
+        listEl.innerHTML = `<div class="text-center text-slate-400 py-6 font-bold">目前尚無抽獎紀錄，請長官貴賓登台抽獎！</div>`;
+        return;
+      }
+
+      const latest = records[0];
+      const lm = members.find(x => x.id === latest.memberId);
+      const lp = prizes.find(x => x.id === latest.prizeId);
+
+      nameEl.textContent = lm ? lm.name : '幸運得主';
+      deptEl.textContent = lm ? `${lm.category_name} ｜ ${lm.title || '座號 ' + lm.seat_str + '號'}` : '';
+      prizeEl.textContent = lp ? `${lp.tier_name}：${lp.name}` : '幸運好禮';
+
+      listEl.innerHTML = records.map((r, i) => {
+        const m = members.find(x => x.id === r.memberId);
+        const p = prizes.find(x => x.id === r.prizeId);
+        return `
+          <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs font-bold text-slate-200">
+            <div class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] flex items-center justify-center font-black">
+                ${records.length - i}
+              </span>
+              <span class="text-white font-black text-sm">${m ? m.display_label : ''}</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-amber-300">${p ? p.name : ''}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full ${r.claimed ? 'bg-emerald-500/30 text-emerald-300' : 'bg-amber-500/30 text-amber-300'}">
+                ${r.claimed ? '已領取' : '待領取'}
+              </span>
+              <span class="text-slate-500 text-[10px]">${r.timestamp}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function switchView(viewName) {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`view-${viewName}`).classList.remove('hidden');
+
+      document.querySelectorAll('.view-tab').forEach(btn => {
+        btn.classList.remove('active', 'bg-white', 'text-red-700', 'shadow-md');
+        btn.classList.add('text-white/90');
+      });
+      document.querySelectorAll('.m-view-tab').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-red-700', 'shadow', 'font-black');
+        btn.classList.add('text-white/90');
+      });
+
+      const activeBtn = document.getElementById(`tab-${viewName}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-white', 'text-red-700', 'shadow-md');
+        activeBtn.classList.remove('text-white/90');
+      }
+
+      const mActiveBtn = document.getElementById(`m-tab-${viewName}`);
+      if (mActiveBtn) {
+        mActiveBtn.classList.add('bg-white', 'text-red-700', 'shadow', 'font-black');
+        mActiveBtn.classList.remove('text-white/90');
+      }
+
+      if (viewName === 'station') {
+        renderStationMemberList();
+        renderStationPrizeList();
+        updateSmartPrompter();
+      } else if (viewName === 'claim') {
+        renderClaimList();
+      }
+    }
+
+    function triggerConfetti() {
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      } catch(e) {}
+    }
+
+    function exportRaffleResultsCSV() {
+      if (records.length === 0) {
+        alert('目前尚無中獎紀錄可供匯出！');
+        return;
+      }
+
+      let csv = '\uFEFF編號,班級身分,姓名,中獎品項,獎項分級,開獎時間,領取狀態,領取時間\n';
+      records.forEach((r, idx) => {
+        const m = members.find(x => x.id === r.memberId);
+        const p = prizes.find(x => x.id === r.prizeId);
+        csv += `"${idx + 1}","${m ? m.category_name : ''}","${m ? m.name : ''}","${p ? p.name : ''}","${p ? p.tier_name : ''}","${r.timestamp}","${r.claimed ? '已領取' : '待領取'}","${r.claimedTime || ''}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `南興國小115校慶大摸彩中獎與兌獎成果清冊_${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+    }
+
+    function resetRaffleData() {
+      if (confirm('【注意】確定要清空所有摸彩中獎紀錄與領取狀態嗎？此動作將還原所有庫存！')) {
+        records = [];
+        lockedPrizeId = null;
+        saveRecords();
+      }
+    }
+
+    function openAddGuestModal() {
+      document.getElementById('add-guest-modal').classList.remove('hidden');
+    }
+    function closeAddGuestModal() {
+      document.getElementById('add-guest-modal').classList.add('hidden');
+    }
+    function confirmAddGuest() {
+      const dept = document.getElementById('guest-dept').value.trim() || '貴賓志工';
+      const name = document.getElementById('guest-name').value.trim();
+
+      if (!name) {
+        alert('請填寫姓名！');
+        return;
+      }
+
+      const newId = 9000 + members.length;
+      const guestObj = {
+        id: newId,
+        category: 'guest',
+        category_name: dept,
+        grade_num: 999,
+        seat: members.length + 1,
+        seat_str: `G${members.length + 1}`,
+        name: name,
+        role: '貴賓',
+        title: dept,
+        display_label: `貴賓 ${name} (${dept})`
+      };
+
+      members.push(guestObj);
+
+      const savedGuests = localStorage.getItem(GUESTS_STORAGE_KEY);
+      const guestList = savedGuests ? JSON.parse(savedGuests) : [];
+      guestList.push(guestObj);
+      localStorage.setItem(GUESTS_STORAGE_KEY, JSON.stringify(guestList));
+
+      closeAddGuestModal();
+      document.getElementById('guest-dept').value = '';
+      document.getElementById('guest-name').value = '';
+
+      renderAllViews();
+      alert(`已成功新增【${name}】至摸彩名冊中！`);
+    }
+
+    initSystem();
+  </script>
+</body>
+</html>
