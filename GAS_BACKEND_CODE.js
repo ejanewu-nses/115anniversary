@@ -349,16 +349,22 @@ function fastLocalParse(text) {
     if (/照顧|幫忙|協助|牽|扶|陪|低年級|一年級|二年級/.test(text)) scoreCross += 1;
 
     // eco（環保自律）
-    if (/垃圾|撿垃圾|清潔環境|落葉|掃地|做整潔|資源回收|寶特瓶/.test(text)) scoreEco += 4;
-    if (/乾淨|自律|整齊|收拾|排隊|環境|清潔|水壺/.test(text)) scoreEco += 1;
+    if (/垃圾|撿垃圾|清潔環境|整理場地|整理環境|整理器材|收拾器材|收拾|場地清潔|場地復原|落葉|掃地|做整潔|資源回收|寶特瓶|撿拾|打掃|場地整理/.test(text)) scoreEco += 4;
+    if (/乾淨|自律|整齊|排隊|環境|清潔|水壺|整理|復原|收拾|衛生|場地|復原場地/.test(text)) scoreEco += 2;
 
     let category = 'sports';
     const maxScore = Math.max(scoreSports, scoreCheer, scoreEco, scoreCross);
     if (maxScore > 0) {
-      if (scoreSports === maxScore) category = 'sports';
-      else if (scoreCheer === maxScore) category = 'cheer';
-      else if (scoreEco === maxScore) category = 'eco';
+      if (scoreEco === maxScore) category = 'eco';
       else if (scoreCross === maxScore) category = 'cross';
+      else if (scoreCheer === maxScore) category = 'cheer';
+      else if (scoreSports === maxScore) category = 'sports';
+    } else {
+      // 兜底智能判斷：若權重為0但文字有明顯語意特徵
+      if (/整理|場地|乾淨|掃|清潔|垃圾|復原|收拾/.test(text)) category = 'eco';
+      else if (/牽|扶|陪|大帶小|學弟|學妹|弟|妹|低年級/.test(text)) category = 'cross';
+      else if (/喊|叫|呼|油|鼓掌|掌聲/.test(text)) category = 'cheer';
+      else category = 'sports';
     }
 
     // 4. 清洗事蹟文字（徹底剔除中文「一分」、登記人、地點、以及開頭的加分引言贅字）
@@ -413,17 +419,57 @@ function fastLocalParse(text) {
       return 'green';
     };
 
-    // 1. 優先檢查名次模式（例如：第一名藍隊、第二名綠隊、第三名紅隊，或「1. 第一名：藍隊」條列格式）
-    const m1 = text.match(/(?:第一名|冠軍)[：:\s]*([^\s,，、\d]+)/);
-    const m2 = text.match(/(?:第二名|亞軍)[：:\s]*([^\s,，、\d]+)/);
-    const m3 = text.match(/(?:第三名|季軍)[：:\s]*([^\s,，、\d]+)/);
+    // 1. 優先檢查名次模式（支援「名次在前」與「隊伍在前」雙向自然語序）
+    let t1 = null, t2 = null, t3 = null;
 
-    if (m1) {
-      const t1 = parseTeam(m1[1]);
-      const t2 = m2 ? parseTeam(m2[1]) : (t1 === 'green' ? 'blue' : 'green');
+    // 語序 A：名次在前（例如：第一名藍隊、第一名：藍隊、冠軍藍隊、第1名藍隊、第一藍隊）
+    const m1Prefix = text.match(/(?:第一名|第1名|第一|第1|冠軍)[：:\s]*([^\s,，、\d]+)/);
+    const m2Prefix = text.match(/(?:第二名|第2名|第二|第2|亞軍)[：:\s]*([^\s,，、\d]+)/);
+    const m3Prefix = text.match(/(?:第三名|第3名|第三|第3|季軍)[：:\s]*([^\s,，、\d]+)/);
+
+    if (m1Prefix) {
+      t1 = parseTeam(m1Prefix[1]);
+      if (m2Prefix) t2 = parseTeam(m2Prefix[1]);
+      if (m3Prefix) t3 = parseTeam(m3Prefix[1]);
+    }
+
+    // 語序 B：隊伍在前（例如：紅隊第一、紅隊第一名、紅隊第1、紅隊冠軍、紅第一）
+    if (!t1) {
+      const redM = text.match(/紅(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
+      const greenM = text.match(/綠(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
+      const blueM = text.match(/藍(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[一1]名?|冠軍)/);
+
+      if (redM) t1 = 'red';
+      else if (greenM) t1 = 'green';
+      else if (blueM) t1 = 'blue';
+
+      const red2 = text.match(/紅(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[二2兩]名?|亞軍)/);
+      const green2 = text.match(/綠(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[二2兩]名?|亞軍)/);
+      const blue2 = text.match(/藍(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[二2兩]名?|亞軍)/);
+
+      if (red2) t2 = 'red';
+      else if (green2) t2 = 'green';
+      else if (blue2) t2 = 'blue';
+
+      const red3 = text.match(/紅(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[三3]名?|季軍)/);
+      const green3 = text.match(/綠(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[三3]名?|季軍)/);
+      const blue3 = text.match(/藍(?:隊)?\s*(?:是|為|得|拿)?[：:\s]*(?:第[三3]名?|季軍)/);
+
+      if (red3) t3 = 'red';
+      else if (green3) t3 = 'green';
+      else if (blue3) t3 = 'blue';
+    }
+
+    if (t1) {
       const allTeams = ['green', 'blue', 'red'];
-      const remaining = allTeams.filter(t => t !== t1 && t !== t2);
-      const t3 = m3 ? parseTeam(m3[1]) : (remaining[0] || 'red');
+      if (!t2) {
+        const left = allTeams.filter(t => t !== t1);
+        t2 = left[0];
+      }
+      if (!t3) {
+        const left = allTeams.filter(t => t !== t1 && t !== t2);
+        t3 = left[0] || 'red';
+      }
 
       return {
         intent: 'UPDATE_EVENT',
@@ -994,10 +1040,11 @@ function generateStoryTitle(story, category) {
   if (!story) return '溫馨校園互助事蹟';
 
   // 1. 環保自律向度
-  if (category === 'eco' || /清潔|環境|垃圾|落葉|掃地|整齊|收拾|排隊|水壺|自律|整潔|回收|紙屑/.test(story)) {
+  if (category === 'eco' || /清潔|環境|垃圾|落葉|掃地|整齊|收拾|排隊|水壺|自律|整潔|回收|紙屑|整理|場地|復原|打掃/.test(story)) {
+    if (/整理.*場地|場地.*整理|場地.*復原|復原.*場地|整理場地/.test(story)) return '合力整理場地，展現高度自律品德';
     if (/清潔|環境|打掃|掃地|做整潔/.test(story)) return '主動維護整潔，守護美麗校園';
     if (/垃圾|落葉|撿|紙屑|寶特瓶/.test(story)) return '隨手彎腰拾起，美化綠活校園';
-    if (/排隊|水壺|整齊|收拾|常規/.test(story)) return '自律守規井然，落實生活常規';
+    if (/排隊|水壺|整齊|收拾|常規|器材/.test(story)) return '自律守規井然，落實生活常規';
     return '自主維護環境，實踐綠活校園';
   }
 
