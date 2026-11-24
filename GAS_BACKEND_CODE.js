@@ -313,7 +313,7 @@ function fastLocalParse(text) {
 
   // A. 精神加分匹配（最常用）
   const isEventWord = /(?:拔河|躲避球|接力|趣味|蟲蟲|彩虹|慢跑|短跑|100m|60m|80m|第一名|第二名|第三名|金牌|銀牌|銅牌)/.test(text);
-  const isSpiritTrigger = /(?:精神|暖心|事蹟|好品德|大帶小|運動家|歡呼|隊呼|自律|整齊|互助|清潔|環境|勉勵|照顧|幫忙|禮貌)|(?:紅隊|綠隊|藍隊)?\s*(?:加|得|[+＋])\s*[1-9一二兩三\d]\s*分?/.test(text);
+  const isSpiritTrigger = /(?:精神|暖心|事蹟|好品德|大帶小|運動家|歡呼|隊呼|自律|整齊|互助|清潔|環境|勉勵|照顧|幫忙|禮貌|聽講|規則|表現|秩序)|(?:加|得|[+＋])\s*[1-9一二兩三\d]\s*分?/.test(text);
 
   if (isSpiritTrigger && !isEventWord) {
     // 🛡️ 戰隊名稱防呆檢核（防止打錯為黃隊、白隊、黑隊等非本校戰隊）
@@ -325,15 +325,22 @@ function fastLocalParse(text) {
       };
     }
 
-    let team = null;
-    if (text.includes('綠') || text.includes('翠玉') || text.includes('蜈蚣')) team = 'green';
-    else if (text.includes('藍') || text.includes('跳鼓') || text.includes('雷鳴') || text.includes('碧海')) team = 'blue';
-    else if (text.includes('紅') || text.includes('烈火') || text.includes('金獅')) team = 'red';
+    let teams = [];
+    const isAllTeams = /(?:紅綠藍|三隊|三大戰隊|各隊|每隊|全隊|全校|大家|全部戰隊|三戰隊)/.test(text) ||
+                       (/(?:紅|烈火|金獅)/.test(text) && /(?:綠|翠玉|蜈蚣)/.test(text) && /(?:藍|跳鼓|雷鳴|碧海)/.test(text));
 
-    if (!team) {
+    if (isAllTeams) {
+      teams = ['red', 'green', 'blue'];
+    } else {
+      if (/(?:紅|烈火|金獅)/.test(text)) teams.push('red');
+      if (/(?:綠|翠玉|蜈蚣)/.test(text)) teams.push('green');
+      if (/(?:藍|跳鼓|雷鳴|碧海)/.test(text)) teams.push('blue');
+    }
+
+    if (teams.length === 0) {
       return {
         intent: 'INVALID_TEAM',
-        message: `⚠️【未指定有效戰隊】\n南興國小僅有「🔴 紅隊」、「🟢 綠隊」、「🔵 藍隊」三大戰隊。\n請於訊息中指明為哪一隊（紅/綠/藍隊）加分喔！`
+        message: `⚠️【未指定有效戰隊】\n南興國小僅有「🔴 紅隊」、「🟢 綠隊」、「🔵 藍隊」三大戰隊。\n請於訊息中指明為哪一隊（紅/綠/藍隊，或「紅綠藍三隊各加...」）加分喔！`
       };
     }
 
@@ -407,7 +414,7 @@ function fastLocalParse(text) {
     let story = text;
     story = story.replace(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]+[^\s,，、。\n\r]+/g, '');
     story = story.replace(/(?:地點|位置)[：:\s]+[^\s,，、。\n\r]+/g, '');
-    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊)?\s*(?:精神(?:加分|分|加)?|加分|加|得|[+＋加]\s*[1-9一二兩三\d]\s*分?|[1-9一二兩三\d]\s*分|[，,、。\s\+＋])+/i, '');
+    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊|紅綠藍隊?|三隊|各隊|每隊|全隊|三大戰隊)?\s*(?:都|各)?\s*(?:精神(?:加分|分|加)?|各加|各得|都加|加分|加|得|[+＋加]\s*[1-9一二兩三\d]\s*分?|[1-9一二兩三\d]\s*分|[，,、。\s\+＋])+/i, '');
     story = story.replace(/^[，,、。\s\+＋\-=]+|[，,、。\s]+$/g, '').trim();
     if (!story) story = text;
 
@@ -416,7 +423,8 @@ function fastLocalParse(text) {
 
     return {
       intent: 'ADD_SPIRIT',
-      team: team,
+      teams: teams,
+      team: teams[0],
       category: category,
       points: pts,
       title: title,
@@ -627,8 +635,8 @@ function callGeminiParser(userText, userId) {
    - 'highGirl' (高年級女生組 100m)
 
 請根據使用者輸入判斷 intent：
-- intent: "ADD_SPIRIT" (例如：綠隊精神加分2分，六年級幫學弟綁鞋帶)
-  輸出欄位: { "intent": "ADD_SPIRIT", "team": "green"|"blue"|"red", "category": "cross"|"sports"|"eco"|"cheer", "points": 1~3, "story": "完整事蹟全文", "author": "老師名稱若有提及否則填寫裁判", "place": "操場/風雨球場/司令台等" }
+- intent: "ADD_SPIRIT" (例如：綠隊精神加分2分，六年級幫學弟綁鞋帶；或 紅綠藍三隊各加1分，認真聽講規則)
+  輸出欄位: { "intent": "ADD_SPIRIT", "teams": ["green"] 或 ["red","green","blue"], "category": "cross"|"sports"|"eco"|"cheer", "points": 1~3, "story": "完整事蹟全文", "author": "老師名稱若有提及否則填寫裁判", "place": "操場/風雨球場/小禮堂等" }
 
 - intent: "UPDATE_SPRINT" (例如：高年級男生組第一名六年級陳小明、第二名林大華、第三名張小傑)
   輸出欄位: { "intent": "UPDATE_SPRINT", "group": "lowBoy"|"lowGirl"|"midBoy"|"midGirl"|"highBoy"|"highGirl", "gold": "姓名", "silver": "姓名", "bronze": "姓名" }
@@ -673,7 +681,13 @@ function callGeminiParser(userText, userId) {
         if (json.candidates && json.candidates[0].content && json.candidates[0].content.parts[0].text) {
           let raw = json.candidates[0].content.parts[0].text.trim();
           raw = raw.replace(/^```json/i, '').replace(/```$/i, '').trim();
-          return JSON.parse(raw);
+          const parsedGemini = JSON.parse(raw);
+          if (parsedGemini && parsedGemini.intent === 'ADD_SPIRIT') {
+            if (!parsedGemini.teams && parsedGemini.team) {
+              parsedGemini.teams = [parsedGemini.team];
+            }
+          }
+          return parsedGemini;
         }
       }
     } catch (e) {
@@ -712,28 +726,38 @@ function recordSpiritPoint(p) {
 
   const now = new Date();
   const cleanStory = safeSheetText(p.story);
-  const row = [
-    now,
-    teamNameMap[p.team] || p.team,
-    p.team,
-    catNameMap[p.category] || p.category,
-    p.points || 1,
-    cleanStory,
-    safeSheetText(p.author || '大會裁判'),
-    safeSheetText(p.place || '')
-  ];
 
-  sheet.appendRow(row);
+  // 支援單隊或多隊（紅綠藍同時各加分）
+  const targetTeams = (p.teams && p.teams.length > 0) ? p.teams : [p.team || 'green'];
+  const appendedRows = [];
 
-  // 暫存上一筆資訊供 /undo 撤銷使用
-  PropertiesService.getScriptProperties().setProperty('LAST_SPIRIT_ROW', sheet.getLastRow().toString());
+  for (const t of targetTeams) {
+    const row = [
+      now,
+      teamNameMap[t] || t,
+      t,
+      catNameMap[p.category] || p.category,
+      p.points || 1,
+      cleanStory,
+      safeSheetText(p.author || '大會裁判'),
+      safeSheetText(p.place || '')
+    ];
+    sheet.appendRow(row);
+    appendedRows.push(sheet.getLastRow());
+  }
+
+  // 暫存本次新增的列數（逗號隔開），供 /undo 一次全部撤銷
+  PropertiesService.getScriptProperties().setProperty('LAST_SPIRIT_ROW', appendedRows.join(','));
 
   const titleText = p.title || generateStoryTitle(p.story, p.category);
   const placeTag = p.place ? ` (${p.place})` : '';
 
+  const teamDisplay = targetTeams.map(t => teamNameMap[t] || t).join('、');
+  const pointsTag = targetTeams.length > 1 ? `各 +${p.points || 1}分` : `+${p.points || 1}分`;
+
   return `🎉【精神加分登記成功！】\n` +
          `━━━━━━━━━━━━━━\n` +
-         `戰隊：${teamNameMap[p.team] || p.team} (+${p.points || 1}分)\n` +
+         `戰隊：${teamDisplay} (${pointsTag})\n` +
          `向度：${catNameMap[p.category] || p.category}\n` +
          `標題：${titleText}\n` +
          `事蹟：${p.story}\n` +
@@ -752,15 +776,28 @@ function undoLastRecord() {
   const lastRowStr = scriptProps.getProperty('LAST_SPIRIT_ROW');
   if (!lastRowStr) return '目前沒有可撤銷的精神加分紀錄。';
 
-  const rowNum = parseInt(lastRowStr, 10);
+  const rows = lastRowStr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)).sort((a, b) => b - a);
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = ss.getSheetByName(CONFIG.SHEET_NAMES.SPIRIT);
 
-  if (rowNum > 1 && rowNum <= sheet.getLastRow()) {
-    const deletedData = sheet.getRange(rowNum, 1, 1, 8).getValues()[0];
-    sheet.deleteRow(rowNum);
-    scriptProps.deleteProperty('LAST_SPIRIT_ROW');
-    return `↩️【已成功撤銷上一筆精神加分】\n戰隊：${deletedData[1]} (-${deletedData[4]}分)\n事蹟：${deletedData[5]}\n官網資料已即時更正！`;
+  let deletedCount = 0;
+  let sampleData = null;
+
+  for (const r of rows) {
+    if (r > 1 && r <= sheet.getLastRow()) {
+      if (!sampleData) {
+        sampleData = sheet.getRange(r, 1, 1, 8).getValues()[0];
+      }
+      sheet.deleteRow(r);
+      deletedCount++;
+    }
+  }
+
+  scriptProps.deleteProperty('LAST_SPIRIT_ROW');
+
+  if (deletedCount > 0) {
+    const multiTag = deletedCount > 1 ? `（共撤銷 ${deletedCount} 筆戰隊紀錄）` : '';
+    return `↩️【已成功撤銷精神加分】${multiTag}\n事蹟：${sampleData ? sampleData[5] : ''}\n官網資料已即時更正！`;
   }
   return '撤銷失敗，該列已不存在或已經撤銷過。';
 }
