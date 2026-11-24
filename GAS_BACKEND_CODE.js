@@ -366,13 +366,26 @@ function fastLocalParse(text) {
       author = '吳宜蓁校長';
     }
 
-    // 2. 提取地點位置（支援冒號或空格分開格式，如「地點 操場」）
+    // 2. 提取地點位置（支援「地點 小禮堂」、「地點在小禮堂」、「見證地點在小禮堂」、「位置：操場」、「在小禮堂」等自然語意）
     let place = '';
-    const placeMatch = text.match(/(?:地點|位置|在)[：:\s]+([^\s,，、。\n\r]+)/);
-    if (placeMatch) {
-      const candidate = placeMatch[1].trim();
-      if (/操場|司令台|球場|跑道|穿堂|走廊|教室|樹下|休息區|看台|大門|校門口|活動中心/.test(candidate)) {
-        place = candidate;
+    const explicitPlaceMatch = text.match(/(?:見證)?(?:地點|位置)(?:在|[：:\s]+)+([^\s,，、。\n\r]+)/);
+    if (explicitPlaceMatch) {
+      place = explicitPlaceMatch[1].trim();
+    } else {
+      const atMatch = text.match(/在\s*([^\s,，、。\n\r]+)/);
+      if (atMatch) {
+        const cand = atMatch[1].trim();
+        const sub = cand.match(/(?:B1\s*)?(?:小?禮堂|操場(?:草地)?|風雨球場|球場|司令台|跑道|穿堂|走廊|教室|樹下|休息區|看台|大門|校門口?|活動中心|辦公室|健康中心)/);
+        if (sub) place = sub[0];
+        else if (/禮堂|操場|球場|司令台|跑道|穿堂|走廊|教室|草地|樹下|看台|大門|活動中心|辦公室|健康中心|B1/.test(cand)) {
+          place = cand;
+        }
+      }
+    }
+    if (!place) {
+      const directMatch = text.match(/(?:B1\s*)?(?:小?禮堂|操場(?:草地)?|風雨球場|司令台|穿堂|看台|活動中心)/);
+      if (directMatch) {
+        place = directMatch[0];
       }
     }
 
@@ -413,8 +426,8 @@ function fastLocalParse(text) {
     // 4. 清洗事蹟文字（徹底剔除隊名、+1/+2/加分符號、中文「一分」、登記人、地點等前綴贅字）
     let story = text;
     story = story.replace(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]+[^\s,，、。\n\r]+/g, '');
-    story = story.replace(/(?:地點|位置)[：:\s]+[^\s,，、。\n\r]+/g, '');
-    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊|紅綠藍隊?|三隊|各隊|每隊|全隊|三大戰隊)?\s*(?:都|各)?\s*(?:精神(?:加分|分|加)?|各加|各得|都加|加分|加|得|[+＋加]\s*[1-9一二兩三\d]\s*分?|[1-9一二兩三\d]\s*分|[，,、。\s\+＋])+/i, '');
+    story = story.replace(/(?:見證)?(?:地點|位置)(?:在|[：:\s]+)+[^\s,，、。\n\r]+/g, '');
+    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊|金獅隊?|烈火隊?|翠玉隊?|蜈蚣隊?|跳鼓隊?|雷鳴隊?|紅綠藍隊?|三隊|各隊|每隊|全隊|三大戰隊)?\s*(?:都|各)?\s*(?:精神(?:加分|分|加)?|各加|各得|都加|加分|加|得|[+＋加]\s*[1-9一二兩三\d]\s*分?|[1-9一二兩三\d]\s*分|[，,、。\s\+＋])+/i, '');
     story = story.replace(/^[，,、。\s\+＋\-=]+|[，,、。\s]+$/g, '').trim();
     if (!story) story = text;
 
