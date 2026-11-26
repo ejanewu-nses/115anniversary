@@ -116,13 +116,13 @@
   <!-- 賽事成績榜專屬章節快速跳轉導覽列 (Sub-nav) -->
   <nav class="bg-rose-50/90 border-b border-rose-200/80 py-2.5 px-4 sticky top-16 z-40 backdrop-blur-xs shadow-2xs">
     <div class="max-w-6xl mx-auto flex items-center justify-center gap-2 sm:gap-4 overflow-x-auto text-xs sm:text-sm font-bold text-slate-700 whitespace-nowrap">
-      <a href="#sec-dashboard" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">📊 戰況總覽</a>
-      <a href="#sec-dodgeball" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">🤾 躲避球賽</a>
-      <a href="#sec-running" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">🏃 校園慢跑</a>
-      <a href="#sec-sprint" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">⚡ 個人短跑</a>
-      <a href="#sec-tug" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">🎪 拔河趣味</a>
-      <a href="#sec-relay" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">🤝 大隊接力</a>
-      <a href="#sec-spirit" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition">🌟 精神加分</a>
+      <a href="#sec-dashboard" onclick="showAndScrollTo('sec-dashboard'); return false;" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition cursor-pointer">📊 戰況總覽</a>
+      <a href="#sec-dodgeball" onclick="showAndScrollTo('sec-dodgeball'); return false;" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition cursor-pointer">🤾 躲避球賽</a>
+      <a href="#sec-running" onclick="showAndScrollTo('sec-running'); return false;" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition cursor-pointer">🏃 校園慢跑</a>
+      <a href="#sec-sprint" onclick="showAndScrollTo('sec-sprint'); return false;" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition cursor-pointer">⚡ 個人短跑</a>
+      <a href="#sec-tug" onclick="showAndScrollTo('sec-tug'); return false;" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition cursor-pointer">🎪 拔河趣味</a>
+      <a href="#sec-relay" onclick="showAndScrollTo('sec-relay'); return false;" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition cursor-pointer">🤝 大隊接力</a>
+      <a href="#sec-spirit" onclick="showAndScrollTo('sec-spirit'); return false;" class="px-3 py-1 rounded-lg hover:bg-rose-200/70 hover:text-rose-950 transition cursor-pointer">🌟 精神加分</a>
     </div>
   </nav>
 
@@ -209,26 +209,26 @@
       </div>
 
       <!-- 分類標籤頁切換（Tabs） -->
-      <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
-        <button onclick="filterCategory('all')" id="tab-all" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-900 text-white shadow-sm transition">
+      <div id="category-filter-tabs" class="flex flex-wrap items-center justify-center gap-2 mb-8">
+        <button onclick="filterCategory('all')" id="tab-all" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-900 text-white shadow-sm transition cursor-pointer">
           全部賽事成績
         </button>
-        <button onclick="filterCategory('warmup')" id="tab-warmup" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 shadow-2xs transition">
+        <button onclick="filterCategory('warmup')" id="tab-warmup" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 shadow-2xs transition cursor-pointer">
           🏃 系列暖身週 (11/26~12/03)
         </button>
-        <button onclick="filterCategory('track')" id="tab-track" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 shadow-2xs transition">
+        <button onclick="filterCategory('track')" id="tab-track" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 shadow-2xs transition cursor-pointer">
           ⏱️ 個人短跑 ＆ 大隊接力 (12/05)
         </button>
-        <button onclick="filterCategory('tug')" id="tab-tug" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 shadow-2xs transition">
+        <button onclick="filterCategory('tug')" id="tab-tug" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 shadow-2xs transition cursor-pointer">
           🎪 拔河・鉛球 ＆ 趣味競賽 (12/05)
         </button>
-        <button onclick="filterCategory('spirit')" id="tab-spirit" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 shadow-2xs transition">
+        <button onclick="filterCategory('spirit')" id="tab-spirit" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 shadow-2xs transition cursor-pointer">
           🌟 互助合作精神加分明細
         </button>
       </div>
 
       <!-- 成績卡片展示列表 -->
-      <div class="space-y-6">
+      <div id="cards-container" class="space-y-6">
 
         <!-- 卡片 1：11/26 熱血躲避球賽 -->
         <div id="sec-dodgeball" class="score-card warmup bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
@@ -501,7 +501,7 @@
         </div>
 
         <!-- 卡片 5：12/05 趣味競賽（1到6年級全員「蟲蟲危機」） -->
-        <div class="score-card tug bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
+        <div id="sec-rainbow" class="score-card tug bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-start gap-2.5">
               <span class="px-2.5 py-1 bg-emerald-600 text-white text-xs font-bold rounded-lg shadow-2xs shrink-0 mt-0.5">🏆 戰隊計分</span>
@@ -1020,6 +1020,53 @@
 
       renderRelayGroup('card-relay-low', 'relayLow');
       renderRelayGroup('card-relay-high', 'relayHigh');
+    }
+
+    // 分類標籤頁切換（Category Filter Tabs）
+    function filterCategory(cat) {
+      // 1. 更新所有 Tab 按鈕外觀
+      const tabs = document.querySelectorAll('.tab-btn');
+      tabs.forEach(btn => {
+        btn.className = 'tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 shadow-2xs transition cursor-pointer';
+      });
+
+      const activeTab = document.getElementById(`tab-${cat}`);
+      if (activeTab) {
+        activeTab.className = 'tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-900 text-white shadow-sm transition cursor-pointer';
+      }
+
+      // 2. 篩選卡片顯示與隱藏
+      const cards = document.querySelectorAll('.score-card');
+      let firstVisible = null;
+      cards.forEach(card => {
+        if (cat === 'all' || card.classList.contains(cat)) {
+          card.style.display = '';
+          if (!firstVisible) firstVisible = card;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // 3. 點擊分類標籤後平滑捲動至卡片區域
+      if (cat !== 'all' && firstVisible) {
+        const yOffset = -120; // 預留頂部 sticky 導覽列的高度
+        const y = firstVisible.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+    }
+
+    // 點擊頂部次導覽列錨點時，確保該賽事卡片未被篩選隱藏並精準捲動
+    function showAndScrollTo(targetId) {
+      const targetEl = document.getElementById(targetId);
+      if (!targetEl) return;
+      if (targetEl.style.display === 'none') {
+        filterCategory('all');
+      }
+      setTimeout(() => {
+        const yOffset = -120;
+        const y = targetEl.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }, 50);
     }
 
     function initScoresApp() {
