@@ -908,16 +908,16 @@ function recordEventScores(p) {
   } 
   // 模式 B：以第一名、第二名、第三名名次登記 (p.rank1)
   else if (p.rank1) {
-    // 依據 115 學年度校慶實施計畫暨工作手冊（正式定稿版）競賽積分規範：
-    // 1. 全體一起的全員趣味賽（1~6年級全員混合參賽，如：蟲蟲危機 rainbow 等）：
+    // 依據 115 學年度校慶實施計畫暨工作手冊（最新規範）競賽積分規範：
+    // 1. 全員趣味賽（如：蟲蟲危機 rainbow 等）及 熱血躲避球賽（dodge）：
     //    採【第一名 16 分、第二名 12 分、第三名 8 分】
-    // 2. 分一二三年級組、四五六年級組各自對抗的積分賽（分組拔河 tugLow/tugHigh、分組大隊接力 relayLow/relayHigh、躲避球 dodge 等）：
+    // 2. 分一二三年級組、四五六年級組各自對抗的積分賽（分組拔河 tugLow/tugHigh、分組大隊接力 relayLow/relayHigh 等）：
     //    採【第一名 8 分、第二名 6 分、第三名 4 分】
-    const isAllTogether = (p.event === 'rainbow' || p.event === 'allTogether');
+    const isHighPoints = (p.event === 'rainbow' || p.event === 'dodge' || p.event === 'allTogether');
 
-    const pts1 = isAllTogether ? 16 : 8;
-    const pts2 = isAllTogether ? 12 : 6;
-    const pts3 = isAllTogether ? 8 : 4;
+    const pts1 = isHighPoints ? 16 : 8;
+    const pts2 = isHighPoints ? 12 : 6;
+    const pts3 = isHighPoints ? 8 : 4;
 
     const scores = { green: 0, blue: 0, red: 0 };
     if (p.rank1) scores[p.rank1] = pts1;
@@ -989,7 +989,7 @@ function ensureSheetHeaders(ss) {
 
     // 寫入預設賽事架構（依 115 校慶工作手冊定稿標準計分：全員趣味 16/12/8；分組對抗 8/6/4）
     const defaultEvents = [
-      ['11/26 (四)', '熱血美式躲避球循環賽', 'dodge', 8, 4, 6, '綠隊冠軍(+8)、紅隊亞軍(+6)、藍隊季軍(+4)', '大會裁判組', new Date()],
+      ['11/26 (四)', '熱血美式躲避球循環賽', 'dodge', 16, 8, 12, '綠隊冠軍(+16)、紅隊亞軍(+12)、藍隊季軍(+8)', '大會裁判組', new Date()],
       ['12/01 (二)', '校園慢跑-低年級3圈(5分內)', 'runLow', 6, 7, 5, '藍7人、綠6人、紅5人達標(每人1分)', '大會裁判組', new Date()],
       ['12/01 (二)', '校園慢跑-中年級800m(7分內)', 'runMid', 6, 4, 5, '綠6人、紅5人、藍4人達標(每人1分)', '大會裁判組', new Date()],
       ['12/01 (二)', '校園慢跑-高年級800m(6分內)', 'runHigh', 5, 4, 6, '紅6人、綠5人、藍4人達標(每人1分)', '大會裁判組', new Date()],

@@ -234,56 +234,42 @@
         <div id="sec-dodgeball" class="score-card warmup bg-white rounded-2xl p-6 border-2 border-slate-200 box-3d">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
             <div class="flex items-start gap-2.5">
-              <span class="px-2.5 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded-lg shrink-0 mt-0.5">🏆 戰隊計分</span>
+              <span class="px-2.5 py-1 bg-blue-600 text-white text-xs font-bold rounded-lg shadow-2xs shrink-0 mt-0.5">🏆 戰隊計分</span>
               <div>
                 <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">11/26 (四) 躲避球熱血對抗賽</h4>
-                <p class="text-xs text-slate-500 font-medium mt-0.5">分紅、綠、藍三隊循環競技 • 排名計算積分</p>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">中高年級三隊全員競技 • 依名次直接核算戰隊積分</p>
               </div>
             </div>
             <div class="flex-shrink-0 flex flex-wrap sm:flex-nowrap items-center gap-2">
-              <span class="px-2.5 py-1 bg-blue-50 text-blue-800 text-xs font-bold rounded-md border border-blue-200 whitespace-nowrap">
-                給分基準：🥇第1名 8分 ｜ 🥈第2名 6分 ｜ 🥉第3名 4分
+              <span class="px-2.5 py-1 bg-blue-50 text-blue-900 text-xs font-bold rounded-md border border-blue-300 whitespace-nowrap">
+                給分基準：🥇第1名 16分 ｜ 🥈第2名 12分 ｜ 🥉第3名 8分
               </span>
-              <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-md whitespace-nowrap">操場球場</span>
+              <span class="text-xs font-bold text-blue-700 bg-blue-100/60 px-2 py-1 rounded-md whitespace-nowrap">08:00 ~ 08:40</span>
             </div>
           </div>
 
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs text-left border border-slate-200 rounded-xl overflow-hidden">
-              <thead class="bg-slate-100 text-slate-700 font-bold">
-                <tr>
-                  <th class="py-2.5 px-3">對戰組合</th>
-                  <th class="py-2.5 px-3">比分戰況</th>
-                  <th class="py-2.5 px-3">勝負結果</th>
-                  <th class="py-2.5 px-3">戰隊積分累積</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-100" id="dodge-match-tbody">
-                <tr class="hover:bg-slate-50">
-                  <td class="py-2.5 px-3 font-medium">第一場：綠隊 vs 紅隊</td>
-                  <td class="py-2.5 px-3 font-mono font-bold text-slate-700">- : -</td>
-                  <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
-                  <td class="py-2.5 px-3 text-slate-400">-</td>
-                </tr>
-                <tr class="hover:bg-slate-50">
-                  <td class="py-2.5 px-3 font-medium">第二場：紅隊 vs 藍隊</td>
-                  <td class="py-2.5 px-3 font-mono font-bold text-slate-700">- : -</td>
-                  <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
-                  <td class="py-2.5 px-3 text-slate-400">-</td>
-                </tr>
-                <tr class="hover:bg-slate-50">
-                  <td class="py-2.5 px-3 font-medium">第三場：綠隊 vs 藍隊</td>
-                  <td class="py-2.5 px-3 font-mono font-bold text-slate-700">- : -</td>
-                  <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
-                  <td class="py-2.5 px-3 text-slate-400">-</td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- 直接呈現哪隊第一名~第三名 -->
+          <div class="p-4 bg-blue-50/80 rounded-xl border-2 border-blue-200 mb-3 text-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+              <strong class="text-blue-950 font-bold text-sm">【中高年級三隊循環 • 躲避球對抗錦標】</strong>
+              <span class="px-2 py-0.5 bg-blue-600 text-white text-[11px] font-bold rounded">🏆 三隊排名直接計入總分</span>
+            </div>
+            <p class="text-slate-700 mb-3">
+              美式 6 球制快節奏對抗，中高年級全力比拼反應與走位，依名次直接計算紅、綠、藍戰隊總錦標積分！
+            </p>
+            <div class="font-bold text-blue-950 bg-white p-3 rounded-xl border border-blue-200 flex flex-wrap items-center justify-around gap-2 text-sm" id="card-dodge-ranking">
+              <span>🥇 冠軍：<strong class="text-emerald-700">綠隊</strong> (+16分)</span>
+              <span>🥈 亞軍：<strong class="text-rose-700">紅隊</strong> (+12分)</span>
+              <span>🥉 季軍：<strong class="text-blue-700">藍隊</strong> (+8分)</span>
+            </div>
           </div>
+
           <div class="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
             <span class="font-bold text-slate-700">🏆 本項戰隊積分結算：</span>
             <div id="card-dodge-summary" class="flex items-center gap-3 font-semibold text-slate-600">
-              <span class="text-slate-400 font-medium">尚未開賽（目前各隊 0 分）</span>
+              <span class="text-emerald-700 font-bold">🟢 綠隊 +16 分</span>
+              <span class="text-rose-700 font-bold">🔴 紅隊 +12 分</span>
+              <span class="text-blue-700 font-bold">🔵 藍隊 +8 分</span>
             </div>
           </div>
         </div>
@@ -706,7 +692,7 @@
       runLow: { green: 6, blue: 7, red: 5 },    // 低年級 3圈 5分鐘內完成人數
       runMid: { green: 6, blue: 4, red: 5 },    // 中年級 800m(4.5圈) 7分鐘內完成人數
       runHigh: { green: 5, blue: 4, red: 6 },   // 高年級 800m(4.5圈) 6分鐘內完成人數
-      dodge: { green: 12, red: 8, blue: 4 },    // 躲避球循環賽得分
+      dodge: { green: 16, red: 12, blue: 8 },    // 躲避球賽得分（第1名16、第2名12、第3名8）
       rainbow: { blue: 12, red: 8, green: 6 },  // 1至6年級趣味競賽：蟲蟲危機得分
       tugLow: { green: 8, blue: 6, red: 4 },    // 一二三年級組拔河得分（參賽50人）
       tugHigh: { red: 8, green: 6, blue: 4 },   // 四五六年級組拔河得分（參賽49人）
@@ -959,34 +945,15 @@
       renderTugGroup('card-tug-low', 'tugLow');
       renderTugGroup('card-tug-high', 'tugHigh');
 
-      // 連動更新躲避球卡片結算展示
+      // 連動更新躲避球卡片結算展示（依名次直接呈現第1~3名）
       const cardDodge = document.getElementById('card-dodge-summary');
-      const dodgeTbody = document.getElementById('dodge-match-tbody');
+      const cardDodgeRanking = document.getElementById('card-dodge-ranking');
       const dgGreen = d.dodge?.green || 0, dgBlue = d.dodge?.blue || 0, dgRed = d.dodge?.red || 0;
 
       if (dgGreen === 0 && dgBlue === 0 && dgRed === 0) {
         if (cardDodge) cardDodge.innerHTML = `<span class="text-slate-400 font-medium">尚未開賽（目前各隊 0 分）</span>`;
-        if (dodgeTbody) {
-          dodgeTbody.innerHTML = `
-            <tr class="hover:bg-slate-50">
-              <td class="py-2.5 px-3 font-medium text-slate-600">第一場：綠隊 vs 紅隊</td>
-              <td class="py-2.5 px-3 font-mono font-bold text-slate-400">- : -</td>
-              <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
-              <td class="py-2.5 px-3 text-slate-400">-</td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-2.5 px-3 font-medium text-slate-600">第二場：紅隊 vs 藍隊</td>
-              <td class="py-2.5 px-3 font-mono font-bold text-slate-400">- : -</td>
-              <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
-              <td class="py-2.5 px-3 text-slate-400">-</td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-2.5 px-3 font-medium text-slate-600">第三場：綠隊 vs 藍隊</td>
-              <td class="py-2.5 px-3 font-mono font-bold text-slate-400">- : -</td>
-              <td class="py-2.5 px-3 text-slate-400 font-medium">即將開賽</td>
-              <td class="py-2.5 px-3 text-slate-400">-</td>
-            </tr>
-          `;
+        if (cardDodgeRanking) {
+          cardDodgeRanking.innerHTML = `<span class="text-slate-400 font-medium py-1">⏳ 賽事即將開打（依名次：第1名16分、第2名12分、第3名8分）</span>`;
         }
       } else {
         if (cardDodge) {
@@ -996,27 +963,17 @@
             <span class="text-blue-700 font-bold">🔵 藍隊 +${dgBlue} 分</span>
           `;
         }
-        if (dodgeTbody) {
-          dodgeTbody.innerHTML = `
-            <tr class="hover:bg-slate-50">
-              <td class="py-2.5 px-3 font-medium text-slate-700">第一場：綠隊 vs 紅隊</td>
-              <td class="py-2.5 px-3 font-mono font-bold text-slate-700">已完賽</td>
-              <td class="py-2.5 px-3 font-bold ${dgGreen >= dgRed ? 'text-emerald-600' : 'text-rose-600'}">${dgGreen >= dgRed ? '綠隊佔優' : '紅隊佔優'}</td>
-              <td class="py-2.5 px-3">綠隊 +${dgGreen}分 ｜ 紅隊 +${dgRed}分</td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-2.5 px-3 font-medium text-slate-700">第二場：紅隊 vs 藍隊</td>
-              <td class="py-2.5 px-3 font-mono font-bold text-slate-700">已完賽</td>
-              <td class="py-2.5 px-3 font-bold ${dgRed >= dgBlue ? 'text-rose-600' : 'text-blue-600'}">${dgRed >= dgBlue ? '紅隊佔優' : '藍隊佔優'}</td>
-              <td class="py-2.5 px-3">紅隊 +${dgRed}分 ｜ 藍隊 +${dgBlue}分</td>
-            </tr>
-            <tr class="hover:bg-slate-50">
-              <td class="py-2.5 px-3 font-medium text-slate-700">第三場：綠隊 vs 藍隊</td>
-              <td class="py-2.5 px-3 font-mono font-bold text-slate-700">已完賽</td>
-              <td class="py-2.5 px-3 font-bold ${dgGreen >= dgBlue ? 'text-emerald-600' : 'text-blue-600'}">${dgGreen >= dgBlue ? '綠隊佔優' : '藍隊佔優'}</td>
-              <td class="py-2.5 px-3">綠隊 +${dgGreen}分 ｜ 藍隊 +${dgBlue}分</td>
-            </tr>
-          `;
+        if (cardDodgeRanking) {
+          const teams = [
+            { name: '綠隊', score: dgGreen, color: 'text-emerald-700' },
+            { name: '藍隊', score: dgBlue, color: 'text-blue-700' },
+            { name: '紅隊', score: dgRed, color: 'text-rose-700' }
+          ].sort((x, y) => y.score - x.score);
+
+          const medals = ['🥇 冠軍', '🥈 亞軍', '🥉 季軍'];
+          cardDodgeRanking.innerHTML = teams.map((t, idx) => `
+            <span class="${t.color}">${medals[idx]}：<strong>${t.name}</strong> (+${t.score}分)</span>
+          `).join('');
         }
       }
 
