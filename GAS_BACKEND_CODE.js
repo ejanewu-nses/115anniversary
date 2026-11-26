@@ -311,11 +311,21 @@ function fastLocalParse(text) {
   if (!text) return null;
   text = text.trim();
 
-  // A. 精神加分匹配（最常用）
-  const isEventWord = /(?:拔河|躲避球|接力|趣味|蟲蟲|彩虹|慢跑|短跑|100m|60m|80m|第一名|第二名|第三名|金牌|銀牌|銅牌)/.test(text);
-  const isSpiritTrigger = /(?:精神|暖心|事蹟|好品德|大帶小|運動家|歡呼|隊呼|自律|整齊|互助|清潔|環境|勉勵|照顧|幫忙|禮貌|聽講|規則|表現|秩序)|(?:加|得|[+＋])\s*[1-9一二兩三\d]\s*分?/.test(text);
+  // 1. 判斷是否為明確的「賽事成績/名次登記」
+  // 必須明確具備「第一名/第1名/冠軍/亞軍/季軍」或者特定賽事比分/人數報分格式
+  const hasRankWords = /(?:第一名|第1名|第一|第1|第二名|第2名|第二|第2|第三名|第3名|第三|第3|冠軍|亞軍|季軍)/.test(text);
+  const isScoreReport = /(?:拔河|躲避球|接力|趣味|蟲蟲|彩虹|慢跑).*(?:\d+\s*分|\d+\s*人)/.test(text);
+  const isSprint = /(?:100m|60m|80m|短跑).*(?:第一|第1|第二|第2|第三|第3|冠軍|金牌)/.test(text);
 
-  if (isSpiritTrigger && !isEventWord) {
+  // 判斷是否具備「精神加分」特徵
+  const isSpiritExplicit = /(?:精神|暖心|事蹟|好品德|大帶小|運動家|歡呼|隊呼|自律|整齊|互助|清潔|環境|勉勵|照顧|幫忙|禮貌|聽講|規則|表現|秩序|熱身|充分熱身|加油)/.test(text) ||
+                           /(?:各加|各得|都加|加分|精神加|精神各加)/.test(text) ||
+                           /(?:[+＋加]\s*[1-9一二兩三\d]\s*分?|[1-9一二兩三\d]\s*分)/.test(text);
+
+  // 如果帶有明確的精神加分語意，且「不是」在登記賽事名次或短跑名次，則優先走精神加分
+  const isSpirit = isSpiritExplicit && (!hasRankWords && !isSprint);
+
+  if (isSpirit) {
     // 🛡️ 戰隊名稱防呆檢核（防止打錯為黃隊、白隊、黑隊等非本校戰隊）
     const wrongTeamMatch = text.match(/([黃白黑紫橘粉灰棕橙])(?:隊)?/);
     if (wrongTeamMatch) {
@@ -326,7 +336,7 @@ function fastLocalParse(text) {
     }
 
     let teams = [];
-    const isAllTeams = /(?:紅綠藍|三隊|三大戰隊|各隊|每隊|全隊|全校|大家|全部戰隊|三戰隊)/.test(text) ||
+    const isAllTeams = /(?:紅\s*綠\s*藍|三隊|三大戰隊|各隊|每隊|全隊|全校|大家|全部戰隊|三戰隊)/.test(text) ||
                        (/(?:紅|烈火|金獅)/.test(text) && /(?:綠|翠玉|蜈蚣)/.test(text) && /(?:藍|跳鼓|雷鳴|碧海)/.test(text));
 
     if (isAllTeams) {
@@ -393,20 +403,20 @@ function fastLocalParse(text) {
     let scoreCheer = 0, scoreSports = 0, scoreEco = 0, scoreCross = 0;
 
     // sports（運動家風度）
-    if (/運動家|風度|勝不驕|敗不餒|握手|鞠躬|致敬|服從|擊掌|拍肩|道歉|輸了|落後|不氣餒|勉勵|彼此勉勵|互勉|安慰|再接再厲/.test(text)) scoreSports += 4;
-    if (/禮貌|友愛|謙虛|誠實|運動員|鼓舞/.test(text)) scoreSports += 1;
+    if (/運動家|風度|勝不驕|敗不餒|握手|鞠躬|致敬|服從|擊掌|拍肩|道歉|輸了|落後|不氣餒|勉勵|彼此勉勵|互勉|安慰|再接再厲|熱身|充分熱身|規則|聽講/.test(text)) scoreSports += 4;
+    if (/禮貌|友愛|謙虛|誠實|運動員|鼓舞|參與|熱忱/.test(text)) scoreSports += 2;
 
     // cheer（團隊歡呼）
-    if (/歡呼|隊呼|加油|吶喊|口號|鼓掌|喝采|鼓舞/.test(text)) scoreCheer += 4;
-    if (/士氣|掌聲|熱情|精神抖擻/.test(text)) scoreCheer += 1;
+    if (/歡呼|隊呼|加油|吶喊|口號|鼓掌|喝采|鼓舞|精神抖擻|士氣/.test(text)) scoreCheer += 4;
+    if (/熱情|活力/.test(text)) scoreCheer += 1;
 
     // cross（跨齡扶持）
     if (/大帶小|跨齡|小隊長|綁鞋帶|牽手|拿外套|遞外套|學弟|學妹/.test(text)) scoreCross += 4;
-    if (/照顧|幫忙|協助|牽|扶|陪|低年級|一年級|二年級/.test(text)) scoreCross += 1;
+    if (/照顧|幫忙|協助|牽|扶|陪|低年級|一年級|二年級/.test(text)) scoreCross += 2;
 
     // eco（環保自律）
     if (/垃圾|撿垃圾|清潔環境|整理場地|整理環境|整理器材|收拾器材|收拾|場地清潔|場地復原|落葉|掃地|做整潔|資源回收|寶特瓶|撿拾|打掃|場地整理/.test(text)) scoreEco += 4;
-    if (/乾淨|自律|整齊|排隊|環境|清潔|水壺|整理|復原|收拾|衛生|場地|復原場地/.test(text)) scoreEco += 2;
+    if (/乾淨|自律|整齊|排隊|環境|清潔|水壺|整理|復原|衛生|場地/.test(text)) scoreEco += 2;
 
     let category = 'sports';
     const maxScore = Math.max(scoreSports, scoreCheer, scoreEco, scoreCross);
@@ -416,19 +426,31 @@ function fastLocalParse(text) {
       else if (scoreCheer === maxScore) category = 'cheer';
       else if (scoreSports === maxScore) category = 'sports';
     } else {
-      // 兜底智能判斷：若權重為0但文字有明顯語意特徵
       if (/整理|場地|乾淨|掃|清潔|垃圾|復原|收拾/.test(text)) category = 'eco';
       else if (/牽|扶|陪|大帶小|學弟|學妹|弟|妹|低年級/.test(text)) category = 'cross';
       else if (/喊|叫|呼|油|鼓掌|掌聲/.test(text)) category = 'cheer';
       else category = 'sports';
     }
 
-    // 4. 清洗事蹟文字（徹底剔除隊名、+1/+2/加分符號、中文「一分」、登記人、地點等前綴贅字）
+    // 4. 清洗事蹟文字（徹底剔除隊名前綴、加分指令、見證人、地點等贅字）
     let story = text;
     story = story.replace(/(?:登記人|見證人|見證者|通報人|認證老師|裁判|紀錄人|記錄人|見證|通報)[：:\s]+[^\s,，、。\n\r]+/g, '');
     story = story.replace(/(?:見證)?(?:地點|位置)(?:在|[：:\s]+)+[^\s,，、。\n\r]+/g, '');
-    story = story.replace(/^[🔴🟢🔵]?\s*(?:紅隊|綠隊|藍隊|金獅隊?|烈火隊?|翠玉隊?|蜈蚣隊?|跳鼓隊?|雷鳴隊?|紅綠藍隊?|三隊|各隊|每隊|全隊|三大戰隊)?\s*(?:都|各)?\s*(?:精神(?:加分|分|加)?|各加|各得|都加|加分|加|得|[+＋加]\s*[1-9一二兩三\d]\s*分?|[1-9一二兩三\d]\s*分|[，,、。\s\+＋])+/i, '');
-    story = story.replace(/^[，,、。\s\+＋\-=]+|[，,、。\s]+$/g, '').trim();
+    if (author) {
+      story = story.replace(new RegExp(author.replace('校長', '').trim(), 'g'), '');
+    }
+
+    // 循環剔除開頭的「各隊/各隊精神加分/紅隊精神加一分/紅綠藍隊各加1分」等前綴
+    const teamPrefixRegex = /^(?:[🔴🟢🔵]\s*)?(?:(?:紅|綠|藍|金獅|烈火|翠玉|蜈蚣|跳鼓|雷鳴|碧海)(?:隊)?\s*(?:精神)?\s*(?:各|都)?\s*(?:加|得|[+＋])\s*[1-9一二兩三\d]\s*分?[，,、。\s]*)+/i;
+    const allTeamPrefixRegex = /^(?:[🔴🟢🔵]\s*)?(?:紅\s*綠\s*藍|三隊|各隊|每隊|全隊|三大戰隊|全部戰隊)(?:隊)?\s*(?:都|各)?\s*(?:精神(?:加分|分|加)?|各加|各得|都加|加分|加|得|[+＋加]\s*[1-9一二兩三\d]\s*分?|[1-9一二兩三\d]\s*分|[，,、。\s\+＋])+/i;
+
+    let prevStory = '';
+    while (story !== prevStory) {
+      prevStory = story;
+      story = story.replace(teamPrefixRegex, '').trim();
+      story = story.replace(allTeamPrefixRegex, '').trim();
+      story = story.replace(/^[，,、。\s\+＋\-=]+|[，,、。\s]+$/g, '').trim();
+    }
     if (!story) story = text;
 
     // 5. 智慧下標題（自動提煉 8~16 字精美大標題）
