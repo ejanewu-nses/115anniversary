@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>個人短跑裁判檢錄暨成績登記系統 ｜ 臺南市安南區南興國小 115校慶</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --target-size: 40px;
+      --tab-accent: #e11d48;
+    }
+    @media (pointer: coarse) {
+      :root {
+        --target-size: 44px;
+      }
+    }
+
+    html {
+      scroll-padding-bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      overflow-wrap: break-word;
+      padding-bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    h1, h2, h3 {
+      text-wrap: balance;
+    }
+
+    p, li {
+      text-wrap: pretty;
+    }
+
+    :where(button, select, input:not([type="checkbox"], [type="radio"]), [role="button"], nav a) {
+      min-block-size: var(--target-size);
+    }
+
+    /* 單行水平捲動 Tablist（避免多行換行影響順序識別） */
+    .tablist-scroll {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 0.375rem;
+      scroll-snap-type: inline proximity;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .tablist-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .tab-btn {
+      flex: none;
+      position: relative;
+      scroll-snap-align: start;
+      white-space: nowrap;
+    }
+    .tab-btn[aria-selected="true"]::after {
+      content: "";
+      position: absolute;
+      inset: auto 0.5rem 0 0.5rem;
+      border-block-end: 3px solid var(--tab-accent);
+      border-radius: 999px;
+    }
+    .heat-tab-btn[aria-selected="true"]::after {
+      border-block-end-color: #0284c7;
+    }
+
+    /* Sticky bottom bar with safe-area padding */
+    .bottom-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      padding-bottom: max(0.65rem, env(safe-area-inset-bottom, 0px));
+      padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+      padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+    }
+
+    /* Native modal dialog scroll locking (per modern-web-guidance) */
+    dialog:modal {
+      overscroll-behavior: contain;
+      max-inline-size: min(92vw, 32rem);
+      max-block-size: 90dvh;
+      margin: auto;
+    }
+    dialog::backdrop {
+      overflow: hidden;
+      overscroll-behavior: contain;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(2px);
+    }
+
+    /* Print A4 layout */
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding-bottom: 0 !important;
+        color: #000000 !important;
+        font-size: 11pt;
+      }
+      .no-print {
+        display: none !important;
+      }
+      #print-area {
+        display: block !important;
+      }
+      .print-division {
+        break-after: page;
+        page-break-after: always;
+      }
+      .print-division:last-child {
+        break-after: auto;
+        page-break-after: auto;
+      }
+      .print-heat-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .print-heat-table th,
+      .print-heat-table td {
+        border: 1.5px solid #1e293b;
+        padding: 5px 4px;
+        text-align: center;
+        vertical-align: middle;
+      }
+      .print-heat-table thead th {
+        background-color: #1e3a8a !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-size: 10pt;
+      }
+      .print-heat-label {
+        background-color: #f1f5f9 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-weight: 900;
+        width: 13%;
+      }
+      .print-score-row td {
+        height: 30px;
+        font-size: 9.5pt;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 antialiased selection:bg-rose-500 selection:text-white">
+
+  <!-- 頂部導覽列（列印時隱藏） -->
+  <header class="no-print sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+    <div class="max-w-4xl mx-auto px-3 sm:px-5 h-16 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <a href="index.html" class="w-10 h-10 rounded-full bg-white p-0.5 border-2 border-amber-300 flex items-center justify-center shrink-0 overflow-hidden" aria-label="返回南興國小校慶首頁">
+          <img src="images/school_logo.jpg" alt="南興國小校徽" class="w-full h-full object-contain">
+        </a>
+        <div class="min-w-0">
+          <h1 class="text-sm sm:text-base font-black text-slate-900 leading-tight truncate">
+            ⚡ 個人短跑裁判檢錄系統
+          </h1>
+          <p class="text-[11px] sm:text-xs text-slate-500 font-bold truncate">
+            12/05 (六) 09:25～10:00 ｜ 檢錄：淇淇老師 ｜ 發令：秀麗主任
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button type="button" id="open-export-btn"
+          class="px-3 py-2 bg-rose-600 hover:bg-rose-700 active:scale-[0.98] text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm flex items-center gap-1.5 transition cursor-pointer">
+          <i class="fa-solid fa-print" aria-hidden="true"></i>
+          <span>列印 / 下載</span>
+        </button>
+        <a href="admin.html"
+          class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-1"
+          aria-label="前往管理後台">
+          <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+          <span class="hidden sm:inline">後台</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主操作區（列印時隱藏） -->
+  <main class="no-print max-w-4xl mx-auto px-3 sm:px-5 pt-3 space-y-3">
+
+    <!-- 1. 全校總進度條 ＋ 選手快速搜尋 -->
+    <section class="bg-white rounded-2xl p-3 sm:p-4 border border-slate-200 shadow-xs space-y-2.5" aria-label="檢錄進度與快速搜尋">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-black">
+            <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+            全場總進度：<span id="global-progress-text">0 / 100 人</span>
+          </span>
+          <span id="global-absent-chip" class="hidden px-2 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold">
+            缺席 <span id="global-absent-count">0</span> 人
+          </span>
+        </div>
+        <button type="button" id="toggle-score-mode-btn"
+          class="px-3 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-slate-50 border-slate-300 text-slate-700 hover:bg-amber-50 hover:border-amber-300">
+          <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
+          <span id="score-mode-label">成績登記：關</span>
+        </button>
+      </div>
+
+      <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden" aria-hidden="true">
+        <div id="global-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-300" style="width: 0%"></div>
+      </div>
+
+      <!-- 選手姓名／年級快搜 -->
+      <div class="relative">
+        <label for="runner-search" class="sr-only">搜尋選手姓名或年級</label>
+        <i class="fa-solid fa-magnifying-glass text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true"></i>
+        <input id="runner-search" type="search" autocomplete="off"
+          placeholder="快速找人：輸入姓名、年級（如：劉、震興、4年級）立即跳組..."
+          class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:bg-white focus:border-rose-400 focus:outline-none">
+        <button type="button" id="clear-search-btn" hidden aria-label="清除搜尋"
+          class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-slate-400 hover:text-slate-700 cursor-pointer">
+          <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div id="search-results" hidden class="divide-y divide-slate-100 border border-slate-200 rounded-xl bg-white max-h-64 overflow-y-auto shadow-sm"></div>
+    </section>
+
+    <!-- 2. 第一層：6大賽程組別（單行水平滾動 Tablist） -->
+    <section class="bg-white rounded-2xl p-2 sm:p-2.5 border border-slate-200 shadow-xs">
+      <div id="division-tablist" role="tablist" aria-label="個人短跑賽程組別" class="tablist-scroll pb-1">
+        <!-- 動態產生 6 個賽程 Tab -->
+      </div>
+
+      <!-- 3. 第二層：該組別下的組次切換（單行水平滾動 Tablist） -->
+      <div class="mt-2 pt-2 border-t border-slate-100">
+        <div id="heat-tablist" role="tablist" aria-label="該賽程組次" class="tablist-scroll pb-1">
+          <!-- 動態產生組次 Tab -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 當前組別檢錄面板 -->
+    <section id="checkin-tabpanel" role="tabpanel" aria-labelledby="" class="space-y-3">
+
+      <!-- 組次標題與整組操作列 -->
+      <div class="bg-white rounded-2xl p-3.5 sm:p-4 border-2 border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h2 id="heat-title" class="text-lg sm:text-xl font-black text-slate-900">低年級男生組 • 男第 1 組</h2>
+            <span id="heat-distance-badge" class="px-2 py-0.5 bg-sky-100 text-sky-900 text-xs font-black rounded-md">60公尺 • 一、二年級</span>
+          </div>
+          <p id="heat-status-text" class="text-xs sm:text-sm font-bold text-slate-600 mt-1">
+            檢錄狀況：待點名
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <button type="button" id="check-all-heat-btn"
+            class="flex-1 sm:flex-none px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-sm font-black rounded-xl shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer">
+            <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+            <span>全組到齊 ✓</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 5條跑道卡片清單 -->
+      <div id="lanes-container" class="space-y-2.5">
+        <!-- 動態產生跑道 1~5 -->
+      </div>
+
+      <!-- 該組別暫定前三名預覽（有輸入秒數時顯示） -->
+      <div id="division-ranking-card" hidden class="bg-amber-50/90 rounded-2xl p-4 border-2 border-amber-300 shadow-xs space-y-2">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm sm:text-base font-black text-amber-950 flex items-center gap-1.5">
+            <i class="fa-solid fa-trophy text-amber-500" aria-hidden="true"></i>
+            <span id="ranking-title">本組別跨組計時暫定前三名</span>
+          </h3>
+          <span class="text-[11px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-md">依秒數由小到大自動排序</span>
+        </div>
+        <div id="ranking-list" class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs sm:text-sm"></div>
+      </div>
+
+      <!-- 現場小提醒 -->
+      <div class="bg-slate-200/60 rounded-xl px-3.5 py-2.5 text-xs text-slate-600 font-medium leading-relaxed">
+        💡 <strong>裁判操作提示：</strong>點按選手右側「<strong class="text-emerald-700">已報到</strong>」或「<strong class="text-rose-700">缺席</strong>」按鈕，進度會自動存於此手機中（重新整理不會遺失）。轉學生「<strong>劉絜</strong>」已列於低年級女生第 2 組第 5 跑道（1年甲班・紅隊）。
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 底部固定快速切換列（手機單手操作核心） -->
+  <nav class="no-print bottom-bar bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(15,23,42,0.08)]" aria-label="組次快速切換">
+    <div class="max-w-4xl mx-auto pt-2.5 flex items-center justify-between gap-2">
+      <button type="button" id="prev-heat-btn"
+        class="px-3.5 sm:px-5 py-2.5 bg-slate-100 hover:bg-slate-200 active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none text-slate-800 text-sm font-black rounded-xl flex items-center gap-1.5 transition cursor-pointer">
+        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        <span>上一組</span>
+      </button>
+
+      <div class="text-center min-w-0 px-1">
+        <div id="bottom-heat-name" class="text-xs sm:text-sm font-black text-slate-900 truncate">低男 第 1 組</div>
+        <div id="bottom-heat-count" class="text-[11px] font-bold text-emerald-700">已到 0 / 5</div>
+      </div>
+
+      <button type="button" id="next-heat-btn"
+        class="px-3.5 sm:px-5 py-2.5 bg-slate-900 hover:bg-slate-800 active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none text-white text-sm font-black rounded-xl flex items-center gap-1.5 transition cursor-pointer">
+        <span>下一組</span>
+        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 列印與檔案下載中心 Dialog -->
+  <dialog id="export-dialog" closedby="any" aria-labelledby="export-dialog-title"
+    class="rounded-3xl p-0 border border-slate-200 shadow-2xl bg-white w-full overflow-hidden">
+    <div class="p-5 sm:p-6 space-y-4">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <h1 id="export-dialog-title" class="text-lg font-black text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-print text-rose-600" aria-hidden="true"></i>
+            列印與成績登記表下載
+          </h1>
+          <p class="text-xs text-slate-500 font-medium mt-0.5">提供 A4 紙本／PDF 列印、Word 表格與 Excel 彙整表</p>
+        </div>
+        <form method="dialog">
+          <button type="submit" value="close" aria-label="關閉視窗"
+            class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </form>
+      </div>
+
+      <div class="space-y-2.5">
+        <button type="button" id="print-all-btn"
+          class="w-full p-3.5 bg-rose-50 hover:bg-rose-100 border-2 border-rose-200 rounded-2xl text-left flex items-center justify-between gap-3 transition cursor-pointer">
+          <div>
+            <div class="text-sm font-black text-rose-950">🖨️ 列印 / 存成 PDF（全部 6 個組別）</div>
+            <div class="text-xs text-rose-700 font-medium mt-0.5">A4 自動分組換頁，含跑道 1～5、年級、隊別與手寫成績欄</div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-rose-500" aria-hidden="true"></i>
+        </button>
+
+        <button type="button" id="print-current-btn"
+          class="w-full p-3.5 bg-sky-50 hover:bg-sky-100 border-2 border-sky-200 rounded-2xl text-left flex items-center justify-between gap-3 transition cursor-pointer">
+          <div>
+            <div class="text-sm font-black text-sky-950">🖨️ 僅列印當前組別（<span id="print-current-name">低年級男生組</span>）</div>
+            <div class="text-xs text-sky-700 font-medium mt-0.5">快速印出單一賽程組別給現場計時裁判使用</div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-sky-500" aria-hidden="true"></i>
+        </button>
+
+        <button type="button" id="download-word-btn"
+          class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 border-2 border-blue-200 rounded-2xl text-left flex items-center justify-between gap-3 transition cursor-pointer">
+          <div>
+            <div class="text-sm font-black text-blue-950">📄 下載 Word 成績登記表（.doc）</div>
+            <div class="text-xs text-blue-700 font-medium mt-0.5">保留跑道 1～5 與成績格線，可在 Microsoft Word 直接微調列印</div>
+          </div>
+          <i class="fa-solid fa-download text-blue-600" aria-hidden="true"></i>
+        </button>
+
+        <button type="button" id="download-csv-btn"
+          class="w-full p-3.5 bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-200 rounded-2xl text-left flex items-center justify-between gap-3 transition cursor-pointer">
+          <div>
+            <div class="text-sm font-black text-emerald-950">📊 下載 Excel 成績彙整總表（.csv）</div>
+            <div class="text-xs text-emerald-700 font-medium mt-0.5">含 100 位選手、年級、紅綠藍隊別、檢錄與已輸入秒數</div>
+          </div>
+          <i class="fa-solid fa-download text-emerald-600" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+        <button type="button" id="open-reset-btn"
+          class="px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition cursor-pointer">
+          <i class="fa-solid fa-rotate-left mr-1" aria-hidden="true"></i>清除本機點名與秒數紀錄
+        </button>
+        <form method="dialog">
+          <button type="submit" value="cancel" autofocus
+            class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer">
+            關閉
+          </button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- 清除確認 Dialog -->
+  <dialog id="reset-dialog" closedby="any" aria-labelledby="reset-dialog-title"
+    class="rounded-3xl p-0 border border-slate-200 shadow-2xl bg-white w-full overflow-hidden">
+    <div class="p-5 sm:p-6 space-y-4">
+      <h1 id="reset-dialog-title" class="text-base sm:text-lg font-black text-slate-900">
+        確定要清除本機的所有檢錄與成績紀錄嗎？
+      </h1>
+      <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+        此動作會將這台裝置上已勾選的「已報到 / 缺席」狀態與輸入的秒數全部歸零，無法復原。
+      </p>
+      <form method="dialog" class="flex items-center justify-end gap-2 pt-2">
+        <button type="submit" value="cancel" autofocus
+          class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs sm:text-sm font-bold rounded-xl cursor-pointer">
+          保留紀錄
+        </button>
+        <button type="submit" value="confirm"
+          class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold rounded-xl cursor-pointer">
+          確定全部清除
+        </button>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- 專為 A4 列印生成的區域（螢幕隱藏，列印顯示） -->
+  <div id="print-area" class="hidden"></div>
+
+  <script>
+    // 115學年度個人短跑官方賽程名單（已與全校名冊交叉驗證；黃振興統一更正為黃震興；劉絜標註一年級轉學生）
+    const SPRINT_DIVISIONS = [{"id": "low-boy", "shortName": "低男 60m", "name": "低年級男生組", "distance": "60公尺", "grades": "一、二年級", "gender": "男", "order": 1, "heats": [{"heatNo": 1, "label": "男第 1 組", "lanes": [{"lane": 1, "name": "黃修齊", "grade": 1, "class": "甲", "team": "blue", "note": ""}, {"lane": 2, "name": "林宇宸", "grade": 1, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "黃羿暘", "grade": 1, "class": "甲", "team": "blue", "note": ""}, {"lane": 4, "name": "蔡孟言", "grade": 1, "class": "甲", "team": "red", "note": ""}, {"lane": 5, "name": "黃建霆", "grade": 2, "class": "甲", "team": "red", "note": ""}]}, {"heatNo": 2, "label": "男第 2 組", "lanes": [{"lane": 1, "name": "黃世瑋", "grade": 2, "class": "甲", "team": "green", "note": ""}, {"lane": 2, "name": "曾紹愷", "grade": 2, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "邱恩俊", "grade": 2, "class": "甲", "team": "red", "note": ""}, {"lane": 4, "name": "吳楷鈞", "grade": 2, "class": "甲", "team": "green", "note": ""}, {"lane": 5, "name": "邱士軒", "grade": 2, "class": "甲", "team": "blue", "note": ""}]}]}, {"id": "low-girl", "shortName": "低女 60m", "name": "低年級女生組", "distance": "60公尺", "grades": "一、二年級", "gender": "女", "order": 2, "heats": [{"heatNo": 1, "label": "女第 1 組", "lanes": [{"lane": 1, "name": "蔡昕佳", "grade": 1, "class": "甲", "team": "green", "note": ""}, {"lane": 2, "name": "郭于瑈", "grade": 1, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "黃卉丞", "grade": 1, "class": "甲", "team": "red", "note": ""}, {"lane": 4, "name": "林羽彤", "grade": 1, "class": "甲", "team": "green", "note": ""}, {"lane": 5, "name": "黎宛潔", "grade": 1, "class": "甲", "team": "red", "note": ""}]}, {"heatNo": 2, "label": "女第 2 組", "lanes": [{"lane": 1, "name": "黃妙金", "grade": 1, "class": "甲", "team": "blue", "note": ""}, {"lane": 2, "name": "黃羽晨", "grade": 1, "class": "甲", "team": "red", "note": ""}, {"lane": 3, "name": "郭子綺", "grade": 1, "class": "甲", "team": "green", "note": ""}, {"lane": 4, "name": "施語凡", "grade": 1, "class": "甲", "team": "blue", "note": ""}, {"lane": 5, "name": "劉絜", "grade": 1, "class": "甲", "team": "red", "note": "轉學生"}]}, {"heatNo": 3, "label": "女第 3 組", "lanes": [{"lane": 1, "name": "顏淓鋙", "grade": 2, "class": "甲", "team": "red", "note": ""}, {"lane": 2, "name": "楊佳瑜", "grade": 2, "class": "甲", "team": "green", "note": ""}, {"lane": 3, "name": "樊沛恩", "grade": 2, "class": "甲", "team": "blue", "note": ""}, {"lane": 4, "name": "蘇潁心", "grade": 2, "class": "甲", "team": "red", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}, {"heatNo": 4, "label": "女第 4 組", "lanes": [{"lane": 1, "name": "楊珍恬", "grade": 2, "class": "甲", "team": "green", "note": ""}, {"lane": 2, "name": "黃姵潔", "grade": 2, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "劉恩語", "grade": 2, "class": "甲", "team": "red", "note": ""}, {"lane": 4, "name": "黃詩柔", "grade": 2, "class": "甲", "team": "green", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}, {"heatNo": 5, "label": "女第 5 組", "lanes": [{"lane": 1, "name": "郭沛貽", "grade": 2, "class": "甲", "team": "blue", "note": ""}, {"lane": 2, "name": "蔡理璇", "grade": 2, "class": "甲", "team": "red", "note": ""}, {"lane": 3, "name": "張巧沛", "grade": 2, "class": "甲", "team": "green", "note": ""}, {"lane": 4, "name": "柯允菲", "grade": 2, "class": "甲", "team": "blue", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}]}, {"id": "mid-boy", "shortName": "中男 80m", "name": "中年級男生組", "distance": "80公尺", "grades": "三、四年級", "gender": "男", "order": 3, "heats": [{"heatNo": 1, "label": "男第 1 組", "lanes": [{"lane": 1, "name": "林進陞", "grade": 3, "class": "甲", "team": "red", "note": ""}, {"lane": 2, "name": "黃柏嘉", "grade": 3, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "陳睿謙", "grade": 3, "class": "甲", "team": "blue", "note": ""}, {"lane": 4, "name": "施慎和", "grade": 3, "class": "甲", "team": "red", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}, {"heatNo": 2, "label": "男第 2 組", "lanes": [{"lane": 1, "name": "黃邦睿", "grade": 3, "class": "甲", "team": "blue", "note": ""}, {"lane": 2, "name": "李宇樂", "grade": 3, "class": "甲", "team": "red", "note": ""}, {"lane": 3, "name": "郭子翔", "grade": 3, "class": "甲", "team": "green", "note": ""}, {"lane": 4, "name": "葉涅山", "grade": 3, "class": "甲", "team": "green", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}, {"heatNo": 3, "label": "男第 3 組", "lanes": [{"lane": 1, "name": "邱弘富", "grade": 4, "class": "甲", "team": "blue", "note": ""}, {"lane": 2, "name": "黃凱崙", "grade": 4, "class": "甲", "team": "red", "note": ""}, {"lane": 3, "name": "王宣錡", "grade": 4, "class": "甲", "team": "green", "note": ""}, {"lane": 4, "name": "黃震興", "grade": 4, "class": "甲", "team": "blue", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}, {"heatNo": 4, "label": "男第 4 組", "lanes": [{"lane": 1, "name": "吳家樂", "grade": 4, "class": "甲", "team": "green", "note": ""}, {"lane": 2, "name": "陳敬倫", "grade": 4, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "陳伯瑞", "grade": 4, "class": "甲", "team": "red", "note": ""}, {"lane": 4, "name": "黃祐嘉", "grade": 4, "class": "甲", "team": "red", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}]}, {"id": "mid-girl", "shortName": "中女 80m", "name": "中年級女生組", "distance": "80公尺", "grades": "三、四年級", "gender": "女", "order": 4, "heats": [{"heatNo": 1, "label": "女第 1 組", "lanes": [{"lane": 1, "name": "邱亞忻", "grade": 3, "class": "甲", "team": "green", "note": ""}, {"lane": 2, "name": "蔡喬捷", "grade": 3, "class": "甲", "team": "red", "note": ""}, {"lane": 3, "name": "林姿妤", "grade": 3, "class": "甲", "team": "green", "note": ""}, {"lane": 4, "name": "", "grade": null, "class": "", "team": "", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}, {"heatNo": 2, "label": "女第 2 組", "lanes": [{"lane": 1, "name": "王畇霏", "grade": 3, "class": "甲", "team": "green", "note": ""}, {"lane": 2, "name": "郭俞岑", "grade": 3, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "葉芷安", "grade": 3, "class": "甲", "team": "red", "note": ""}, {"lane": 4, "name": "", "grade": null, "class": "", "team": "", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}, {"heatNo": 3, "label": "女第 3 組", "lanes": [{"lane": 1, "name": "蘇亮伃", "grade": 4, "class": "甲", "team": "red", "note": ""}, {"lane": 2, "name": "方婕薰", "grade": 4, "class": "甲", "team": "green", "note": ""}, {"lane": 3, "name": "黃晨瑄", "grade": 4, "class": "甲", "team": "blue", "note": ""}, {"lane": 4, "name": "邱子瑜", "grade": 4, "class": "甲", "team": "red", "note": ""}, {"lane": 5, "name": "楊佳恩", "grade": 4, "class": "甲", "team": "green", "note": ""}]}, {"heatNo": 4, "label": "女第 4 組", "lanes": [{"lane": 1, "name": "陳采緹", "grade": 4, "class": "甲", "team": "green", "note": ""}, {"lane": 2, "name": "林雨晴", "grade": 4, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "蔡依璇", "grade": 4, "class": "甲", "team": "red", "note": ""}, {"lane": 4, "name": "翁梓綝", "grade": 4, "class": "甲", "team": "green", "note": ""}, {"lane": 5, "name": "陳品彤", "grade": 4, "class": "甲", "team": "blue", "note": ""}]}]}, {"id": "high-boy", "shortName": "高男 100m", "name": "高年級男生組", "distance": "100公尺", "grades": "五、六年級", "gender": "男", "order": 5, "heats": [{"heatNo": 1, "label": "男第 1 組", "lanes": [{"lane": 1, "name": "陳致愷", "grade": 5, "class": "甲", "team": "red", "note": ""}, {"lane": 2, "name": "黃鈞瑋", "grade": 5, "class": "甲", "team": "green", "note": ""}, {"lane": 3, "name": "黃俊佑", "grade": 5, "class": "甲", "team": "blue", "note": ""}, {"lane": 4, "name": "莊迪元", "grade": 5, "class": "甲", "team": "red", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}, {"heatNo": 2, "label": "男第 2 組", "lanes": [{"lane": 1, "name": "吳羿辰", "grade": 5, "class": "甲", "team": "blue", "note": ""}, {"lane": 2, "name": "王浩宸", "grade": 5, "class": "甲", "team": "red", "note": ""}, {"lane": 3, "name": "陳奕辰", "grade": 5, "class": "甲", "team": "green", "note": ""}, {"lane": 4, "name": "陳浩銘", "grade": 5, "class": "甲", "team": "blue", "note": ""}, {"lane": 5, "name": "王威霖", "grade": 5, "class": "甲", "team": "red", "note": ""}]}, {"heatNo": 3, "label": "男第 3 組", "lanes": [{"lane": 1, "name": "劉濬賓", "grade": 5, "class": "甲", "team": "green", "note": ""}, {"lane": 2, "name": "林浩哲", "grade": 5, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "蔡岳辰", "grade": 5, "class": "甲", "team": "red", "note": ""}, {"lane": 4, "name": "夘嵊彬", "grade": 5, "class": "甲", "team": "green", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}, {"heatNo": 4, "label": "男第 4 組", "lanes": [{"lane": 1, "name": "黃睿澄", "grade": 6, "class": "甲", "team": "blue", "note": ""}, {"lane": 2, "name": "郭韋辰", "grade": 6, "class": "甲", "team": "red", "note": ""}, {"lane": 3, "name": "方晨宇", "grade": 6, "class": "甲", "team": "green", "note": ""}, {"lane": 4, "name": "陳駿鈜", "grade": 6, "class": "甲", "team": "blue", "note": ""}, {"lane": 5, "name": "施竑群", "grade": 6, "class": "甲", "team": "green", "note": ""}]}, {"heatNo": 5, "label": "男第 5 組", "lanes": [{"lane": 1, "name": "黃若驊", "grade": 6, "class": "甲", "team": "green", "note": ""}, {"lane": 2, "name": "李順興", "grade": 6, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "李帷雍", "grade": 6, "class": "甲", "team": "red", "note": ""}, {"lane": 4, "name": "黃振宸", "grade": 6, "class": "甲", "team": "red", "note": ""}, {"lane": 5, "name": "黃明哲", "grade": 6, "class": "甲", "team": "green", "note": ""}]}]}, {"id": "high-girl", "shortName": "高女 100m", "name": "高年級女生組", "distance": "100公尺", "grades": "五、六年級", "gender": "女", "order": 6, "heats": [{"heatNo": 1, "label": "女第 1 組", "lanes": [{"lane": 1, "name": "黃晨涵", "grade": 5, "class": "甲", "team": "green", "note": ""}, {"lane": 2, "name": "李姿錡", "grade": 5, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "黃宥榛", "grade": 5, "class": "甲", "team": "red", "note": ""}, {"lane": 4, "name": "李晨馨", "grade": 5, "class": "甲", "team": "green", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}, {"heatNo": 2, "label": "女第 2 組", "lanes": [{"lane": 1, "name": "黃婕洺", "grade": 6, "class": "甲", "team": "red", "note": ""}, {"lane": 2, "name": "黃品璇", "grade": 6, "class": "甲", "team": "red", "note": ""}, {"lane": 3, "name": "陳品甯", "grade": 6, "class": "甲", "team": "green", "note": ""}, {"lane": 4, "name": "林勤容", "grade": 6, "class": "甲", "team": "blue", "note": ""}, {"lane": 5, "name": "顏儀芳", "grade": 6, "class": "甲", "team": "blue", "note": ""}]}, {"heatNo": 3, "label": "女第 3 組", "lanes": [{"lane": 1, "name": "羅苡芸", "grade": 6, "class": "甲", "team": "green", "note": ""}, {"lane": 2, "name": "劉雯玲", "grade": 6, "class": "甲", "team": "blue", "note": ""}, {"lane": 3, "name": "戴瑋辰", "grade": 6, "class": "甲", "team": "red", "note": ""}, {"lane": 4, "name": "吳宜樂", "grade": 6, "class": "甲", "team": "green", "note": ""}, {"lane": 5, "name": "", "grade": null, "class": "", "team": "", "note": ""}]}]}];
+
+    const STORAGE_KEY = 'nanxing_115_sprint_checkin_v1';
+
+    const TEAM_META = {
+      red: { label: '紅隊', badge: 'bg-rose-100 text-rose-800 border-rose-300', dot: 'bg-rose-500' },
+      green: { label: '綠隊', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300', dot: 'bg-emerald-500' },
+      blue: { label: '藍隊', badge: 'bg-blue-100 text-blue-800 border-blue-300', dot: 'bg-blue-500' },
+      pending: { label: '隊別待確認', badge: 'bg-slate-100 text-slate-700 border-slate-300', dot: 'bg-slate-400' }
+    };
+
+    // 狀態：statuses[key] = 'pending' | 'checked' | 'absent'
+    //       times[key] = '9.85'
+    let state = {
+      divisionIndex: 0,
+      heatIndex: 0,
+      scoreMode: false,
+      statuses: {},
+      times: {}
+    };
+
+    function runnerKey(divId, heatNo, laneNo) {
+      return `${divId}__h${heatNo}__l${laneNo}`;
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === 'object') {
+            state.statuses = parsed.statuses || {};
+            state.times = parsed.times || {};
+            if (Number.isInteger(parsed.divisionIndex) && parsed.divisionIndex >= 0 && parsed.divisionIndex < SPRINT_DIVISIONS.length) {
+              state.divisionIndex = parsed.divisionIndex;
+            }
+            const maxHeat = SPRINT_DIVISIONS[state.divisionIndex].heats.length;
+            if (Number.isInteger(parsed.heatIndex) && parsed.heatIndex >= 0 && parsed.heatIndex < maxHeat) {
+              state.heatIndex = parsed.heatIndex;
+            }
+            state.scoreMode = Boolean(parsed.scoreMode);
+          }
+        }
+      } catch (e) {
+        console.warn('localStorage unavailable', e);
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.warn('localStorage save failed', e);
+      }
+    }
+
+    function getHeatStats(div, heat) {
+      const runners = heat.lanes.filter(l => l.name);
+      let checked = 0;
+      let absent = 0;
+      runners.forEach(r => {
+        const st = state.statuses[runnerKey(div.id, heat.heatNo, r.lane)] || 'pending';
+        if (st === 'checked') checked++;
+        else if (st === 'absent') absent++;
+      });
+      return {
+        total: runners.length,
+        checked,
+        absent,
+        done: checked + absent === runners.length
+      };
+    }
+
+    function getGlobalStats() {
+      let total = 0;
+      let checked = 0;
+      let absent = 0;
+      SPRINT_DIVISIONS.forEach(div => {
+        div.heats.forEach(heat => {
+          const st = getHeatStats(div, heat);
+          total += st.total;
+          checked += st.checked;
+          absent += st.absent;
+        });
+      });
+      return { total, checked, absent };
+    }
+
+    function isMixedGrade(div, heat, grade) {
+      // 標示跨年級補位（例如低男第1組只有黃建霆為二年級）
+      const grades = heat.lanes.filter(l => l.name && l.grade).map(l => l.grade);
+      if (grades.length <= 1) return false;
+      const counts = {};
+      grades.forEach(g => { counts[g] = (counts[g] || 0) + 1; });
+      const uniqueGrades = Object.keys(counts);
+      if (uniqueGrades.length <= 1) return false;
+      return counts[grade] === 1;
+    }
+
+    function renderDivisionTabs() {
+      const container = document.getElementById('division-tablist');
+      container.innerHTML = '';
+
+      SPRINT_DIVISIONS.forEach((div, idx) => {
+        const selected = idx === state.divisionIndex;
+        let divTotal = 0;
+        let divChecked = 0;
+        div.heats.forEach(h => {
+          const s = getHeatStats(div, h);
+          divTotal += s.total;
+          divChecked += s.checked;
+        });
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `div-tab-${div.id}`;
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+        btn.tabIndex = selected ? 0 : -1;
+        btn.className = `tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition cursor-pointer flex items-center gap-1.5 ${
+          selected
+            ? 'bg-rose-50 text-rose-800'
+            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+        }`;
+        btn.innerHTML = `
+          <span>${div.shortName}</span>
+          <span class="px-1.5 py-0.5 rounded-md text-[11px] font-bold ${
+            divChecked === divTotal && divTotal > 0
+              ? 'bg-emerald-100 text-emerald-800'
+              : (selected ? 'bg-rose-200/70 text-rose-900' : 'bg-slate-200/70 text-slate-600')
+          }">${divChecked}/${divTotal}</span>
+        `;
+        btn.addEventListener('click', () => selectDivision(idx));
+        container.appendChild(btn);
+
+        if (selected) {
+          requestAnimationFrame(() => {
+            btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+          });
+        }
+      });
+    }
+
+    function renderHeatTabs() {
+      const container = document.getElementById('heat-tablist');
+      container.innerHTML = '';
+      const div = SPRINT_DIVISIONS[state.divisionIndex];
+
+      div.heats.forEach((heat, idx) => {
+        const selected = idx === state.heatIndex;
+        const st = getHeatStats(div, heat);
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `heat-tab-${div.id}-${heat.heatNo}`;
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+        btn.tabIndex = selected ? 0 : -1;
+        btn.className = `tab-btn heat-tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer flex items-center gap-1.5 ${
+          selected
+            ? 'bg-sky-50 text-sky-900'
+            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+        }`;
+        btn.innerHTML = `
+          <span>${heat.label}</span>
+          <span class="px-1.5 py-0.5 rounded text-[11px] font-black ${
+            st.done
+              ? 'bg-emerald-100 text-emerald-800'
+              : (selected ? 'bg-sky-200/80 text-sky-950' : 'bg-slate-200/70 text-slate-600')
+          }">${st.done ? `${st.checked}/${st.total} ✓` : `${st.checked}/${st.total}`}</span>
+        `;
+        btn.addEventListener('click', () => selectHeat(idx));
+        container.appendChild(btn);
+
+        if (selected) {
+          requestAnimationFrame(() => {
+            btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+          });
+        }
+      });
+    }
+
+    function renderCheckinPanel(highlightLane = null) {
+      const div = SPRINT_DIVISIONS[state.divisionIndex];
+      const heat = div.heats[state.heatIndex];
+      const st = getHeatStats(div, heat);
+
+      const panel = document.getElementById('checkin-tabpanel');
+      panel.setAttribute('aria-labelledby', `heat-tab-${div.id}-${heat.heatNo}`);
+
+      document.getElementById('heat-title').textContent = `${div.name} • ${heat.label}`;
+      document.getElementById('heat-distance-badge').textContent = `${div.distance} • ${div.grades}`;
+      document.getElementById('print-current-name').textContent = div.name;
+
+      const statusEl = document.getElementById('heat-status-text');
+      if (st.done) {
+        statusEl.className = 'text-xs sm:text-sm font-black text-emerald-700 mt-1 flex items-center gap-1.5';
+        statusEl.innerHTML = `<i class="fa-solid fa-circle-check" aria-hidden="true"></i> 本組檢錄完成（已到 ${st.checked} 人${st.absent > 0 ? `，缺席 ${st.absent} 人` : ''}），可帶往起跑線！`;
+      } else {
+        statusEl.className = 'text-xs sm:text-sm font-bold text-slate-600 mt-1';
+        statusEl.textContent = `檢錄進度：已報到 ${st.checked} / ${st.total} 人${st.absent > 0 ? `（缺席 ${st.absent} 人）` : ''}`;
+      }
+
+      // 成績模式按鈕狀態
+      const scoreBtn = document.getElementById('toggle-score-mode-btn');
+      const scoreLabel = document.getElementById('score-mode-label');
+      if (state.scoreMode) {
+        scoreBtn.className = 'px-3 py-1.5 rounded-xl border text-xs font-black transition flex items-center gap-1.5 cursor-pointer bg-amber-100 border-amber-400 text-amber-950';
+        scoreLabel.textContent = '成績登記：開';
+      } else {
+        scoreBtn.className = 'px-3 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-slate-50 border-slate-300 text-slate-700 hover:bg-amber-50 hover:border-amber-300';
+        scoreLabel.textContent = '成績登記：關';
+      }
+
+      // 跑道卡片
+      const container = document.getElementById('lanes-container');
+      container.innerHTML = '';
+
+      heat.lanes.forEach(lane => {
+        if (!lane.name) {
+          const emptyCard = document.createElement('div');
+          emptyCard.className = 'bg-slate-50/70 border-2 border-dashed border-slate-200 rounded-2xl p-3 sm:p-3.5 flex items-center gap-3 text-slate-400';
+          emptyCard.innerHTML = `
+            <div class="w-11 h-11 rounded-xl bg-slate-200/70 text-slate-500 font-black flex items-center justify-center shrink-0 text-base">
+              ${lane.lane}
+            </div>
+            <div class="text-sm font-bold">第 ${lane.lane} 跑道 — 空跑道（無選手）</div>
+          `;
+          container.appendChild(emptyCard);
+          return;
+        }
+
+        const key = runnerKey(div.id, heat.heatNo, lane.lane);
+        const status = state.statuses[key] || 'pending';
+        const timeVal = state.times[key] || '';
+        const teamInfo = TEAM_META[lane.team] || TEAM_META.pending;
+        const mixed = isMixedGrade(div, heat, lane.grade);
+
+        let cardBorder = 'border-slate-200 bg-white';
+        if (status === 'checked') cardBorder = 'border-emerald-400 bg-emerald-50/50';
+        else if (status === 'absent') cardBorder = 'border-slate-300 bg-slate-100/90 opacity-75';
+
+        const card = document.createElement('div');
+        card.className = `rounded-2xl border-2 p-3 sm:p-4 shadow-xs transition ${cardBorder} ${
+          highlightLane === lane.lane ? 'ring-4 ring-amber-400' : ''
+        }`;
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between gap-2.5">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex flex-col items-center justify-center shrink-0 font-black ${
+                status === 'checked'
+                  ? 'bg-emerald-600 text-white'
+                  : (status === 'absent' ? 'bg-slate-400 text-white' : 'bg-slate-900 text-white')
+              }">
+                <span class="text-[10px] leading-none opacity-80">跑道</span>
+                <span class="text-lg sm:text-xl leading-tight">${lane.lane}</span>
+              </div>
+
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="text-xl sm:text-2xl font-black tracking-wide ${
+                    status === 'absent' ? 'line-through text-slate-500' : 'text-slate-900'
+                  }">${lane.name}</span>
+                  <span class="px-2 py-0.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-md text-xs font-black">
+                    ${lane.grade}年${lane.class}班
+                  </span>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-1.5 mt-1">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[11px] font-black ${teamInfo.badge}">
+                    <span class="w-2 h-2 rounded-full ${teamInfo.dot}" aria-hidden="true"></span>
+                    ${teamInfo.label}
+                  </span>
+                  ${mixed ? '<span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300 text-[11px] font-bold">跨年級補位</span>' : ''}
+                  ${lane.note ? `<span class="px-2 py-0.5 rounded-md bg-purple-100 text-purple-900 border border-purple-300 text-[11px] font-bold">${lane.note}</span>` : ''}
+                </div>
+              </div>
+            </div>
+
+            <!-- 檢錄狀態切換大按鈕 -->
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" data-action="checked" data-key="${key}"
+                aria-pressed="${status === 'checked'}"
+                class="px-3.5 sm:px-4 py-2.5 rounded-xl font-black text-xs sm:text-sm flex items-center gap-1 transition cursor-pointer ${
+                  status === 'checked'
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300'
+                }">
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>已報到</span>
+              </button>
+
+              <button type="button" data-action="absent" data-key="${key}"
+                aria-pressed="${status === 'absent'}"
+                class="px-2.5 sm:px-3 py-2.5 rounded-xl font-bold text-xs transition cursor-pointer ${
+                  status === 'absent'
+                    ? 'bg-rose-600 text-white shadow-sm'
+                    : 'bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200'
+                }">
+                缺席
+              </button>
+            </div>
+          </div>
+
+          ${state.scoreMode ? `
+            <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between gap-3">
+              <label for="time-${key}" class="text-xs font-bold text-slate-700 whitespace-nowrap">
+                ⏱️ 計時成績（秒）：
+              </label>
+              <div class="flex items-center gap-1.5">
+                <input id="time-${key}" type="number" step="0.01" min="1" max="99.99" inputmode="decimal"
+                  data-time-key="${key}"
+                  value="${timeVal}"
+                  placeholder="例 9.85"
+                  class="w-28 px-3 py-1.5 bg-white border border-amber-300 rounded-xl text-sm font-black text-right text-slate-900 focus:outline-none focus:border-amber-500">
+                <span class="text-xs font-bold text-slate-500">秒</span>
+              </div>
+            </div>
+          ` : ''}
+        `;
+
+        container.appendChild(card);
+      });
+
+      // 綁定卡片內按鈕與秒數輸入事件
+      container.querySelectorAll('button[data-action]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.dataset.key;
+          const targetAction = btn.dataset.action;
+          const cur = state.statuses[key] || 'pending';
+          state.statuses[key] = cur === targetAction ? 'pending' : targetAction;
+          saveState();
+          renderAll();
+        });
+      });
+
+      container.querySelectorAll('input[data-time-key]').forEach(inp => {
+        inp.addEventListener('input', () => {
+          const key = inp.dataset.timeKey;
+          const v = inp.value.trim();
+          if (v === '') {
+            delete state.times[key];
+          } else {
+            state.times[key] = v;
+          }
+          saveState();
+          renderDivisionRanking();
+        });
+      });
+
+      // 更新全場進度 & 底部導覽 & 暫定前三名
+      updateGlobalProgress();
+      updateBottomBar();
+      renderDivisionRanking();
+    }
+
+    function renderDivisionRanking() {
+      const div = SPRINT_DIVISIONS[state.divisionIndex];
+      const card = document.getElementById('division-ranking-card');
+      const listEl = document.getElementById('ranking-list');
+      document.getElementById('ranking-title').textContent = `${div.name} 跨組計時暫定前三名`;
+
+      const entries = [];
+      div.heats.forEach(heat => {
+        heat.lanes.forEach(lane => {
+          if (!lane.name) return;
+          const key = runnerKey(div.id, heat.heatNo, lane.lane);
+          const status = state.statuses[key] || 'pending';
+          const rawTime = state.times[key];
+          const num = rawTime ? parseFloat(rawTime) : NaN;
+          if (!Number.isNaN(num) && num > 0 && status !== 'absent') {
+            entries.push({
+              name: lane.name,
+              grade: lane.grade,
+              heatLabel: heat.label,
+              lane: lane.lane,
+              time: num,
+              timeStr: rawTime
+            });
+          }
+        });
+      });
+
+      if (entries.length === 0) {
+        card.hidden = true;
+        return;
+      }
+
+      entries.sort((a, b) => a.time - b.time);
+      const top3 = entries.slice(0, 3);
+      const medals = ['🥇 金牌', '🥈 銀牌', '🥉 銅牌'];
+      card.hidden = false;
+      listEl.innerHTML = top3.map((e, i) => `
+        <div class="bg-white rounded-xl p-2.5 border border-amber-200 flex items-center justify-between gap-2">
+          <div>
+            <div class="text-[11px] font-black text-amber-700">${medals[i]}</div>
+            <div class="text-sm font-black text-slate-900">${e.name} <span class="text-xs font-bold text-slate-500">(${e.grade}年)</span></div>
+            <div class="text-[11px] text-slate-500">${e.heatLabel} 第${e.lane}道</div>
+          </div>
+          <div class="text-base font-black text-rose-600 font-mono">${e.time.toFixed(2)}s</div>
+        </div>
+      `).join('');
+    }
+
+    function updateGlobalProgress() {
+      const g = getGlobalStats();
+      document.getElementById('global-progress-text').textContent = `${g.checked} / ${g.total} 人`;
+      const pct = g.total > 0 ? Math.round((g.checked / g.total) * 100) : 0;
+      document.getElementById('global-progress-bar').style.width = `${pct}%`;
+
+      const absentChip = document.getElementById('global-absent-chip');
+      if (g.absent > 0) {
+        absentChip.classList.remove('hidden');
+        document.getElementById('global-absent-count').textContent = g.absent;
+      } else {
+        absentChip.classList.add('hidden');
+      }
+    }
+
+    function updateBottomBar() {
+      const div = SPRINT_DIVISIONS[state.divisionIndex];
+      const heat = div.heats[state.heatIndex];
+      const st = getHeatStats(div, heat);
+
+      document.getElementById('bottom-heat-name').textContent = `${div.shortName} • ${heat.label}`;
+      document.getElementById('bottom-heat-count').textContent = st.done
+        ? `✓ 已完成 (${st.checked}/${st.total})`
+        : `已報到 ${st.checked} / ${st.total}`;
+
+      const isFirst = state.divisionIndex === 0 && state.heatIndex === 0;
+      const lastDivIdx = SPRINT_DIVISIONS.length - 1;
+      const isLast = state.divisionIndex === lastDivIdx && state.heatIndex === SPRINT_DIVISIONS[lastDivIdx].heats.length - 1;
+
+      document.getElementById('prev-heat-btn').disabled = isFirst;
+      document.getElementById('next-heat-btn').disabled = isLast;
+    }
+
+    function selectDivision(idx) {
+      state.divisionIndex = idx;
+      state.heatIndex = 0;
+      saveState();
+      renderAll();
+    }
+
+    function selectHeat(idx, highlightLane = null) {
+      state.heatIndex = idx;
+      saveState();
+      renderAll(highlightLane);
+    }
+
+    function renderAll(highlightLane = null) {
+      renderDivisionTabs();
+      renderHeatTabs();
+      renderCheckinPanel(highlightLane);
+    }
+
+    // 鍵盤左右鍵切換 Tab（支援無障礙 tablist 操作）
+    function attachTablistKeys(containerEl, onMove) {
+      containerEl.addEventListener('keydown', e => {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Home' && e.key !== 'End') return;
+        const tabs = Array.from(containerEl.querySelectorAll('[role="tab"]'));
+        const cur = tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+        if (cur === -1 || tabs.length === 0) return;
+
+        let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        else if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        else if (e.key === 'Home') next = 0;
+        else if (e.key === 'End') next = tabs.length - 1;
+
+        e.preventDefault();
+        onMove(next);
+        const updatedTabs = containerEl.querySelectorAll('[role="tab"]');
+        if (updatedTabs[next]) updatedTabs[next].focus();
+      });
+    }
+
+    // 選手快搜
+    function handleSearch() {
+      const input = document.getElementById('runner-search');
+      const clearBtn = document.getElementById('clear-search-btn');
+      const box = document.getElementById('search-results');
+      const q = input.value.trim();
+
+      clearBtn.hidden = q.length === 0;
+      if (!q) {
+        box.hidden = true;
+        box.innerHTML = '';
+        return;
+      }
+
+      const matches = [];
+      SPRINT_DIVISIONS.forEach((div, dIdx) => {
+        div.heats.forEach((heat, hIdx) => {
+          heat.lanes.forEach(lane => {
+            if (!lane.name) return;
+            const hay = `${lane.name} ${lane.grade}年級 ${lane.grade}甲 ${div.name} ${TEAM_META[lane.team]?.label || ''}`;
+            if (hay.includes(q)) {
+              matches.push({ div, dIdx, heat, hIdx, lane });
+            }
+          });
+        });
+      });
+
+      box.hidden = false;
+      if (matches.length === 0) {
+        box.innerHTML = '<div class="p-3 text-xs text-slate-500 text-center font-bold">查無符合的選手</div>';
+        return;
+      }
+
+      box.innerHTML = matches.slice(0, 15).map((m, idx) => {
+        const teamInfo = TEAM_META[m.lane.team] || TEAM_META.pending;
+        return `
+          <button type="button" data-match-idx="${idx}"
+            class="w-full px-3.5 py-2.5 text-left hover:bg-rose-50 flex items-center justify-between gap-2 cursor-pointer transition">
+            <div>
+              <span class="text-sm font-black text-slate-900">${m.lane.name}</span>
+              <span class="text-xs font-bold text-slate-500 ml-1">${m.lane.grade}年${m.lane.class}班 • ${teamInfo.label}</span>
+            </div>
+            <span class="text-xs font-black text-rose-700 bg-rose-50 px-2 py-1 rounded-lg whitespace-nowrap">
+              ${m.div.shortName} ${m.heat.label} 第${m.lane.lane}道
+            </span>
+          </button>
+        `;
+      }).join('');
+
+      box.querySelectorAll('button[data-match-idx]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const m = matches[Number(btn.dataset.matchIdx)];
+          state.divisionIndex = m.dIdx;
+          state.heatIndex = m.hIdx;
+          saveState();
+          box.hidden = true;
+          renderAll(m.lane.lane);
+        });
+      });
+    }
+
+    // 建構 A4 列印 HTML（供瀏覽器列印/另存 PDF 與 Word .doc 下載共用）
+    function buildPrintableHtml(onlyCurrentDivision = false, forWord = false) {
+      const targetDivs = onlyCurrentDivision
+        ? [SPRINT_DIVISIONS[state.divisionIndex]]
+        : SPRINT_DIVISIONS;
+
+      return targetDivs.map(div => {
+        const heatsHtml = div.heats.map(heat => {
+          const runnerCells = heat.lanes.map(l => {
+            if (!l.name) {
+              return `<td style="color:#94a3b8;font-size:9pt;">（空跑道）</td>`;
+            }
+            const key = runnerKey(div.id, heat.heatNo, l.lane);
+            const st = state.statuses[key] || 'pending';
+            const teamName = TEAM_META[l.team]?.label || '';
+            const statusText = st === 'checked' ? '☑已到' : (st === 'absent' ? '☒缺席' : '□到 □缺');
+            return `
+              <td>
+                <div style="font-size:12pt;font-weight:900;color:#0f172a;">${l.name}</div>
+                <div style="font-size:8.5pt;color:#475569;margin-top:2px;">${l.grade}甲｜${teamName}</div>
+                <div style="font-size:8pt;color:#334155;margin-top:2px;">${statusText}</div>
+              </td>
+            `;
+          }).join('');
+
+          const scoreCells = heat.lanes.map(l => {
+            if (!l.name) return `<td></td>`;
+            const key = runnerKey(div.id, heat.heatNo, l.lane);
+            const t = state.times[key];
+            return `<td style="height:32px;font-weight:bold;">${t ? `${t} 秒` : ''}</td>`;
+          }).join('');
+
+          return `
+            <table class="print-heat-table" style="width:100%;border-collapse:collapse;margin-bottom:10px;${forWord ? 'border:1.5px solid #000;' : ''}">
+              <thead>
+                <tr>
+                  <th style="${forWord ? 'background:#1e3a8a;color:#fff;border:1px solid #000;padding:5px;width:13%;' : ''}">組別</th>
+                  ${heat.lanes.map(l => `<th style="${forWord ? 'background:#1e3a8a;color:#fff;border:1px solid #000;padding:5px;width:17.4%;' : ''}">跑道 ${l.lane}</th>`).join('')}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="print-heat-label" style="${forWord ? 'background:#f1f5f9;font-weight:bold;border:1px solid #000;text-align:center;' : ''}">${heat.label}</td>
+                  ${forWord
+                    ? heat.lanes.map(l => {
+                        if (!l.name) return `<td style="border:1px solid #000;text-align:center;color:#999;">（空）</td>`;
+                        const key = runnerKey(div.id, heat.heatNo, l.lane);
+                        const st = state.statuses[key] || 'pending';
+                        const teamName = TEAM_META[l.team]?.label || '';
+                        const statusText = st === 'checked' ? '☑已到' : (st === 'absent' ? '☒缺席' : '□到 □缺');
+                        return `<td style="border:1px solid #000;text-align:center;padding:5px 3px;">
+                          <div style="font-size:12pt;font-weight:bold;">${l.name}</div>
+                          <div style="font-size:8.5pt;color:#444;">${l.grade}甲｜${teamName}</div>
+                          <div style="font-size:8pt;">${statusText}</div>
+                        </td>`;
+                      }).join('')
+                    : runnerCells
+                  }
+                </tr>
+                <tr class="print-score-row">
+                  <td class="print-heat-label" style="${forWord ? 'background:#f1f5f9;font-weight:bold;border:1px solid #000;text-align:center;height:32px;' : ''}">成績 / 名次</td>
+                  ${forWord
+                    ? heat.lanes.map(l => {
+                        if (!l.name) return `<td style="border:1px solid #000;height:32px;"></td>`;
+                        const key = runnerKey(div.id, heat.heatNo, l.lane);
+                        const t = state.times[key];
+                        return `<td style="border:1px solid #000;text-align:center;height:32px;">${t ? `${t} 秒` : ''}</td>`;
+                      }).join('')
+                    : scoreCells
+                  }
+                </tr>
+              </tbody>
+            </table>
+          `;
+        }).join('');
+
+        return `
+          <div class="print-division" style="${forWord ? 'page-break-after:always;font-family:DFKai-SB, PMingLiU, Noto Sans TC, sans-serif;' : ''}">
+            <div style="text-align:center;margin-bottom:8px;">
+              <div style="font-size:15pt;font-weight:900;letter-spacing:1px;">臺南市安南區南興國民小學 115學年度校慶運動大會</div>
+              <div style="font-size:13pt;font-weight:800;margin-top:2px;">個人短跑徑賽檢錄暨成績登記表 — 【${div.name}（${div.distance}）】</div>
+              <div style="font-size:9.5pt;color:#334155;margin-top:2px;">
+                年級對象：${div.grades} ｜ 賽程時間：115年12月5日 09:25～10:00 ｜ 計時決賽（跨組擇優錄取前 3 名）
+              </div>
+            </div>
+            ${heatsHtml}
+            <div style="border:1.5px solid #1e293b;padding:8px 10px;margin-top:8px;font-size:10pt;line-height:1.8;">
+              <div><strong>🏆 本組別跨組計時決賽錄取前 3 名（供頒獎組核對）：</strong></div>
+              <div>🥇 第 1 名：________________（____年級 ／ ______ 秒）　🥈 第 2 名：________________（____年級 ／ ______ 秒）</div>
+              <div>🥉 第 3 名：________________（____年級 ／ ______ 秒）</div>
+              <div style="margin-top:6px;display:flex;justify-content:space-between;">
+                <span>起點檢錄裁判簽名：____________________</span>
+                <span>終點計時裁判簽名：____________________</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function triggerPrint(onlyCurrent) {
+      const printArea = document.getElementById('print-area');
+      printArea.innerHTML = buildPrintableHtml(onlyCurrent, false);
+      document.getElementById('export-dialog').close();
+      requestAnimationFrame(() => window.print());
+    }
+
+    function downloadWordDoc() {
+      const bodyHtml = buildPrintableHtml(false, true);
+      const fullDoc = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office"
+              xmlns:w="urn:schemas-microsoft-com:office:word"
+              xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+          <meta charset="utf-8">
+          <title>南興國小115校慶個人短跑檢錄暨成績登記表</title>
+          <style>
+            @page { size: A4 portrait; margin: 12mm; }
+            body { font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif; }
+          </style>
+        </head>
+        <body>${bodyHtml}</body>
+        </html>
+      `;
+      const blob = new Blob(['\uFEFF', fullDoc], { type: 'application/msword;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '南興國小115校慶_個人短跑檢錄暨成績登記表.doc';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadCsv() {
+      const rows = [
+        ['賽程組別', '距離', '組次', '跑道', '學生姓名', '年級', '班級', '隊別', '檢錄狀態', '秒數成績(秒)', '組別總名次(待填)', '備註']
+      ];
+      const statusLabel = { pending: '待檢錄', checked: '已報到', absent: '缺席' };
+
+      SPRINT_DIVISIONS.forEach(div => {
+        div.heats.forEach(heat => {
+          heat.lanes.forEach(lane => {
+            if (!lane.name) return;
+            const key = runnerKey(div.id, heat.heatNo, lane.lane);
+            const st = state.statuses[key] || 'pending';
+            const t = state.times[key] || '';
+            const teamName = TEAM_META[lane.team]?.label || '';
+            rows.push([
+              div.name,
+              div.distance,
+              heat.label,
+              `跑道${lane.lane}`,
+              lane.name,
+              `${lane.grade}年級`,
+              `${lane.class}班`,
+              teamName,
+              statusLabel[st] || '待檢錄',
+              t,
+              '',
+              lane.note || ''
+            ]);
+          });
+        });
+      });
+
+      const csvText = '\uFEFF' + rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\r\n');
+      const blob = new Blob([csvText], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '南興國小115校慶_個人短跑成績彙整表.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // closedby="any" 瀏覽器相容降級方案（如 Safari）
+    function installClosedByFallback() {
+      if (!('closedBy' in HTMLDialogElement.prototype)) {
+        const outside = (e, dialog) => {
+          const r = dialog.getBoundingClientRect();
+          return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+        };
+        for (const dialog of document.querySelectorAll('dialog[closedby="any"]')) {
+          let pressedOutside = false;
+          dialog.addEventListener('pointerdown', e => { pressedOutside = outside(e, dialog); });
+          dialog.addEventListener('pointerup', e => { if (pressedOutside && outside(e, dialog)) dialog.close(); });
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      renderAll();
+      installClosedByFallback();
+
+      attachTablistKeys(document.getElementById('division-tablist'), idx => selectDivision(idx));
+      attachTablistKeys(document.getElementById('heat-tablist'), idx => selectHeat(idx));
+
+      // 全組到齊按鈕
+      document.getElementById('check-all-heat-btn').addEventListener('click', () => {
+        const div = SPRINT_DIVISIONS[state.divisionIndex];
+        const heat = div.heats[state.heatIndex];
+        heat.lanes.forEach(lane => {
+          if (!lane.name) return;
+          const key = runnerKey(div.id, heat.heatNo, lane.lane);
+          if (state.statuses[key] !== 'absent') {
+            state.statuses[key] = 'checked';
+          }
+        });
+        saveState();
+        renderAll();
+      });
+
+      // 成績登記模式切換
+      document.getElementById('toggle-score-mode-btn').addEventListener('click', () => {
+        state.scoreMode = !state.scoreMode;
+        saveState();
+        renderCheckinPanel();
+      });
+
+      // 底部上一組／下一組切換
+      document.getElementById('prev-heat-btn').addEventListener('click', () => {
+        if (state.heatIndex > 0) {
+          selectHeat(state.heatIndex - 1);
+        } else if (state.divisionIndex > 0) {
+          state.divisionIndex -= 1;
+          state.heatIndex = SPRINT_DIVISIONS[state.divisionIndex].heats.length - 1;
+          saveState();
+          renderAll();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      document.getElementById('next-heat-btn').addEventListener('click', () => {
+        const curHeats = SPRINT_DIVISIONS[state.divisionIndex].heats;
+        if (state.heatIndex < curHeats.length - 1) {
+          selectHeat(state.heatIndex + 1);
+        } else if (state.divisionIndex < SPRINT_DIVISIONS.length - 1) {
+          state.divisionIndex += 1;
+          state.heatIndex = 0;
+          saveState();
+          renderAll();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // 搜尋事件
+      document.getElementById('runner-search').addEventListener('input', handleSearch);
+      document.getElementById('clear-search-btn').addEventListener('click', () => {
+        const inp = document.getElementById('runner-search');
+        inp.value = '';
+        handleSearch();
+        inp.focus();
+      });
+
+      // Modal Dialog 控制
+      const exportDialog = document.getElementById('export-dialog');
+      const resetDialog = document.getElementById('reset-dialog');
+
+      document.getElementById('open-export-btn').addEventListener('click', () => exportDialog.showModal());
+      exportDialog.addEventListener('close', () => { exportDialog.returnValue = ''; });
+
+      document.getElementById('print-all-btn').addEventListener('click', () => triggerPrint(false));
+      document.getElementById('print-current-btn').addEventListener('click', () => triggerPrint(true));
+      document.getElementById('download-word-btn').addEventListener('click', downloadWordDoc);
+      document.getElementById('download-csv-btn').addEventListener('click', downloadCsv);
+
+      document.getElementById('open-reset-btn').addEventListener('click', () => {
+        exportDialog.close();
+        resetDialog.showModal();
+      });
+
+      resetDialog.addEventListener('close', () => {
+        const val = resetDialog.returnValue;
+        resetDialog.returnValue = '';
+        if (val === 'confirm') {
+          state.statuses = {};
+          state.times = {};
+          saveState();
+          renderAll();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
