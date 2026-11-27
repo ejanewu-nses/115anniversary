@@ -784,7 +784,12 @@
 
       const topStories = stories.slice(0, 5);
       container.innerHTML = topStories.map(s => {
-        const team = s.team || 'green';
+        let team = String(s.team || 'green').trim().toLowerCase();
+        if (/red|紅|烈火|金獅/.test(team)) team = 'red';
+        else if (/blue|藍|跳鼓|雷鳴|碧海/.test(team)) team = 'blue';
+        else if (/green|綠|翠玉|蜈蚣/.test(team)) team = 'green';
+        else team = 'green';
+
         const cat = s.categoryLabel || s.category || '跨齡扶持';
         return `
           <div class="p-3 bg-slate-50 rounded-xl border-l-4 ${teamBorder[team] || 'border-emerald-500'} flex flex-col sm:flex-row sm:items-center justify-between gap-2">

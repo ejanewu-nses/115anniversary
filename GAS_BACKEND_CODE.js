@@ -91,12 +91,13 @@ function doGet(e) {
     for (let i = 1; i < spiritData.length; i++) {
       const row = spiritData[i];
       if (!row[0]) continue;
-      const team = String(row[2]).trim(); // 'green', 'blue', 'red'
+      const teamRaw = String(row[2] || row[1] || '').trim(); // 優先讀取 C 欄代碼 (red/blue/green)，次讀 B 欄戰隊名稱
       const pts = Number(row[4]) || 0;
+      const normTeam = normalizeTeam(teamRaw);
 
-      if (team === 'green' || team.includes('綠')) greenSpirit += pts;
-      else if (team === 'blue' || team.includes('藍')) blueSpirit += pts;
-      else if (team === 'red' || team.includes('紅')) redSpirit += pts;
+      if (normTeam === 'green') greenSpirit += pts;
+      else if (normTeam === 'blue') blueSpirit += pts;
+      else if (normTeam === 'red') redSpirit += pts;
 
       const rawCat = String(row[3] || '');
       let catCode = 'cross';
@@ -111,7 +112,7 @@ function doGet(e) {
       stories.push({
         id: i,
         time: Utilities.formatDate(new Date(row[0]), 'Asia/Taipei', 'MM/dd HH:mm'),
-        team: normalizeTeam(team),
+        team: normTeam,
         category: catCode,
         categoryLabel: catLabel,
         title: storyTitle,
@@ -1176,9 +1177,11 @@ function pushLineNotification(textMessage) {
 }
 
 function normalizeTeam(t) {
-  if (/綠|翠玉|蜈蚣/.test(t)) return 'green';
-  if (/藍|跳鼓|雷鳴|碧海/.test(t)) return 'blue';
-  if (/紅|烈火|金獅/.test(t)) return 'red';
+  if (!t) return 'green';
+  t = String(t).trim().toLowerCase();
+  if (/green|綠|翠玉|蜈蚣/.test(t)) return 'green';
+  if (/blue|藍|跳鼓|雷鳴|碧海/.test(t)) return 'blue';
+  if (/red|紅|烈火|金獅/.test(t)) return 'red';
   return 'green';
 }
 

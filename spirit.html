@@ -418,6 +418,16 @@
       if (elCheer) elCheer.innerText = `已累計 ${cheer} 次加分`;
     }
 
+    // 輔助函式：安全解析戰隊（支援代碼 red/blue/green、隊名與別名，防範任何預設誤判）
+    function resolveTeam(item) {
+      if (!item) return 'green';
+      const t = (typeof item === 'string' ? item : (item.team || item.teamName || '')).trim().toLowerCase();
+      if (/red|紅|烈火|金獅/.test(t)) return 'red';
+      if (/blue|藍|跳鼓|雷鳴|碧海/.test(t)) return 'blue';
+      if (/green|綠|翠玉|蜈蚣/.test(t)) return 'green';
+      return 'green';
+    }
+
     // 輔助函式：安全解析向度名稱與圖示，防範任何 undefined
     function resolveCategoryLabel(item) {
       const catMap = {
@@ -489,6 +499,7 @@
 
         const matchFilter = (currentFilter === 'all') ||
                             (currentFilter === item.team) ||
+                            (currentFilter === resolveTeam(item)) ||
                             (currentFilter === item.category) ||
                             (currentFilter === 'cross' && catLabel.includes('跨齡')) ||
                             (currentFilter === 'sports' && catLabel.includes('運動')) ||
@@ -515,11 +526,12 @@
 
       emptyState.classList.add('hidden');
       grid.innerHTML = filtered.map(item => {
+        const teamKey = resolveTeam(item);
         const teamColors = {
           green: { border: 'border-emerald-500', bg: 'bg-emerald-50/70', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300', icon: '🟢 綠隊 • 翠玉蜈蚣' },
           blue: { border: 'border-blue-500', bg: 'bg-blue-50/70', badge: 'bg-blue-100 text-blue-800 border-blue-300', icon: '🔵 藍隊 • 雷鳴跳鼓' },
           red: { border: 'border-rose-500', bg: 'bg-rose-50/70', badge: 'bg-rose-100 text-rose-800 border-rose-300', icon: '🔴 紅隊 • 烈火金獅' }
-        }[item.team] || { border: 'border-emerald-500', bg: 'bg-emerald-50/70', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300', icon: '🟢 綠隊 • 翠玉蜈蚣' };
+        }[teamKey];
 
         const catLabel = resolveCategoryLabel(item);
         const titleText = resolveStoryTitle(item);
@@ -613,11 +625,12 @@
 
     function showKioskSlide() {
       const item = STORIES_DATA[kioskIndex];
+      const teamKey = resolveTeam(item);
       const teamBadges = {
         green: '<span class="px-3 py-1 bg-emerald-500 text-white font-black rounded-xl text-sm sm:text-base shadow">🟢 綠隊 • 翠玉蜈蚣</span>',
         blue: '<span class="px-3 py-1 bg-blue-500 text-white font-black rounded-xl text-sm sm:text-base shadow">🔵 藍隊 • 雷鳴跳鼓</span>',
         red: '<span class="px-3 py-1 bg-rose-500 text-white font-black rounded-xl text-sm sm:text-base shadow">🔴 紅隊 • 烈火金獅</span>'
-      }[item.team] || '<span class="px-3 py-1 bg-emerald-500 text-white font-black rounded-xl text-sm sm:text-base shadow">🟢 綠隊 • 翠玉蜈蚣</span>';
+      }[teamKey];
 
       const catBadges = resolveCategoryLabel(item);
 
@@ -720,6 +733,7 @@
             STORIES_DATA = data.stories.map((s, idx) => ({
               ...s,
               id: s.id || idx,
+              team: resolveTeam(s),
               title: s.title || resolveStoryTitle(s),
               categoryLabel: resolveCategoryLabel(s)
             }));
