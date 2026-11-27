@@ -307,7 +307,7 @@
     <div class="hidden md:flex flex-col items-center gap-0.5 min-w-[220px]">
       <div class="flex items-center justify-between w-full text-[11px] text-slate-300 font-bold px-1">
         <span>分隊進度</span>
-        <span id="progress-text" class="text-amber-400 font-cinzel">0 / 99 人 (0%)</span>
+        <span id="progress-text" class="text-amber-400 font-cinzel">0 / 100 人 (0%)</span>
       </div>
       <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700">
         <div id="progress-bar" class="bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-300 h-full w-0 transition-all duration-500"></div>
@@ -368,7 +368,7 @@
           <span class="font-black text-rose-200 text-sm">🔴 烈火金獅隊</span>
         </div>
         <div class="text-xs font-cinzel font-black px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">
-          <span id="wings-count-red">0</span> / 33 人
+          <span id="wings-count-red">0</span> / <span id="wings-total-red">34</span> 人
         </div>
       </div>
       <!-- 學生名單晶片區（自動平滑捲動至最新同學） -->
@@ -440,7 +440,7 @@
           <!-- 序號與年級標籤 -->
           <div class="flex items-center justify-between text-xs text-slate-400 font-bold mb-1">
             <span id="current-seq" class="px-2.5 py-0.5 rounded-full bg-slate-800 text-amber-300 border border-slate-700 font-cinzel">
-              NO. 01 / 99
+              NO. 01 / 100
             </span>
             <span id="current-grade-badge" class="px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-200 border border-amber-500/40">
               六年甲班
@@ -512,7 +512,7 @@
             <span class="font-black text-emerald-200 text-xs sm:text-sm">🟢 翠玉蜈蚣隊</span>
           </div>
           <div class="text-[11px] font-cinzel font-black px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-            <span id="wings-count-green">0</span> / 33 人
+            <span id="wings-count-green">0</span> / <span id="wings-total-green">33</span> 人
           </div>
         </div>
         <div id="wings-roster-green" class="flex-1 overflow-y-auto flex flex-wrap gap-1 content-start pr-1">
@@ -531,7 +531,7 @@
             <span class="font-black text-sky-200 text-xs sm:text-sm">🔵 雷鳴跳鼓隊</span>
           </div>
           <div class="text-[11px] font-cinzel font-black px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40">
-            <span id="wings-count-blue">0</span> / 33 人
+            <span id="wings-count-blue">0</span> / <span id="wings-total-blue">33</span> 人
           </div>
         </div>
         <div id="wings-roster-blue" class="flex-1 overflow-y-auto flex flex-wrap gap-1 content-start pr-1">
@@ -565,7 +565,7 @@
           <div>
             <div class="flex items-center justify-between border-b border-rose-900/40 pb-1 mb-1">
               <span class="font-bold text-rose-200 text-xs">🔴 烈火金獅隊</span>
-              <span class="text-[11px] font-cinzel text-rose-300 font-bold"><span id="count-red">0</span> / 33 人</span>
+              <span class="text-[11px] font-cinzel text-rose-300 font-bold"><span id="count-red">0</span> / <span id="target-total-red">34</span> 人</span>
             </div>
             <div id="roster-red" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1 content-start"></div>
           </div>
@@ -576,7 +576,7 @@
           <div>
             <div class="flex items-center justify-between border-b border-emerald-900/40 pb-1 mb-1">
               <span class="font-bold text-emerald-200 text-xs">🟢 翠玉蜈蚣隊</span>
-              <span class="text-[11px] font-cinzel text-emerald-300 font-bold"><span id="count-green">0</span> / 33 人</span>
+              <span class="text-[11px] font-cinzel text-emerald-300 font-bold"><span id="count-green">0</span> / <span id="target-total-green">33</span> 人</span>
             </div>
             <div id="roster-green" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1 content-start"></div>
           </div>
@@ -587,7 +587,7 @@
           <div>
             <div class="flex items-center justify-between border-b border-sky-900/40 pb-1 mb-1">
               <span class="font-bold text-sky-200 text-xs">🔵 雷鳴跳鼓隊</span>
-              <span class="text-[11px] font-cinzel text-sky-300 font-bold"><span id="count-blue">0</span> / 33 人</span>
+              <span class="text-[11px] font-cinzel text-sky-300 font-bold"><span id="count-blue">0</span> / <span id="target-total-blue">33</span> 人</span>
             </div>
             <div id="roster-blue" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1 content-start"></div>
           </div>
@@ -645,7 +645,7 @@
           </div>
         </div>
         <div style="text-align: right; font-size: 8.5pt; color: #475569; line-height: 1.4;">
-          <div>全校國小學生：99 位 ｜ 各隊 33 位（均質分組）</div>
+          <div>全校國小學生：100 位 ｜ 紅隊 34 位、綠隊 33 位、藍隊 33 位</div>
           <div>列印時間：<span id="print-time-str">民國115年</span> ｜ 學生朝會魔法分隊籌備小組</div>
         </div>
       </div>
@@ -659,7 +659,7 @@
           <div>
             <h3 class="text-sm sm:text-base font-black text-amber-100 flex items-center gap-2">
               <span>南興國小 115 校慶 • 紅綠藍三大戰隊總名冊</span>
-              <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">全校 99 位學生</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">全校 100 位學生</span>
             </h3>
             <p class="text-[11px] text-slate-400">儀式完成後，請各戰隊老師帶隊進行破冰與隊長遴選 ｜ 支援 A4 橫向一頁完整列印</p>
           </div>
@@ -793,7 +793,7 @@
         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div>
             <span class="text-slate-400">學生總數：</span>
-            <span id="settings-total-students" class="font-bold text-amber-300">99 人</span>
+            <span id="settings-total-students" class="font-bold text-amber-300">100 人</span>
           </div>
           <div class="flex items-center gap-3">
             <span class="text-rose-400 font-bold">🔴 紅隊: <span id="settings-cnt-red">33</span></span>
@@ -942,601 +942,608 @@
   },
   {
     "id": 14,
+    "grade": 1,
+    "class": "甲",
+    "name": "劉絜",
+    "team": "red"
+  },
+  {
+    "id": 15,
     "grade": 2,
     "class": "甲",
     "name": "黃建霆",
     "team": "blue"
   },
   {
-    "id": 15,
+    "id": 16,
     "grade": 2,
     "class": "甲",
     "name": "黃世瑋",
     "team": "green"
   },
   {
-    "id": 16,
+    "id": 17,
     "grade": 2,
     "class": "甲",
     "name": "曾紹愷",
     "team": "blue"
   },
   {
-    "id": 17,
+    "id": 18,
     "grade": 2,
     "class": "甲",
     "name": "邱恩俊",
     "team": "green"
   },
   {
-    "id": 18,
+    "id": 19,
     "grade": 2,
     "class": "甲",
     "name": "吳楷鈞",
     "team": "green"
   },
   {
-    "id": 19,
+    "id": 20,
     "grade": 2,
     "class": "甲",
     "name": "邱士軒",
     "team": "blue"
   },
   {
-    "id": 20,
+    "id": 21,
     "grade": 2,
     "class": "甲",
     "name": "顏淓鋙",
     "team": "red"
   },
   {
-    "id": 21,
+    "id": 22,
     "grade": 2,
     "class": "甲",
     "name": "楊佳瑜",
     "team": "red"
   },
   {
-    "id": 22,
+    "id": 23,
     "grade": 2,
     "class": "甲",
     "name": "樊沛恩",
     "team": "red"
   },
   {
-    "id": 23,
+    "id": 24,
     "grade": 2,
     "class": "甲",
     "name": "蘇潁心",
     "team": "red"
   },
   {
-    "id": 24,
+    "id": 25,
     "grade": 2,
     "class": "甲",
     "name": "楊珍恬",
     "team": "green"
   },
   {
-    "id": 25,
+    "id": 26,
     "grade": 2,
     "class": "甲",
     "name": "黃姵潔",
     "team": "blue"
   },
   {
-    "id": 26,
+    "id": 27,
     "grade": 2,
     "class": "甲",
     "name": "劉恩語",
     "team": "green"
   },
   {
-    "id": 27,
+    "id": 28,
     "grade": 2,
     "class": "甲",
     "name": "黃詩柔",
     "team": "red"
   },
   {
-    "id": 28,
+    "id": 29,
     "grade": 2,
     "class": "甲",
     "name": "郭沛貽",
     "team": "red"
   },
   {
-    "id": 29,
+    "id": 30,
     "grade": 2,
     "class": "甲",
     "name": "蔡理璇",
     "team": "blue"
   },
   {
-    "id": 30,
+    "id": 31,
     "grade": 2,
     "class": "甲",
     "name": "張巧沛",
     "team": "blue"
   },
   {
-    "id": 31,
+    "id": 32,
     "grade": 2,
     "class": "甲",
     "name": "柯允菲",
     "team": "green"
   },
   {
-    "id": 32,
+    "id": 33,
     "grade": 3,
     "class": "甲",
     "name": "林進陞",
     "team": "green"
   },
   {
-    "id": 33,
+    "id": 34,
     "grade": 3,
     "class": "甲",
     "name": "黃柏嘉",
     "team": "blue"
   },
   {
-    "id": 34,
+    "id": 35,
     "grade": 3,
     "class": "甲",
     "name": "陳睿謙",
     "team": "red"
   },
   {
-    "id": 35,
+    "id": 36,
     "grade": 3,
     "class": "甲",
     "name": "施慎和",
     "team": "blue"
   },
   {
-    "id": 36,
+    "id": 37,
     "grade": 3,
     "class": "甲",
     "name": "葉涅山",
     "team": "blue"
   },
   {
-    "id": 37,
+    "id": 38,
     "grade": 3,
     "class": "甲",
     "name": "黃邦睿",
     "team": "green"
   },
   {
-    "id": 38,
+    "id": 39,
     "grade": 3,
     "class": "甲",
     "name": "李宇樂",
     "team": "green"
   },
   {
-    "id": 39,
+    "id": 40,
     "grade": 3,
     "class": "甲",
     "name": "郭子翔",
     "team": "red"
   },
   {
-    "id": 40,
+    "id": 41,
     "grade": 3,
     "class": "甲",
     "name": "邱亞忻",
     "team": "green"
   },
   {
-    "id": 41,
+    "id": 42,
     "grade": 3,
     "class": "甲",
     "name": "蔡喬捷",
     "team": "red"
   },
   {
-    "id": 42,
+    "id": 43,
     "grade": 3,
     "class": "甲",
     "name": "林姿妤",
     "team": "blue"
   },
   {
-    "id": 43,
+    "id": 44,
     "grade": 3,
     "class": "甲",
     "name": "郭俞岑",
     "team": "green"
   },
   {
-    "id": 44,
+    "id": 45,
     "grade": 3,
     "class": "甲",
     "name": "葉芷安",
     "team": "blue"
   },
   {
-    "id": 45,
+    "id": 46,
     "grade": 3,
     "class": "甲",
     "name": "王畇霏",
     "team": "red"
   },
   {
-    "id": 46,
+    "id": 47,
     "grade": 4,
     "class": "甲",
     "name": "黃祐嘉",
     "team": "blue"
   },
   {
-    "id": 47,
+    "id": 48,
     "grade": 4,
     "class": "甲",
     "name": "陳敬倫",
     "team": "green"
   },
   {
-    "id": 48,
+    "id": 49,
     "grade": 4,
     "class": "甲",
     "name": "邱弘富",
     "team": "blue"
   },
   {
-    "id": 49,
+    "id": 50,
     "grade": 4,
     "class": "甲",
     "name": "黃凱崙",
     "team": "red"
   },
   {
-    "id": 50,
+    "id": 51,
     "grade": 4,
     "class": "甲",
     "name": "王宣錡",
     "team": "red"
   },
   {
-    "id": 51,
+    "id": 52,
     "grade": 4,
     "class": "甲",
     "name": "黃震興",
     "team": "green"
   },
   {
-    "id": 52,
+    "id": 53,
     "grade": 4,
     "class": "甲",
     "name": "陳伯瑞",
     "team": "blue"
   },
   {
-    "id": 53,
+    "id": 54,
     "grade": 4,
     "class": "甲",
     "name": "吳家樂",
     "team": "blue"
   },
   {
-    "id": 54,
+    "id": 55,
     "grade": 4,
     "class": "甲",
     "name": "林雨晴",
     "team": "red"
   },
   {
-    "id": 55,
+    "id": 56,
     "grade": 4,
     "class": "甲",
     "name": "蔡依璇",
     "team": "green"
   },
   {
-    "id": 56,
+    "id": 57,
     "grade": 4,
     "class": "甲",
     "name": "翁梓綝",
     "team": "blue"
   },
   {
-    "id": 57,
+    "id": 58,
     "grade": 4,
     "class": "甲",
     "name": "陳品彤",
     "team": "blue"
   },
   {
-    "id": 58,
+    "id": 59,
     "grade": 4,
     "class": "甲",
     "name": "蘇亮伃",
     "team": "red"
   },
   {
-    "id": 59,
+    "id": 60,
     "grade": 4,
     "class": "甲",
     "name": "方婕薰",
     "team": "red"
   },
   {
-    "id": 60,
+    "id": 61,
     "grade": 4,
     "class": "甲",
     "name": "黃晨瑄",
     "team": "red"
   },
   {
-    "id": 61,
+    "id": 62,
     "grade": 4,
     "class": "甲",
     "name": "邱子瑜",
     "team": "green"
   },
   {
-    "id": 62,
+    "id": 63,
     "grade": 4,
     "class": "甲",
     "name": "楊佳恩",
     "team": "green"
   },
   {
-    "id": 63,
+    "id": 64,
     "grade": 4,
     "class": "甲",
     "name": "陳采緹",
     "team": "green"
   },
   {
-    "id": 64,
+    "id": 65,
     "grade": 5,
     "class": "甲",
     "name": "陳致愷",
     "team": "red"
   },
   {
-    "id": 65,
+    "id": 66,
     "grade": 5,
     "class": "甲",
     "name": "黃鈞瑋",
     "team": "green"
   },
   {
-    "id": 66,
+    "id": 67,
     "grade": 5,
     "class": "甲",
     "name": "黃俊佑",
     "team": "red"
   },
   {
-    "id": 67,
+    "id": 68,
     "grade": 5,
     "class": "甲",
     "name": "莊迪元",
     "team": "blue"
   },
   {
-    "id": 68,
+    "id": 69,
     "grade": 5,
     "class": "甲",
     "name": "夘嵊彬",
     "team": "blue"
   },
   {
-    "id": 69,
+    "id": 70,
     "grade": 5,
     "class": "甲",
     "name": "吳羿辰",
     "team": "blue"
   },
   {
-    "id": 70,
+    "id": 71,
     "grade": 5,
     "class": "甲",
     "name": "王浩宸",
     "team": "red"
   },
   {
-    "id": 71,
+    "id": 72,
     "grade": 5,
     "class": "甲",
     "name": "陳奕辰",
     "team": "red"
   },
   {
-    "id": 72,
+    "id": 73,
     "grade": 5,
     "class": "甲",
     "name": "陳浩銘",
     "team": "red"
   },
   {
-    "id": 73,
+    "id": 74,
     "grade": 5,
     "class": "甲",
     "name": "王威霖",
     "team": "blue"
   },
   {
-    "id": 74,
+    "id": 75,
     "grade": 5,
     "class": "甲",
     "name": "劉濬賓",
     "team": "red"
   },
   {
-    "id": 75,
+    "id": 76,
     "grade": 5,
     "class": "甲",
     "name": "林浩哲",
     "team": "blue"
   },
   {
-    "id": 76,
+    "id": 77,
     "grade": 5,
     "class": "甲",
     "name": "蔡岳辰",
     "team": "green"
   },
   {
-    "id": 77,
+    "id": 78,
     "grade": 5,
     "class": "甲",
     "name": "黃晨涵",
     "team": "green"
   },
   {
-    "id": 78,
+    "id": 79,
     "grade": 5,
     "class": "甲",
     "name": "李姿錡",
     "team": "blue"
   },
   {
-    "id": 79,
+    "id": 80,
     "grade": 5,
     "class": "甲",
     "name": "黃宥榛",
     "team": "green"
   },
   {
-    "id": 80,
+    "id": 81,
     "grade": 5,
     "class": "甲",
     "name": "李晨馨",
     "team": "green"
   },
   {
-    "id": 81,
+    "id": 82,
     "grade": 6,
     "class": "甲",
     "name": "黃振宸",
     "team": "red"
   },
   {
-    "id": 82,
+    "id": 83,
     "grade": 6,
     "class": "甲",
     "name": "黃明哲",
     "team": "blue"
   },
   {
-    "id": 83,
+    "id": 84,
     "grade": 6,
     "class": "甲",
     "name": "黃睿澄",
     "team": "blue"
   },
   {
-    "id": 84,
+    "id": 85,
     "grade": 6,
     "class": "甲",
     "name": "郭韋辰",
     "team": "red"
   },
   {
-    "id": 85,
+    "id": 86,
     "grade": 6,
     "class": "甲",
     "name": "方晨宇",
     "team": "green"
   },
   {
-    "id": 86,
+    "id": 87,
     "grade": 6,
     "class": "甲",
     "name": "陳駿鈜",
     "team": "red"
   },
   {
-    "id": 87,
+    "id": 88,
     "grade": 6,
     "class": "甲",
     "name": "施竑群",
     "team": "green"
   },
   {
-    "id": 88,
+    "id": 89,
     "grade": 6,
     "class": "甲",
     "name": "黃若驊",
     "team": "green"
   },
   {
-    "id": 89,
+    "id": 90,
     "grade": 6,
     "class": "甲",
     "name": "李順興",
     "team": "blue"
   },
   {
-    "id": 90,
+    "id": 91,
     "grade": 6,
     "class": "甲",
     "name": "李帷雍",
     "team": "red"
   },
   {
-    "id": 91,
+    "id": 92,
     "grade": 6,
     "class": "甲",
     "name": "吳宜樂",
     "team": "green"
   },
   {
-    "id": 92,
+    "id": 93,
     "grade": 6,
     "class": "甲",
     "name": "顏儀芳",
     "team": "green"
   },
   {
-    "id": 93,
+    "id": 94,
     "grade": 6,
     "class": "甲",
     "name": "黃品璇",
     "team": "green"
   },
   {
-    "id": 94,
+    "id": 95,
     "grade": 6,
     "class": "甲",
     "name": "陳品甯",
     "team": "red"
   },
   {
-    "id": 95,
+    "id": 96,
     "grade": 6,
     "class": "甲",
     "name": "林勤容",
     "team": "red"
   },
   {
-    "id": 96,
+    "id": 97,
     "grade": 6,
     "class": "甲",
     "name": "黃婕洺",
     "team": "blue"
   },
   {
-    "id": 97,
+    "id": 98,
     "grade": 6,
     "class": "甲",
     "name": "羅苡芸",
     "team": "blue"
   },
   {
-    "id": 98,
+    "id": 99,
     "grade": 6,
     "class": "甲",
     "name": "劉雯玲",
     "team": "green"
   },
   {
-    "id": 99,
+    "id": 100,
     "grade": 6,
     "class": "甲",
     "name": "戴瑋辰",
@@ -1661,7 +1668,7 @@
     }
 
     function loadStudentsFromStorage() {
-      const DATA_VERSION = '1124_v1'; // 11/22 最新紅綠藍名單版本戳記
+      const DATA_VERSION = '1128_v1'; // 11/22 最新紅綠藍名單版本戳記
       const savedVersion = localStorage.getItem('nanxing_sorting_version');
       const saved = localStorage.getItem('nanxing_sorting_students');
 
@@ -1897,6 +1904,14 @@
       if (wGreen) wGreen.textContent = greenRevealed;
       if (wBlue) wBlue.textContent = blueRevealed;
 
+      // 各隊總人數分母動態更新
+      ['red', 'green', 'blue'].forEach(t => {
+        const totalElem = document.getElementById(`wings-total-${t}`);
+        if (totalElem) totalElem.textContent = students.filter(s => s.team === t).length;
+        const targetElem = document.getElementById(`target-total-${t}`);
+        if (targetElem) targetElem.textContent = students.filter(s => s.team === t).length;
+      });
+
       // 經典底部計數
       const cRed = document.getElementById('count-red');
       const cGreen = document.getElementById('count-green');
@@ -2018,7 +2033,7 @@
     }
 
     function revealAllStudentsFast() {
-      if (confirm('確定要一鍵將全校 99 位學生全數揭曉分隊嗎？（適合想直接進入三隊集合檢核）')) {
+      if (confirm('確定要一鍵將全校 100 位學生全數揭曉分隊嗎？（適合想直接進入三隊集合檢核）')) {
         students.forEach(s => s.revealed = true);
         saveStudentsToStorage();
         renderCurrentStudent();
