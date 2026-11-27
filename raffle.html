@@ -544,11 +544,11 @@
 
       <div class="flex items-center justify-center gap-2">
         <button onclick="closeStationAuthModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">返回公告</button>
-        <button onclick="verifyStationPassword()" class="px-6 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black transition shadow">確認解鎖</button>
+        <button id="station-auth-submit-btn" onclick="verifyStationPassword()" class="px-6 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black transition shadow">確認解鎖</button>
       </div>
 
       <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400">
-        💡 預設大會管理密碼：<strong class="text-slate-600">115</strong>（或輸入 nanxing）
+        🔒 驗證通過後可於各台電腦／平板即時同步摸彩與兌獎狀態
       </div>
     </div>
   </div>
@@ -586,50 +586,83 @@
     </div>
   </div>
 
-  <!-- JavaScript 核心程式碼 -->
-  <script>
-    const DEFAULT_MEMBERS = [{"id": 1, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 1, "seat_str": "01", "name": "黃偉杉", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 01號 黃偉杉"}, {"id": 2, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 2, "seat_str": "02", "name": "邱振倫", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 02號 邱振倫"}, {"id": 3, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 3, "seat_str": "03", "name": "陳鎰鈞", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 03號 陳鎰鈞"}, {"id": 4, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 4, "seat_str": "04", "name": "柯允昊", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 04號 柯允昊"}, {"id": 5, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 5, "seat_str": "05", "name": "黃群澔", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 05號 黃群澔"}, {"id": 6, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 6, "seat_str": "06", "name": "許名鋐", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 06號 許名鋐"}, {"id": 7, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 7, "seat_str": "07", "name": "李倪", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 07號 李倪"}, {"id": 8, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 8, "seat_str": "08", "name": "黃苡芹", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 08號 黃苡芹"}, {"id": 9, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 9, "seat_str": "09", "name": "黃若芯", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 09號 黃若芯"}, {"id": 10, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 10, "seat_str": "10", "name": "黃平荷", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 10號 黃平荷"}, {"id": 11, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 11, "seat_str": "11", "name": "黃妙鈺", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 11號 黃妙鈺"}, {"id": 12, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 12, "seat_str": "12", "name": "黃紫凝", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 12號 黃紫凝"}, {"id": 13, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 13, "seat_str": "13", "name": "施又菲", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 13號 施又菲"}, {"id": 14, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 14, "seat_str": "14", "name": "郭子菲", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 14號 郭子菲"}, {"id": 15, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 15, "seat_str": "15", "name": "邱品潔", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 15號 邱品潔"}, {"id": 16, "category": "kindergarten", "category_name": "幼兒園星星班", "grade_num": 0, "seat": 16, "seat_str": "16", "name": "黃唯溱", "role": "幼生", "title": "幼兒園星星班幼生", "display_label": "幼兒園 16號 黃唯溱"}, {"id": 17, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 1, "seat_str": "01", "name": "黃修齊", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 01號 黃修齊"}, {"id": 18, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 2, "seat_str": "02", "name": "林宇宸", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 02號 林宇宸"}, {"id": 19, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 3, "seat_str": "03", "name": "黃羿暘", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 03號 黃羿暘"}, {"id": 20, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 4, "seat_str": "04", "name": "蔡孟言", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 04號 蔡孟言"}, {"id": 21, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 5, "seat_str": "05", "name": "蔡昕佳", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 05號 蔡昕佳"}, {"id": 22, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 6, "seat_str": "06", "name": "郭于瑈", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 06號 郭于瑈"}, {"id": 23, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 7, "seat_str": "07", "name": "黃卉丞", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 07號 黃卉丞"}, {"id": 24, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 8, "seat_str": "08", "name": "林羽彤", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 08號 林羽彤"}, {"id": 25, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 9, "seat_str": "09", "name": "黃妙金", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 09號 黃妙金"}, {"id": 26, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 10, "seat_str": "10", "name": "黃羽晨", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 10號 黃羽晨"}, {"id": 27, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 11, "seat_str": "11", "name": "郭子綺", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 11號 郭子綺"}, {"id": 28, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 12, "seat_str": "12", "name": "施語凡", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 12號 施語凡"}, {"id": 29, "category": "grade1", "category_name": "一年甲班", "grade_num": 1, "seat": 13, "seat_str": "13", "name": "黎宛潔", "role": "學生", "title": "一年甲班學生", "display_label": "一甲 13號 黎宛潔"}, {"id": 30, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 1, "seat_str": "01", "name": "黃建霆", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 01號 黃建霆"}, {"id": 31, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 2, "seat_str": "02", "name": "黃世瑋", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 02號 黃世瑋"}, {"id": 32, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 3, "seat_str": "03", "name": "曾紹愷", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 03號 曾紹愷"}, {"id": 33, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 4, "seat_str": "04", "name": "邱恩俊", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 04號 邱恩俊"}, {"id": 34, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 5, "seat_str": "05", "name": "吳楷鈞", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 05號 吳楷鈞"}, {"id": 35, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 6, "seat_str": "06", "name": "邱士軒", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 06號 邱士軒"}, {"id": 36, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 7, "seat_str": "07", "name": "顏淓鋙", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 07號 顏淓鋙"}, {"id": 37, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 8, "seat_str": "08", "name": "楊佳瑜", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 08號 楊佳瑜"}, {"id": 38, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 9, "seat_str": "09", "name": "樊沛恩", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 09號 樊沛恩"}, {"id": 39, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 10, "seat_str": "10", "name": "蘇潁心", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 10號 蘇潁心"}, {"id": 40, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 11, "seat_str": "11", "name": "楊珍恬", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 11號 楊珍恬"}, {"id": 41, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 12, "seat_str": "12", "name": "黃姵潔", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 12號 黃姵潔"}, {"id": 42, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 13, "seat_str": "13", "name": "劉恩語", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 13號 劉恩語"}, {"id": 43, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 14, "seat_str": "14", "name": "黃詩柔", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 14號 黃詩柔"}, {"id": 44, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 15, "seat_str": "15", "name": "郭沛貽", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 15號 郭沛貽"}, {"id": 45, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 16, "seat_str": "16", "name": "蔡理璇", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 16號 蔡理璇"}, {"id": 46, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 17, "seat_str": "17", "name": "張巧沛", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 17號 張巧沛"}, {"id": 47, "category": "grade2", "category_name": "二年甲班", "grade_num": 2, "seat": 18, "seat_str": "18", "name": "柯允菲", "role": "學生", "title": "二年甲班學生", "display_label": "二甲 18號 柯允菲"}, {"id": 48, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 1, "seat_str": "01", "name": "林進陞", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 01號 林進陞"}, {"id": 49, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 2, "seat_str": "02", "name": "黃柏嘉", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 02號 黃柏嘉"}, {"id": 50, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 3, "seat_str": "03", "name": "陳睿謙", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 03號 陳睿謙"}, {"id": 51, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 4, "seat_str": "04", "name": "施慎和", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 04號 施慎和"}, {"id": 52, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 5, "seat_str": "05", "name": "葉涅山", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 05號 葉涅山"}, {"id": 53, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 6, "seat_str": "06", "name": "黃邦睿", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 06號 黃邦睿"}, {"id": 54, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 7, "seat_str": "07", "name": "李宇樂", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 07號 李宇樂"}, {"id": 55, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 8, "seat_str": "08", "name": "郭子翔", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 08號 郭子翔"}, {"id": 56, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 9, "seat_str": "09", "name": "邱亞忻", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 09號 邱亞忻"}, {"id": 57, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 10, "seat_str": "10", "name": "蔡喬捷", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 10號 蔡喬捷"}, {"id": 58, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 11, "seat_str": "11", "name": "林姿妤", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 11號 林姿妤"}, {"id": 59, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 12, "seat_str": "12", "name": "郭俞岑", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 12號 郭俞岑"}, {"id": 60, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 13, "seat_str": "13", "name": "葉芷安", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 13號 葉芷安"}, {"id": 61, "category": "grade3", "category_name": "三年甲班", "grade_num": 3, "seat": 14, "seat_str": "14", "name": "王畇霏", "role": "學生", "title": "三年甲班學生", "display_label": "三甲 14號 王畇霏"}, {"id": 62, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 1, "seat_str": "01", "name": "黃祐嘉", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 01號 黃祐嘉"}, {"id": 63, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 2, "seat_str": "02", "name": "陳敬倫", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 02號 陳敬倫"}, {"id": 64, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 3, "seat_str": "03", "name": "邱弘富", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 03號 邱弘富"}, {"id": 65, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 4, "seat_str": "04", "name": "黃凱崙", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 04號 黃凱崙"}, {"id": 66, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 5, "seat_str": "05", "name": "王宣錡", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 05號 王宣錡"}, {"id": 67, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 6, "seat_str": "06", "name": "黃震興", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 06號 黃震興"}, {"id": 68, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 7, "seat_str": "07", "name": "陳伯瑞", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 07號 陳伯瑞"}, {"id": 69, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 8, "seat_str": "08", "name": "吳家樂", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 08號 吳家樂"}, {"id": 70, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 9, "seat_str": "09", "name": "林雨晴", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 09號 林雨晴"}, {"id": 71, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 10, "seat_str": "10", "name": "蔡依璇", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 10號 蔡依璇"}, {"id": 72, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 11, "seat_str": "11", "name": "翁梓綝", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 11號 翁梓綝"}, {"id": 73, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 12, "seat_str": "12", "name": "陳品彤", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 12號 陳品彤"}, {"id": 74, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 13, "seat_str": "13", "name": "蘇亮伃", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 13號 蘇亮伃"}, {"id": 75, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 14, "seat_str": "14", "name": "方婕薰", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 14號 方婕薰"}, {"id": 76, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 15, "seat_str": "15", "name": "黃晨瑄", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 15號 黃晨瑄"}, {"id": 77, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 16, "seat_str": "16", "name": "邱子瑜", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 16號 邱子瑜"}, {"id": 78, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 17, "seat_str": "17", "name": "楊佳恩", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 17號 楊佳恩"}, {"id": 79, "category": "grade4", "category_name": "四年甲班", "grade_num": 4, "seat": 18, "seat_str": "18", "name": "陳采緹", "role": "學生", "title": "四年甲班學生", "display_label": "四甲 18號 陳采緹"}, {"id": 80, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 1, "seat_str": "01", "name": "陳致愷", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 01號 陳致愷"}, {"id": 81, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 2, "seat_str": "02", "name": "黃鈞瑋", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 02號 黃鈞瑋"}, {"id": 82, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 3, "seat_str": "03", "name": "黃俊佑", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 03號 黃俊佑"}, {"id": 83, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 4, "seat_str": "04", "name": "莊迪元", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 04號 莊迪元"}, {"id": 84, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 5, "seat_str": "05", "name": "夘嵊彬", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 05號 夘嵊彬"}, {"id": 85, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 6, "seat_str": "06", "name": "吳羿辰", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 06號 吳羿辰"}, {"id": 86, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 7, "seat_str": "07", "name": "王浩宸", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 07號 王浩宸"}, {"id": 87, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 8, "seat_str": "08", "name": "陳奕辰", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 08號 陳奕辰"}, {"id": 88, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 9, "seat_str": "09", "name": "陳浩銘", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 09號 陳浩銘"}, {"id": 89, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 10, "seat_str": "10", "name": "王威霖", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 10號 王威霖"}, {"id": 90, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 11, "seat_str": "11", "name": "劉濬賓", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 11號 劉濬賓"}, {"id": 91, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 12, "seat_str": "12", "name": "林浩哲", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 12號 林浩哲"}, {"id": 92, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 13, "seat_str": "13", "name": "蔡岳辰", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 13號 蔡岳辰"}, {"id": 93, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 14, "seat_str": "14", "name": "黃晨涵", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 14號 黃晨涵"}, {"id": 94, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 15, "seat_str": "15", "name": "李姿錡", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 15號 李姿錡"}, {"id": 95, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 16, "seat_str": "16", "name": "黃宥榛", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 16號 黃宥榛"}, {"id": 96, "category": "grade5", "category_name": "五年甲班", "grade_num": 5, "seat": 17, "seat_str": "17", "name": "李晨馨", "role": "學生", "title": "五年甲班學生", "display_label": "五甲 17號 李晨馨"}, {"id": 97, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 1, "seat_str": "01", "name": "黃振宸", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 01號 黃振宸"}, {"id": 98, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 2, "seat_str": "02", "name": "黃明哲", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 02號 黃明哲"}, {"id": 99, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 3, "seat_str": "03", "name": "黃睿澄", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 03號 黃睿澄"}, {"id": 100, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 4, "seat_str": "04", "name": "郭韋辰", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 04號 郭韋辰"}, {"id": 101, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 5, "seat_str": "05", "name": "方晨宇", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 05號 方晨宇"}, {"id": 102, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 6, "seat_str": "06", "name": "陳駿鈜", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 06號 陳駿鈜"}, {"id": 103, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 7, "seat_str": "07", "name": "施竑群", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 07號 施竑群"}, {"id": 104, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 8, "seat_str": "08", "name": "黃若驊", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 08號 黃若驊"}, {"id": 105, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 9, "seat_str": "09", "name": "李順興", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 09號 李順興"}, {"id": 106, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 10, "seat_str": "10", "name": "李帷雍", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 10號 李帷雍"}, {"id": 107, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 11, "seat_str": "11", "name": "吳宜樂", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 11號 吳宜樂"}, {"id": 108, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 12, "seat_str": "12", "name": "顏儀芳", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 12號 顏儀芳"}, {"id": 109, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 13, "seat_str": "13", "name": "黃品璇", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 13號 黃品璇"}, {"id": 110, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 14, "seat_str": "14", "name": "陳品甯", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 14號 陳品甯"}, {"id": 111, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 15, "seat_str": "15", "name": "林勤容", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 15號 林勤容"}, {"id": 112, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 16, "seat_str": "16", "name": "黃婕洺", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 16號 黃婕洺"}, {"id": 113, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 17, "seat_str": "17", "name": "羅苡芸", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 17號 羅苡芸"}, {"id": 114, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 18, "seat_str": "18", "name": "劉雯玲", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 18號 劉雯玲"}, {"id": 115, "category": "grade6", "category_name": "六年甲班", "grade_num": 6, "seat": 19, "seat_str": "19", "name": "戴瑋辰", "role": "學生", "title": "六年甲班學生", "display_label": "六甲 19號 戴瑋辰"}, {"id": 116, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 1, "seat_str": "T01", "name": "吳宜蓁", "role": "教職員", "title": "校長", "display_label": "教職員 校長 吳宜蓁"}, {"id": 117, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 2, "seat_str": "T02", "name": "為秀麗", "role": "教職員", "title": "教導主任", "display_label": "教職員 教導主任 為秀麗"}, {"id": 118, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 3, "seat_str": "T03", "name": "陳建榮", "role": "教職員", "title": "總務主任", "display_label": "教職員 總務主任 陳建榮"}, {"id": 119, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 4, "seat_str": "T04", "name": "林佩君", "role": "教職員", "title": "人事主任", "display_label": "教職員 人事主任 林佩君"}, {"id": 120, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 5, "seat_str": "T05", "name": "汪淑慧", "role": "教職員", "title": "會計主任", "display_label": "教職員 會計主任 汪淑慧"}, {"id": 121, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 6, "seat_str": "T06", "name": "林承翰", "role": "教職員", "title": "教務組長", "display_label": "教職員 教務組長 林承翰"}, {"id": 122, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 7, "seat_str": "T07", "name": "李宗修", "role": "教職員", "title": "學務組長", "display_label": "教職員 學務組長 李宗修"}, {"id": 123, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 8, "seat_str": "T08", "name": "曾鈺真", "role": "教職員", "title": "事務組長", "display_label": "教職員 事務組長 曾鈺真"}, {"id": 124, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 9, "seat_str": "T09", "name": "黃千芳", "role": "教職員", "title": "護理師", "display_label": "教職員 護理師 黃千芳"}, {"id": 125, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 10, "seat_str": "T10", "name": "楊詒茹", "role": "教職員", "title": "六甲導師", "display_label": "教職員 六甲導師 楊詒茹"}, {"id": 126, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 11, "seat_str": "T11", "name": "蔡武憲", "role": "教職員", "title": "五甲導師", "display_label": "教職員 五甲導師 蔡武憲"}, {"id": 127, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 12, "seat_str": "T12", "name": "施喬恩", "role": "教職員", "title": "四甲導師", "display_label": "教職員 四甲導師 施喬恩"}, {"id": 128, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 13, "seat_str": "T13", "name": "鄭潔", "role": "教職員", "title": "三甲導師", "display_label": "教職員 三甲導師 鄭潔"}, {"id": 129, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 14, "seat_str": "T14", "name": "黃美雅", "role": "教職員", "title": "二甲導師", "display_label": "教職員 二甲導師 黃美雅"}, {"id": 130, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 15, "seat_str": "T15", "name": "徐敏瓊", "role": "教職員", "title": "一甲導師", "display_label": "教職員 一甲導師 徐敏瓊"}, {"id": 131, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 16, "seat_str": "T16", "name": "羅珮華", "role": "教職員", "title": "科任教師", "display_label": "教職員 科任教師 羅珮華"}, {"id": 132, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 17, "seat_str": "T17", "name": "周婉琳", "role": "教職員", "title": "資源班", "display_label": "教職員 資源班 周婉琳"}, {"id": 133, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 18, "seat_str": "T18", "name": "許靖昀", "role": "教職員", "title": "星星班主任", "display_label": "教職員 星星班主任 許靖昀"}, {"id": 134, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 19, "seat_str": "T19", "name": "莊雅筑", "role": "教職員", "title": "導師", "display_label": "教職員 導師 莊雅筑"}, {"id": 135, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 20, "seat_str": "T20", "name": "黃筱筠", "role": "教職員", "title": "教保員", "display_label": "教職員 教保員 黃筱筠"}, {"id": 136, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 21, "seat_str": "T21", "name": "林杏華", "role": "教職員", "title": "加置人力教保員", "display_label": "教職員 加置人力教保員 林杏華"}, {"id": 137, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 22, "seat_str": "T22", "name": "楊秀珍", "role": "教職員", "title": "幼兒園廚工", "display_label": "教職員 幼兒園廚工 楊秀珍"}, {"id": 138, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 23, "seat_str": "T23", "name": "楊宗朋", "role": "教職員", "title": "警衛", "display_label": "教職員 警衛 楊宗朋"}, {"id": 139, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 24, "seat_str": "T24", "name": "李枝香", "role": "教職員", "title": "警衛", "display_label": "教職員 警衛 李枝香"}, {"id": 140, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 25, "seat_str": "T25", "name": "張惠華", "role": "教職員", "title": "課輔班教師", "display_label": "教職員 課輔班教師 張惠華"}, {"id": 141, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 26, "seat_str": "T26", "name": "翁佳淇", "role": "教職員", "title": "課輔班教師", "display_label": "教職員 課輔班教師 翁佳淇"}, {"id": 142, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 27, "seat_str": "T27", "name": "周家妤", "role": "教職員", "title": "課輔班教師", "display_label": "教職員 課輔班教師 周家妤"}, {"id": 143, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 28, "seat_str": "T28", "name": "黃水樹", "role": "教職員", "title": "金獅陣教練", "display_label": "教職員 金獅陣教練 黃水樹"}, {"id": 144, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 29, "seat_str": "T29", "name": "陳孟菱", "role": "教職員", "title": "音樂老師", "display_label": "教職員 音樂老師 陳孟菱"}, {"id": 145, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 30, "seat_str": "T30", "name": "吳雪如", "role": "教職員", "title": "校園大姊", "display_label": "教職員 校園大姊 吳雪如"}, {"id": 146, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 31, "seat_str": "T31", "name": "林立樺", "role": "教職員", "title": "實習老師", "display_label": "教職員 實習老師 林立樺"}, {"id": 147, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 32, "seat_str": "T32", "name": "魏仲偉", "role": "教職員", "title": "本土語老師", "display_label": "教職員 本土語老師 魏仲偉"}, {"id": 148, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 33, "seat_str": "T33", "name": "王琮雅", "role": "教職員", "title": "美勞老師", "display_label": "教職員 美勞老師 王琮雅"}, {"id": 149, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 34, "seat_str": "T34", "name": "侯庭慧", "role": "教職員", "title": "舞蹈老師", "display_label": "教職員 舞蹈老師 侯庭慧"}, {"id": 150, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 35, "seat_str": "T35", "name": "蔡佩紋", "role": "教職員", "title": "跳鼓陣教練", "display_label": "教職員 跳鼓陣教練 蔡佩紋"}, {"id": 151, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 36, "seat_str": "T36", "name": "蔡招治", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 蔡招治"}, {"id": 152, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 37, "seat_str": "T37", "name": "洪美娟", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 洪美娟"}, {"id": 153, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 38, "seat_str": "T38", "name": "鄭育姍", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 鄭育姍"}, {"id": 154, "category": "staff", "category_name": "教職員工", "grade_num": 99, "seat": 39, "seat_str": "T39", "name": "高阿忍", "role": "教職員", "title": "特教助理", "display_label": "教職員 特教助理 高阿忍"}];
+  <!-- JavaScript 核心程式碼（Firebase Firestore 即時同步＋後端密碼驗證） -->
+  <script type="module">
+    import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js';
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      updateDoc,
+      deleteDoc,
+      collection,
+      onSnapshot
+    } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      projectId: "nses-115-sports",
+      appId: "1:407289264179:web:264129772885bcadd6cb46",
+      storageBucket: "nses-115-sports.firebasestorage.app",
+      apiKey: "AIzaSyCus5d1cj2cbe_xSiDDkr7GNlJZ40mAP7M",
+      authDomain: "nses-115-sports.firebaseapp.com",
+      messagingSenderId: "407289264179"
+    };
+
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const RAFFLE_EMAIL = 'raffle@nses-115.local';
+    const MEMBERS_CACHE_KEY = 'NANXING_RAFFLE_MEMBERS_CACHE_V1';
+
     const DEFAULT_PRIZES = [{"id": "p01", "tier": "grand", "tier_name": "特獎", "name": "高級直立式電風扇", "total": 2, "remaining": 2, "image": "images/raffle/高級直立式電風扇.jpg", "unit": "台", "icon": "fa-fan", "stage": 4}, {"id": "p02", "tier": "grand", "tier_name": "特獎", "name": "智慧感應式垃圾桶", "total": 1, "remaining": 1, "image": "images/raffle/智慧感應式垃圾桶.jpg", "unit": "台", "icon": "fa-trash-can", "stage": 4}, {"id": "p03", "tier": "first", "tier_name": "頭獎", "name": "彼得兔不鏽鋼保溫杯", "total": 2, "remaining": 2, "image": "images/raffle/彼得兔不鏽鋼保溫杯.jpg", "unit": "個", "icon": "fa-mug-hot", "stage": 4}, {"id": "p04", "tier": "first", "tier_name": "頭獎", "name": "超萌水豚造型後背包", "total": 1, "remaining": 1, "image": "images/raffle/超萌水豚造型後背包.jpg", "unit": "個", "icon": "fa-bag-shopping", "stage": 4}, {"id": "p05", "tier": "first", "tier_name": "頭獎", "name": "多功能減壓實用後背包", "total": 1, "remaining": 1, "image": "images/raffle/多功能減壓實用後背包.jpg", "unit": "個", "icon": "fa-briefcase", "stage": 4}, {"id": "p06", "tier": "second", "tier_name": "貳獎", "name": "蠟筆小新餐具餐盒套裝組", "total": 1, "remaining": 1, "image": "images/raffle/蠟筆小新餐具餐盒套裝組.jpg", "unit": "組", "icon": "fa-utensils", "stage": 4}, {"id": "p07", "tier": "second", "tier_name": "貳獎", "name": "精選水果刀具組", "total": 1, "remaining": 1, "image": "images/raffle/精選水果刀具組.jpg", "unit": "套", "icon": "fa-kitchen-set", "stage": 3}, {"id": "p08", "tier": "second", "tier_name": "貳獎", "name": "方形親膚舒適大抱枕", "total": 1, "remaining": 1, "image": "images/raffle/方形親膚舒適大抱枕.jpg", "unit": "個", "icon": "fa-couch", "stage": 2}, {"id": "p09", "tier": "second", "tier_name": "貳獎", "name": "長形萌萌趴趴狗抱枕", "total": 2, "remaining": 2, "image": "images/raffle/長形萌萌趴趴狗抱枕.jpg", "unit": "隻", "icon": "fa-dog", "stage": 2}, {"id": "p10", "tier": "second", "tier_name": "貳獎", "name": "短型萌萌趴趴狗抱枕", "total": 2, "remaining": 2, "image": "images/raffle/短型萌萌趴趴狗抱枕.jpg", "unit": "隻", "icon": "fa-dog", "stage": 2}, {"id": "p11", "tier": "third", "tier_name": "參獎", "name": "Smartivity 木質益智拼組玩具", "total": 5, "remaining": 5, "image": "images/raffle/Smartivity 木質益智拼組玩具.jpg", "unit": "盒", "icon": "fa-puzzle-piece", "stage": 3}, {"id": "p12", "tier": "third", "tier_name": "參獎", "name": "Panasonic 負離子吹風機", "total": 5, "remaining": 5, "image": "images/raffle/Panasonic吹風機.jpg", "unit": "台", "icon": "fa-wind", "stage": 3}, {"id": "p13", "tier": "third", "tier_name": "參獎", "name": "Kinyo 大風量吹風機", "total": 5, "remaining": 5, "image": "images/raffle/Kinyo吹風機.jpg", "unit": "台", "icon": "fa-wind", "stage": 3}, {"id": "p14", "tier": "third", "tier_name": "參獎", "name": "迷你型便攜旅行吹風機", "total": 5, "remaining": 5, "image": "images/raffle/迷你型便攜旅行吹風機.jpg", "unit": "台", "icon": "fa-wind", "stage": 3}, {"id": "p15", "tier": "lucky", "tier_name": "幸運獎", "name": "隨身手持小風扇", "total": 10, "remaining": 10, "image": "images/raffle/隨身手持小風扇.jpg", "unit": "台", "icon": "fa-fan", "stage": 2}, {"id": "p16", "tier": "lucky", "tier_name": "幸運獎", "name": "台灣優質在地好米 (3kg)", "total": 5, "remaining": 5, "image": "images/raffle/台灣優質在地好米 (3kg).jpg", "unit": "包", "icon": "fa-bowl-rice", "stage": 2}, {"id": "p17", "tier": "general", "tier_name": "普獎", "name": "典雅美型面紙盒", "total": 30, "remaining": 30, "image": "images/raffle/典雅美型面紙盒.jpg", "unit": "個", "icon": "fa-box-open", "stage": 1}, {"id": "p18", "tier": "general", "tier_name": "普獎", "name": "居家優雅防水桌巾", "total": 30, "remaining": 30, "image": "images/raffle/居家優雅防水桌巾.jpg", "unit": "條", "icon": "fa-table-cells", "stage": 1}];
 
+    let baseMembers = [];
+    let cloudGuests = [];
     let members = [];
-    let prizes = [];
-    let records = []; // { memberId, prizeId, timestamp, claimed: boolean, claimedTime: string }
+    let prizes = JSON.parse(JSON.stringify(DEFAULT_PRIZES));
+    let records = [];
     let selectedMemberId = null;
-    let lockedPrizeId = null; // ⚡ 當前連續鎖定快抽之獎項 ID
+    let lockedPrizeId = null;
     let currentCategoryFilter = 'all';
     let currentPrizeFilter = 'all';
     let currentClaimFilter = 'all';
     let currentPrompterIndex = 0;
     let authTargetView = 'station';
+    let currentActiveView = 'board';
+    let unsubGuests = null;
+    let pendingModalSwitch = false;
 
-    const STORAGE_KEY = 'NANXING_RAFFLE_RECORDS_V1';
-    const GUESTS_STORAGE_KEY = 'NANXING_RAFFLE_GUESTS_V1';
-    const AUTH_SESSION_KEY = 'NANXING_RAFFLE_STATION_UNLOCKED';
-
-    function initSystem() {
-      try {
-        members = JSON.parse(JSON.stringify(DEFAULT_MEMBERS));
-
-        const savedGuests = localStorage.getItem(GUESTS_STORAGE_KEY);
-        if (savedGuests) {
-          const guests = JSON.parse(savedGuests);
-          members = [...members, ...guests];
-        }
-
-        prizes = JSON.parse(JSON.stringify(DEFAULT_PRIZES));
-
-        const savedRec = localStorage.getItem(STORAGE_KEY);
-        if (savedRec) {
-          records = JSON.parse(savedRec);
-        }
-
-        updateStationLockUI();
-        syncPrizeRemaining();
-        updateSmartPrompter();
-        renderAllViews();
-      } catch (err) {
-        console.error('初始化失敗:', err);
+    function resolveMember(recOrId) {
+      const id = typeof recOrId === 'object' ? recOrId.memberId : recOrId;
+      const found = members.find(x => x.id === id);
+      if (found) return found;
+      if (typeof recOrId === 'object') {
+        const cat = recOrId.categoryName || '';
+        const nm = recOrId.memberName || '幸運得主';
+        return {
+          id: recOrId.memberId,
+          name: nm,
+          category_name: cat,
+          seat_str: '',
+          title: '',
+          display_label: cat ? `${cat} ${nm}` : nm
+        };
       }
+      return null;
+    }
+
+    function formatNowTime24() {
+      const d = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
     }
 
     function syncPrizeRemaining() {
@@ -638,7 +671,6 @@
         p.remaining = Math.max(0, p.total - drawnCount);
       });
 
-      // 若目前鎖定的獎品抽完了，自動解除鎖定
       if (lockedPrizeId) {
         const lp = prizes.find(x => x.id === lockedPrizeId);
         if (!lp || lp.remaining <= 0) {
@@ -648,8 +680,7 @@
       }
     }
 
-    function saveRecords() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    function refreshAll() {
       syncPrizeRemaining();
       updateSmartPrompter();
       renderAllViews();
@@ -674,7 +705,7 @@
       document.getElementById('stat-total-prizes').textContent = `${totalPrizes} 份`;
       document.getElementById('stat-drawn-prizes').textContent = `${drawnCount} 份`;
       document.getElementById('stat-claimed-prizes').textContent = `${claimedCount} 份`;
-      document.getElementById('stat-total-members').textContent = `${members.length} 人`;
+      document.getElementById('stat-total-members').textContent = members.length > 0 ? `${members.length} 人` : '154+ 人';
 
       document.getElementById('claim-stat-total').textContent = `${drawnCount} 份`;
       document.getElementById('claim-stat-claimed').textContent = `${claimedCount} 份`;
@@ -689,11 +720,7 @@
       }
     }
 
-    // ==========================================
-    // 🌟 司儀提詞台智慧推薦邏輯 (Smart Teleprompter)
-    // ==========================================
     function getAvailablePrizes() {
-      // 按照階段 stage 排序：階段1 ➔ 階段2 ➔ 階段3 ➔ 階段4
       return prizes.filter(p => p.remaining > 0).sort((a, b) => a.stage - b.stage);
     }
 
@@ -732,7 +759,6 @@
       updateSmartPrompter();
     }
 
-    // ⚡ 批量快抽模式：直接鎖定獎項
     function lockCurrentPrompterPrize() {
       const available = getAvailablePrizes();
       if (available.length === 0) return;
@@ -756,9 +782,6 @@
       renderStationPrizeList();
     }
 
-    // ==========================================
-    // 視圖一：公告榜與圖鑑
-    // ==========================================
     let currentPrizeTierFilter = 'all';
 
     function renderPrizeGrid() {
@@ -775,10 +798,10 @@
       }
 
       list.forEach(p => {
-        const winners = records.filter(r => r.prizeId === p.id).map(r => {
-          const m = members.find(x => x.id === r.memberId);
-          return { ...r, member: m };
-        });
+        const winners = records.filter(r => r.prizeId === p.id).map(r => ({
+          ...r,
+          member: resolveMember(r)
+        }));
 
         let tierBadgeColor = 'bg-slate-100 text-slate-800 border-slate-200';
         if (p.tier === 'grand') tierBadgeColor = 'bg-red-100 text-red-800 border-red-300';
@@ -793,17 +816,14 @@
         }`;
 
         card.innerHTML = `
-          <!-- 圖片容器 (object-contain 完整呈現不裁切，點擊可放大) -->
           <div onclick="openImageLightbox('${p.id}')" class="relative h-52 bg-slate-50 cursor-pointer overflow-hidden group flex items-center justify-center p-3 border-b border-slate-100">
             <img src="${p.image}" alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300" onerror="this.src='images/school_logo.jpg'">
-            
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="px-2.5 py-1 rounded-lg text-xs font-black border shadow-sm ${tierBadgeColor}">
                 ${p.tier_name}
               </span>
               ${isDrawnOut ? '<span class="px-2 py-1 rounded-lg text-xs font-black bg-slate-900 text-white shadow-sm">已完抽</span>' : ''}
             </div>
-
             <div class="absolute bottom-3 right-3 bg-black/75 backdrop-blur-md text-white text-xs font-bold px-2.5 py-1 rounded-lg shadow flex items-center gap-1.5">
               <i class="fa-solid fa-magnifying-glass-plus text-[10px] text-amber-300"></i>
               <span>庫存：${p.remaining} / ${p.total} ${p.unit}</span>
@@ -817,7 +837,6 @@
               </div>
               <p class="text-xs text-slate-400 mt-0.5">總募集數量：${p.total} ${p.unit}</p>
 
-              <!-- 中獎者清單 -->
               <div class="mt-4 pt-3 border-t border-slate-100">
                 <div class="text-xs font-bold text-slate-500 mb-2 flex items-center justify-between">
                   <span>🎉 已抽出幸運兒 (${winners.length}人)：</span>
@@ -829,7 +848,7 @@
                   <div class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto custom-scroll">
                     ${winners.map(w => `
                       <span class="inline-flex items-center gap-1.5 text-xs font-bold px-2 py-1 rounded-lg ${w.claimed ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-amber-50 text-amber-800 border border-amber-200'}">
-                        <span>${w.member ? w.member.display_label : '未知'}</span>
+                        <span>${w.member ? w.member.display_label : '幸運得主'}</span>
                         <span class="text-[10px] px-1 rounded ${w.claimed ? 'bg-emerald-200 text-emerald-900' : 'bg-amber-200 text-amber-900'}">
                           ${w.claimed ? '已領' : '待領'}
                         </span>
@@ -851,8 +870,10 @@
         btn.classList.remove('active', 'bg-red-600', 'text-white');
         btn.classList.add('bg-slate-100', 'text-slate-700');
       });
-      event.target.classList.remove('bg-slate-100', 'text-slate-700');
-      event.target.classList.add('active', 'bg-red-600', 'text-white');
+      if (window.event && window.event.target) {
+        window.event.target.classList.remove('bg-slate-100', 'text-slate-700');
+        window.event.target.classList.add('active', 'bg-red-600', 'text-white');
+      }
       renderPrizeGrid();
     }
 
@@ -865,7 +886,50 @@
         return;
       }
 
-      const matchMembers = members.filter(m => 
+      // 公開狀態僅搜尋已開獎紀錄（保護未開獎學童名冊）；工作人員解鎖後可搜尋全校名冊
+      if (!isStationUnlocked()) {
+        const matchedRecs = records.filter(r =>
+          (r.memberName || '').toLowerCase().includes(q) ||
+          (r.categoryName || '').toLowerCase().includes(q)
+        );
+        resBox.classList.remove('hidden');
+        if (matchedRecs.length === 0) {
+          resBox.innerHTML = `
+            <div class="text-center py-3 text-slate-500 font-bold text-sm">
+              目前「${q}」尚未出現在已開獎名單中（為保護隱私，未開獎名冊不對外開放搜尋）。
+            </div>
+          `;
+          return;
+        }
+        resBox.innerHTML = `
+          <div class="text-xs font-bold text-slate-500 mb-2">找到 ${matchedRecs.length} 筆已中獎紀錄：</div>
+          <div class="space-y-2">
+            ${matchedRecs.map(r => {
+              const m = resolveMember(r);
+              const prize = prizes.find(p => p.id === r.prizeId);
+              return `
+                <div class="p-3 rounded-xl bg-gradient-to-r from-amber-50 to-red-50 border-2 border-amber-300 flex items-center justify-between text-xs shadow-sm">
+                  <div class="flex items-center gap-2">
+                    <span class="text-lg">🎉</span>
+                    <div>
+                      <div class="font-black text-red-900 text-sm">${m ? m.display_label : r.memberName}</div>
+                      <div class="text-slate-600 mt-0.5">榮獲：<strong class="text-red-700">${prize ? prize.name : '未知好禮'}</strong> (${prize ? prize.tier_name : ''})</div>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-black ${r.claimed ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                      ${r.claimed ? '✅ 已領取' : '🟡 請至辦公室領獎'}
+                    </span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+        return;
+      }
+
+      const matchMembers = members.filter(m =>
         m.name.toLowerCase().includes(q) ||
         m.display_label.toLowerCase().includes(q) ||
         m.seat_str.toLowerCase().includes(q)
@@ -894,27 +958,26 @@
                   <span class="text-slate-400 font-medium italic">目前尚未中獎，請為自己集氣加油！</span>
                 </div>
               `;
-            } else {
-              return myRecords.map(r => {
-                const prize = prizes.find(p => p.id === r.prizeId);
-                return `
-                  <div class="p-3 rounded-xl bg-gradient-to-r from-amber-50 to-red-50 border-2 border-amber-300 flex items-center justify-between text-xs shadow-sm">
-                    <div class="flex items-center gap-2">
-                      <span class="text-lg">🎉</span>
-                      <div>
-                        <div class="font-black text-red-900 text-sm">${m.display_label}</div>
-                        <div class="text-slate-600 mt-0.5">榮獲：<strong class="text-red-700">${prize ? prize.name : '未知好禮'}</strong> (${prize ? prize.tier_name : ''})</div>
-                      </div>
-                    </div>
-                    <div class="text-right">
-                      <span class="inline-block px-2.5 py-1 rounded-full text-xs font-black ${r.claimed ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
-                        ${r.claimed ? '✅ 已領取' : '🟡 請至辦公室領獎'}
-                      </span>
+            }
+            return myRecords.map(r => {
+              const prize = prizes.find(p => p.id === r.prizeId);
+              return `
+                <div class="p-3 rounded-xl bg-gradient-to-r from-amber-50 to-red-50 border-2 border-amber-300 flex items-center justify-between text-xs shadow-sm">
+                  <div class="flex items-center gap-2">
+                    <span class="text-lg">🎉</span>
+                    <div>
+                      <div class="font-black text-red-900 text-sm">${m.display_label}</div>
+                      <div class="text-slate-600 mt-0.5">榮獲：<strong class="text-red-700">${prize ? prize.name : '未知好禮'}</strong> (${prize ? prize.tier_name : ''})</div>
                     </div>
                   </div>
-                `;
-              }).join('');
-            }
+                  <div class="text-right">
+                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-black ${r.claimed ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                      ${r.claimed ? '✅ 已領取' : '🟡 請至辦公室領獎'}
+                    </span>
+                  </div>
+                </div>
+              `;
+            }).join('');
           }).join('')}
         </div>
       `;
@@ -925,9 +988,6 @@
       document.getElementById('board-search-result').classList.add('hidden');
     }
 
-    // ==========================================
-    // 燈箱大圖彈窗 (Lightbox Modal - 點空白關閉)
-    // ==========================================
     function openImageLightbox(prizeId) {
       const p = prizes.find(x => x.id === prizeId);
       if (!p) return;
@@ -958,11 +1018,8 @@
       }
     });
 
-    // ==========================================
-    // 密碼保護機制 (Station & Claim 共用)
-    // ==========================================
     function isStationUnlocked() {
-      return sessionStorage.getItem(AUTH_SESSION_KEY) === 'true';
+      return Boolean(auth.currentUser && auth.currentUser.email === RAFFLE_EMAIL);
     }
 
     function handleProtectedTabClick(targetView) {
@@ -985,22 +1042,29 @@
       document.getElementById('station-auth-modal').classList.add('hidden');
     }
 
-    function verifyStationPassword() {
+    async function verifyStationPassword() {
       const pwd = document.getElementById('station-password-input').value.trim();
-      if (pwd === '115' || pwd.toLowerCase() === 'nanxing') {
-        sessionStorage.setItem(AUTH_SESSION_KEY, 'true');
+      if (!pwd) return;
+      const errEl = document.getElementById('auth-error-msg');
+      const btn = document.getElementById('station-auth-submit-btn');
+      errEl.classList.add('hidden');
+      if (btn) btn.disabled = true;
+
+      try {
+        pendingModalSwitch = true;
+        await signInWithEmailAndPassword(auth, RAFFLE_EMAIL, `nses-pin-${pwd}`);
         closeStationAuthModal();
-        updateStationLockUI();
-        switchView(authTargetView);
-      } else {
-        document.getElementById('auth-error-msg').classList.remove('hidden');
+      } catch (err) {
+        pendingModalSwitch = false;
+        errEl.classList.remove('hidden');
+      } finally {
+        if (btn) btn.disabled = false;
       }
     }
 
-    function lockStation() {
-      sessionStorage.removeItem(AUTH_SESSION_KEY);
-      updateStationLockUI();
-      switchView('board');
+    async function lockStation() {
+      localStorage.removeItem(MEMBERS_CACHE_KEY);
+      await signOut(auth);
       alert('摸彩登記與兌獎工作站已全數安全鎖定！');
     }
 
@@ -1017,17 +1081,16 @@
       });
     }
 
-    // ==========================================
-    // 視圖二：摸彩台登記工作站 (Laptop Station)
-    // ==========================================
     function filterStationMembers(cat) {
       currentCategoryFilter = cat;
       document.querySelectorAll('.st-pill').forEach(btn => {
         btn.classList.remove('active', 'bg-red-600', 'text-white');
         btn.classList.add('bg-slate-100', 'text-slate-700');
       });
-      event.target.classList.remove('bg-slate-100', 'text-slate-700');
-      event.target.classList.add('active', 'bg-red-600', 'text-white');
+      if (window.event && window.event.target) {
+        window.event.target.classList.remove('bg-slate-100', 'text-slate-700');
+        window.event.target.classList.add('active', 'bg-red-600', 'text-white');
+      }
       renderStationMemberList();
     }
 
@@ -1036,16 +1099,16 @@
       const searchKey = document.getElementById('station-search-input').value.trim().toLowerCase();
       container.innerHTML = '';
 
-      let list = members;
+      let list = [...members];
       if (currentCategoryFilter !== 'all') {
-        list = members.filter(m => m.category === currentCategoryFilter);
+        list = list.filter(m => m.category === currentCategoryFilter);
       }
 
       if (searchKey) {
-        list = list.filter(m => 
-          m.name.toLowerCase().includes(searchKey) || 
+        list = list.filter(m =>
+          m.name.toLowerCase().includes(searchKey) ||
           m.display_label.toLowerCase().includes(searchKey) ||
-          m.seat_str.toLowerCase().includes(searchKey)
+          (m.seat_str || '').toLowerCase().includes(searchKey)
         );
       }
 
@@ -1065,10 +1128,10 @@
 
         const card = document.createElement('div');
         card.className = `p-3 rounded-xl border text-xs cursor-pointer transition flex items-center justify-between ${
-          isSelected 
-            ? 'bg-red-500 text-white border-red-600 shadow-md transform scale-[1.01]' 
-            : myRec 
-              ? 'bg-slate-50 text-slate-500 border-slate-200' 
+          isSelected
+            ? 'bg-red-500 text-white border-red-600 shadow-md transform scale-[1.01]'
+            : myRec
+              ? 'bg-slate-50 text-slate-500 border-slate-200'
               : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 hover:border-slate-300'
         }`;
 
@@ -1079,7 +1142,7 @@
             <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
               isSelected ? 'bg-white/20 text-white' : myRec ? 'bg-slate-200 text-slate-600' : 'bg-red-100 text-red-700'
             }">
-              ${m.seat_str}
+              ${m.seat_str || ''}
             </div>
             <div>
               <div class="font-black text-sm">${m.name}</div>
@@ -1109,7 +1172,6 @@
     }
 
     function handleMemberCardClick(memberId) {
-      // 如果目前處於「批量鎖定快抽模式」：點人名直接頒發當前鎖定獎項！
       if (lockedPrizeId) {
         selectedMemberId = memberId;
         assignPrizeToSelected(lockedPrizeId);
@@ -1137,8 +1199,10 @@
         btn.classList.remove('active', 'bg-red-600', 'text-white');
         btn.classList.add('bg-slate-100', 'text-slate-700');
       });
-      event.target.classList.remove('bg-slate-100', 'text-slate-700');
-      event.target.classList.add('active', 'bg-red-600', 'text-white');
+      if (window.event && window.event.target) {
+        window.event.target.classList.remove('bg-slate-100', 'text-slate-700');
+        window.event.target.classList.add('active', 'bg-red-600', 'text-white');
+      }
       renderStationPrizeList();
     }
 
@@ -1167,8 +1231,8 @@
         card.className = `p-2.5 rounded-xl border text-xs flex items-center justify-between transition ${
           isLocked
             ? 'bg-amber-100 border-amber-400 ring-2 ring-amber-400 shadow-md transform scale-[1.01]'
-            : isOutOfStock 
-              ? 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed opacity-60' 
+            : isOutOfStock
+              ? 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed opacity-60'
               : 'bg-white hover:bg-amber-50 hover:border-amber-300 border-slate-200 text-slate-800 cursor-pointer shadow-sm active:scale-95'
         }`;
 
@@ -1178,7 +1242,6 @@
 
         card.innerHTML = `
           <div class="flex items-center gap-2.5">
-            <!-- 縮圖容器 (object-contain 不裁切) -->
             <div onclick="event.stopPropagation(); openImageLightbox('${p.id}')" class="w-12 h-12 rounded-lg overflow-hidden bg-slate-50 border border-slate-200 flex-shrink-0 flex items-center justify-center p-1 cursor-zoom-in" title="點擊放大查看大圖">
               <img src="${p.image}" class="max-h-full max-w-full object-contain" onerror="this.src='images/school_logo.jpg'">
             </div>
@@ -1207,50 +1270,71 @@
       });
     }
 
-    function assignPrizeToSelected(prizeId) {
+    async function assignPrizeToSelected(prizeId) {
       if (!selectedMemberId) {
         alert('請先在左邊清單點選【被抽中的師生人員】！');
+        return;
+      }
+      if (!isStationUnlocked()) {
+        openStationAuthModal();
         return;
       }
 
       const m = members.find(x => x.id === selectedMemberId);
       const p = prizes.find(x => x.id === prizeId);
-
       if (!m || !p) return;
 
-      const existIdx = records.findIndex(r => r.memberId === selectedMemberId);
-      if (existIdx >= 0) {
-        const prevPrize = prizes.find(x => x.id === records[existIdx].prizeId);
+      const existing = records.find(r => r.memberId === selectedMemberId);
+      if (existing) {
+        const prevPrize = prizes.find(x => x.id === existing.prizeId);
         if (!confirm(`【${m.display_label}】剛剛已經抽中【${prevPrize ? prevPrize.name : ''}】，確定要改登記為【${p.name}】嗎？`)) {
           return;
         }
-        records.splice(existIdx, 1);
       }
 
-      records.unshift({
-        memberId: m.id,
-        prizeId: p.id,
-        timestamp: new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+      const recordPayload = {
+        memberId: Number(m.id),
+        memberName: String(m.name).slice(0, 40),
+        categoryName: String(m.category_name || '貴賓').slice(0, 40),
+        prizeId: String(p.id).slice(0, 20),
+        timestamp: formatNowTime24(),
         claimed: false,
         claimedTime: ''
-      });
+      };
 
       triggerConfetti();
-      saveRecords();
-
       selectedMemberId = null;
       document.getElementById('selected-member-banner').classList.add('hidden');
-      renderStationMemberList();
+
+      try {
+        await setDoc(doc(db, 'raffle_records', String(m.id)), recordPayload);
+      } catch (err) {
+        console.error('Failed to save draw record:', err);
+        alert('雲端寫入失敗，請確認網路連線或重新解鎖！');
+      }
     }
 
-    function toggleClaimStatus(memberId, e) {
+    async function toggleClaimStatus(memberId, e) {
       if (e) e.stopPropagation();
+      if (!isStationUnlocked()) {
+        openStationAuthModal();
+        return;
+      }
       const rec = records.find(r => r.memberId === memberId);
       if (!rec) return;
 
-      rec.claimed = !rec.claimed;
-      rec.claimedTime = rec.claimed ? new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }) : '';
-      saveRecords();
+      const nextClaimed = !rec.claimed;
+      const nextTime = nextClaimed ? formatNowTime24().slice(0, 5) : '';
+
+      try {
+        await updateDoc(doc(db, 'raffle_records', String(memberId)), {
+          claimed: nextClaimed,
+          claimedTime: nextTime
+        });
+      } catch (err) {
+        console.error('Failed to update claim status:', err);
+        alert('領取狀態更新失敗，請確認網路連線！');
+      }
     }
 
     function updateStationRecentBox() {
@@ -1264,35 +1348,37 @@
 
       box.classList.remove('hidden');
       const last = records[0];
-      const m = members.find(x => x.id === last.memberId);
+      const m = resolveMember(last);
       const p = prizes.find(x => x.id === last.prizeId);
 
       text.innerHTML = `恭喜 <strong>${m ? m.display_label : ''}</strong> 抽中 <strong>${p ? p.name : ''}</strong> (${last.timestamp}) ｜ 狀態：<span class="${last.claimed ? 'text-emerald-700 font-bold' : 'text-amber-700 font-bold'}">${last.claimed ? '已領取' : '待領取'}</span>`;
     }
 
-    function undoLastDraw() {
+    async function undoLastDraw() {
       if (records.length === 0) return;
+      if (!isStationUnlocked()) {
+        openStationAuthModal();
+        return;
+      }
       const last = records[0];
-      const m = members.find(x => x.id === last.memberId);
+      const m = resolveMember(last);
       const p = prizes.find(x => x.id === last.prizeId);
 
       if (confirm(`確定要撤銷【${m ? m.display_label : ''}】獲得【${p ? p.name : ''}】的紀錄嗎？`)) {
-        records.shift();
-        saveRecords();
+        await deleteDoc(doc(db, 'raffle_records', String(last.memberId)));
       }
     }
 
-    // ==========================================
-    // 視圖三：現場兌獎核銷管理 (Claim Desk)
-    // ==========================================
     function filterClaimList(status) {
       currentClaimFilter = status;
       document.querySelectorAll('.claim-filter-btn').forEach(btn => {
         btn.classList.remove('active', 'bg-emerald-600', 'text-white');
         btn.classList.add('bg-slate-100', 'text-slate-700');
       });
-      event.target.classList.remove('bg-slate-100', 'text-slate-700');
-      event.target.classList.add('active', 'bg-emerald-600', 'text-white');
+      if (window.event && window.event.target) {
+        window.event.target.classList.remove('bg-slate-100', 'text-slate-700');
+        window.event.target.classList.add('active', 'bg-emerald-600', 'text-white');
+      }
       renderClaimList();
     }
 
@@ -1311,11 +1397,12 @@
         return;
       }
 
-      let list = records.map((r, idx) => {
-        const m = members.find(x => x.id === r.memberId);
-        const p = prizes.find(x => x.id === r.prizeId);
-        return { ...r, member: m, prize: p, originalIndex: idx };
-      });
+      let list = records.map((r, idx) => ({
+        ...r,
+        member: resolveMember(r),
+        prize: prizes.find(x => x.id === r.prizeId),
+        originalIndex: idx
+      }));
 
       if (currentClaimFilter === 'unclaimed') {
         list = list.filter(x => !x.claimed);
@@ -1324,7 +1411,7 @@
       }
 
       if (searchKey) {
-        list = list.filter(x => 
+        list = list.filter(x =>
           (x.member && (x.member.name.toLowerCase().includes(searchKey) || x.member.display_label.toLowerCase().includes(searchKey))) ||
           (x.prize && x.prize.name.toLowerCase().includes(searchKey))
         );
@@ -1345,8 +1432,8 @@
 
         const card = document.createElement('div');
         card.className = `p-4 rounded-2xl border transition shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 ${
-          item.claimed 
-            ? 'bg-slate-50 border-slate-200 text-slate-600' 
+          item.claimed
+            ? 'bg-slate-50 border-slate-200 text-slate-600'
             : 'bg-white border-amber-300 shadow-sm ring-1 ring-amber-200'
         }`;
 
@@ -1375,8 +1462,8 @@
 
           <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
             <button onclick="toggleClaimStatus(${item.memberId})" class="px-5 py-2.5 rounded-xl font-black text-xs transition shadow-sm flex items-center gap-2 ${
-              item.claimed 
-                ? 'bg-emerald-600 hover:bg-emerald-700 text-white' 
+              item.claimed
+                ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                 : 'bg-amber-400 hover:bg-amber-500 text-slate-950 font-black animate-pulse'
             }">
               ${item.claimed ? '<i class="fa-solid fa-circle-check text-sm"></i> ✅ 已領取完成' : '<i class="fa-solid fa-hand-holding-hand text-sm"></i> 🟡 點此確認領取'}
@@ -1392,9 +1479,6 @@
       });
     }
 
-    // ==========================================
-    // 視圖四：大螢幕開獎投影模式 (Projector Mode)
-    // ==========================================
     function renderProjectorView() {
       const nameEl = document.getElementById('proj-winner-name');
       const deptEl = document.getElementById('proj-winner-dept');
@@ -1410,15 +1494,15 @@
       }
 
       const latest = records[0];
-      const lm = members.find(x => x.id === latest.memberId);
+      const lm = resolveMember(latest);
       const lp = prizes.find(x => x.id === latest.prizeId);
 
       nameEl.textContent = lm ? lm.name : '幸運得主';
-      deptEl.textContent = lm ? `${lm.category_name} ｜ ${lm.title || '座號 ' + lm.seat_str + '號'}` : '';
+      deptEl.textContent = lm ? `${lm.category_name}${lm.seat_str ? ' ｜ 座號 ' + lm.seat_str + '號' : ''}` : '';
       prizeEl.textContent = lp ? `${lp.tier_name}：${lp.name}` : '幸運好禮';
 
       listEl.innerHTML = records.map((r, i) => {
-        const m = members.find(x => x.id === r.memberId);
+        const m = resolveMember(r);
         const p = prizes.find(x => x.id === r.prizeId);
         return `
           <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs font-bold text-slate-200">
@@ -1441,6 +1525,7 @@
     }
 
     function switchView(viewName) {
+      currentActiveView = viewName;
       document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
       document.getElementById(`view-${viewName}`).classList.remove('hidden');
 
@@ -1492,7 +1577,7 @@
 
       let csv = '\uFEFF編號,班級身分,姓名,中獎品項,獎項分級,開獎時間,領取狀態,領取時間\n';
       records.forEach((r, idx) => {
-        const m = members.find(x => x.id === r.memberId);
+        const m = resolveMember(r);
         const p = prizes.find(x => x.id === r.prizeId);
         csv += `"${idx + 1}","${m ? m.category_name : ''}","${m ? m.name : ''}","${p ? p.name : ''}","${p ? p.tier_name : ''}","${r.timestamp}","${r.claimed ? '已領取' : '待領取'}","${r.claimedTime || ''}"\n`;
       });
@@ -1504,11 +1589,14 @@
       link.click();
     }
 
-    function resetRaffleData() {
-      if (confirm('【注意】確定要清空所有摸彩中獎紀錄與領取狀態嗎？此動作將還原所有庫存！')) {
-        records = [];
+    async function resetRaffleData() {
+      if (!isStationUnlocked()) {
+        openStationAuthModal();
+        return;
+      }
+      if (confirm('【注意】確定要清空雲端所有摸彩中獎紀錄與領取狀態嗎？此動作將還原所有庫存！')) {
         lockedPrizeId = null;
-        saveRecords();
+        await Promise.all(records.map(r => deleteDoc(doc(db, 'raffle_records', String(r.memberId)))));
       }
     }
 
@@ -1518,16 +1606,21 @@
     function closeAddGuestModal() {
       document.getElementById('add-guest-modal').classList.add('hidden');
     }
-    function confirmAddGuest() {
-      const dept = document.getElementById('guest-dept').value.trim() || '貴賓志工';
-      const name = document.getElementById('guest-name').value.trim();
+
+    async function confirmAddGuest() {
+      if (!isStationUnlocked()) {
+        openStationAuthModal();
+        return;
+      }
+      const dept = (document.getElementById('guest-dept').value.trim() || '貴賓志工').slice(0, 40);
+      const name = document.getElementById('guest-name').value.trim().slice(0, 40);
 
       if (!name) {
         alert('請填寫姓名！');
         return;
       }
 
-      const newId = 9000 + members.length;
+      const newId = 9000 + (Date.now() % 900000);
       const guestObj = {
         id: newId,
         category: 'guest',
@@ -1538,25 +1631,113 @@
         name: name,
         role: '貴賓',
         title: dept,
-        display_label: `貴賓 ${name} (${dept})`
+        display_label: `貴賓 ${name} (${dept})`.slice(0, 80),
+        createdAt: Date.now(),
+        updatedAt: Date.now()
       };
 
-      members.push(guestObj);
-
-      const savedGuests = localStorage.getItem(GUESTS_STORAGE_KEY);
-      const guestList = savedGuests ? JSON.parse(savedGuests) : [];
-      guestList.push(guestObj);
-      localStorage.setItem(GUESTS_STORAGE_KEY, JSON.stringify(guestList));
-
-      closeAddGuestModal();
-      document.getElementById('guest-dept').value = '';
-      document.getElementById('guest-name').value = '';
-
-      renderAllViews();
-      alert(`已成功新增【${name}】至摸彩名冊中！`);
+      try {
+        await setDoc(doc(db, 'raffle_guests', String(newId)), guestObj);
+        closeAddGuestModal();
+        document.getElementById('guest-dept').value = '';
+        document.getElementById('guest-name').value = '';
+        alert(`已成功新增【${name}】至雲端摸彩名冊中！`);
+      } catch (err) {
+        console.error('Failed to add guest:', err);
+        alert('新增貴賓失敗，請確認網路連線！');
+      }
     }
 
-    initSystem();
+    async function loadStaffRaffleRoster() {
+      try {
+        const snap = await getDoc(doc(db, 'raffle_private', 'members'));
+        if (snap.exists() && Array.isArray(snap.data().members)) {
+          baseMembers = snap.data().members;
+          localStorage.setItem(MEMBERS_CACHE_KEY, JSON.stringify(baseMembers));
+        }
+      } catch (err) {
+        const cached = localStorage.getItem(MEMBERS_CACHE_KEY);
+        if (cached) baseMembers = JSON.parse(cached);
+      }
+
+      if (unsubGuests) unsubGuests();
+      unsubGuests = onSnapshot(collection(db, 'raffle_guests'), (snap) => {
+        cloudGuests = [];
+        snap.forEach(docSnap => {
+          const g = docSnap.data();
+          if (g && g.id && g.name) cloudGuests.push(g);
+        });
+        members = [...baseMembers, ...cloudGuests];
+        refreshAll();
+      });
+    }
+
+    function clearStaffRaffleRoster() {
+      if (unsubGuests) { unsubGuests(); unsubGuests = null; }
+      baseMembers = [];
+      cloudGuests = [];
+      members = [];
+      if (currentActiveView === 'station' || currentActiveView === 'claim') {
+        switchView('board');
+      }
+    }
+
+    // 公開即時監聽所有中獎與領獎紀錄
+    onSnapshot(collection(db, 'raffle_records'), (snapshot) => {
+      const next = [];
+      snapshot.forEach(docSnap => {
+        const d = docSnap.data();
+        if (d && d.memberId && d.prizeId) next.push(d);
+      });
+      next.sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')));
+      records = next;
+      refreshAll();
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      updateStationLockUI();
+      if (user && user.email === RAFFLE_EMAIL) {
+        await loadStaffRaffleRoster();
+        if (pendingModalSwitch) {
+          pendingModalSwitch = false;
+          switchView(authTargetView);
+        }
+      } else {
+        clearStaffRaffleRoster();
+        refreshAll();
+      }
+    });
+
+    // 將供 HTML 行內 onclick / oninput 呼叫之函式綁定至全域 window
+    Object.assign(window, {
+      clearBoardSearch,
+      closeAddGuestModal,
+      closeImageLightbox,
+      closeStationAuthModal,
+      confirmAddGuest,
+      exportRaffleResultsCSV,
+      filterClaimList,
+      filterPrizeGrid,
+      filterStationMembers,
+      filterStationPrizes,
+      handleBoardSearch,
+      handleLightboxBackdropClick,
+      handleProtectedTabClick,
+      lockCurrentPrompterPrize,
+      lockPrize,
+      lockStation,
+      nextPrompterPrize,
+      openAddGuestModal,
+      openImageLightbox,
+      renderClaimList,
+      renderStationMemberList,
+      resetRaffleData,
+      switchView,
+      toggleClaimStatus,
+      undoLastDraw,
+      unlockCurrentPrize,
+      verifyStationPassword
+    });
   </script>
 </body>
 </html>

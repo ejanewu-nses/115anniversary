@@ -748,10 +748,11 @@
         saveScoresToStorage(currentData);
         calculateAndRender();
 
-        // 3. 同步個人短跑金銀銅榜 (sprintWinners)
+        // 3. 同步個人短跑金銀銅榜 (sprintWinners；若 Firebase 已即時發布則以 Firebase 為準)
         if (data.sprintWinners) {
           const sprintGroups = ['lowBoy', 'lowGirl', 'midBoy', 'midGirl', 'highBoy', 'highGirl'];
           sprintGroups.forEach(g => {
+            if (window.__firebaseSprintPublished && window.__firebaseSprintPublished[g]) return;
             const w = data.sprintWinners[g];
             if (w) {
               const goldEl = document.getElementById(`sprint-${g}-gold`);
@@ -1085,6 +1086,45 @@
     } else {
       initScoresApp();
     }
+  </script>
+
+  <!-- Firebase 即時短跑成績同步 (sprint_public) -->
+  <script type="module">
+    import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
+    import { getFirestore, collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      projectId: "nses-115-sports",
+      appId: "1:407289264179:web:264129772885bcadd6cb46",
+      storageBucket: "nses-115-sports.firebasestorage.app",
+      apiKey: "AIzaSyCus5d1cj2cbe_xSiDDkr7GNlJZ40mAP7M",
+      authDomain: "nses-115-sports.firebaseapp.com",
+      messagingSenderId: "407289264179"
+    };
+
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    window.__firebaseSprintPublished = window.__firebaseSprintPublished || {};
+
+    onSnapshot(collection(db, 'sprint_public'), (snapshot) => {
+      snapshot.forEach((docSnap) => {
+        const d = docSnap.data();
+        const g = docSnap.id;
+        const goldEl = document.getElementById(`sprint-${g}-gold`);
+        const silverEl = document.getElementById(`sprint-${g}-silver`);
+        const bronzeEl = document.getElementById(`sprint-${g}-bronze`);
+        if (d && d.published) {
+          window.__firebaseSprintPublished[g] = true;
+          if (goldEl) goldEl.innerText = d.gold || '決賽待公布';
+          if (silverEl) silverEl.innerText = d.silver || '決賽待公布';
+          if (bronzeEl) bronzeEl.innerText = d.bronze || '決賽待公布';
+        } else {
+          window.__firebaseSprintPublished[g] = false;
+        }
+      });
+    }, (err) => {
+      console.warn('Firestore sprint_public listener warning:', err);
+    });
   </script>
 </body>
 </html>

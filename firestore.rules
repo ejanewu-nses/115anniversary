@@ -1,0 +1,235 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model (Project: nses-115-sports)
+    // ===============================================================
+    //
+    // Staff Authentication:
+    //   - Referee account:      request.auth.token.email == 'referee@nses-115.local'
+    //   - Raffle station acct:  request.auth.token.email == 'raffle@nses-115.local'
+    //   (Email/Password provider only; public self-signup disabled)
+    //
+    // Collection: sprint_private
+    // Document ID: roster (or private config docId)
+    // Access: Referee only (read, create, update, delete)
+    // Fields: Map with 1..20 top-level keys (holds 100-student roster)
+    //
+    // Collection: sprint_heats
+    // Document ID: {heatId} (e.g., low-boy__h1; 23 heat docs)
+    // Access: Referee only (read, create, update, delete)
+    // Fields:
+    //   - divisionId: string (required, 1..32 chars)
+    //   - heatNo:     int (required, 1..20)
+    //   - lanes:      map (required, <= 10 entries)
+    //   - updatedAt:  number or timestamp (required)
+    //
+    // Collection: sprint_public
+    // Document ID: {groupCode} in ['lowBoy', 'lowGirl', 'midBoy', 'midGirl', 'highBoy', 'highGirl']
+    // Access: Public read; Referee only (create, update, delete)
+    // Fields:
+    //   - groupCode: string (required, matches document ID and allowed group codes)
+    //   - published: bool (required)
+    //   - gold:      string (required, 0..120 chars)
+    //   - silver:    string (required, 0..120 chars)
+    //   - bronze:    string (required, 0..120 chars)
+    //   - top3:      list (required, <= 5 items)
+    //   - updatedAt: number or timestamp (required)
+    //
+    // Collection: raffle_private
+    // Document ID: members (or private config docId)
+    // Access: Raffle station only (read, create, update, delete)
+    // Fields: Map with 1..20 top-level keys (holds 154-person raffle roster)
+    //
+    // Collection: raffle_records
+    // Document ID: {recordId}
+    // Access: Public read; Raffle station only (create, update, delete)
+    // Fields:
+    //   - memberId:     int (required, >= 1)
+    //   - memberName:   string (required, 1..40 chars)
+    //   - categoryName: string (required, 1..40 chars)
+    //   - prizeId:      string (required, 1..20 chars)
+    //   - timestamp:    string (required, 1..40 chars)
+    //   - claimed:      bool (required)
+    //   - claimedTime:  string (optional, 0..40 chars)
+    //
+    // Collection: raffle_guests
+    // Document ID: {guestId}
+    // Access: Raffle station only (read, create, update, delete)
+    // Fields:
+    //   - id:            int (required, >= 1)
+    //   - name:          string (required, 1..40 chars)
+    //   - category:      string (optional, <= 20 chars)
+    //   - category_name: string (optional, <= 40 chars)
+    //   - grade_num:     int (optional, >= 0)
+    //   - seat:          int (optional, >= 0)
+    //   - seat_str:      string (optional, <= 20 chars)
+    //   - role:          string (optional, <= 20 chars)
+    //   - title:         string (optional, <= 40 chars)
+    //   - display_label: string (optional, <= 80 chars)
+    //   - createdAt:     number or timestamp (optional)
+    //   - updatedAt:     number or timestamp (optional)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isReferee() {
+      return isAuthenticated() && request.auth.token.email == 'referee@nses-115.local';
+    }
+
+    function isRaffleStaff() {
+      return isAuthenticated() && request.auth.token.email == 'raffle@nses-115.local';
+    }
+
+    function hasRequiredFields(data, fields) {
+      return data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(data, fields) {
+      return data.keys().hasOnly(fields);
+    }
+
+    function isBoundedString(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    function isOptionalBoundedString(data, field, minLen, maxLen) {
+      return !(field in data) || isBoundedString(data[field], minLen, maxLen);
+    }
+
+    function isValidTimestampOrNumber(val) {
+      return (val is number && val >= 0) || val is timestamp;
+    }
+
+    // ===============================================================
+    // Domain Validators (Used in BOTH create and update)
+    // ===============================================================
+
+    function isValidPrivateContainer(data) {
+      return data is map &&
+             data.keys().size() >= 1 &&
+             data.keys().size() <= 20;
+    }
+
+    function isValidSprintHeat(data) {
+      return data is map &&
+             hasRequiredFields(data, ['divisionId', 'heatNo', 'lanes', 'updatedAt']) &&
+             hasOnlyAllowedFields(data, ['divisionId', 'heatNo', 'lanes', 'updatedAt']) &&
+             isBoundedString(data.divisionId, 1, 32) &&
+             data.heatNo is int && data.heatNo >= 1 && data.heatNo <= 20 &&
+             data.lanes is map && data.lanes.keys().size() <= 10 &&
+             isValidTimestampOrNumber(data.updatedAt);
+    }
+
+    function isValidSprintPublic(groupCode, data) {
+      let allowedGroups = ['lowBoy', 'lowGirl', 'midBoy', 'midGirl', 'highBoy', 'highGirl'];
+      return data is map &&
+             groupCode in allowedGroups &&
+             hasRequiredFields(data, ['groupCode', 'published', 'gold', 'silver', 'bronze', 'top3', 'updatedAt']) &&
+             hasOnlyAllowedFields(data, ['groupCode', 'published', 'gold', 'silver', 'bronze', 'top3', 'updatedAt']) &&
+             data.groupCode is string &&
+             data.groupCode == groupCode &&
+             data.published is bool &&
+             isBoundedString(data.gold, 0, 120) &&
+             isBoundedString(data.silver, 0, 120) &&
+             isBoundedString(data.bronze, 0, 120) &&
+             data.top3 is list && data.top3.size() <= 5 &&
+             isValidTimestampOrNumber(data.updatedAt);
+    }
+
+    function isValidRaffleRecord(data) {
+      return data is map &&
+             hasRequiredFields(data, ['memberId', 'memberName', 'categoryName', 'prizeId', 'timestamp', 'claimed']) &&
+             hasOnlyAllowedFields(data, ['memberId', 'memberName', 'categoryName', 'prizeId', 'timestamp', 'claimed', 'claimedTime']) &&
+             data.memberId is int && data.memberId >= 1 &&
+             isBoundedString(data.memberName, 1, 40) &&
+             isBoundedString(data.categoryName, 1, 40) &&
+             isBoundedString(data.prizeId, 1, 20) &&
+             isBoundedString(data.timestamp, 1, 40) &&
+             data.claimed is bool &&
+             isOptionalBoundedString(data, 'claimedTime', 0, 40);
+    }
+
+    function isValidRaffleGuest(data) {
+      return data is map &&
+             hasRequiredFields(data, ['id', 'name']) &&
+             hasOnlyAllowedFields(data, [
+               'id', 'name', 'category', 'category_name', 'grade_num',
+               'seat', 'seat_str', 'role', 'title', 'display_label',
+               'createdAt', 'updatedAt'
+             ]) &&
+             data.id is int && data.id >= 1 &&
+             isBoundedString(data.name, 1, 40) &&
+             isOptionalBoundedString(data, 'category', 0, 20) &&
+             isOptionalBoundedString(data, 'category_name', 0, 40) &&
+             (!('grade_num' in data) || (data.grade_num is int && data.grade_num >= 0)) &&
+             (!('seat' in data) || (data.seat is int && data.seat >= 0)) &&
+             isOptionalBoundedString(data, 'seat_str', 0, 20) &&
+             isOptionalBoundedString(data, 'role', 0, 20) &&
+             isOptionalBoundedString(data, 'title', 0, 40) &&
+             isOptionalBoundedString(data, 'display_label', 0, 80) &&
+             (!('createdAt' in data) || isValidTimestampOrNumber(data.createdAt)) &&
+             (!('updatedAt' in data) || isValidTimestampOrNumber(data.updatedAt));
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    // Private 100-student sprint roster (Referee only)
+    match /sprint_private/{docId} {
+      allow read: if isReferee();
+      allow create, update: if isReferee() && isValidPrivateContainer(request.resource.data);
+      allow delete: if isReferee();
+    }
+
+    // 23 Sprint heat check-in & timing sheets (Referee only)
+    match /sprint_heats/{heatId} {
+      allow read: if isReferee();
+      allow create, update: if isReferee() && isValidSprintHeat(request.resource.data);
+      allow delete: if isReferee();
+    }
+
+    // 6 Public Top-3 sprint scoreboards (Public read; Referee write)
+    match /sprint_public/{groupCode} {
+      allow read: if true;
+      allow create, update: if isReferee() && isValidSprintPublic(groupCode, request.resource.data);
+      allow delete: if isReferee();
+    }
+
+    // Private 154-person raffle roster (Raffle station only)
+    match /raffle_private/{docId} {
+      allow read: if isRaffleStaff();
+      allow create, update: if isRaffleStaff() && isValidPrivateContainer(request.resource.data);
+      allow delete: if isRaffleStaff();
+    }
+
+    // Live raffle prize winner & claim records (Public read; Raffle station write)
+    match /raffle_records/{recordId} {
+      allow read: if true;
+      allow create, update: if isRaffleStaff() && isValidRaffleRecord(request.resource.data);
+      allow delete: if isRaffleStaff();
+    }
+
+    // Onsite added raffle guests (Raffle station only - no public dump)
+    match /raffle_guests/{guestId} {
+      allow read: if isRaffleStaff();
+      allow create, update: if isRaffleStaff() && isValidRaffleGuest(request.resource.data);
+      allow delete: if isRaffleStaff();
+    }
+
+    // Explicit catch-all deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
