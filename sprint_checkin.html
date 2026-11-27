@@ -38,6 +38,10 @@
       text-wrap: pretty;
     }
 
+    [hidden] {
+      display: none !important;
+    }
+
     :where(button, select, input:not([type="checkbox"], [type="radio"]), [role="button"], nav a) {
       min-block-size: var(--target-size);
     }
@@ -1494,12 +1498,16 @@
       onAuthStateChanged(auth, async (user) => {
         if (user && user.email === REFEREE_EMAIL) {
           authGate.hidden = true;
+          authGate.classList.add('hidden');
           appShell.hidden = false;
+          appShell.classList.remove('hidden');
           await startRefereeSession();
         } else {
           stopRefereeSession();
           appShell.hidden = true;
+          appShell.classList.add('hidden');
           authGate.hidden = false;
+          authGate.classList.remove('hidden');
         }
       });
 
