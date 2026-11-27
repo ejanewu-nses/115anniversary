@@ -574,7 +574,9 @@
     let initialSnapshotLoaded = false;
     let previousDoneMap = {};
     let pendingToastJump = null;
+    let renderedStructureKey = '';
     const debounceTimers = {};
+    const dirtyTimeKeys = {};
 
     // state.statuses[key] = 'pending' | 'checked' | 'absent'
     // state.times[key] = '9.85'
@@ -669,7 +671,18 @@
       toast.hidden = false;
     }
 
-    function renderDivisionTabs() {
+    function scrollTabHorizontally(container, btn) {
+      if (!container || !btn) return;
+      const cRect = container.getBoundingClientRect();
+      const bRect = btn.getBoundingClientRect();
+      if (bRect.left < cRect.left) {
+        container.scrollLeft += bRect.left - cRect.left - 8;
+      } else if (bRect.right > cRect.right) {
+        container.scrollLeft += bRect.right - cRect.right + 8;
+      }
+    }
+
+    function renderDivisionTabs(scrollTabs = false) {
       const container = document.getElementById('division-tablist');
       container.innerHTML = '';
 
@@ -702,13 +715,13 @@
         btn.addEventListener('click', () => selectDivision(idx));
         container.appendChild(btn);
 
-        if (selected) {
-          requestAnimationFrame(() => btn.scrollIntoView({ block: 'nearest', inline: 'nearest' }));
+        if (selected && scrollTabs) {
+          requestAnimationFrame(() => scrollTabHorizontally(container, btn));
         }
       });
     }
 
-    function renderHeatTabs() {
+    function renderHeatTabs(scrollTabs = false) {
       const container = document.getElementById('heat-tablist');
       container.innerHTML = '';
       if (SPRINT_DIVISIONS.length === 0) return;
@@ -738,8 +751,8 @@
         btn.addEventListener('click', () => selectHeat(idx));
         container.appendChild(btn);
 
-        if (selected) {
-          requestAnimationFrame(() => btn.scrollIntoView({ block: 'nearest', inline: 'nearest' }));
+        if (selected && scrollTabs) {
+          requestAnimationFrame(() => scrollTabHorizontally(container, btn));
         }
       });
     }
@@ -754,6 +767,84 @@
         cBtn.className = 'px-3 py-1 rounded-lg text-xs font-black transition cursor-pointer bg-white text-slate-900 shadow-xs';
         tBtn.className = 'px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer text-slate-600 hover:text-slate-900';
       }
+    }
+
+    function syncLanesInPlace(div, heat, highlightLane = null) {
+      const container = document.getElementById('lanes-container');
+      heat.lanes.forEach(lane => {
+        if (!lane.name) return;
+        const key = runnerKey(div.id, heat.heatNo, lane.lane);
+        const status = state.statuses[key] || 'pending';
+        const timeVal = state.times[key] || '';
+        const card = container.querySelector(`[data-lane-card="${lane.lane}"]`);
+        if (!card) return;
+
+        let cardBorder = 'border-slate-200 bg-white';
+        if (status === 'checked') cardBorder = 'border-emerald-400 bg-emerald-50/50';
+        else if (status === 'absent') cardBorder = 'border-slate-300 bg-slate-100/90 opacity-75';
+        card.className = `rounded-2xl border-2 p-3 sm:p-4 shadow-xs transition ${cardBorder} ${
+          highlightLane === lane.lane ? 'ring-4 ring-amber-400' : ''
+        }`;
+
+        const badge = card.querySelector('[data-lane-badge]');
+        if (badge) {
+          badge.className = `w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex flex-col items-center justify-center shrink-0 font-black ${
+            status === 'checked'
+              ? 'bg-emerald-600 text-white'
+              : (status === 'absent' ? 'bg-slate-400 text-white' : 'bg-slate-900 text-white')
+          }`;
+        }
+
+        const nameEl = card.querySelector('[data-runner-name]');
+        if (nameEl) {
+          nameEl.className = `text-xl sm:text-2xl font-black tracking-wide ${
+            status === 'absent' ? 'line-through text-slate-500' : 'text-slate-900'
+          }`;
+        }
+
+        const checkedBtn = card.querySelector('button[data-action="checked"]');
+        if (checkedBtn) {
+          checkedBtn.setAttribute('aria-pressed', String(status === 'checked'));
+          checkedBtn.className = `px-3.5 sm:px-4 py-2.5 rounded-xl font-black text-xs sm:text-sm flex items-center gap-1 transition cursor-pointer ${
+            status === 'checked'
+              ? 'bg-emerald-600 text-white shadow-sm'
+              : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300'
+          }`;
+        }
+
+        const absentBtn = card.querySelector('button[data-action="absent"]');
+        if (absentBtn) {
+          absentBtn.setAttribute('aria-pressed', String(status === 'absent'));
+          absentBtn.className = `px-2.5 sm:px-3 py-2.5 rounded-xl font-bold text-xs transition cursor-pointer ${
+            status === 'absent'
+              ? 'bg-rose-600 text-white shadow-sm'
+              : 'bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200'
+          }`;
+        }
+
+        const timePill = card.querySelector('[data-time-pill]');
+        if (timePill) {
+          if (!state.scoreMode && timeVal) {
+            timePill.textContent = `⏱️ ${timeVal}s`;
+            timePill.hidden = false;
+          } else {
+            timePill.hidden = true;
+          }
+        }
+
+        const inp = card.querySelector(`input[data-lane="${lane.lane}"]`);
+        if (inp) {
+          inp.disabled = (status === 'absent');
+          if (document.activeElement !== inp && !dirtyTimeKeys[key]) {
+            if (inp.value !== timeVal) inp.value = timeVal;
+          }
+        }
+
+        const absentNote = card.querySelector('[data-absent-note]');
+        if (absentNote) {
+          absentNote.hidden = (status !== 'absent');
+        }
+      });
     }
 
     function renderCheckinPanel(highlightLane = null) {
@@ -779,9 +870,18 @@
         statusEl.textContent = `檢錄進度：已報到 ${st.checked} / ${st.total} 人${st.absent > 0 ? `（缺席 ${st.absent} 人）` : ''}`;
       }
 
+      const structureKey = `${div.id}__${heat.heatNo}__${state.scoreMode ? 'T' : 'C'}__${highlightLane || ''}`;
       const container = document.getElementById('lanes-container');
-      // 保留正在輸入焦點的元素避免重繪打斷打字
-      const activeId = document.activeElement?.id;
+
+      if (renderedStructureKey === structureKey && container.children.length > 0) {
+        syncLanesInPlace(div, heat, highlightLane);
+        updateGlobalProgress();
+        updateBottomBar();
+        renderDivisionRanking();
+        return;
+      }
+
+      renderedStructureKey = structureKey;
       container.innerHTML = '';
 
       heat.lanes.forEach(lane => {
@@ -809,6 +909,7 @@
         else if (status === 'absent') cardBorder = 'border-slate-300 bg-slate-100/90 opacity-75';
 
         const card = document.createElement('div');
+        card.setAttribute('data-lane-card', String(lane.lane));
         card.className = `rounded-2xl border-2 p-3 sm:p-4 shadow-xs transition ${cardBorder} ${
           highlightLane === lane.lane ? 'ring-4 ring-amber-400' : ''
         }`;
@@ -816,7 +917,7 @@
         card.innerHTML = `
           <div class="flex items-center justify-between gap-2.5">
             <div class="flex items-center gap-3 min-w-0">
-              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex flex-col items-center justify-center shrink-0 font-black ${
+              <div data-lane-badge class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex flex-col items-center justify-center shrink-0 font-black ${
                 status === 'checked'
                   ? 'bg-emerald-600 text-white'
                   : (status === 'absent' ? 'bg-slate-400 text-white' : 'bg-slate-900 text-white')
@@ -827,7 +928,7 @@
 
               <div class="min-w-0">
                 <div class="flex flex-wrap items-center gap-1.5">
-                  <span class="text-xl sm:text-2xl font-black tracking-wide ${
+                  <span data-runner-name class="text-xl sm:text-2xl font-black tracking-wide ${
                     status === 'absent' ? 'line-through text-slate-500' : 'text-slate-900'
                   }">${lane.name}</span>
                   <span class="px-2 py-0.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-md text-xs font-black">
@@ -842,7 +943,7 @@
                   </span>
                   ${mixed ? '<span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300 text-[11px] font-bold">跨年級補位</span>' : ''}
                   ${lane.note ? `<span class="px-2 py-0.5 rounded-md bg-purple-100 text-purple-900 border border-purple-300 text-[11px] font-bold">${lane.note}</span>` : ''}
-                  ${!state.scoreMode && timeVal ? `<span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 font-mono text-[11px] font-black">⏱️ ${timeVal}s</span>` : ''}
+                  <span data-time-pill ${(!state.scoreMode && timeVal) ? '' : 'hidden'} class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 font-mono text-[11px] font-black">⏱️ ${timeVal}s</span>
                 </div>
               </div>
             </div>
@@ -874,10 +975,10 @@
           ${state.scoreMode ? `
             <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between gap-3">
               <label for="time-${key}" class="text-xs font-bold text-slate-700 whitespace-nowrap">
-                ⏱️ 計時成績（秒）：${status === 'absent' ? '<span class="text-rose-600">(已標記缺席)</span>' : ''}
+                ⏱️ 計時成績（秒）：<span data-absent-note ${status === 'absent' ? '' : 'hidden'} class="text-rose-600">(已標記缺席)</span>
               </label>
               <div class="flex items-center gap-1.5">
-                <input id="time-${key}" type="number" step="0.01" min="1" max="99.99" inputmode="decimal"
+                <input id="time-${key}" type="number" step="0.01" min="1" max="99.99" inputmode="decimal" enterkeyhint="next"
                   data-lane="${lane.lane}"
                   value="${timeVal}"
                   ${status === 'absent' ? 'disabled' : ''}
@@ -892,11 +993,6 @@
         container.appendChild(card);
       });
 
-      if (activeId) {
-        const restoreEl = document.getElementById(activeId);
-        if (restoreEl) restoreEl.focus();
-      }
-
       container.querySelectorAll('button[data-action]').forEach(btn => {
         btn.addEventListener('click', () => {
           const laneNo = Number(btn.dataset.lane);
@@ -908,15 +1004,27 @@
         });
       });
 
-      container.querySelectorAll('input[data-lane]').forEach(inp => {
+      const timeInputs = Array.from(container.querySelectorAll('input[data-lane]'));
+      timeInputs.forEach((inp, idx) => {
         const laneNo = Number(inp.dataset.lane);
         const key = runnerKey(div.id, heat.heatNo, laneNo);
         inp.addEventListener('input', () => {
           const v = inp.value.trim();
+          dirtyTimeKeys[key] = true;
           state.times[key] = v;
           renderDivisionRanking();
           clearTimeout(debounceTimers[key]);
-          debounceTimers[key] = setTimeout(() => updateLaneTime(div, heat, laneNo, v), 350);
+          debounceTimers[key] = setTimeout(() => updateLaneTime(div, heat, laneNo, v), 600);
+        });
+        inp.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            clearTimeout(debounceTimers[key]);
+            updateLaneTime(div, heat, laneNo, inp.value.trim());
+            const nextInp = timeInputs.slice(idx + 1).find(x => !x.disabled);
+            if (nextInp) nextInp.focus();
+            else inp.blur();
+          }
         });
         inp.addEventListener('blur', () => {
           clearTimeout(debounceTimers[key]);
@@ -981,6 +1089,8 @@
         });
       } catch (err) {
         console.error('Failed to sync lane time:', err);
+      } finally {
+        delete dirtyTimeKeys[key];
       }
     }
 
@@ -1131,19 +1241,19 @@
       state.divisionIndex = idx;
       state.heatIndex = 0;
       saveUiPrefs();
-      renderAll();
+      renderAll(null, true);
     }
 
     function selectHeat(idx, highlightLane = null) {
       state.heatIndex = idx;
       saveUiPrefs();
-      renderAll(highlightLane);
+      renderAll(highlightLane, true);
     }
 
-    function renderAll(highlightLane = null) {
+    function renderAll(highlightLane = null, scrollTabs = false) {
       clampSelection();
-      renderDivisionTabs();
-      renderHeatTabs();
+      renderDivisionTabs(scrollTabs);
+      renderHeatTabs(scrollTabs);
       renderCheckinPanel(highlightLane);
     }
 
@@ -1220,7 +1330,7 @@
           state.heatIndex = m.hIdx;
           saveUiPrefs();
           box.hidden = true;
-          renderAll(m.lane.lane);
+          renderAll(m.lane.lane, true);
         });
       });
     }
@@ -1441,7 +1551,10 @@
             const k = runnerKey(d.divisionId, d.heatNo, laneKey);
             if (val && typeof val === 'object') {
               state.statuses[k] = val.status || 'pending';
-              state.times[k] = val.time || '';
+              const activeTimeId = document.activeElement?.id;
+              if (!dirtyTimeKeys[k] && activeTimeId !== `time-${k}`) {
+                state.times[k] = val.time || '';
+              }
             }
           });
         });
@@ -1479,6 +1592,7 @@
       if (unsubPublic) { unsubPublic(); unsubPublic = null; }
       initialSnapshotLoaded = false;
       previousDoneMap = {};
+      renderedStructureKey = '';
       SPRINT_DIVISIONS = [];
       state.statuses = {};
       state.times = {};
@@ -1583,7 +1697,7 @@
           state.divisionIndex = pendingToastJump.dIdx;
           state.heatIndex = pendingToastJump.hIdx;
           saveUiPrefs();
-          renderAll();
+          renderAll(null, true);
         }
         document.getElementById('live-toast').hidden = true;
       });
